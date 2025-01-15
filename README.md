@@ -33,7 +33,7 @@ The following table contains the list of supported datasets and tasks. Click on 
 | Open Kidney Ultrasound (article)                          | Kidney       |                                  | Kidney capsule segmentation                 |
 | Point-of-care Ultrasound (POCUS) (article)                | Lung         | COVID-19 classification          |                                             |
 | PSFHS (article)                                           | Fetus        |                                  | Fetal head and pubic symphysis segmentation |
-| Stanford Thyroid (repository)                                | Thyroid      |                                  | Thyroid nodule segmentation                 |
+| Stanford Thyroid (repository)                             | Thyroid      |                                  | Thyroid nodule segmentation                 |
 
 ## Contributing
 
