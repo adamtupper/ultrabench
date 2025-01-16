@@ -12,6 +12,14 @@ This benchmark was published alongside the article [Revisiting Data Augmentation
 
 A common limitation of studies on ultrasound image analysis using machine learning is a lack of evaluations across multiple domains. However, this is made difficult by a lack of ultrasound image analysis tasks in existing medical image analysis benchmarks, such as [MedMNIST](https://www.nature.com/articles/s41597-022-01721-8), [MedSegBench](https://www.nature.com/articles/s41597-024-04159-2) and the [Medical Segmentation Decathlon](https://www.nature.com/articles/s41467-022-30695-9). To address this issue, we created UltraBench. Our aim is to make it easier for researchers by standardizing the preprocessing of many publicly available ultrasound datasets and providing tools (e.g., dataset implementations for common deep learning frameworks) that (a) reduce the effort required to use them and (b) make it easier for researchers to compare results between papers.
 
+## Installation
+
+Install UltraBench using:
+
+```bash
+pip install .
+```
+
 ## Getting Started
 
 To get started using UltraBench, checkout the [Documentation](https://github.com/adamtupper/ultrabench/wiki) on the wiki!
