@@ -22,7 +22,10 @@ pip install .
 
 ## Getting Started
 
-To get started using UltraBench, checkout the [Documentation](https://github.com/adamtupper/ultrabench/wiki) on the wiki!
+UltraBench is packaged as a commandline application. After installing, run
+`ultrabench --help` to get started.
+
+For more information, checkout the [Documentation](https://github.com/adamtupper/ultrabench/wiki) on the wiki!
 
 ## Current Datasets & Tasks
 
