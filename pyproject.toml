@@ -1,0 +1,56 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ultrabench"
+version = "0.0.1"
+authors = [
+  { name="Adam Tupper", email="adam.tupper.1@ulaval.ca" },
+]
+description = "A standardized benchmark of ultrasound image analysis tasks."
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
+
+dependencies = [
+    "numpy >=1.26.4",
+    "pandas >=2.2.1",
+    "scikit-image >=0.24.0",
+    "scikit-learn >=1.5.0",
+    "typer >=0.15.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pre-commit >=4.0.1",
+    "ruff >=0.8.4",
+    "nbstripout >=0.8.1",
+]
+
+[project.urls]
+Homepage = "https://github.com/adamtupper/ultrabench"
+Documentation = "https://github.com/adamtupper/ultrabench/wiki"
+Issues = "https://github.com/adamtupper/ultrabench/issues"
+
+[project.scripts]
+ultrabench = "ultrabench.cli:app"
+
+[project.entry-points."pipx.run"]
+ultrabench = "ultrabench.cli:app"
+
+[tool.ruff.lint]
+select = [
+    "E", # pycodestyle errors
+    "W", # pycodestyle warnings
+    "F", # pyflakes. "E" + "W" + "F" + "C90" (mccabe complexity) is equivalent to flake8
+    "I", # isort
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["ultrabench"]
