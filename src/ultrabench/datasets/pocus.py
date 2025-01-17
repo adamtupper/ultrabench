@@ -214,6 +214,7 @@ def pocus(
         str, typer.Argument(help="The output directory for the processed datasets")
     ],
 ):
+    """Prepare the training, validation and test sets for the POCUS dataset."""
     verify_args(raw_data_dir, output_dir)
 
     output_dir = os.path.join(output_dir, OUTPUT_NAME.format(__version__))
