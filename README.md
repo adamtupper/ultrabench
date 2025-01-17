@@ -29,22 +29,22 @@ For more information, checkout the [Documentation](https://github.com/adamtupper
 
 ## Current Datasets & Tasks
 
-The following table contains the list of supported datasets and tasks. Click on the links to checkout the appropriate sections of the documentation or on the article/repository links to visit the original publications. We do not have the rights to republish the datasets, but you will find download links in the [Documentation](https://github.com/adamtupper/ultrabench/wiki).
+The following table contains the list of supported datasets and tasks. Click on the links to checkout the appropriate sections of the documentation or on the article/repository links to visit the original publications. We do not have the rights to republish the datasets, but links to the original articles and datasets are included here and in the [Documentation](https://github.com/adamtupper/ultrabench/wiki).
 
-<!-- TODO: Add links to documentation and original sources -->
+<!-- TODO: Add links to documentation -->
 
 | Dataset                                                   | Region       | Classification Tasks             | Segmentation Tasks                          |
 |-----------------------------------------------------------|--------------|----------------------------------|---------------------------------------------|
-| Annotated Ultrasound Liver (article)                      | Liver        | Liver mass classification        | Liver segmentation, Liver mass segmentation |
-| Butterfly (repository)                                    | Multi-region | Region classification            |                                             |
-| CAMUS (article)                                           | Heart        | Image quality classification     | Cardiac region segmentation                 |
-| Dataset of B-mode fatty liver ultrasound images (article) | Liver        | NFLD classification              |                                             |
-| Gallbladder Cancer Ultrasound (GBCU) (article)            | Gallbladder  | Gallbladder tumor classification |                                             |
-| Multi-Modality Ovarian Tumor Ultrasound (MMOTU) (article) | Ovaries      | Ovarian tumor classifcation      | Ovarian tumor segmentation                  |
-| Open Kidney Ultrasound (article)                          | Kidney       |                                  | Kidney capsule segmentation                 |
-| Point-of-care Ultrasound (POCUS) (article)                | Lung         | COVID-19 classification          |                                             |
-| PSFHS (article)                                           | Fetus        |                                  | Fetal head and pubic symphysis segmentation |
-| Stanford Thyroid (repository)                             | Thyroid      |                                  | Thyroid nodule segmentation                 |
+| Annotated Ultrasound Liver ([article](https://doi.org/10.1093/bib/bbac569), [data](https://zenodo.org/records/7272660))                      | Liver        | Liver mass classification        | Liver segmentation, Liver mass segmentation |
+| Butterfly ([data](https://github.com/ButterflyNetwork/MITGrandHack2018))                                    | Multi-region | Region classification            |                                             |
+| CAMUS ([article](https://ieeexplore.ieee.org/document/8649738/), [data](https://www.creatis.insa-lyon.fr/Challenge/camus/index.html))                                           | Heart        | Image quality classification     | Cardiac region segmentation                 |
+| Dataset of B-mode fatty liver ultrasound images ([article](https://link.springer.com/article/10.1007/s11548-018-1843-2), [data](https://zenodo.org/records/1009146)) | Liver        | NFLD classification              |                                             |
+| Gallbladder Cancer Ultrasound (GBCU) ([article](https://ieeexplore.ieee.org/document/9879895), [data](https://gbc-iitd.github.io/data/gbcu))            | Gallbladder  | Gallbladder tumor classification |                                             |
+| Multi-Modality Ovarian Tumor Ultrasound (MMOTU) ([article](http://arxiv.org/abs/2207.06799), [data](https://github.com/cv516Buaa/MMOTU_DS2Net)) | Ovaries      | Ovarian tumor classifcation      | Ovarian tumor segmentation                  |
+| Open Kidney Ultrasound ([article](https://link.springer.com/chapter/10.1007/978-3-031-44521-7_15), [data](https://rsingla.ca/kidneyUS/))                          | Kidney       |                                  | Kidney capsule segmentation                 |
+| Point-of-care Ultrasound (POCUS) ([article](http://dx.doi.org/10.3390/app11020672), [data](https://github.com/jannisborn/covid19_ultrasound/))                | Lung         | COVID-19 classification          |                                             |
+| PSFHS ([article](https://www.nature.com/articles/s41597-024-03266-4), [data](https://zenodo.org/records/10969427))                                           | Fetus        |                                  | Fetal head and pubic symphysis segmentation |
+| Stanford Thyroid ([data](https://stanfordaimi.azurewebsites.net/datasets/a72f2b02-7b53-4c5d-963c-d7253220bfd5))                             | Thyroid      |                                  | Thyroid nodule segmentation                 |
 
 ## Contributing
 
