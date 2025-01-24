@@ -49,6 +49,9 @@ ultrabench = "ultrabench.cli:app"
 [project.entry-points."pipx.run"]
 ultrabench = "ultrabench.cli:app"
 
+[tool.hatch.version]
+path = "src/usaugment/__about__.py"
+
 [tool.ruff.lint]
 select = [
     "E", # pycodestyle errors
