@@ -1,10 +1,11 @@
 # UltraBench
 
 [![arXiv](https://img.shields.io/badge/arXiv-2501.13193-b31b1b.svg)](http://arxiv.org/abs/2501.13193)
+[![OperReview](https://img.shields.io/badge/OpenReview-Reviews-blue.svg)](https://openreview.net/forum?id=iGcxlTLIL5)
 
 UltraBench is a standardized benchmark of 14 different convex ultrasound image classification and semantic segmentation tasks (7 classification and 7 segmentation tasks) drawn from the 10 different publicly available datasets covering 11 regions of the body. This repository contains the processing scripts to transform raw datasets from their original sources into a standardized format for training and evaluating machine learning models.
 
-This benchmark was published alongside the article [Revisiting Data Augmentation for Ultrasound Images](https://arxiv.org/abs/2501.13193). If you use this benchmark in your research please cite this article and the articles for each of the included datasets. Instructions for how to do so are provided at the end.
+This benchmark was published alongside the article [Revisiting Data Augmentation for Ultrasound Images](https://openreview.net/forum?id=iGcxlTLIL5). If you use this benchmark in your research please cite this article and the articles for each of the included datasets. Instructions for how to do so are provided at the end.
 
 <p align="center">
   <img src="figures/body_regions.svg" alt="Regions of the body covered by UltraBench"/>
@@ -66,16 +67,17 @@ If you have any questions, please open an issue or contact us via email.
 
 ## How to Cite UltraBench
 
-If you use UltraBench in your research, please cite our article [Revisiting Data Augmentation for Ultrasound Images](https://arxiv.org/abs/2501.13193) and the articles for each of the datasets. This ensures that the work of the authors of the original datasets is properly acknowledged, helps more people find the benchmark and encourages us to continue maintaining and improving it!
+If you use UltraBench in your research, please cite our article [Revisiting Data Augmentation for Ultrasound Images](https://openreview.net/forum?id=iGcxlTLIL5) and the articles for each of the datasets. This ensures that the work of the authors of the original datasets is properly acknowledged, helps more people find the benchmark and encourages us to continue maintaining and improving it!
 
 ```
-@misc{tupper2025,
-      title={Revisiting Data Augmentation for Ultrasound Images}, 
-      author={Adam Tupper and Christian Gagné},
-      year={2025},
-      eprint={2501.13193},
-      archivePrefix={arXiv},
-      primaryClass={eess.IV},
-      url={https://arxiv.org/abs/2501.13193}, 
+@article{
+tupper2025,
+title={Revisiting Data Augmentation for Ultrasound Images},
+author={Adam Tupper and Christian Gagn{\'e}},
+journal={Transactions on Machine Learning Research},
+issn={2835-8856},
+year={2025},
+url={https://openreview.net/forum?id=iGcxlTLIL5},
+note={}
 }
 ```
