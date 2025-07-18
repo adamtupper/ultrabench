@@ -1,7 +1,7 @@
 # UltraBench
 
 [![arXiv](https://img.shields.io/badge/arXiv-2501.13193-b31b1b.svg)](http://arxiv.org/abs/2501.13193)
-[![OperReview](https://img.shields.io/badge/OpenReview-Reviews-blue.svg)](https://openreview.net/forum?id=iGcxlTLIL5)
+[![OpenReview](https://img.shields.io/badge/OpenReview-Reviews-blue.svg)](https://openreview.net/forum?id=iGcxlTLIL5)
 
 UltraBench is a standardized benchmark of 14 different convex ultrasound image classification and semantic segmentation tasks (7 classification and 7 segmentation tasks) drawn from the 10 different publicly available datasets covering 11 regions of the body. This repository contains the processing scripts to transform raw datasets from their original sources into a standardized format for training and evaluating machine learning models.
 
