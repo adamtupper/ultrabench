@@ -8,7 +8,7 @@ UltraBench is a standardized benchmark of 14 different convex ultrasound image c
 This benchmark was published alongside the article [Revisiting Data Augmentation for Ultrasound Images](https://openreview.net/forum?id=iGcxlTLIL5). If you use this benchmark in your research please cite this article and the articles for each of the included datasets. Instructions for how to do so are provided at the end.
 
 <p align="center">
-  <img src="figures/body_regions.svg" alt="Regions of the body covered by UltraBench"/>
+  <img src="figures/cover_figure.svg" alt="Datasets and tasks included in UltraBench"/>
 </p>
 
 ## Motivation
