@@ -13,7 +13,7 @@ from .datasets import (
     stanford_thyroid,
 )
 
-app = typer.Typer()
+app = typer.Typer(no_args_is_help=True)
 app.command()(aul)
 app.command()(butterfly)
 app.command()(camus)
