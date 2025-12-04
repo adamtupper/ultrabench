@@ -51,12 +51,13 @@ The following table contains the list of supported datasets and tasks. Click on 
 
 ## Contributing
 
-We would love for this benchmark to grow and flourish into a resource that anyone with an interest in machine learning for ultrasound analysis can pick up and use quickly and easily. Any help addressing bugs, contributing new datasets or tasks, or any other improvements are welcome and appreiciated! I only ask that you respect the community guidelines laid out in the `CODE_OF_CONDUCT.md`. For more information on how to contribute, checkout out the [Documentation](https://github.com/adamtupper/ultrabench/wiki).
+We would love for this benchmark to grow and flourish into a resource that anyone with an interest in machine learning for ultrasound analysis can pick up and use quickly and easily. Any help addressing bugs, contributing new datasets or tasks, or any other improvements are welcome and appreciated! I only ask that you respect the community guidelines laid out in the `CODE_OF_CONDUCT.md`. For more information on how to contribute, checkout out the [Documentation](https://github.com/adamtupper/ultrabench/wiki).
 
-To ensure that your code meets the style guidelines etc., make sure you install the optional development dependencies:
+UltraBench is built using [uv](https://docs.astral.sh/uv/), so for the best experience make sure to [install uv](https://docs.astral.sh/uv/getting-started/installation/) before getting started. Once that's done, you can setup the development environment for the project by following the commands below. To ensure that your code meets the style guidelines etc., this also installs and initializes the optional development dependencies.
 
 ```bash
-pip install '.[dev]'
+uv venv
+source .venv/bin/activate
 nbstripout --install
 pre-commit install
 ```
@@ -71,13 +72,13 @@ If you use UltraBench in your research, please cite our article [Revisiting Data
 
 ```
 @article{
-tupper2025,
-title={Revisiting Data Augmentation for Ultrasound Images},
-author={Adam Tupper and Christian Gagn{\'e}},
-journal={Transactions on Machine Learning Research},
-issn={2835-8856},
-year={2025},
-url={https://openreview.net/forum?id=iGcxlTLIL5},
-note={}
+  tupper2025,
+  title={Revisiting Data Augmentation for Ultrasound Images},
+  author={Adam Tupper and Christian Gagn{\'e}},
+  journal={Transactions on Machine Learning Research},
+  issn={2835-8856},
+  year={2025},
+  url={https://openreview.net/forum?id=iGcxlTLIL5},
+  note={}
 }
 ```
