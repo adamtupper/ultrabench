@@ -53,6 +53,9 @@ ultrabench = "ultrabench.cli:app"
 [tool.hatch.version]
 path = "src/ultrabench/__about__.py"
 
+[tool.ruff]
+line-length = 88
+
 [tool.ruff.lint]
 select = [
     "E", # pycodestyle errors
