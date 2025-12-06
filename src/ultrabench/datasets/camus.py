@@ -1,12 +1,12 @@
-"""Split the CAMUS dataset into training, validation, and test sets using a 7:1:2 split,
-ensuring that there is no patient overlap between the splits.
+"""Split the CAMUS dataset into training, validation, and test sets using a
+7:1:2 split, ensuring that there is no patient overlap between the splits.
 
-The images and masks are extracted from the NIfTI files and saved as 8-bit PNG files.
-The corresponding metadata for each sequence is the ".cfg" files.
+The images and masks are extracted from the NIfTI files and saved as 8-bit PNG
+files. The corresponding metadata for each sequence is the ".cfg" files.
 
-Each example (a single image) is represented as an object in one of three JSON array
-files (`train.json`, `validation.json`, or `test.json`). Each object has the following
-key/value pairs:
+Each example (a single image) is represented as an object in one of three JSON
+array files (`train.json`, `validation.json`, or `test.json`). Each object has
+the following key/value pairs:
 
     - patient:          The patient ID.
     - view:             The view of the sequence (2CH or 4CH).
@@ -18,8 +18,8 @@ key/value pairs:
     - frame_rate:       The frame rate of the sequence.
     - image:            The path to the image file.
     - mask:             The path to the mask file.
-    - label:            The quality of the image encoded as an integer (poor = 0,
-                        medium = 1, good = 2).
+    - label:            The quality of the image encoded as an integer
+                        (poor = 0, medium = 1, good = 2).
 
 Usage:
     ultrabench camus RAW_DATA_DIR OUTPUT_DIR
@@ -51,7 +51,15 @@ CLASS_TO_LABEL = {
 }
 
 
-def segment_fan(image: np.ndarray):
+def segment_fan(image: np.ndarray) -> np.ndarray:
+    """Generate a fan-shaped mask using morphological operations.
+
+    Args:
+        image: The input image array.
+
+    Returns:
+        A binary mask of the fan-shaped region.
+    """
     # Threshold the image
     mask = image > 0
 
@@ -61,9 +69,13 @@ def segment_fan(image: np.ndarray):
     return mask.astype(np.uint8)
 
 
-def extract_images_and_masks(dataset_dir, output_dir):
-    """Extract the images and masks from the NIfTI files and save them as 8-bit PNG
-    files.
+def extract_images_and_masks(dataset_dir: str, output_dir: str) -> None:
+    """Extract the images and masks from the NIfTI files and save them as
+    8-bit PNG files.
+
+    Args:
+        dataset_dir: The path to the dataset directory.
+        output_dir: The path to the output directory.
     """
     os.makedirs(os.path.join(output_dir, "images"), exist_ok=True)
     os.makedirs(os.path.join(output_dir, "masks", "scan"), exist_ok=True)
@@ -102,8 +114,15 @@ def extract_images_and_masks(dataset_dir, output_dir):
                 )
 
 
-def extract_metadata(dataset_dir):
-    """Extract the metadata from the ".cfg" files."""
+def extract_metadata(dataset_dir: str) -> pd.DataFrame:
+    """Extract the metadata from the ".cfg" files.
+
+    Args:
+        dataset_dir: The path to the dataset directory.
+
+    Returns:
+        A DataFrame containing the metadata for each example.
+    """
     metadata = []
     for file_path in glob.glob(
         os.path.join(dataset_dir, "database_nifti", "**", "*.cfg")
@@ -141,7 +160,13 @@ def extract_metadata(dataset_dir):
     return df
 
 
-def verify_args(raw_data_dir, output_dir):
+def verify_args(raw_data_dir: str, output_dir: str) -> None:
+    """Verify the command line arguments.
+
+    Args:
+        raw_data_dir: The path to the raw data directory.
+        output_dir: The path to the output directory.
+    """
     assert os.path.isdir(raw_data_dir), "raw_data_dir must be an existing directory"
     assert os.path.isdir(output_dir), "output_dir must be an existing directory"
     assert not os.path.exists(
@@ -154,8 +179,13 @@ def camus(
     output_dir: Annotated[
         str, typer.Argument(help="The output directory for the processed datasets")
     ],
-):
-    """Divide the CAMUS dataset into training, validation, and test splits."""
+) -> None:
+    """Divide the CAMUS dataset into training, validation, and test splits.
+
+    Args:
+        raw_data_dir: The path to the raw data directory.
+        output_dir: The path to the output directory.
+    """
     verify_args(raw_data_dir, output_dir)
 
     output_dir = os.path.join(output_dir, OUTPUT_NAME.format(__version__))

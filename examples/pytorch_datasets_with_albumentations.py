@@ -1,3 +1,7 @@
+"""An example of creating PyTorch datasets that use Albumentations for
+data augmentation and preprocessing.
+"""
+
 import json
 import os
 
@@ -8,13 +12,14 @@ from torch.utils.data import Dataset
 
 
 class JSON_Dataset(Dataset):
-    def __init__(self, root_dir, split, transform=None):
-        """
-        Arguments:
-            root_dir (string): Directory with all the images.
-            split (string): The split to use, i.e. "train", "validation" or "test".
-            transform (callable, optional): Optional transform to be applied on a
-                sample.
+    def __init__(self, root_dir: str, split: str, transform=None) -> None:
+        """Initialize the JSON_Dataset.
+
+        Args:
+            root_dir: Directory with all the images.
+            split: The split to use, i.e. "train", "validation" or
+                "test".
+            transform: Optional transform to be applied on a sample.
         """
         self.root_dir = root_dir
         self.split = split
@@ -23,7 +28,7 @@ class JSON_Dataset(Dataset):
         with open(os.path.join(root_dir, f"{split}.json"), "r") as f:
             self.metadata = json.load(f)
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.metadata)
 
     def __getitem__(self, idx):
@@ -33,26 +38,31 @@ class JSON_Dataset(Dataset):
 class ClassificationDataset(JSON_Dataset):
     def __init__(
         self,
-        root_dir,
-        split,
+        root_dir: str,
+        split: str,
         transform=None,
-        image_key="image",
-        label_key="label",
-        scan_mask_key="scan_mask",
-    ):
-        """
-        Arguments:
-            root_dir (string): Directory with all the images.
-            split (string): The split to use, i.e. "train", "validation" or "test".
-            transform (callable, optional): Optional transform to be applied on a
-                sample.
+        image_key: str = "image",
+        label_key: str = "label",
+        scan_mask_key: str = "scan_mask",
+    ) -> None:
+        """Initialize the ClassificationDataset.
+
+        Args:
+            root_dir: Directory with all the images.
+            split: The split to use, i.e. "train", "validation" or
+                "test".
+            transform: Optional transform to be applied on a sample.
+            image_key: The key for the image path in the metadata.
+            label_key: The key for the label in the metadata.
+            scan_mask_key: The key for the scan mask path in the
+                metadata.
         """
         super().__init__(root_dir, split, transform)
         self.image_key = image_key
         self.label_key = label_key
         self.scan_mask_key = scan_mask_key
 
-    def __getitem__(self, idx):
+    def __getitem__(self, idx: int) -> tuple[np.ndarray | dict, int]:
         if torch.is_tensor(idx):
             idx = idx.tolist()
 
@@ -79,26 +89,30 @@ class ClassificationDataset(JSON_Dataset):
 class SegmentationDataset(JSON_Dataset):
     def __init__(
         self,
-        root_dir,
-        split,
+        root_dir: str,
+        split: str,
         transform=None,
-        image_key="image",
-        mask_key="mask",
-        scan_mask_key="scan_mask",
-    ):
-        """
-        Arguments:
-            root_dir (string): Directory with all the images.
-            split (string): The split to use, i.e. "train", "validation" or "test".
-            transform (callable, optional): Optional transform to be applied on a
-                sample.
+        image_key: str = "image",
+        mask_key: str = "mask",
+        scan_mask_key: str = "scan_mask",
+    ) -> None:
+        """Initialize the SegmentationDataset.
+
+        Args:
+            root_dir: Directory with all the images.
+            split: The split to use ("train", "validation" or "test").
+            transform: Optional transform to be applied on a sample.
+            image_key: The key for the image path in the metadata.
+            mask_key: The key for the mask path in the metadata.
+            scan_mask_key: The key for the scan mask path in the
+                metadata.
         """
         super().__init__(root_dir, split, transform)
         self.image_key = image_key
         self.mask_key = mask_key
         self.scan_mask_key = scan_mask_key
 
-    def __getitem__(self, idx):
+    def __getitem__(self, idx: int) -> tuple[np.ndarray, np.ndarray]:
         if torch.is_tensor(idx):
             idx = idx.tolist()
 

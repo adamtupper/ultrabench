@@ -1,17 +1,17 @@
-"""Split the Fatty Liver dataset into training, validation, and test sets using a 7:1:2
-split. The dataset consists of 550 images collected from 55 patients (10 images per
-patient). The images are split by patient to ensure that there is no patient overlap
-between the splits.
+"""Split the Fatty Liver dataset into training, validation, and test sets using
+a 7:1:2 split. The dataset consists of 550 images collected from 55 patients
+(10 images per patient). The images are split by patient to ensure that there
+is no patient overlap between the splits.
 
-Each example (a single image) is represented as an object in one of three JSON array
-files (`train.json`, `validation.json`, or `test.json`). Each object has the following
-key/value pairs:
+Each example (a single image) is represented as an object in one of three JSON
+array files (`train.json`, `validation.json`, or `test.json`). Each object has
+the following key/value pairs:
 
     - patient:      The patient ID.
     - image:        The path to the image file.
     - steatosis:    The percentage of hepatocytes with steatosis.
-    - label:        Whether or not the liver is fatty (0 if <5% hepatocytes with
-                    steatosis, 1 otherwise).
+    - label:        Whether or not the liver is fatty (0 if <5% hepatocytes
+                    with steatosis, 1 otherwise).
     - pathology:    0 = Normal or 1 = NFLD.
 
 Usage:
@@ -39,7 +39,15 @@ OUTPUT_NAME = "fatty_liver_v{}"
 LABEL_TO_CLASS = {0: "Normal", 1: "NFLD"}
 
 
-def generate_scan_mask(image: np.ndarray):
+def generate_scan_mask(image: np.ndarray) -> np.ndarray:
+    """Generate a scan mask using morphological operations.
+
+    Args:
+        image: The input image array.
+
+    Returns:
+        A binary mask of the scan region.
+    """
     # Threshold the image
     mask = image > 0
 
@@ -66,7 +74,13 @@ def generate_scan_mask(image: np.ndarray):
     return mask.astype(np.uint8)
 
 
-def verify_args(raw_data_path, output_dir):
+def verify_args(raw_data_path: str, output_dir: str) -> None:
+    """Verify the command line arguments.
+
+    Args:
+        raw_data_path: The path to the raw data file.
+        output_dir: The path to the output directory.
+    """
     assert os.path.exists(raw_data_path), "raw_data_path must exist"
     assert os.path.isdir(output_dir), "output_dir must be an existing directory"
     assert not os.path.exists(
@@ -79,8 +93,14 @@ def fatty_liver(
     output_dir: Annotated[
         str, typer.Argument(help="The output directory for the processed datasets")
     ],
-):
-    """Prepare the training, validation, and test sets for the Fatty Liver dataset."""
+) -> None:
+    """Prepare the training, validation, and test sets for the Fatty Liver
+    dataset.
+
+    Args:
+        raw_data_path: The path to the raw data file.
+        output_dir: The path to the output directory.
+    """
 
     output_dir = os.path.join(output_dir, OUTPUT_NAME.format(__version__))
 

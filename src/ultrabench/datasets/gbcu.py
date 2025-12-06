@@ -1,24 +1,25 @@
-"""Prepare the training, validation, and test sets for the GBCU dataset. We use the
-predefined training and test data split, and additionally separate 10% of the training
-set to serve as a validation set.
+"""Prepare the training, validation, and test sets for the GBCU dataset. We use
+the predefined training and test data split, and additionally separate 10% of
+the training set to serve as a validation set.
 
 While there is no patient overlap between the training and test splits, patient
-information is not publicly available and therefore we cannot prevent patient overlap
-between the training and validation sets.
+information is not publicly available and therefore we cannot prevent patient
+overlap between the training and validation sets.
 
-Each example (a single image) is represented as an object in one of three JSON array
-files (`train.json`, `validation.json`, or `test.json`). Each object has the following
-key/value pairs:
+Each example (a single image) is represented as an object in one of three JSON
+array files (`train.json`, `validation.json`, or `test.json`). Each object has
+the following key/value pairs:
 
     - image:        The path to the image file.
     - dimensions:   The dimensions of the image (width, height).
-    - bbox_labels:  The bounding box labels for the region of interest (nml, abn), and
-                    other pathologies (stn, malg, etc.) that may be present.
-    - bboxes:       The bounding boxes for the region of interest (nml, abn), and other
-                    pathologies (stn, malg, etc.) that maybe present.
+    - bbox_labels:  The bounding box labels for the region of interest (nml,
+                    abn), and other pathologies (stn, malg, etc.) that may be
+                    present.
+    - bboxes:       The bounding boxes for the region of interest (nml, abn),
+                    and other pathologies (stn, malg, etc.) that maybe present.
     - pathology:    Normal, benign, or malignant.
-    - label:        The pathology encoded as an integer (normal = 0, benign = 1,
-                    malignant = 2).
+    - label:        The pathology encoded as an integer (normal = 0,
+                    benign = 1, malignant = 2).
 
 Bounding boxes are stored in (x_min, y_min, x_max, y_max) format.
 
@@ -49,16 +50,16 @@ IMAGE_DIR = "imgs"
 OUTPUT_NAME = "gbcu_v{}"
 
 
-def collate_info(filename, label, bbox_annotations):
+def collate_info(filename: str, label: int, bbox_annotations: dict) -> dict:
     """Collate the information for an image.
 
     Args:
-        filename (str): The image filename.
-        label (int): The pathology label.
-        bbox_annotations (dict): The bounding box annotations.
+        filename: The image filename.
+        label: The pathology label.
+        bbox_annotations: The bounding box annotations.
 
     Returns:
-        dict: The collated information for the image.
+        The collated information for the image.
     """
     annotations = bbox_annotations[filename]
     dimensions, bboxes = annotations["dim"], annotations["bbs"]
@@ -78,7 +79,15 @@ def collate_info(filename, label, bbox_annotations):
     }
 
 
-def generate_scan_mask(image: np.ndarray):
+def generate_scan_mask(image: np.ndarray) -> np.ndarray:
+    """Generate a scan mask using morphological operations.
+
+    Args:
+        image: The input image array.
+
+    Returns:
+        A binary mask of the scan region.
+    """
     # Threshold the image
     mask = image > 0
 
@@ -99,7 +108,13 @@ def generate_scan_mask(image: np.ndarray):
     return mask.astype(np.uint8)
 
 
-def verify_args(raw_data_dir, output_dir):
+def verify_args(raw_data_dir: str, output_dir: str) -> None:
+    """Verify the command line arguments.
+
+    Args:
+        raw_data_dir: The path to the raw data directory.
+        output_dir: The path to the output directory.
+    """
     assert os.path.isdir(raw_data_dir), "raw_data_dir must be an existing directory"
     assert os.path.isdir(output_dir), "output_dir must be an existing directory"
     assert not os.path.exists(
@@ -112,8 +127,13 @@ def gbcu(
     output_dir: Annotated[
         str, typer.Argument(help="The output directory for the processed datasets")
     ],
-):
-    """Prepare the training, validation, and test sets for the GBCU dataset."""
+) -> None:
+    """Prepare the training, validation, and test sets for the GBCU dataset.
+
+    Args:
+        raw_data_dir: The path to the raw data directory.
+        output_dir: The path to the output directory.
+    """
     verify_args(raw_data_dir, output_dir)
 
     output_dir = os.path.join(output_dir, OUTPUT_NAME.format(__version__))

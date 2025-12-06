@@ -1,19 +1,21 @@
-"""Prepare the training, validation, and test sets for the MMOTU dataset. The dataset is
-already pre-split into training and test data, ensuring that there is no patient overlap
-between these splits. However, no patient data is retained and therefore we cannot
-ensure that there is not any patient overlap when splitting the training set into
-training and validation data. We use a 8:2 split to separate the training and validation
-sets.
+"""Prepare the training, validation, and test sets for the MMOTU dataset. The
+dataset is already pre-split into training and test data, ensuring that there
+is no patient overlap between these splits. However, no patient data is
+retained and therefore we cannot ensure that there is not any patient overlap
+when splitting the training set into training and validation data. We use an
+8:2 split to separate the training and validation sets.
 
-Each example (a single image) is represented as an object in one of three JSON array
-files (`train.json`, `validation.json`, or `test.json`). Each object has the following
-key/value pairs:
+Each example (a single image) is represented as an object in one of three JSON
+array files (`train.json`, `validation.json`, or `test.json`). Each object has
+the following key/value pairs:
 
     - image:                    The path to the image file.
-    - tumor_mask_binary:        The path to the binary mask file (tumor segmentation).
+    - tumor_mask_binary:        The path to the binary mask file (tumor
+                                segmentation).
     - tumor_mask_multiclass:    The path to the multi-class mask file (tumor
                                 segmentation by type).
-    - scan_mask:                The path to the scan mask file (scan segmentation).
+    - scan_mask:                The path to the scan mask file (scan
+                                segmentation).
     - label:                    The class label of the image.
 
 
@@ -52,7 +54,15 @@ PIXEL_TO_CLASS = {
 }
 
 
-def generate_scan_mask(image: np.ndarray):
+def generate_scan_mask(image: np.ndarray) -> np.ndarray:
+    """Generate a scan mask using morphological operations.
+
+    Args:
+        image: The input image array.
+
+    Returns:
+        A binary mask of the scan region.
+    """
     # Threshold the image
     mask = image > 0
 
@@ -100,7 +110,17 @@ def generate_scan_mask(image: np.ndarray):
     return mask.astype(np.uint8)
 
 
-def process_examples(dataset_dir, output_dir, split):
+def process_examples(dataset_dir: str, output_dir: str, split: str) -> list[dict]:
+    """Process the examples for a given split.
+
+    Args:
+        dataset_dir: The path to the dataset directory.
+        output_dir: The path to the output directory.
+        split: The dataset split (train or test).
+
+    Returns:
+        A list of example dictionaries.
+    """
     # Read the text file containing the image file names
     prefix = "train" if split == "train" else "val"
 
@@ -176,7 +196,13 @@ def process_examples(dataset_dir, output_dir, split):
     return examples
 
 
-def verify_args(raw_data_dir, output_dir):
+def verify_args(raw_data_dir: str, output_dir: str) -> None:
+    """Verify the command line arguments.
+
+    Args:
+        raw_data_dir: The path to the raw data directory.
+        output_dir: The path to the output directory.
+    """
     assert os.path.isdir(raw_data_dir), "raw_data_dir must be an existing directory"
     assert os.path.isdir(output_dir), "output_dir must be an existing directory"
     assert not os.path.exists(
@@ -189,8 +215,13 @@ def mmotu(
     output_dir: Annotated[
         str, typer.Argument(help="The output directory for the processed datasets")
     ],
-):
-    """Prepare the training and test sets for the MMOTU dataset."""
+) -> None:
+    """Prepare the training and test sets for the MMOTU dataset.
+
+    Args:
+        raw_data_dir: The path to the raw data directory.
+        output_dir: The path to the output directory.
+    """
     verify_args(raw_data_dir, output_dir)
 
     output_dir = os.path.join(output_dir, OUTPUT_NAME.format(__version__))
