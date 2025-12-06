@@ -1,3 +1,0 @@
-albumentations>=1.4.18
-scikit-image>=0.24.0
-torch>=2.3.0

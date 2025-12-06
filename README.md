@@ -56,7 +56,8 @@ We would love for this benchmark to grow and flourish into a resource that anyon
 UltraBench is built using [uv](https://docs.astral.sh/uv/), so for the best experience make sure to [install uv](https://docs.astral.sh/uv/getting-started/installation/) before getting started. Once that's done, you can setup the development environment for the project by following the commands below. To ensure that your code meets the style guidelines etc., this also installs and initializes the optional development dependencies.
 
 ```bash
-uv venv
+uv sync
+uv sync --group examples  # Install the dependencies for the examples, if required
 source .venv/bin/activate
 nbstripout --install
 pre-commit install
