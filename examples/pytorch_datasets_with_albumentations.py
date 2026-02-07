@@ -1,5 +1,5 @@
-"""An example of creating PyTorch datasets that use Albumentations for
-data augmentation and preprocessing.
+"""An example of creating PyTorch datasets that use Albumentations for data
+augmentation and preprocessing.
 """
 
 import json
@@ -49,13 +49,11 @@ class ClassificationDataset(JSON_Dataset):
 
         Args:
             root_dir: Directory with all the images.
-            split: The split to use, i.e. "train", "validation" or
-                "test".
+            split: The split to use, i.e. "train", "validation" or "test".
             transform: Optional transform to be applied on a sample.
             image_key: The key for the image path in the metadata.
             label_key: The key for the label in the metadata.
-            scan_mask_key: The key for the scan mask path in the
-                metadata.
+            scan_mask_key: The key for the scan mask path in the metadata.
         """
         super().__init__(root_dir, split, transform)
         self.image_key = image_key
@@ -104,8 +102,7 @@ class SegmentationDataset(JSON_Dataset):
             transform: Optional transform to be applied on a sample.
             image_key: The key for the image path in the metadata.
             mask_key: The key for the mask path in the metadata.
-            scan_mask_key: The key for the scan mask path in the
-                metadata.
+            scan_mask_key: The key for the scan mask path in the metadata.
         """
         super().__init__(root_dir, split, transform)
         self.image_key = image_key
