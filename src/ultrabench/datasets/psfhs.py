@@ -1,11 +1,12 @@
-"""Split the PSFHS dataset into training, validation, and test sets using a 7:1:2 split.
-The dataset consists of 1358 images from 1124 patients. Unfortunately, there is no
-metadata to provide additional information about the patients or the images. Therefore,
-we cannot ensure that there is no patient overlap between the splits.
+"""Split the PSFHS dataset into training, validation, and test sets using a
+7:1:2 split. The dataset consists of 1358 images from 1124 patients.
+Unfortunately, there is no metadata to provide additional information about the
+patients or the images. Therefore, we cannot ensure that there is no patient
+overlap between the splits.
 
-Each example (a single image) is represented as an object in one of three JSON array
-files (`train.json`, `validation.json`, or `test.json`). Each object has the following
-key/value pairs:
+Each example (a single image) is represented as an object in one of three JSON
+array files (`train.json`, `validation.json`, or `test.json`). Each object has
+the following key/value pairs:
 
     - image:            The path to the image file.
     - psfh_mask:        The path to the PS-FH mask file.
@@ -36,7 +37,15 @@ __version__ = version("ultrabench")
 OUTPUT_NAME = "psfhs_v{}"
 
 
-def generate_scan_mask(image: np.ndarray):
+def generate_scan_mask(image: np.ndarray) -> np.ndarray:
+    """Generate a scan mask using morphological operations.
+
+    Args:
+        image: The input image array.
+
+    Returns:
+        A binary mask of the scan region.
+    """
     # Threshold the image
     mask = image > 1
 
@@ -72,7 +81,13 @@ def generate_scan_mask(image: np.ndarray):
     return mask.astype(np.uint8)
 
 
-def verify_args(raw_data_dir, output_dir):
+def verify_args(raw_data_dir: str, output_dir: str) -> None:
+    """Verify the command line arguments.
+
+    Args:
+        raw_data_dir: The path to the raw data directory.
+        output_dir: The path to the output directory.
+    """
     assert os.path.isdir(raw_data_dir), "raw_data_dir must be an existing directory"
     assert os.path.isdir(output_dir), "output_dir must be an existing directory"
     assert not os.path.exists(
@@ -85,8 +100,14 @@ def psfhs(
     output_dir: Annotated[
         str, typer.Argument(help="The output directory for the processed datasets")
     ],
-):
-    """Prepare the training, validation and test sets for the PSFHS dataset."""
+) -> None:
+    """Prepare the training, validation and test sets for the PSFHS
+    dataset.
+
+    Args:
+        raw_data_dir: The path to the raw data directory.
+        output_dir: The path to the output directory.
+    """
     verify_args(raw_data_dir, output_dir)
 
     output_dir = os.path.join(output_dir, OUTPUT_NAME.format(__version__))

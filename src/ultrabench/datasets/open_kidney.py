@@ -1,19 +1,21 @@
-"""Divide the Open Kidney dataset into training, validation, and test splits using a
-7:1:2 split. For the annotations, use those created by Sonographer 1. Each image is
-associated with a distinct patient so we do not need to worry about patient overlap
-between the splits. However, we do need to remove 20 duplicate images. The splits are
-stratified based on the view label (longitudinal, transverse, other) to mitigate
-distribution shifts between the splits.
+"""Divide the Open Kidney dataset into training, validation, and test splits
+using a 7:1:2 split. For the annotations, use those created by Sonographer 1.
+Each image is associated with a distinct patient so we do not need to worry
+about patient overlap between the splits. However, we do need to remove 20
+duplicate images. The splits are stratified based on the view label
+(longitudinal, transverse, other) to mitigate distribution shifts between the
+splits.
 
-From inspecting the original code, the labels of the regions mask are as follows:
+From inspecting the original code, the labels of the regions mask are as
+follows:
     - 0: Background
     - 1: Central Echo Complex
     - 2: Medulla
     - 3: Cortex
 
-Each example (a single image) is represented as an object in one of three JSON array
-files (`train.json`, `validation.json`, or `test.json`). Each object has the following
-key/value pairs:
+Each example (a single image) is represented as an object in one of three JSON
+array files (`train.json`, `validation.json`, or `test.json`). Each object has
+the following key/value pairs:
 
     - image:        The path to the image file.
     - scan_mask:    The path to the scan mask file.
@@ -21,7 +23,8 @@ key/value pairs:
     - regions_mask:  The path to the region mask file.
     - transplant:   True if the kidney is transplanted, False otherwise.
     - view:         The view of the kidney (longitudinal, transverse, other).
-    - quality:      The quality of the image (unsatisfactory, poor, fair, good).
+    - quality:      The quality of the image (unsatisfactory, poor, fair,
+                    good).
 
 Usage:
     ultrabench open_kidney RAW_DATA_DIR OUTPUT_DIR
@@ -49,7 +52,15 @@ SONOGRAPHER = 1
 CLINICAL_METADATA_FILE = f"labels/reviewed_labels_{SONOGRAPHER}.csv"
 
 
-def generate_scan_mask(image: np.ndarray):
+def generate_scan_mask(image: np.ndarray) -> np.ndarray:
+    """Generate a scan mask using morphological operations.
+
+    Args:
+        image: The input image array.
+
+    Returns:
+        A binary mask of the scan region.
+    """
     # Threshold the image
     mask = image > 0
 
@@ -95,7 +106,13 @@ def generate_scan_mask(image: np.ndarray):
     return mask.astype(np.uint8)
 
 
-def verify_args(raw_data_dir, output_dir):
+def verify_args(raw_data_dir: str, output_dir: str) -> None:
+    """Verify the command line arguments.
+
+    Args:
+        raw_data_dir: The path to the raw data directory.
+        output_dir: The path to the output directory.
+    """
     assert os.path.isdir(raw_data_dir), "raw_data_dir must be an existing directory"
     assert os.path.isdir(output_dir), "output_dir must be an existing directory"
     assert not os.path.exists(
@@ -108,8 +125,13 @@ def open_kidney(
     output_dir: Annotated[
         str, typer.Argument(help="The output directory for the processed datasets")
     ],
-):
-    """Prepare the Open Kidney dataset."""
+) -> None:
+    """Prepare the Open Kidney dataset.
+
+    Args:
+        raw_data_dir: The path to the raw data directory.
+        output_dir: The path to the output directory.
+    """
     verify_args(raw_data_dir, output_dir)
 
     output_dir = os.path.join(output_dir, OUTPUT_NAME.format(__version__))

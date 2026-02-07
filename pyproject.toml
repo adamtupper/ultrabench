@@ -38,6 +38,10 @@ dev = [
     "pre-commit>=4.5.0",
     "ruff>=0.14.7",
 ]
+examples = [
+    "albumentations>=1.4.18",
+    "torch>=2.3.0",
+]
 
 [project.urls]
 Homepage = "https://github.com/adamtupper/ultrabench"
@@ -52,6 +56,12 @@ ultrabench = "ultrabench.cli:app"
 
 [tool.hatch.version]
 path = "src/ultrabench/__about__.py"
+
+[tool.uv]
+default-groups = ["dev"]
+
+[tool.ruff]
+line-length = 88
 
 [tool.ruff.lint]
 select = [

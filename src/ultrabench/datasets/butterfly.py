@@ -1,11 +1,11 @@
 """Prepare the Butterfly dataset, splitting the training data into training and
-validation sets using a 8:2 split and preserving the existing test split. The training
-and validation sets are split by patient to ensure that there is no patient overlap
-between the splits.
+validation sets using a 8:2 split and preserving the existing test split. The
+training and validation sets are split by patient to ensure that there is no
+patient overlap between the splits.
 
-Each example (a single image) is represented as an object in one of three JSON array
-files (`train.json`, `validation.json`, or `test.json`). Each object has the following
-key/value pairs:
+Each example (a single image) is represented as an object in one of three JSON
+array files (`train.json`, `validation.json`, or `test.json`). Each object has
+the following key/value pairs:
 
     - patient: The patient ID.
     - image: The path to the image file.
@@ -47,13 +47,15 @@ CLASS_TO_LABEL = {
 }
 
 
-def generate_scan_mask(output_dir: str, rel_image_path: str, rel_mask_path: str):
+def generate_scan_mask(
+    output_dir: str, rel_image_path: str, rel_mask_path: str
+) -> None:
     """Generate a scan mask for an image using morphological operations.
 
     Args:
-        output_dir (str): The output directory for the dataset.
-        image_path (str): The path to the image file.
-        mask_path (str): The path to save the scan mask file.
+        output_dir: The output directory for the dataset.
+        rel_image_path: The path to the image file.
+        rel_mask_path: The path to save the scan mask file.
     """
     image = skimage.io.imread(rel_image_path)
     mask = image > 0  # Threshold the image
@@ -65,7 +67,13 @@ def generate_scan_mask(output_dir: str, rel_image_path: str, rel_mask_path: str)
     )
 
 
-def verify_args(raw_data_dir, output_dir):
+def verify_args(raw_data_dir: str, output_dir: str) -> None:
+    """Verify the command line arguments.
+
+    Args:
+        raw_data_dir: The path to the raw data directory.
+        output_dir: The path to the output directory.
+    """
     assert os.path.isdir(raw_data_dir), "raw_data_dir must be an existing directory"
     assert os.path.isdir(output_dir), "output_dir must be an existing directory"
     assert not os.path.exists(
@@ -78,8 +86,14 @@ def butterfly(
     output_dir: Annotated[
         str, typer.Argument(help="The output directory for the processed datasets")
     ],
-):
-    """Prepare the training, validation, and test sets for the Butterfly dataset."""
+) -> None:
+    """Prepare the training, validation, and test sets for the
+    Butterfly dataset.
+
+    Args:
+        raw_data_dir: The path to the raw data directory.
+        output_dir: The path to the output directory.
+    """
     # Verify arguments
     verify_args(raw_data_dir, output_dir)
 

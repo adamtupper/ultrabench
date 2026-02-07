@@ -1,25 +1,26 @@
-"""Split the Annotated Ultrasound Liver (AUL) dataset into training, validation, and
-test sets using a 7:1:2 split. The dataset consists of 735 images from different
-patients.
+"""Split the Annotated Ultrasound Liver (AUL) dataset into training,
+validation, and test sets using a 7:1:2 split. The dataset consists of 735
+images from different patients.
 
-Two versions of the dataset are created, one for liver segmentation and one for mass
-classification/segmentation. This is because one of the examples (image 374.jpg) is
-missing a liver segmentation mask and is therefore excluded from the liver segmentation
-task. For images 229.jpg and 306.jpg, the scan annotations actually correspond to the
-liver (they are missing the scan annotations). See `exploratory_analysis/eda_aul.py` for
-more information.
+Two versions of the dataset are created, one for liver segmentation and one for
+mass classification/segmentation. This is because one of the examples
+(image 374.jpg) is missing a liver segmentation mask and is therefore excluded
+from the liver segmentation task. For images 229.jpg and 306.jpg, the scan
+annotations actually correspond to the liver (they are missing the scan
+annotations).
 
-Each example (a single image) is represented as an object in one of three JSON array
-files (`train.json`, `validation.json`, or `test.json`). Each object has the following
-key/value pairs:
+Each example (a single image) is represented as an object in one of three JSON
+array files (`train.json`, `validation.json`, or `test.json`). Each object has
+the following key/value pairs:
 
     - image: The path to the image file.
     - scan_mask:  The path to the scan mask file.
     - liver_mask: The path to the liver mask file.
     - mass_mask: The path to the mass mask file.
-    - pathology: The pathology of the mass (normal/no mass, benign or malignant).
-    - label: The pathology of the mass encoded as an integer (norma/no mass = 0,
-      benign = 1, malignant = 2).
+    - pathology: The pathology of the mass (normal/no mass, benign or
+        malignant).
+    - label: The pathology of the mass encoded as an integer (normal/no
+        mass = 0, benign = 1, malignant = 2).
 
 Usage:
     ultrabench aul RAW_DATA_DIR OUTPUT_DIR
@@ -29,6 +30,7 @@ import glob
 import json
 import os
 from importlib.metadata import version
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -51,7 +53,16 @@ CLASS_TO_LABEL = {
 }
 
 
-def collect_examples(dataset_dir):
+def collect_examples(dataset_dir: str) -> list[dict[str, Any]]:
+    """Collect all examples from the dataset directory.
+
+    Args:
+        dataset_dir: The path to the dataset directory.
+
+    Returns:
+        A list of examples, where each example is represented as a
+            dictionary.
+    """
     examples = []
     for class_name in CLASS_TO_LABEL.keys():
         images = glob.glob(f"{dataset_dir}/{class_name}/image/*.jpg")
@@ -101,8 +112,15 @@ def collect_examples(dataset_dir):
     return examples
 
 
-def generate_scan_mask(image_path):
-    """Generate a scan mask for the given image using morphological operations."""
+def generate_scan_mask(image_path: str) -> np.ndarray:
+    """Generate a scan mask for the given image using morphological operations.
+
+    Args:
+        image_path: The path to the image file.
+
+    Returns:
+        A binary mask of the scan region.
+    """
     image = io.imread(image_path)
 
     # Threshold the image
@@ -118,8 +136,17 @@ def generate_scan_mask(image_path):
     return mask.astype("uint8")
 
 
-def generate_mask(image_shape, polygon_file):
-    """Generate a pixel mask for the polygon coordinates in the given file."""
+def generate_mask(image_shape: tuple[int, int], polygon_file: str) -> np.ndarray:
+    """Generate a pixel mask for the polygon coordinates in the given file.
+
+    Args:
+        image_shape: The shape of the image (height, width).
+        polygon_file: The path to the JSON file containing the polygon
+            coordinates.
+
+    Returns:
+        A binary mask of the polygon region.
+    """
     with open(polygon_file) as f:
         points = json.load(f)
 
@@ -129,10 +156,15 @@ def generate_mask(image_shape, polygon_file):
     return mask
 
 
-def copy_images(output_dir, df):
-    """Save the images as PNG files in the output directory. 3-channel images are
-    converted to single-channel images by using the mean intensity across the three
-    channels.
+def copy_images(output_dir: str, df: pd.DataFrame) -> None:
+    """Save the images as PNG files in the output directory.
+
+    3-channel images are converted to single-channel images by using the mean
+    intensity across the three channels.
+
+    Args:
+        output_dir: The path to the output directory.
+        df: The DataFrame containing the examples.
     """
     image_dir = os.path.join(output_dir, "images")
     os.makedirs(image_dir, exist_ok=True)
@@ -147,8 +179,13 @@ def copy_images(output_dir, df):
         io.imsave(os.path.join(image_dir, dest_filename), image, check_contrast=False)
 
 
-def generate_masks(output_dir, df):
-    """Generate and save the scan, liver, and mass masks for the examples."""
+def generate_masks(output_dir: str, df: pd.DataFrame) -> None:
+    """Generate and save the scan, liver, and mass masks for the examples.
+
+    Args:
+        output_dir: The path to the output directory.
+        df: The DataFrame containing the examples.
+    """
     scan_mask_dir = os.path.join(output_dir, "masks", "scan")
     liver_mask_dir = os.path.join(output_dir, "masks", "liver")
     mass_mask_dir = os.path.join(output_dir, "masks", "mass")
@@ -183,8 +220,14 @@ def generate_masks(output_dir, df):
             io.imsave(mass_mask_path, mass_mask, check_contrast=False)
 
 
-def save_examples(output_dir, df, split):
-    """Save the examples to a JSON file."""
+def save_examples(output_dir: str, df: pd.DataFrame, split: str) -> None:
+    """Save the examples to a JSON file.
+
+    Args:
+        output_dir: The path to the output directory.
+        df: The DataFrame containing the examples.
+        split: The dataset split (train, validation, or test).
+    """
     columns_to_drop = [
         "filename",
         "image_path",
@@ -198,7 +241,13 @@ def save_examples(output_dir, df, split):
         json.dump(examples, f, indent=4)
 
 
-def verify_args(raw_data_dir, output_dir):
+def verify_args(raw_data_dir: str, output_dir: str) -> None:
+    """Verify the command line arguments.
+
+    Args:
+        raw_data_dir: The path to the raw data directory.
+        output_dir: The path to the output directory.
+    """
     assert os.path.isdir(raw_data_dir), "raw_data_dir must be an existing directory"
     assert os.path.isdir(output_dir), "output_dir must be an existing directory"
     assert not os.path.exists(
@@ -214,9 +263,13 @@ def aul(
     output_dir: Annotated[
         str, typer.Argument(help="The output directory for the processed datasets")
     ],
-):
-    """Prepare the training, validation, and test sets for the mass classification, mass
-    segmentation and liver segmentation tasks.
+) -> None:
+    """Prepare the training, validation, and test sets for the mass
+    classification, mass segmentation and liver segmentation tasks.
+
+    Args:
+        raw_data_dir: The path to the raw data directory.
+        output_dir: The path to the output directory.
     """
     # Verify arguments
     verify_args(raw_data_dir, output_dir)

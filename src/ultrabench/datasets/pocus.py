@@ -1,28 +1,30 @@
-"""Build the POCUS image dataset by extracting the frames from the videos and copying
-the images. The dataset is split into training, validation, and test sets using a 7:1:2
-split.
+"""Build the POCUS image dataset by extracting the frames from the videos and
+copying the images. The dataset is split into training, validation, and test
+sets using a 7:1:2 split.
 
 Notes:
-    - Following the same procedure as the authors of the original paper, we sample the
-      videos at a rate of 3 Hz upto a maximum of 30 frames.
+    - Following the same procedure as the authors of the original paper, we
+      sample the videos at a rate of 3 Hz upto a maximum of 30 frames.
     - We include only convex probe ultrasound images in the dataset.
-    - Following the same procedure as the authors of the original paper, we do not
-      include the viral pneumonia class in the dataset due to the lack of examples.
-    - The frames extracted from videos are grouped by the video source when splitting
-      the dataset into training, validation, and test sets to prevent data leakage.
-    - In total, there are 2102 examples split into 1468 training, 177 validation, and
-      457 test examples.
+    - Following the same procedure as the authors of the original paper, we do
+      not include the viral pneumonia class in the dataset due to the lack of
+      examples.
+    - The frames extracted from videos are grouped by the video source when
+      splitting the dataset into training, validation, and test sets to prevent
+      data leakage.
+    - In total, there are 2102 examples split into 1468 training, 177
+      validation, and 457 test examples.
 
-Each example (a single image) is represented as an object in one of three JSON array
-files (`train.json`, `validation.json`, or `test.json`). Each object has the following
-key/value pairs:
+Each example (a single image) is represented as an object in one of three JSON
+array files (`train.json`, `validation.json`, or `test.json`). Each object has
+the following key/value pairs:
 
     - source:       The name of the source video or image file.
     - image:        The path to the image file.
     - scan_mask:    The path to the scan mask file.
     - pathology:    The pathology of the mass (regular, pneumonia, or covid).
-    - label:        The pathology of the mass encoded as an integer (regular = 0,
-                    pneumonia = 1, covid = 2).
+    - label:        The pathology of the mass encoded as an integer
+                    (regular = 0, pneumonia = 1, covid = 2).
 
 Usage:
     ultrabench pocus RAW_DATA_DIR OUTPUT_DIR
@@ -67,11 +69,11 @@ VIDEO_EXTENSIONS = (".mpeg", ".gif", ".mp4", ".m4v", ".avi", ".mov")
 VIDEO_INFO_TEMPLATE = "--> {}: {} frames at {:.2f} Hz, {} dimensions"
 
 
-def parse_args():
+def parse_args() -> argparse.Namespace:
     """Parse command-line arguments.
 
     Returns:
-        argparse.Namespace: The parsed arguments.
+        The parsed arguments.
     """
     parser = argparse.ArgumentParser(prog="prepare_pocus.py")
     parser.add_argument(
@@ -103,7 +105,15 @@ def parse_args():
     return args
 
 
-def generate_scan_mask(image: np.ndarray):
+def generate_scan_mask(image: np.ndarray) -> np.ndarray:
+    """Generate a scan mask using morphological operations.
+
+    Args:
+        image: The input image array.
+
+    Returns:
+        A binary mask of the scan region.
+    """
     # Convert the image to single-channel grayscale
     image = image.mean(axis=-1).astype(np.uint8) if image.ndim == 3 else image
 
@@ -147,13 +157,28 @@ def generate_scan_mask(image: np.ndarray):
     return mask.astype(np.uint8)
 
 
-def image_filter(path, prefix):
-    """Filter the images in the directory."""
+def image_filter(path: str, prefix: str) -> bool:
+    """Filter the images in the directory.
+
+    Args:
+        path: The path to the file.
+        prefix: The prefix to match.
+
+    Returns:
+        True if the file matches the criteria, False otherwise.
+    """
     return path.endswith(IMAGE_EXTENSIONS) and path.startswith(prefix)
 
 
-def extract_frames_ffmpeg(video_path):
-    """Extract the frames from the video using ffmpeg."""
+def extract_frames_ffmpeg(video_path: str) -> tuple[np.ndarray, float]:
+    """Extract the frames from the video using ffmpeg.
+
+    Args:
+        video_path: The path to the video file.
+
+    Returns:
+        A tuple containing the frames array and the frame rate.
+    """
     video = imageio.get_reader(video_path, "ffmpeg")
     frame_rate = video.get_meta_data()["fps"]
 
@@ -176,8 +201,15 @@ def extract_frames_ffmpeg(video_path):
     return frames, frame_rate
 
 
-def extract_frames_opencv(video_path):
-    """Extract the frames from the video using OpenCV."""
+def extract_frames_opencv(video_path: str) -> tuple[np.ndarray, float]:
+    """Extract the frames from the video using OpenCV.
+
+    Args:
+        video_path: The path to the video file.
+
+    Returns:
+        A tuple containing the frames array and the frame rate.
+    """
     video = cv2.VideoCapture(video_path)
     frame_rate = video.get(cv2.CAP_PROP_FPS)
 
@@ -200,7 +232,13 @@ def extract_frames_opencv(video_path):
     return frames, frame_rate
 
 
-def verify_args(raw_data_dir, output_dir):
+def verify_args(raw_data_dir: str, output_dir: str) -> None:
+    """Verify the command line arguments.
+
+    Args:
+        raw_data_dir: The path to the raw data directory.
+        output_dir: The path to the output directory.
+    """
     assert os.path.isdir(raw_data_dir), "raw_data_dir must be an existing directory"
     assert os.path.isdir(output_dir), "output_dir must be an existing directory"
     assert not os.path.exists(
@@ -213,8 +251,14 @@ def pocus(
     output_dir: Annotated[
         str, typer.Argument(help="The output directory for the processed datasets")
     ],
-):
-    """Prepare the training, validation and test sets for the POCUS dataset."""
+) -> None:
+    """Prepare the training, validation and test sets for the POCUS
+    dataset.
+
+    Args:
+        raw_data_dir: The path to the raw data directory.
+        output_dir: The path to the output directory.
+    """
     verify_args(raw_data_dir, output_dir)
 
     output_dir = os.path.join(output_dir, OUTPUT_NAME.format(__version__))

@@ -1,24 +1,25 @@
-"""Split the Stanford Thyroid Ultrasound Cine-clip dataset into training, validation,
-and test data using a 7:1:2 split, ensuring that there is no patient overlap between the
-splits.
+"""Split the Stanford Thyroid Ultrasound Cine-clip dataset into training,
+validation, and test data using a 7:1:2 split, ensuring that there is no
+patient overlap between the splits.
 
-The images and masks are extracted from the `dataset.hdf5` file. The images and masks
-are saved as single-channel uint8 PNG files. Mask values are mapped from the values
-{0, 255} to {0, 1}.
+The images and masks are extracted from the `dataset.hdf5` file. The images and
+masks are saved as single-channel uint8 PNG files. Mask values are mapped from
+the values {0, 255} to {0, 1}.
 
-Each example (image) is represented as an object in one of three JSON array files
-(`train.json`, `validation.json`, or `test.json`). Each object has the following
-key/value pairs:
+Each example (image) is represented as an object in one of three JSON array
+files (`train.json`, `validation.json`, or `test.json`). Each object has the
+following key/value pairs:
 
     - patient:              The patient ID.
     - image:                The path to the image file.
     - tumor_mask:           The path to the tumor mask file.
     - scan_mask:            The path to the scan mask file.
-    - pathology:            The pathology of the lesion (benign or malignant = 1).
+    - pathology:            The pathology of the lesion (benign or
+                            malignant = 1).
     - label:                The pathology of the lesion encoded as an integer
-                            (benign = 0, malignant = 1). Lesions with TIRADS levels
-                            between 1-3 are considered benign and levels 4-5 are
-                            considered malignant.
+                            (benign = 0, malignant = 1). Lesions with TIRADS
+                            levels between 1-3 are considered benign and levels
+                            4-5 are considered malignant.
     - age:                  The age of the patient.
     - sex:                  The sex of the patient.
     - location:             The location of the lesion.
@@ -34,7 +35,7 @@ key/value pairs:
     - histopath_diagnosis:  No description provided.
 
 Usage:
-    ultrabenck stanford_thyroid RAW_DATA_DIR OUTPUT_DIR
+    ultrabench stanford_thyroid RAW_DATA_DIR OUTPUT_DIR
 """
 
 import json
@@ -166,7 +167,15 @@ PATIENTS = [
 ]
 
 
-def generate_scan_mask(image: np.ndarray):
+def generate_scan_mask(image: np.ndarray) -> np.ndarray:
+    """Generate a scan mask using morphological operations.
+
+    Args:
+        image: The input image array.
+
+    Returns:
+        A binary mask of the scan region.
+    """
     # Threshold the image
     mask = image > 1
 
@@ -198,7 +207,13 @@ def generate_scan_mask(image: np.ndarray):
     return mask.astype(np.uint8)
 
 
-def verify_args(raw_data_dir, output_dir):
+def verify_args(raw_data_dir: str, output_dir: str) -> None:
+    """Verify the command line arguments.
+
+    Args:
+        raw_data_dir: The path to the raw data directory.
+        output_dir: The path to the output directory.
+    """
     assert os.path.isdir(raw_data_dir), "raw_data_dir must be an existing directory"
     assert os.path.isdir(output_dir), "output_dir must be an existing directory"
     assert not os.path.exists(
@@ -211,8 +226,13 @@ def stanford_thyroid(
     output_dir: Annotated[
         str, typer.Argument(help="The output directory for the processed datasets")
     ],
-):
-    """Preprocess the Stanford Thyroid Ultrasound Cine-clip dataset."""
+) -> None:
+    """Preprocess the Stanford Thyroid Ultrasound Cine-clip dataset.
+
+    Args:
+        raw_data_dir: The path to the raw data directory.
+        output_dir: The path to the output directory.
+    """
     verify_args(raw_data_dir, output_dir)
 
     output_dir = os.path.join(output_dir, OUTPUT_NAME.format(__version__))
