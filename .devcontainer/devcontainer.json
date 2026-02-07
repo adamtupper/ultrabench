@@ -1,0 +1,30 @@
+{
+    "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
+    "features": {
+        "ghcr.io/devcontainers/features/nvidia-cuda:2.0.0": {
+            "cudaVersion": "12.6",
+            "cudnnVersion": "9.10.0.56"
+        },
+        "ghcr.io/stuartleeks/dev-container-features/shell-history:0": {},
+        "ghcr.io/hwaien/devcontainer-features/match-host-time-zone": {}
+    },
+    "hostRequirements": {
+        "gpu": "optional"
+    },
+    "runArgs": [
+        "--ipc=host"
+    ],
+    "postCreateCommand": "bash .devcontainer/post_create_script.sh",
+    "containerEnv": {
+        "TERM": "xterm-256color"
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "charliermarsh.ruff",
+                "bierner.github-markdown-preview",
+                "streetsidesoftware.code-spell-checker"
+            ]
+        }
+    }
+}
