@@ -1,6 +1,6 @@
-"""Split the Annotated Ultrasound Liver (AUL) dataset into training,
-validation, and test sets using a 7:1:2 split. The dataset consists of 735
-images from different patients.
+"""Split the Annotated Ultrasound Liver (AUL) dataset into training and test
+sets using a 8:2 split. The dataset consists of 735 images from different
+patients.
 
 Two versions of the dataset are created, one for liver segmentation and one for
 mass classification/segmentation. This is because one of the examples
@@ -9,9 +9,9 @@ from the liver segmentation task. For images 229.jpg and 306.jpg, the scan
 annotations actually correspond to the liver (they are missing the scan
 annotations).
 
-Each example (a single image) is represented as an object in one of three JSON
-array files (`train.json`, `validation.json`, or `test.json`). Each object has
-the following key/value pairs:
+Each example (a single image) is represented as an object in one of two JSON
+array files (`train_val.json` or `test.json`). Each object has the following
+key/value pairs:
 
     - image: The path to the image file.
     - scan_mask:  The path to the scan mask file.
@@ -226,7 +226,7 @@ def save_examples(output_dir: str, df: pd.DataFrame, split: str) -> None:
     Args:
         output_dir: The path to the output directory.
         df: The DataFrame containing the examples.
-        split: The dataset split (train, validation, or test).
+        split: The dataset split (train_val, or test).
     """
     columns_to_drop = [
         "filename",
@@ -264,8 +264,8 @@ def aul(
         str, typer.Argument(help="The output directory for the processed datasets")
     ],
 ) -> None:
-    """Prepare the training, validation, and test sets for the mass
-    classification, mass segmentation and liver segmentation tasks.
+    """Prepare the training and test sets for the mass classification,
+    mass segmentation and liver segmentation tasks.
 
     Args:
         raw_data_dir: The path to the raw data directory.
@@ -285,20 +285,10 @@ def aul(
         df, test_size=0.2, random_state=42, shuffle=True, stratify=df["label"]
     )
 
-    # Separate the training and validation sets
-    train_df, val_df = train_test_split(
-        train_val_df,
-        test_size=0.1,
-        random_state=42,
-        shuffle=True,
-        stratify=train_val_df["label"],
-    )
-
     # Create mass classification/segmentation dataset
     mass_dataset_dir = os.path.join(output_dir, OUTPUT_NAME_MASS.format(__version__))
     for split, subset_df in [
-        ("train", train_df),
-        ("validation", val_df),
+        ("train_val", train_val_df),
         ("test", test_df),
     ]:
         copy_images(mass_dataset_dir, subset_df)
@@ -311,8 +301,7 @@ def aul(
     # Create liver segmentation dataset
     liver_dataset_dir = os.path.join(output_dir, OUTPUT_NAME_LIVER.format(__version__))
     for split, subset_df in [
-        ("train", train_df),
-        ("validation", val_df),
+        ("train_val", train_val_df),
         ("test", test_df),
     ]:
         subset_df = subset_df.dropna(subset=["liver_mask"])

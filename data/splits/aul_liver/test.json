@@ -1,0 +1,1178 @@
+[
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_65.jpg",
+        "scan_mask": "masks/scan/benign_65.png",
+        "liver_mask": "masks/liver/benign_65.png",
+        "mass_mask": "masks/mass/benign_65.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_305.jpg",
+        "scan_mask": "masks/scan/malignant_305.png",
+        "liver_mask": "masks/liver/malignant_305.png",
+        "mass_mask": "masks/mass/malignant_305.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_85.jpg",
+        "scan_mask": "masks/scan/benign_85.png",
+        "liver_mask": "masks/liver/benign_85.png",
+        "mass_mask": "masks/mass/benign_85.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_278.jpg",
+        "scan_mask": "masks/scan/malignant_278.png",
+        "liver_mask": "masks/liver/malignant_278.png",
+        "mass_mask": "masks/mass/malignant_278.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_148.jpg",
+        "scan_mask": "masks/scan/malignant_148.png",
+        "liver_mask": "masks/liver/malignant_148.png",
+        "mass_mask": "masks/mass/malignant_148.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_105.jpg",
+        "scan_mask": "masks/scan/benign_105.png",
+        "liver_mask": "masks/liver/benign_105.png",
+        "mass_mask": "masks/mass/benign_105.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_229.jpg",
+        "scan_mask": "masks/scan/malignant_229.png",
+        "liver_mask": "masks/liver/malignant_229.png",
+        "mass_mask": "masks/mass/malignant_229.png"
+    },
+    {
+        "pathology": "Normal",
+        "label": 0,
+        "image": "images/normal_24.jpg",
+        "scan_mask": "masks/scan/normal_24.png",
+        "liver_mask": "masks/liver/normal_24.png",
+        "mass_mask": "masks/mass/normal_24.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_167.jpg",
+        "scan_mask": "masks/scan/benign_167.png",
+        "liver_mask": "masks/liver/benign_167.png",
+        "mass_mask": "masks/mass/benign_167.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_220.jpg",
+        "scan_mask": "masks/scan/malignant_220.png",
+        "liver_mask": "masks/liver/malignant_220.png",
+        "mass_mask": "masks/mass/malignant_220.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_388.jpg",
+        "scan_mask": "masks/scan/malignant_388.png",
+        "liver_mask": "masks/liver/malignant_388.png",
+        "mass_mask": "masks/mass/malignant_388.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_353.jpg",
+        "scan_mask": "masks/scan/malignant_353.png",
+        "liver_mask": "masks/liver/malignant_353.png",
+        "mass_mask": "masks/mass/malignant_353.png"
+    },
+    {
+        "pathology": "Normal",
+        "label": 0,
+        "image": "images/normal_87.jpg",
+        "scan_mask": "masks/scan/normal_87.png",
+        "liver_mask": "masks/liver/normal_87.png",
+        "mass_mask": "masks/mass/normal_87.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_31.jpg",
+        "scan_mask": "masks/scan/malignant_31.png",
+        "liver_mask": "masks/liver/malignant_31.png",
+        "mass_mask": "masks/mass/malignant_31.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_298.jpg",
+        "scan_mask": "masks/scan/malignant_298.png",
+        "liver_mask": "masks/liver/malignant_298.png",
+        "mass_mask": "masks/mass/malignant_298.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_133.jpg",
+        "scan_mask": "masks/scan/malignant_133.png",
+        "liver_mask": "masks/liver/malignant_133.png",
+        "mass_mask": "masks/mass/malignant_133.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_271.jpg",
+        "scan_mask": "masks/scan/malignant_271.png",
+        "liver_mask": "masks/liver/malignant_271.png",
+        "mass_mask": "masks/mass/malignant_271.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_78.jpg",
+        "scan_mask": "masks/scan/benign_78.png",
+        "liver_mask": "masks/liver/benign_78.png",
+        "mass_mask": "masks/mass/benign_78.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_254.jpg",
+        "scan_mask": "masks/scan/malignant_254.png",
+        "liver_mask": "masks/liver/malignant_254.png",
+        "mass_mask": "masks/mass/malignant_254.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_37.jpg",
+        "scan_mask": "masks/scan/benign_37.png",
+        "liver_mask": "masks/liver/benign_37.png",
+        "mass_mask": "masks/mass/benign_37.png"
+    },
+    {
+        "pathology": "Normal",
+        "label": 0,
+        "image": "images/normal_92.jpg",
+        "scan_mask": "masks/scan/normal_92.png",
+        "liver_mask": "masks/liver/normal_92.png",
+        "mass_mask": "masks/mass/normal_92.png"
+    },
+    {
+        "pathology": "Normal",
+        "label": 0,
+        "image": "images/normal_29.jpg",
+        "scan_mask": "masks/scan/normal_29.png",
+        "liver_mask": "masks/liver/normal_29.png",
+        "mass_mask": "masks/mass/normal_29.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_92.jpg",
+        "scan_mask": "masks/scan/benign_92.png",
+        "liver_mask": "masks/liver/benign_92.png",
+        "mass_mask": "masks/mass/benign_92.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_38.jpg",
+        "scan_mask": "masks/scan/malignant_38.png",
+        "liver_mask": "masks/liver/malignant_38.png",
+        "mass_mask": "masks/mass/malignant_38.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_192.jpg",
+        "scan_mask": "masks/scan/benign_192.png",
+        "liver_mask": "masks/liver/benign_192.png",
+        "mass_mask": "masks/mass/benign_192.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_138.jpg",
+        "scan_mask": "masks/scan/malignant_138.png",
+        "liver_mask": "masks/liver/malignant_138.png",
+        "mass_mask": "masks/mass/malignant_138.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_121.jpg",
+        "scan_mask": "masks/scan/benign_121.png",
+        "liver_mask": "masks/liver/benign_121.png",
+        "mass_mask": "masks/mass/benign_121.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_261.jpg",
+        "scan_mask": "masks/scan/malignant_261.png",
+        "liver_mask": "masks/liver/malignant_261.png",
+        "mass_mask": "masks/mass/malignant_261.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_269.jpg",
+        "scan_mask": "masks/scan/malignant_269.png",
+        "liver_mask": "masks/liver/malignant_269.png",
+        "mass_mask": "masks/mass/malignant_269.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_50.jpg",
+        "scan_mask": "masks/scan/malignant_50.png",
+        "liver_mask": "masks/liver/malignant_50.png",
+        "mass_mask": "masks/mass/malignant_50.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_208.jpg",
+        "scan_mask": "masks/scan/malignant_208.png",
+        "liver_mask": "masks/liver/malignant_208.png",
+        "mass_mask": "masks/mass/malignant_208.png"
+    },
+    {
+        "pathology": "Normal",
+        "label": 0,
+        "image": "images/normal_77.jpg",
+        "scan_mask": "masks/scan/normal_77.png",
+        "liver_mask": "masks/liver/normal_77.png",
+        "mass_mask": "masks/mass/normal_77.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_81.jpg",
+        "scan_mask": "masks/scan/malignant_81.png",
+        "liver_mask": "masks/liver/malignant_81.png",
+        "mass_mask": "masks/mass/malignant_81.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_88.jpg",
+        "scan_mask": "masks/scan/malignant_88.png",
+        "liver_mask": "masks/liver/malignant_88.png",
+        "mass_mask": "masks/mass/malignant_88.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_6.jpg",
+        "scan_mask": "masks/scan/malignant_6.png",
+        "liver_mask": "masks/liver/malignant_6.png",
+        "mass_mask": "masks/mass/malignant_6.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_112.jpg",
+        "scan_mask": "masks/scan/benign_112.png",
+        "liver_mask": "masks/liver/benign_112.png",
+        "mass_mask": "masks/mass/benign_112.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_23.jpg",
+        "scan_mask": "masks/scan/malignant_23.png",
+        "liver_mask": "masks/liver/malignant_23.png",
+        "mass_mask": "masks/mass/malignant_23.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_385.jpg",
+        "scan_mask": "masks/scan/malignant_385.png",
+        "liver_mask": "masks/liver/malignant_385.png",
+        "mass_mask": "masks/mass/malignant_385.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_75.jpg",
+        "scan_mask": "masks/scan/malignant_75.png",
+        "liver_mask": "masks/liver/malignant_75.png",
+        "mass_mask": "masks/mass/malignant_75.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_193.jpg",
+        "scan_mask": "masks/scan/malignant_193.png",
+        "liver_mask": "masks/liver/malignant_193.png",
+        "mass_mask": "masks/mass/malignant_193.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_5.jpg",
+        "scan_mask": "masks/scan/benign_5.png",
+        "liver_mask": "masks/liver/benign_5.png",
+        "mass_mask": "masks/mass/benign_5.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_71.jpg",
+        "scan_mask": "masks/scan/benign_71.png",
+        "liver_mask": "masks/liver/benign_71.png",
+        "mass_mask": "masks/mass/benign_71.png"
+    },
+    {
+        "pathology": "Normal",
+        "label": 0,
+        "image": "images/normal_65.jpg",
+        "scan_mask": "masks/scan/normal_65.png",
+        "liver_mask": "masks/liver/normal_65.png",
+        "mass_mask": "masks/mass/normal_65.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_4.jpg",
+        "scan_mask": "masks/scan/malignant_4.png",
+        "liver_mask": "masks/liver/malignant_4.png",
+        "mass_mask": "masks/mass/malignant_4.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_279.jpg",
+        "scan_mask": "masks/scan/malignant_279.png",
+        "liver_mask": "masks/liver/malignant_279.png",
+        "mass_mask": "masks/mass/malignant_279.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_214.jpg",
+        "scan_mask": "masks/scan/malignant_214.png",
+        "liver_mask": "masks/liver/malignant_214.png",
+        "mass_mask": "masks/mass/malignant_214.png"
+    },
+    {
+        "pathology": "Normal",
+        "label": 0,
+        "image": "images/normal_73.jpg",
+        "scan_mask": "masks/scan/normal_73.png",
+        "liver_mask": "masks/liver/normal_73.png",
+        "mass_mask": "masks/mass/normal_73.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_12.jpg",
+        "scan_mask": "masks/scan/malignant_12.png",
+        "liver_mask": "masks/liver/malignant_12.png",
+        "mass_mask": "masks/mass/malignant_12.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_361.jpg",
+        "scan_mask": "masks/scan/malignant_361.png",
+        "liver_mask": "masks/liver/malignant_361.png",
+        "mass_mask": "masks/mass/malignant_361.png"
+    },
+    {
+        "pathology": "Normal",
+        "label": 0,
+        "image": "images/normal_44.jpg",
+        "scan_mask": "masks/scan/normal_44.png",
+        "liver_mask": "masks/liver/normal_44.png",
+        "mass_mask": "masks/mass/normal_44.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_11.jpg",
+        "scan_mask": "masks/scan/malignant_11.png",
+        "liver_mask": "masks/liver/malignant_11.png",
+        "mass_mask": "masks/mass/malignant_11.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_204.jpg",
+        "scan_mask": "masks/scan/malignant_204.png",
+        "liver_mask": "masks/liver/malignant_204.png",
+        "mass_mask": "masks/mass/malignant_204.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_195.jpg",
+        "scan_mask": "masks/scan/malignant_195.png",
+        "liver_mask": "masks/liver/malignant_195.png",
+        "mass_mask": "masks/mass/malignant_195.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_211.jpg",
+        "scan_mask": "masks/scan/malignant_211.png",
+        "liver_mask": "masks/liver/malignant_211.png",
+        "mass_mask": "masks/mass/malignant_211.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_14.jpg",
+        "scan_mask": "masks/scan/benign_14.png",
+        "liver_mask": "masks/liver/benign_14.png",
+        "mass_mask": "masks/mass/benign_14.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_299.jpg",
+        "scan_mask": "masks/scan/malignant_299.png",
+        "liver_mask": "masks/liver/malignant_299.png",
+        "mass_mask": "masks/mass/malignant_299.png"
+    },
+    {
+        "pathology": "Normal",
+        "label": 0,
+        "image": "images/normal_99.jpg",
+        "scan_mask": "masks/scan/normal_99.png",
+        "liver_mask": "masks/liver/normal_99.png",
+        "mass_mask": "masks/mass/normal_99.png"
+    },
+    {
+        "pathology": "Normal",
+        "label": 0,
+        "image": "images/normal_81.jpg",
+        "scan_mask": "masks/scan/normal_81.png",
+        "liver_mask": "masks/liver/normal_81.png",
+        "mass_mask": "masks/mass/normal_81.png"
+    },
+    {
+        "pathology": "Normal",
+        "label": 0,
+        "image": "images/normal_45.jpg",
+        "scan_mask": "masks/scan/normal_45.png",
+        "liver_mask": "masks/liver/normal_45.png",
+        "mass_mask": "masks/mass/normal_45.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_27.jpg",
+        "scan_mask": "masks/scan/benign_27.png",
+        "liver_mask": "masks/liver/benign_27.png",
+        "mass_mask": "masks/mass/benign_27.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_188.jpg",
+        "scan_mask": "masks/scan/malignant_188.png",
+        "liver_mask": "masks/liver/malignant_188.png",
+        "mass_mask": "masks/mass/malignant_188.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_386.jpg",
+        "scan_mask": "masks/scan/malignant_386.png",
+        "liver_mask": "masks/liver/malignant_386.png",
+        "mass_mask": "masks/mass/malignant_386.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_141.jpg",
+        "scan_mask": "masks/scan/benign_141.png",
+        "liver_mask": "masks/liver/benign_141.png",
+        "mass_mask": "masks/mass/benign_141.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_179.jpg",
+        "scan_mask": "masks/scan/benign_179.png",
+        "liver_mask": "masks/liver/benign_179.png",
+        "mass_mask": "masks/mass/benign_179.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_270.jpg",
+        "scan_mask": "masks/scan/malignant_270.png",
+        "liver_mask": "masks/liver/malignant_270.png",
+        "mass_mask": "masks/mass/malignant_270.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_402.jpg",
+        "scan_mask": "masks/scan/malignant_402.png",
+        "liver_mask": "masks/liver/malignant_402.png",
+        "mass_mask": "masks/mass/malignant_402.png"
+    },
+    {
+        "pathology": "Normal",
+        "label": 0,
+        "image": "images/normal_72.jpg",
+        "scan_mask": "masks/scan/normal_72.png",
+        "liver_mask": "masks/liver/normal_72.png",
+        "mass_mask": "masks/mass/normal_72.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_363.jpg",
+        "scan_mask": "masks/scan/malignant_363.png",
+        "liver_mask": "masks/liver/malignant_363.png",
+        "mass_mask": "masks/mass/malignant_363.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_306.jpg",
+        "scan_mask": "masks/scan/malignant_306.png",
+        "liver_mask": "masks/liver/malignant_306.png",
+        "mass_mask": "masks/mass/malignant_306.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_142.jpg",
+        "scan_mask": "masks/scan/malignant_142.png",
+        "liver_mask": "masks/liver/malignant_142.png",
+        "mass_mask": "masks/mass/malignant_142.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_142.jpg",
+        "scan_mask": "masks/scan/benign_142.png",
+        "liver_mask": "masks/liver/benign_142.png",
+        "mass_mask": "masks/mass/benign_142.png"
+    },
+    {
+        "pathology": "Normal",
+        "label": 0,
+        "image": "images/normal_88.jpg",
+        "scan_mask": "masks/scan/normal_88.png",
+        "liver_mask": "masks/liver/normal_88.png",
+        "mass_mask": "masks/mass/normal_88.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_101.jpg",
+        "scan_mask": "masks/scan/malignant_101.png",
+        "liver_mask": "masks/liver/malignant_101.png",
+        "mass_mask": "masks/mass/malignant_101.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_302.jpg",
+        "scan_mask": "masks/scan/malignant_302.png",
+        "liver_mask": "masks/liver/malignant_302.png",
+        "mass_mask": "masks/mass/malignant_302.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_147.jpg",
+        "scan_mask": "masks/scan/benign_147.png",
+        "liver_mask": "masks/liver/benign_147.png",
+        "mass_mask": "masks/mass/benign_147.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_376.jpg",
+        "scan_mask": "masks/scan/malignant_376.png",
+        "liver_mask": "masks/liver/malignant_376.png",
+        "mass_mask": "masks/mass/malignant_376.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_46.jpg",
+        "scan_mask": "masks/scan/benign_46.png",
+        "liver_mask": "masks/liver/benign_46.png",
+        "mass_mask": "masks/mass/benign_46.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_182.jpg",
+        "scan_mask": "masks/scan/malignant_182.png",
+        "liver_mask": "masks/liver/malignant_182.png",
+        "mass_mask": "masks/mass/malignant_182.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_25.jpg",
+        "scan_mask": "masks/scan/malignant_25.png",
+        "liver_mask": "masks/liver/malignant_25.png",
+        "mass_mask": "masks/mass/malignant_25.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_170.jpg",
+        "scan_mask": "masks/scan/malignant_170.png",
+        "liver_mask": "masks/liver/malignant_170.png",
+        "mass_mask": "masks/mass/malignant_170.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_76.jpg",
+        "scan_mask": "masks/scan/benign_76.png",
+        "liver_mask": "masks/liver/benign_76.png",
+        "mass_mask": "masks/mass/benign_76.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_120.jpg",
+        "scan_mask": "masks/scan/malignant_120.png",
+        "liver_mask": "masks/liver/malignant_120.png",
+        "mass_mask": "masks/mass/malignant_120.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_223.jpg",
+        "scan_mask": "masks/scan/malignant_223.png",
+        "liver_mask": "masks/liver/malignant_223.png",
+        "mass_mask": "masks/mass/malignant_223.png"
+    },
+    {
+        "pathology": "Normal",
+        "label": 0,
+        "image": "images/normal_53.jpg",
+        "scan_mask": "masks/scan/normal_53.png",
+        "liver_mask": "masks/liver/normal_53.png",
+        "mass_mask": "masks/mass/normal_53.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_126.jpg",
+        "scan_mask": "masks/scan/malignant_126.png",
+        "liver_mask": "masks/liver/malignant_126.png",
+        "mass_mask": "masks/mass/malignant_126.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_297.jpg",
+        "scan_mask": "masks/scan/malignant_297.png",
+        "liver_mask": "masks/liver/malignant_297.png",
+        "mass_mask": "masks/mass/malignant_297.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_17.jpg",
+        "scan_mask": "masks/scan/benign_17.png",
+        "liver_mask": "masks/liver/benign_17.png",
+        "mass_mask": "masks/mass/benign_17.png"
+    },
+    {
+        "pathology": "Normal",
+        "label": 0,
+        "image": "images/normal_10.jpg",
+        "scan_mask": "masks/scan/normal_10.png",
+        "liver_mask": "masks/liver/normal_10.png",
+        "mass_mask": "masks/mass/normal_10.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_63.jpg",
+        "scan_mask": "masks/scan/benign_63.png",
+        "liver_mask": "masks/liver/benign_63.png",
+        "mass_mask": "masks/mass/benign_63.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_160.jpg",
+        "scan_mask": "masks/scan/malignant_160.png",
+        "liver_mask": "masks/liver/malignant_160.png",
+        "mass_mask": "masks/mass/malignant_160.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_116.jpg",
+        "scan_mask": "masks/scan/benign_116.png",
+        "liver_mask": "masks/liver/benign_116.png",
+        "mass_mask": "masks/mass/benign_116.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_136.jpg",
+        "scan_mask": "masks/scan/benign_136.png",
+        "liver_mask": "masks/liver/benign_136.png",
+        "mass_mask": "masks/mass/benign_136.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_58.jpg",
+        "scan_mask": "masks/scan/benign_58.png",
+        "liver_mask": "masks/liver/benign_58.png",
+        "mass_mask": "masks/mass/benign_58.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_7.jpg",
+        "scan_mask": "masks/scan/malignant_7.png",
+        "liver_mask": "masks/liver/malignant_7.png",
+        "mass_mask": "masks/mass/malignant_7.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_28.jpg",
+        "scan_mask": "masks/scan/malignant_28.png",
+        "liver_mask": "masks/liver/malignant_28.png",
+        "mass_mask": "masks/mass/malignant_28.png"
+    },
+    {
+        "pathology": "Normal",
+        "label": 0,
+        "image": "images/normal_80.jpg",
+        "scan_mask": "masks/scan/normal_80.png",
+        "liver_mask": "masks/liver/normal_80.png",
+        "mass_mask": "masks/mass/normal_80.png"
+    },
+    {
+        "pathology": "Normal",
+        "label": 0,
+        "image": "images/normal_96.jpg",
+        "scan_mask": "masks/scan/normal_96.png",
+        "liver_mask": "masks/liver/normal_96.png",
+        "mass_mask": "masks/mass/normal_96.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_119.jpg",
+        "scan_mask": "masks/scan/malignant_119.png",
+        "liver_mask": "masks/liver/malignant_119.png",
+        "mass_mask": "masks/mass/malignant_119.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_41.jpg",
+        "scan_mask": "masks/scan/malignant_41.png",
+        "liver_mask": "masks/liver/malignant_41.png",
+        "mass_mask": "masks/mass/malignant_41.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_325.jpg",
+        "scan_mask": "masks/scan/malignant_325.png",
+        "liver_mask": "masks/liver/malignant_325.png",
+        "mass_mask": "masks/mass/malignant_325.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_55.jpg",
+        "scan_mask": "masks/scan/malignant_55.png",
+        "liver_mask": "masks/liver/malignant_55.png",
+        "mass_mask": "masks/mass/malignant_55.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_239.jpg",
+        "scan_mask": "masks/scan/malignant_239.png",
+        "liver_mask": "masks/liver/malignant_239.png",
+        "mass_mask": "masks/mass/malignant_239.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_354.jpg",
+        "scan_mask": "masks/scan/malignant_354.png",
+        "liver_mask": "masks/liver/malignant_354.png",
+        "mass_mask": "masks/mass/malignant_354.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_52.jpg",
+        "scan_mask": "masks/scan/malignant_52.png",
+        "liver_mask": "masks/liver/malignant_52.png",
+        "mass_mask": "masks/mass/malignant_52.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_371.jpg",
+        "scan_mask": "masks/scan/malignant_371.png",
+        "liver_mask": "masks/liver/malignant_371.png",
+        "mass_mask": "masks/mass/malignant_371.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_209.jpg",
+        "scan_mask": "masks/scan/malignant_209.png",
+        "liver_mask": "masks/liver/malignant_209.png",
+        "mass_mask": "masks/mass/malignant_209.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_76.jpg",
+        "scan_mask": "masks/scan/malignant_76.png",
+        "liver_mask": "masks/liver/malignant_76.png",
+        "mass_mask": "masks/mass/malignant_76.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_308.jpg",
+        "scan_mask": "masks/scan/malignant_308.png",
+        "liver_mask": "masks/liver/malignant_308.png",
+        "mass_mask": "masks/mass/malignant_308.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_285.jpg",
+        "scan_mask": "masks/scan/malignant_285.png",
+        "liver_mask": "masks/liver/malignant_285.png",
+        "mass_mask": "masks/mass/malignant_285.png"
+    },
+    {
+        "pathology": "Normal",
+        "label": 0,
+        "image": "images/normal_18.jpg",
+        "scan_mask": "masks/scan/normal_18.png",
+        "liver_mask": "masks/liver/normal_18.png",
+        "mass_mask": "masks/mass/normal_18.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_384.jpg",
+        "scan_mask": "masks/scan/malignant_384.png",
+        "liver_mask": "masks/liver/malignant_384.png",
+        "mass_mask": "masks/mass/malignant_384.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_162.jpg",
+        "scan_mask": "masks/scan/malignant_162.png",
+        "liver_mask": "masks/liver/malignant_162.png",
+        "mass_mask": "masks/mass/malignant_162.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_41.jpg",
+        "scan_mask": "masks/scan/benign_41.png",
+        "liver_mask": "masks/liver/benign_41.png",
+        "mass_mask": "masks/mass/benign_41.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_165.jpg",
+        "scan_mask": "masks/scan/benign_165.png",
+        "liver_mask": "masks/liver/benign_165.png",
+        "mass_mask": "masks/mass/benign_165.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_377.jpg",
+        "scan_mask": "masks/scan/malignant_377.png",
+        "liver_mask": "masks/liver/malignant_377.png",
+        "mass_mask": "masks/mass/malignant_377.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_186.jpg",
+        "scan_mask": "masks/scan/benign_186.png",
+        "liver_mask": "masks/liver/benign_186.png",
+        "mass_mask": "masks/mass/benign_186.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_137.jpg",
+        "scan_mask": "masks/scan/benign_137.png",
+        "liver_mask": "masks/liver/benign_137.png",
+        "mass_mask": "masks/mass/benign_137.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_394.jpg",
+        "scan_mask": "masks/scan/malignant_394.png",
+        "liver_mask": "masks/liver/malignant_394.png",
+        "mass_mask": "masks/mass/malignant_394.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_4.jpg",
+        "scan_mask": "masks/scan/benign_4.png",
+        "liver_mask": "masks/liver/benign_4.png",
+        "mass_mask": "masks/mass/benign_4.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_349.jpg",
+        "scan_mask": "masks/scan/malignant_349.png",
+        "liver_mask": "masks/liver/malignant_349.png",
+        "mass_mask": "masks/mass/malignant_349.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_405.jpg",
+        "scan_mask": "masks/scan/malignant_405.png",
+        "liver_mask": "masks/liver/malignant_405.png",
+        "mass_mask": "masks/mass/malignant_405.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_114.jpg",
+        "scan_mask": "masks/scan/malignant_114.png",
+        "liver_mask": "masks/liver/malignant_114.png",
+        "mass_mask": "masks/mass/malignant_114.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_108.jpg",
+        "scan_mask": "masks/scan/malignant_108.png",
+        "liver_mask": "masks/liver/malignant_108.png",
+        "mass_mask": "masks/mass/malignant_108.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_64.jpg",
+        "scan_mask": "masks/scan/benign_64.png",
+        "liver_mask": "masks/liver/benign_64.png",
+        "mass_mask": "masks/mass/benign_64.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_181.jpg",
+        "scan_mask": "masks/scan/benign_181.png",
+        "liver_mask": "masks/liver/benign_181.png",
+        "mass_mask": "masks/mass/benign_181.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_411.jpg",
+        "scan_mask": "masks/scan/malignant_411.png",
+        "liver_mask": "masks/liver/malignant_411.png",
+        "mass_mask": "masks/mass/malignant_411.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_118.jpg",
+        "scan_mask": "masks/scan/malignant_118.png",
+        "liver_mask": "masks/liver/malignant_118.png",
+        "mass_mask": "masks/mass/malignant_118.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_329.jpg",
+        "scan_mask": "masks/scan/malignant_329.png",
+        "liver_mask": "masks/liver/malignant_329.png",
+        "mass_mask": "masks/mass/malignant_329.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_151.jpg",
+        "scan_mask": "masks/scan/malignant_151.png",
+        "liver_mask": "masks/liver/malignant_151.png",
+        "mass_mask": "masks/mass/malignant_151.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_132.jpg",
+        "scan_mask": "masks/scan/benign_132.png",
+        "liver_mask": "masks/liver/benign_132.png",
+        "mass_mask": "masks/mass/benign_132.png"
+    },
+    {
+        "pathology": "Normal",
+        "label": 0,
+        "image": "images/normal_47.jpg",
+        "scan_mask": "masks/scan/normal_47.png",
+        "liver_mask": "masks/liver/normal_47.png",
+        "mass_mask": "masks/mass/normal_47.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_60.jpg",
+        "scan_mask": "masks/scan/benign_60.png",
+        "liver_mask": "masks/liver/benign_60.png",
+        "mass_mask": "masks/mass/benign_60.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_56.jpg",
+        "scan_mask": "masks/scan/benign_56.png",
+        "liver_mask": "masks/liver/benign_56.png",
+        "mass_mask": "masks/mass/benign_56.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_233.jpg",
+        "scan_mask": "masks/scan/malignant_233.png",
+        "liver_mask": "masks/liver/malignant_233.png",
+        "mass_mask": "masks/mass/malignant_233.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_156.jpg",
+        "scan_mask": "masks/scan/benign_156.png",
+        "liver_mask": "masks/liver/benign_156.png",
+        "mass_mask": "masks/mass/benign_156.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_195.jpg",
+        "scan_mask": "masks/scan/benign_195.png",
+        "liver_mask": "masks/liver/benign_195.png",
+        "mass_mask": "masks/mass/benign_195.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_53.jpg",
+        "scan_mask": "masks/scan/malignant_53.png",
+        "liver_mask": "masks/liver/malignant_53.png",
+        "mass_mask": "masks/mass/malignant_53.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_176.jpg",
+        "scan_mask": "masks/scan/benign_176.png",
+        "liver_mask": "masks/liver/benign_176.png",
+        "mass_mask": "masks/mass/benign_176.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_181.jpg",
+        "scan_mask": "masks/scan/malignant_181.png",
+        "liver_mask": "masks/liver/malignant_181.png",
+        "mass_mask": "masks/mass/malignant_181.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_275.jpg",
+        "scan_mask": "masks/scan/malignant_275.png",
+        "liver_mask": "masks/liver/malignant_275.png",
+        "mass_mask": "masks/mass/malignant_275.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_73.jpg",
+        "scan_mask": "masks/scan/benign_73.png",
+        "liver_mask": "masks/liver/benign_73.png",
+        "mass_mask": "masks/mass/benign_73.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_110.jpg",
+        "scan_mask": "masks/scan/malignant_110.png",
+        "liver_mask": "masks/liver/malignant_110.png",
+        "mass_mask": "masks/mass/malignant_110.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_42.jpg",
+        "scan_mask": "masks/scan/malignant_42.png",
+        "liver_mask": "masks/liver/malignant_42.png",
+        "mass_mask": "masks/mass/malignant_42.png"
+    },
+    {
+        "pathology": "Benign",
+        "label": 1,
+        "image": "images/benign_72.jpg",
+        "scan_mask": "masks/scan/benign_72.png",
+        "liver_mask": "masks/liver/benign_72.png",
+        "mass_mask": "masks/mass/benign_72.png"
+    },
+    {
+        "pathology": "Normal",
+        "label": 0,
+        "image": "images/normal_97.jpg",
+        "scan_mask": "masks/scan/normal_97.png",
+        "liver_mask": "masks/liver/normal_97.png",
+        "mass_mask": "masks/mass/normal_97.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_413.jpg",
+        "scan_mask": "masks/scan/malignant_413.png",
+        "liver_mask": "masks/liver/malignant_413.png",
+        "mass_mask": "masks/mass/malignant_413.png"
+    },
+    {
+        "pathology": "Malignant",
+        "label": 2,
+        "image": "images/malignant_180.jpg",
+        "scan_mask": "masks/scan/malignant_180.png",
+        "liver_mask": "masks/liver/malignant_180.png",
+        "mass_mask": "masks/mass/malignant_180.png"
+    }
+]
