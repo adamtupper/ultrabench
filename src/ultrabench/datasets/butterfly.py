@@ -1,11 +1,9 @@
-"""Prepare the Butterfly dataset, splitting the training data into training and
-validation sets using a 8:2 split and preserving the existing test split. The
-training and validation sets are split by patient to ensure that there is no
-patient overlap between the splits.
+"""Prepare the Butterfly dataset. The existing training and test splits
+are preserved.
 
-Each example (a single image) is represented as an object in one of three JSON
-array files (`train.json`, `validation.json`, or `test.json`). Each object has
-the following key/value pairs:
+Each example (a single image) is represented as an object in one of two JSON
+array files (`train_val.json` or `test.json`). Each object has the following
+key/value pairs:
 
     - patient: The patient ID.
     - image: The path to the image file.
@@ -26,7 +24,6 @@ from importlib.metadata import version
 import pandas as pd
 import skimage
 import typer
-from sklearn.model_selection import GroupShuffleSplit
 from typing_extensions import Annotated
 
 from .utils import save_version_info
@@ -87,8 +84,7 @@ def butterfly(
         str, typer.Argument(help="The output directory for the processed datasets")
     ],
 ) -> None:
-    """Prepare the training, validation, and test sets for the
-    Butterfly dataset.
+    """Prepare the training and test sets for the Butterfly dataset.
 
     Args:
         raw_data_dir: The path to the raw data directory.
@@ -120,38 +116,22 @@ def butterfly(
         )
     df = pd.DataFrame.from_records(examples)
 
-    # Create the scan masks
+    # Create output directories for images and scan masks
     mask_dir = os.path.join(dataset_dir, "masks", "scan")
     os.makedirs(mask_dir, exist_ok=True)
-    df.apply(
-        lambda x: generate_scan_mask(dataset_dir, x["filepath"], x["scan_mask"]),
-        axis="columns",
-    )
 
-    # Copy the images to the output directory
     image_dir = os.path.join(dataset_dir, "images")
     os.makedirs(image_dir, exist_ok=True)
-    df.apply(
-        lambda x: shutil.copy(x["filepath"], os.path.join(image_dir, x["filename"])),
-        axis="columns",
-    )
 
-    # Split the dataset into training, validation, and test sets
-    test_df = df[df["subset"] == "test"]
-    train_val_df = df[df["subset"] == "train"]
+    # Create scan masks and copy images
+    for row in df.itertuples(index=False):
+        generate_scan_mask(dataset_dir, str(row.filepath), str(row.scan_mask))
+        shutil.copy(str(row.filepath), os.path.join(image_dir, str(row.filename)))
 
-    splitter = GroupShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
-    train_indices, val_indices = next(
-        splitter.split(X=train_val_df, groups=train_val_df["patient"])
-    )
-    train_df = train_val_df.iloc[train_indices]
-    val_df = train_val_df.iloc[val_indices]
-
-    # Save the training, validation, and test indices to a JSON file
+    # Save the metadata for the training and test sets to a JSON file
     for split, subset in [
-        ("train", train_df),
-        ("validation", val_df),
-        ("test", test_df),
+        ("train_val", df[df["subset"] == "train"]),
+        ("test", df[df["subset"] == "test"]),
     ]:
         subset = subset.drop(
             ["filepath", "subset", "filename"], axis="columns"
