@@ -1,14 +1,14 @@
-"""Split the Stanford Thyroid Ultrasound Cine-clip dataset into training,
-validation, and test data using a 7:1:2 split, ensuring that there is no
-patient overlap between the splits.
+"""Split the Stanford Thyroid Ultrasound Cine-clip dataset into training and
+test data using an 8:2 split, ensuring that there is no patient overlap between
+the splits.
 
 The images and masks are extracted from the `dataset.hdf5` file. The images and
 masks are saved as single-channel uint8 PNG files. Mask values are mapped from
 the values {0, 255} to {0, 1}.
 
-Each example (image) is represented as an object in one of three JSON array
-files (`train.json`, `validation.json`, or `test.json`). Each object has the
-following key/value pairs:
+Each example (image) is represented as an object in one of two JSON array files
+(`train_val.json` or `test.json`). Each object has the following key/value
+pairs:
 
     - patient:              The patient ID.
     - image:                The path to the image file.
@@ -263,9 +263,9 @@ def stanford_thyroid(
             dataset["mask"][i],
         )
         patient_metadata = metadata[metadata["annot_id"] == patient_id]
-        assert (
-            len(patient_metadata) == 1
-        ), f"metadata for patient {patient_id} not found"
+        assert len(patient_metadata) == 1, (
+            f"metadata for patient {patient_id} not found"
+        )
 
         if int(patient_id.removesuffix("_")) not in included_patients:
             continue
@@ -325,7 +325,7 @@ def stanford_thyroid(
         f"The actual ({actual}) and expected ({expected}) number of patients does not match!"  # noqa: E501
     )
 
-    # Split the examples into training, validation, and test sets
+    # Split the examples into training and test sets
     splitter = GroupShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
     train_val_indices, test_indices = next(
         splitter.split(X=examples, groups=examples["patient"])
@@ -333,17 +333,9 @@ def stanford_thyroid(
     train_val_examples = examples.iloc[train_val_indices]
     test_examples = examples.iloc[test_indices]
 
-    splitter = GroupShuffleSplit(n_splits=1, test_size=0.1, random_state=42)
-    train_indices, val_indices = next(
-        splitter.split(X=train_val_examples, groups=train_val_examples["patient"])
-    )
-    train_examples = train_val_examples.iloc[train_indices]
-    val_examples = train_val_examples.iloc[val_indices]
-
-    # Save the training, validation, and test examples as JSON files
+    # Save the training and test examples as JSON files
     for split, examples in [
-        ("train", train_examples),
-        ("validation", val_examples),
+        ("train_val", train_val_examples),
         ("test", test_examples),
     ]:
         file_path = os.path.join(output_dir, f"{split}.json")

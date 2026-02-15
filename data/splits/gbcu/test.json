@@ -1,0 +1,3481 @@
+[
+    {
+        "image": "images/im00335.jpg",
+        "scan_mask": "masks/scan/im00335.jpg",
+        "dimensions": [
+            1180,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                413,
+                278,
+                617,
+                369
+            ],
+            [
+                408,
+                100,
+                688,
+                279
+            ],
+            [
+                391,
+                84,
+                698,
+                400
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im01024.jpg",
+        "scan_mask": "masks/scan/im01024.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                526,
+                197,
+                670,
+                261
+            ],
+            [
+                471,
+                88,
+                755,
+                202
+            ],
+            [
+                457,
+                87,
+                771,
+                288
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im00702.jpg",
+        "scan_mask": "masks/scan/im00702.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                623,
+                209,
+                693,
+                253
+            ],
+            [
+                603,
+                106,
+                784,
+                348
+            ],
+            [
+                559,
+                92,
+                795,
+                375
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im00886.jpg",
+        "scan_mask": "masks/scan/im00886.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                473,
+                126,
+                648,
+                291
+            ],
+            [
+                449,
+                112,
+                664,
+                312
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im00232.jpg",
+        "scan_mask": "masks/scan/im00232.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                434,
+                144,
+                658,
+                496
+            ],
+            [
+                410,
+                127,
+                672,
+                506
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im00530.jpg",
+        "scan_mask": "masks/scan/im00530.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                508,
+                189,
+                652,
+                265
+            ],
+            [
+                477,
+                105,
+                693,
+                193
+            ],
+            [
+                465,
+                89,
+                708,
+                279
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im00333.jpg",
+        "scan_mask": "masks/scan/im00333.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                652,
+                162,
+                734,
+                226
+            ],
+            [
+                536,
+                120,
+                653,
+                307
+            ],
+            [
+                513,
+                100,
+                782,
+                331
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im00224.jpg",
+        "scan_mask": "masks/scan/im00224.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "nml"
+        ],
+        "bboxes": [
+            [
+                482,
+                238,
+                666,
+                432
+            ]
+        ],
+        "pathology": "normal",
+        "label": 0
+    },
+    {
+        "image": "images/im00674.jpg",
+        "scan_mask": "masks/scan/im00674.jpg",
+        "dimensions": [
+            1221,
+            788
+        ],
+        "bbox_labels": [
+            "nml"
+        ],
+        "bboxes": [
+            [
+                642,
+                115,
+                897,
+                327
+            ]
+        ],
+        "pathology": "normal",
+        "label": 0
+    },
+    {
+        "image": "images/im00415.jpg",
+        "scan_mask": "masks/scan/im00415.jpg",
+        "dimensions": [
+            1221,
+            793
+        ],
+        "bbox_labels": [
+            "nml"
+        ],
+        "bboxes": [
+            [
+                595,
+                143,
+                802,
+                445
+            ]
+        ],
+        "pathology": "normal",
+        "label": 0
+    },
+    {
+        "image": "images/im00613.jpg",
+        "scan_mask": "masks/scan/im00613.jpg",
+        "dimensions": [
+            1222,
+            790
+        ],
+        "bbox_labels": [
+            "nml"
+        ],
+        "bboxes": [
+            [
+                567,
+                132,
+                829,
+                500
+            ]
+        ],
+        "pathology": "normal",
+        "label": 0
+    },
+    {
+        "image": "images/im00484.jpg",
+        "scan_mask": "masks/scan/im00484.jpg",
+        "dimensions": [
+            1222,
+            785
+        ],
+        "bbox_labels": [
+            "nml"
+        ],
+        "bboxes": [
+            [
+                410,
+                184,
+                645,
+                350
+            ]
+        ],
+        "pathology": "normal",
+        "label": 0
+    },
+    {
+        "image": "images/im00090.jpg",
+        "scan_mask": "masks/scan/im00090.jpg",
+        "dimensions": [
+            1222,
+            784
+        ],
+        "bbox_labels": [
+            "nml"
+        ],
+        "bboxes": [
+            [
+                404,
+                124,
+                712,
+                435
+            ]
+        ],
+        "pathology": "normal",
+        "label": 0
+    },
+    {
+        "image": "images/im00935.jpg",
+        "scan_mask": "masks/scan/im00935.jpg",
+        "dimensions": [
+            1222,
+            785
+        ],
+        "bbox_labels": [
+            "nml"
+        ],
+        "bboxes": [
+            [
+                366,
+                137,
+                740,
+                416
+            ]
+        ],
+        "pathology": "normal",
+        "label": 0
+    },
+    {
+        "image": "images/im00361.jpg",
+        "scan_mask": "masks/scan/im00361.jpg",
+        "dimensions": [
+            1222,
+            790
+        ],
+        "bbox_labels": [
+            "nml"
+        ],
+        "bboxes": [
+            [
+                507,
+                158,
+                733,
+                320
+            ]
+        ],
+        "pathology": "normal",
+        "label": 0
+    },
+    {
+        "image": "images/im00328.jpg",
+        "scan_mask": "masks/scan/im00328.jpg",
+        "dimensions": [
+            1164,
+            776
+        ],
+        "bbox_labels": [
+            "nml"
+        ],
+        "bboxes": [
+            [
+                397,
+                102,
+                648,
+                398
+            ]
+        ],
+        "pathology": "normal",
+        "label": 0
+    },
+    {
+        "image": "images/im00043.jpg",
+        "scan_mask": "masks/scan/im00043.jpg",
+        "dimensions": [
+            1201,
+            844
+        ],
+        "bbox_labels": [
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                494,
+                137,
+                645,
+                339
+            ],
+            [
+                472,
+                109,
+                793,
+                364
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im00897.jpg",
+        "scan_mask": "masks/scan/im00897.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "bmt",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                344,
+                230,
+                427,
+                371
+            ],
+            [
+                342,
+                102,
+                643,
+                594
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im01077.jpg",
+        "scan_mask": "masks/scan/im01077.jpg",
+        "dimensions": [
+            1138,
+            843
+        ],
+        "bbox_labels": [
+            "nml"
+        ],
+        "bboxes": [
+            [
+                437,
+                255,
+                714,
+                395
+            ]
+        ],
+        "pathology": "normal",
+        "label": 0
+    },
+    {
+        "image": "images/im01081.jpg",
+        "scan_mask": "masks/scan/im01081.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "bmt",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                373,
+                307,
+                480,
+                360
+            ],
+            [
+                495,
+                188,
+                653,
+                274
+            ],
+            [
+                343,
+                164,
+                691,
+                371
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00949.jpg",
+        "scan_mask": "masks/scan/im00949.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "bmt",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                513,
+                310,
+                604,
+                355
+            ],
+            [
+                623,
+                162,
+                759,
+                312
+            ],
+            [
+                489,
+                151,
+                772,
+                354
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00594.jpg",
+        "scan_mask": "masks/scan/im00594.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                585,
+                206,
+                634,
+                266
+            ],
+            [
+                542,
+                180,
+                717,
+                340
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im00604.jpg",
+        "scan_mask": "masks/scan/im00604.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "bmt",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                431,
+                233,
+                564,
+                348
+            ],
+            [
+                414,
+                206,
+                578,
+                359
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00778.jpg",
+        "scan_mask": "masks/scan/im00778.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "bmt",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                599,
+                302,
+                711,
+                351
+            ],
+            [
+                694,
+                166,
+                795,
+                253
+            ],
+            [
+                592,
+                158,
+                859,
+                388
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00261.jpg",
+        "scan_mask": "masks/scan/im00261.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "bmt",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                503,
+                291,
+                637,
+                348
+            ],
+            [
+                605,
+                200,
+                709,
+                278
+            ],
+            [
+                505,
+                190,
+                757,
+                369
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im01190.jpg",
+        "scan_mask": "masks/scan/im01190.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "bmt",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                484,
+                182,
+                630,
+                307
+            ],
+            [
+                452,
+                160,
+                641,
+                327
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00532.jpg",
+        "scan_mask": "masks/scan/im00532.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "bmt",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                462,
+                152,
+                641,
+                306
+            ],
+            [
+                442,
+                135,
+                659,
+                327
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00607.jpg",
+        "scan_mask": "masks/scan/im00607.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "bmt",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                466,
+                162,
+                640,
+                314
+            ],
+            [
+                450,
+                155,
+                662,
+                330
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00788.jpg",
+        "scan_mask": "masks/scan/im00788.jpg",
+        "dimensions": [
+            1356,
+            848
+        ],
+        "bbox_labels": [
+            "bmt",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                822,
+                324,
+                914,
+                433
+            ],
+            [
+                640,
+                258,
+                1164,
+                631
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00225.jpg",
+        "scan_mask": "masks/scan/im00225.jpg",
+        "dimensions": [
+            1356,
+            848
+        ],
+        "bbox_labels": [
+            "bmt",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                745,
+                284,
+                945,
+                554
+            ],
+            [
+                403,
+                283,
+                964,
+                632
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00837.jpg",
+        "scan_mask": "masks/scan/im00837.jpg",
+        "dimensions": [
+            1356,
+            848
+        ],
+        "bbox_labels": [
+            "bmt",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                722,
+                324,
+                926,
+                450
+            ],
+            [
+                624,
+                288,
+                932,
+                575
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00117.jpg",
+        "scan_mask": "masks/scan/im00117.jpg",
+        "dimensions": [
+            1356,
+            848
+        ],
+        "bbox_labels": [
+            "bmt",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                704,
+                301,
+                912,
+                503
+            ],
+            [
+                552,
+                279,
+                934,
+                591
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00030.jpg",
+        "scan_mask": "masks/scan/im00030.jpg",
+        "dimensions": [
+            1356,
+            848
+        ],
+        "bbox_labels": [
+            "bmt",
+            "stn",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                693,
+                317,
+                1000,
+                461
+            ],
+            [
+                537,
+                602,
+                678,
+                680
+            ],
+            [
+                493,
+                335,
+                989,
+                678
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00033.jpg",
+        "scan_mask": "masks/scan/im00033.jpg",
+        "dimensions": [
+            1137,
+            844
+        ],
+        "bbox_labels": [
+            "bmt",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                769,
+                155,
+                806,
+                233
+            ],
+            [
+                758,
+                145,
+                842,
+                341
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00338.jpg",
+        "scan_mask": "masks/scan/im00338.jpg",
+        "dimensions": [
+            1200,
+            712
+        ],
+        "bbox_labels": [
+            "bmt",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                861,
+                191,
+                910,
+                228
+            ],
+            [
+                804,
+                93,
+                923,
+                320
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00660.jpg",
+        "scan_mask": "masks/scan/im00660.jpg",
+        "dimensions": [
+            1200,
+            712
+        ],
+        "bbox_labels": [
+            "bmt",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                809,
+                136,
+                855,
+                209
+            ],
+            [
+                794,
+                85,
+                923,
+                339
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00114.jpg",
+        "scan_mask": "masks/scan/im00114.jpg",
+        "dimensions": [
+            1199,
+            844
+        ],
+        "bbox_labels": [
+            "bmt",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                661,
+                214,
+                713,
+                296
+            ],
+            [
+                633,
+                198,
+                747,
+                408
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00818.jpg",
+        "scan_mask": "masks/scan/im00818.jpg",
+        "dimensions": [
+            1200,
+            704
+        ],
+        "bbox_labels": [
+            "bmt",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                628,
+                64,
+                672,
+                162
+            ],
+            [
+                602,
+                41,
+                710,
+                290
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00381.jpg",
+        "scan_mask": "masks/scan/im00381.jpg",
+        "dimensions": [
+            1197,
+            688
+        ],
+        "bbox_labels": [
+            "bmt",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                630,
+                61,
+                689,
+                148
+            ],
+            [
+                593,
+                42,
+                716,
+                293
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00524.jpg",
+        "scan_mask": "masks/scan/im00524.jpg",
+        "dimensions": [
+            1196,
+            844
+        ],
+        "bbox_labels": [
+            "bmt",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                561,
+                218,
+                607,
+                314
+            ],
+            [
+                565,
+                188,
+                665,
+                387
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00559.jpg",
+        "scan_mask": "masks/scan/im00559.jpg",
+        "dimensions": [
+            1199,
+            844
+        ],
+        "bbox_labels": [
+            "bmt",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                696,
+                194,
+                737,
+                257
+            ],
+            [
+                686,
+                170,
+                775,
+                338
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00197.jpg",
+        "scan_mask": "masks/scan/im00197.jpg",
+        "dimensions": [
+            1200,
+            844
+        ],
+        "bbox_labels": [
+            "bmt",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                708,
+                188,
+                780,
+                291
+            ],
+            [
+                678,
+                175,
+                788,
+                466
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00649.jpg",
+        "scan_mask": "masks/scan/im00649.jpg",
+        "dimensions": [
+            1200,
+            844
+        ],
+        "bbox_labels": [
+            "bmt",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                722,
+                182,
+                800,
+                329
+            ],
+            [
+                678,
+                153,
+                814,
+                458
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im01002.jpg",
+        "scan_mask": "masks/scan/im01002.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "nml"
+        ],
+        "bboxes": [
+            [
+                630,
+                194,
+                804,
+                528
+            ]
+        ],
+        "pathology": "normal",
+        "label": 0
+    },
+    {
+        "image": "images/im01111.jpg",
+        "scan_mask": "masks/scan/im01111.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "nml"
+        ],
+        "bboxes": [
+            [
+                668,
+                282,
+                821,
+                512
+            ]
+        ],
+        "pathology": "normal",
+        "label": 0
+    },
+    {
+        "image": "images/im00340.jpg",
+        "scan_mask": "masks/scan/im00340.jpg",
+        "dimensions": [
+            1222,
+            844
+        ],
+        "bbox_labels": [
+            "nml"
+        ],
+        "bboxes": [
+            [
+                348,
+                330,
+                700,
+                650
+            ]
+        ],
+        "pathology": "normal",
+        "label": 0
+    },
+    {
+        "image": "images/im00389.jpg",
+        "scan_mask": "masks/scan/im00389.jpg",
+        "dimensions": [
+            1222,
+            844
+        ],
+        "bbox_labels": [
+            "nml"
+        ],
+        "bboxes": [
+            [
+                423,
+                284,
+                574,
+                573
+            ]
+        ],
+        "pathology": "normal",
+        "label": 0
+    },
+    {
+        "image": "images/im00579.jpg",
+        "scan_mask": "masks/scan/im00579.jpg",
+        "dimensions": [
+            1222,
+            844
+        ],
+        "bbox_labels": [
+            "nml"
+        ],
+        "bboxes": [
+            [
+                654,
+                226,
+                936,
+                588
+            ]
+        ],
+        "pathology": "normal",
+        "label": 0
+    },
+    {
+        "image": "images/im00193.jpg",
+        "scan_mask": "masks/scan/im00193.jpg",
+        "dimensions": [
+            1222,
+            844
+        ],
+        "bbox_labels": [
+            "nml"
+        ],
+        "bboxes": [
+            [
+                706,
+                311,
+                993,
+                610
+            ]
+        ],
+        "pathology": "normal",
+        "label": 0
+    },
+    {
+        "image": "images/im00139.jpg",
+        "scan_mask": "masks/scan/im00139.jpg",
+        "dimensions": [
+            1165,
+            844
+        ],
+        "bbox_labels": [
+            "nml"
+        ],
+        "bboxes": [
+            [
+                687,
+                219,
+                885,
+                505
+            ]
+        ],
+        "pathology": "normal",
+        "label": 0
+    },
+    {
+        "image": "images/im00823.jpg",
+        "scan_mask": "masks/scan/im00823.jpg",
+        "dimensions": [
+            1165,
+            844
+        ],
+        "bbox_labels": [
+            "nml"
+        ],
+        "bboxes": [
+            [
+                518,
+                225,
+                744,
+                488
+            ]
+        ],
+        "pathology": "normal",
+        "label": 0
+    },
+    {
+        "image": "images/im00952.jpg",
+        "scan_mask": "masks/scan/im00952.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                576,
+                139,
+                704,
+                239
+            ],
+            [
+                537,
+                119,
+                749,
+                329
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im00086.jpg",
+        "scan_mask": "masks/scan/im00086.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                607,
+                112,
+                752,
+                225
+            ],
+            [
+                562,
+                75,
+                783,
+                249
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im00713.jpg",
+        "scan_mask": "masks/scan/im00713.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                521,
+                111,
+                637,
+                219
+            ],
+            [
+                485,
+                95,
+                671,
+                259
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im00615.jpg",
+        "scan_mask": "masks/scan/im00615.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                530,
+                106,
+                671,
+                196
+            ],
+            [
+                517,
+                88,
+                735,
+                236
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im00093.jpg",
+        "scan_mask": "masks/scan/im00093.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                495,
+                94,
+                653,
+                184
+            ],
+            [
+                448,
+                75,
+                705,
+                237
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im01138.jpg",
+        "scan_mask": "masks/scan/im01138.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                493,
+                100,
+                648,
+                226
+            ],
+            [
+                464,
+                81,
+                695,
+                248
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im01085.jpg",
+        "scan_mask": "masks/scan/im01085.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                487,
+                91,
+                622,
+                233
+            ],
+            [
+                470,
+                76,
+                664,
+                252
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im00339.jpg",
+        "scan_mask": "masks/scan/im00339.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                494,
+                97,
+                618,
+                212
+            ],
+            [
+                478,
+                75,
+                617,
+                278
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im00270.jpg",
+        "scan_mask": "masks/scan/im00270.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "abn",
+            "malg"
+        ],
+        "bboxes": [
+            [
+                609,
+                335,
+                725,
+                417
+            ],
+            [
+                465,
+                188,
+                791,
+                488
+            ],
+            [
+                508,
+                227,
+                675,
+                306
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im00447.jpg",
+        "scan_mask": "masks/scan/im00447.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                502,
+                170,
+                677,
+                342
+            ],
+            [
+                413,
+                154,
+                724,
+                490
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im00944.jpg",
+        "scan_mask": "masks/scan/im00944.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                515,
+                220,
+                657,
+                328
+            ],
+            [
+                481,
+                171,
+                757,
+                439
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im00864.jpg",
+        "scan_mask": "masks/scan/im00864.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                552,
+                212,
+                671,
+                328
+            ],
+            [
+                515,
+                183,
+                803,
+                434
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im00929.jpg",
+        "scan_mask": "masks/scan/im00929.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                490,
+                192,
+                644,
+                312
+            ],
+            [
+                462,
+                168,
+                729,
+                478
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im01247.jpg",
+        "scan_mask": "masks/scan/im01247.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                584,
+                332,
+                650,
+                384
+            ],
+            [
+                585,
+                187,
+                702,
+                288
+            ],
+            [
+                534,
+                184,
+                742,
+                400
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im00979.jpg",
+        "scan_mask": "masks/scan/im00979.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                636,
+                288,
+                667,
+                310
+            ],
+            [
+                587,
+                180,
+                689,
+                276
+            ],
+            [
+                549,
+                162,
+                779,
+                383
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im01226.jpg",
+        "scan_mask": "masks/scan/im01226.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                623,
+                256,
+                702,
+                324
+            ],
+            [
+                508,
+                176,
+                611,
+                306
+            ],
+            [
+                482,
+                135,
+                726,
+                371
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im00170.jpg",
+        "scan_mask": "masks/scan/im00170.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "bmt",
+            "bmt",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                576,
+                156,
+                687,
+                300
+            ],
+            [
+                432,
+                311,
+                608,
+                423
+            ],
+            [
+                409,
+                130,
+                748,
+                438
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00073.jpg",
+        "scan_mask": "masks/scan/im00073.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "stn",
+            "bmt",
+            "bmt",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                470,
+                352,
+                603,
+                428
+            ],
+            [
+                548,
+                252,
+                682,
+                346
+            ],
+            [
+                434,
+                244,
+                523,
+                315
+            ],
+            [
+                364,
+                332,
+                463,
+                452
+            ],
+            [
+                369,
+                131,
+                730,
+                492
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00876.jpg",
+        "scan_mask": "masks/scan/im00876.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "stn",
+            "bmt",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                512,
+                352,
+                641,
+                429
+            ],
+            [
+                613,
+                307,
+                686,
+                350
+            ],
+            [
+                476,
+                256,
+                549,
+                319
+            ],
+            [
+                437,
+                144,
+                731,
+                439
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00392.jpg",
+        "scan_mask": "masks/scan/im00392.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "bmt",
+            "bmt",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                685,
+                188,
+                827,
+                352
+            ],
+            [
+                539,
+                328,
+                659,
+                448
+            ],
+            [
+                537,
+                118,
+                858,
+                464
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00493.jpg",
+        "scan_mask": "masks/scan/im00493.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                552,
+                398,
+                593,
+                441
+            ],
+            [
+                568,
+                273,
+                736,
+                383
+            ],
+            [
+                440,
+                230,
+                777,
+                481
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im00810.jpg",
+        "scan_mask": "masks/scan/im00810.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                550,
+                407,
+                589,
+                439
+            ],
+            [
+                571,
+                251,
+                744,
+                414
+            ],
+            [
+                435,
+                233,
+                789,
+                499
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im01146.jpg",
+        "scan_mask": "masks/scan/im01146.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                649,
+                200,
+                757,
+                316
+            ],
+            [
+                641,
+                135,
+                791,
+                337
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00668.jpg",
+        "scan_mask": "masks/scan/im00668.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                636,
+                211,
+                737,
+                301
+            ],
+            [
+                612,
+                153,
+                771,
+                318
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00819.jpg",
+        "scan_mask": "masks/scan/im00819.jpg",
+        "dimensions": [
+            1180,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                631,
+                207,
+                733,
+                321
+            ],
+            [
+                547,
+                155,
+                780,
+                349
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00414.jpg",
+        "scan_mask": "masks/scan/im00414.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                617,
+                196,
+                723,
+                309
+            ],
+            [
+                557,
+                141,
+                771,
+                359
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00329.jpg",
+        "scan_mask": "masks/scan/im00329.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "stn",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                650,
+                211,
+                763,
+                292
+            ],
+            [
+                582,
+                278,
+                675,
+                350
+            ],
+            [
+                514,
+                161,
+                830,
+                379
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00069.jpg",
+        "scan_mask": "masks/scan/im00069.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "stn",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                744,
+                185,
+                845,
+                280
+            ],
+            [
+                726,
+                251,
+                785,
+                433
+            ],
+            [
+                669,
+                143,
+                860,
+                454
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00365.jpg",
+        "scan_mask": "masks/scan/im00365.jpg",
+        "dimensions": [
+            1180,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "stn",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                592,
+                209,
+                717,
+                307
+            ],
+            [
+                560,
+                292,
+                652,
+                361
+            ],
+            [
+                511,
+                116,
+                763,
+                406
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00796.jpg",
+        "scan_mask": "masks/scan/im00796.jpg",
+        "dimensions": [
+            1246,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "stn",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                743,
+                248,
+                858,
+                333
+            ],
+            [
+                685,
+                332,
+                769,
+                497
+            ],
+            [
+                644,
+                164,
+                903,
+                528
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00495.jpg",
+        "scan_mask": "masks/scan/im00495.jpg",
+        "dimensions": [
+            1246,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "stn",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                731,
+                261,
+                881,
+                373
+            ],
+            [
+                676,
+                368,
+                809,
+                515
+            ],
+            [
+                674,
+                205,
+                897,
+                539
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00845.jpg",
+        "scan_mask": "masks/scan/im00845.jpg",
+        "dimensions": [
+            1246,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "stn",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                719,
+                285,
+                876,
+                368
+            ],
+            [
+                655,
+                360,
+                804,
+                489
+            ],
+            [
+                599,
+                201,
+                904,
+                512
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00769.jpg",
+        "scan_mask": "masks/scan/im00769.jpg",
+        "dimensions": [
+            1246,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "stn",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                703,
+                271,
+                863,
+                379
+            ],
+            [
+                648,
+                376,
+                736,
+                456
+            ],
+            [
+                624,
+                196,
+                894,
+                464
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00785.jpg",
+        "scan_mask": "masks/scan/im00785.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                682,
+                187,
+                784,
+                256
+            ],
+            [
+                581,
+                164,
+                803,
+                386
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im00351.jpg",
+        "scan_mask": "masks/scan/im00351.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "bmt",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                550,
+                324,
+                637,
+                421
+            ],
+            [
+                502,
+                245,
+                759,
+                493
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00057.jpg",
+        "scan_mask": "masks/scan/im00057.jpg",
+        "dimensions": [
+            1150,
+            843
+        ],
+        "bbox_labels": [
+            "stn",
+            "bmt",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                430,
+                392,
+                534,
+                468
+            ],
+            [
+                598,
+                251,
+                668,
+                342
+            ],
+            [
+                390,
+                234,
+                779,
+                488
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00212.jpg",
+        "scan_mask": "masks/scan/im00212.jpg",
+        "dimensions": [
+            1150,
+            843
+        ],
+        "bbox_labels": [
+            "bmt",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                679,
+                284,
+                742,
+                397
+            ],
+            [
+                550,
+                198,
+                846,
+                455
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00754.jpg",
+        "scan_mask": "masks/scan/im00754.jpg",
+        "dimensions": [
+            1150,
+            843
+        ],
+        "bbox_labels": [
+            "bmt",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                677,
+                211,
+                754,
+                315
+            ],
+            [
+                557,
+                195,
+                789,
+                405
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im01176.jpg",
+        "scan_mask": "masks/scan/im01176.jpg",
+        "dimensions": [
+            1150,
+            843
+        ],
+        "bbox_labels": [
+            "stn",
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                586,
+                361,
+                627,
+                415
+            ],
+            [
+                584,
+                196,
+                712,
+                334
+            ],
+            [
+                501,
+                158,
+                836,
+                464
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im00996.jpg",
+        "scan_mask": "masks/scan/im00996.jpg",
+        "dimensions": [
+            1150,
+            843
+        ],
+        "bbox_labels": [
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                437,
+                250,
+                651,
+                542
+            ],
+            [
+                402,
+                216,
+                743,
+                600
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im00762.jpg",
+        "scan_mask": "masks/scan/im00762.jpg",
+        "dimensions": [
+            1150,
+            843
+        ],
+        "bbox_labels": [
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                370,
+                169,
+                606,
+                478
+            ],
+            [
+                362,
+                163,
+                635,
+                558
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im01210.jpg",
+        "scan_mask": "masks/scan/im01210.jpg",
+        "dimensions": [
+            1150,
+            843
+        ],
+        "bbox_labels": [
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                488,
+                211,
+                774,
+                541
+            ],
+            [
+                454,
+                190,
+                816,
+                563
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im00445.jpg",
+        "scan_mask": "masks/scan/im00445.jpg",
+        "dimensions": [
+            1150,
+            843
+        ],
+        "bbox_labels": [
+            "stn",
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                484,
+                391,
+                596,
+                482
+            ],
+            [
+                571,
+                193,
+                768,
+                340
+            ],
+            [
+                441,
+                191,
+                812,
+                521
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im00814.jpg",
+        "scan_mask": "masks/scan/im00814.jpg",
+        "dimensions": [
+            1149,
+            843
+        ],
+        "bbox_labels": [
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                460,
+                111,
+                798,
+                458
+            ],
+            [
+                438,
+                133,
+                843,
+                522
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im00528.jpg",
+        "scan_mask": "masks/scan/im00528.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                552,
+                394,
+                675,
+                482
+            ],
+            [
+                587,
+                193,
+                827,
+                428
+            ],
+            [
+                521,
+                181,
+                877,
+                521
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im01036.jpg",
+        "scan_mask": "masks/scan/im01036.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                625,
+                350,
+                699,
+                421
+            ],
+            [
+                557,
+                219,
+                832,
+                362
+            ],
+            [
+                530,
+                181,
+                919,
+                446
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im00431.jpg",
+        "scan_mask": "masks/scan/im00431.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "malg",
+            "stn",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                517,
+                398,
+                581,
+                470
+            ],
+            [
+                471,
+                183,
+                659,
+                392
+            ],
+            [
+                678,
+                214,
+                735,
+                268
+            ],
+            [
+                443,
+                155,
+                880,
+                481
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im00697.jpg",
+        "scan_mask": "masks/scan/im00697.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "stn",
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                716,
+                224,
+                768,
+                266
+            ],
+            [
+                572,
+                420,
+                625,
+                453
+            ],
+            [
+                508,
+                207,
+                695,
+                364
+            ],
+            [
+                451,
+                178,
+                879,
+                481
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im00880.jpg",
+        "scan_mask": "masks/scan/im00880.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                355,
+                168,
+                554,
+                383
+            ],
+            [
+                340,
+                149,
+                600,
+                414
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im00546.jpg",
+        "scan_mask": "masks/scan/im00546.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                471,
+                111,
+                612,
+                279
+            ],
+            [
+                455,
+                101,
+                699,
+                325
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im01128.jpg",
+        "scan_mask": "masks/scan/im01128.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                355,
+                118,
+                507,
+                248
+            ],
+            [
+                351,
+                94,
+                564,
+                326
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im00517.jpg",
+        "scan_mask": "masks/scan/im00517.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "malg",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                372,
+                107,
+                508,
+                228
+            ],
+            [
+                346,
+                85,
+                563,
+                255
+            ]
+        ],
+        "pathology": "malignant",
+        "label": 2
+    },
+    {
+        "image": "images/im00997.jpg",
+        "scan_mask": "masks/scan/im00997.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "nml"
+        ],
+        "bboxes": [
+            [
+                355,
+                223,
+                820,
+                400
+            ]
+        ],
+        "pathology": "normal",
+        "label": 0
+    },
+    {
+        "image": "images/im00018.jpg",
+        "scan_mask": "masks/scan/im00018.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "nml"
+        ],
+        "bboxes": [
+            [
+                470,
+                203,
+                825,
+                470
+            ]
+        ],
+        "pathology": "normal",
+        "label": 0
+    },
+    {
+        "image": "images/im00987.jpg",
+        "scan_mask": "masks/scan/im00987.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "nml"
+        ],
+        "bboxes": [
+            [
+                400,
+                235,
+                722,
+                497
+            ]
+        ],
+        "pathology": "normal",
+        "label": 0
+    },
+    {
+        "image": "images/im00752.jpg",
+        "scan_mask": "masks/scan/im00752.jpg",
+        "dimensions": [
+            1180,
+            844
+        ],
+        "bbox_labels": [
+            "nml"
+        ],
+        "bboxes": [
+            [
+                334,
+                184,
+                731,
+                383
+            ]
+        ],
+        "pathology": "normal",
+        "label": 0
+    },
+    {
+        "image": "images/im00932.jpg",
+        "scan_mask": "masks/scan/im00932.jpg",
+        "dimensions": [
+            1180,
+            844
+        ],
+        "bbox_labels": [
+            "nml"
+        ],
+        "bboxes": [
+            [
+                442,
+                211,
+                593,
+                368
+            ]
+        ],
+        "pathology": "normal",
+        "label": 0
+    },
+    {
+        "image": "images/im00258.jpg",
+        "scan_mask": "masks/scan/im00258.jpg",
+        "dimensions": [
+            1246,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "stn",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                612,
+                166,
+                757,
+                241
+            ],
+            [
+                471,
+                207,
+                559,
+                307
+            ],
+            [
+                313,
+                128,
+                837,
+                313
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im01116.jpg",
+        "scan_mask": "masks/scan/im01116.jpg",
+        "dimensions": [
+            1244,
+            844
+        ],
+        "bbox_labels": [
+            "nml"
+        ],
+        "bboxes": [
+            [
+                426,
+                119,
+                636,
+                279
+            ]
+        ],
+        "pathology": "normal",
+        "label": 0
+    },
+    {
+        "image": "images/im00857.jpg",
+        "scan_mask": "masks/scan/im00857.jpg",
+        "dimensions": [
+            1246,
+            844
+        ],
+        "bbox_labels": [
+            "nml"
+        ],
+        "bboxes": [
+            [
+                423,
+                94,
+                936,
+                314
+            ]
+        ],
+        "pathology": "normal",
+        "label": 0
+    },
+    {
+        "image": "images/im00998.jpg",
+        "scan_mask": "masks/scan/im00998.jpg",
+        "dimensions": [
+            1246,
+            844
+        ],
+        "bbox_labels": [
+            "nml"
+        ],
+        "bboxes": [
+            [
+                412,
+                89,
+                972,
+                332
+            ]
+        ],
+        "pathology": "normal",
+        "label": 0
+    },
+    {
+        "image": "images/im00698.jpg",
+        "scan_mask": "masks/scan/im00698.jpg",
+        "dimensions": [
+            1246,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                505,
+                228,
+                562,
+                257
+            ],
+            [
+                324,
+                137,
+                840,
+                307
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00721.jpg",
+        "scan_mask": "masks/scan/im00721.jpg",
+        "dimensions": [
+            1246,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                499,
+                226,
+                543,
+                255
+            ],
+            [
+                305,
+                121,
+                809,
+                282
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im01052.jpg",
+        "scan_mask": "masks/scan/im01052.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                445,
+                380,
+                509,
+                418
+            ],
+            [
+                417,
+                190,
+                770,
+                435
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00930.jpg",
+        "scan_mask": "masks/scan/im00930.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                513,
+                401,
+                594,
+                455
+            ],
+            [
+                496,
+                165,
+                820,
+                461
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00572.jpg",
+        "scan_mask": "masks/scan/im00572.jpg",
+        "dimensions": [
+            1181,
+            844
+        ],
+        "bbox_labels": [
+            "stn",
+            "abn"
+        ],
+        "bboxes": [
+            [
+                471,
+                441,
+                528,
+                479
+            ],
+            [
+                414,
+                208,
+                710,
+                492
+            ]
+        ],
+        "pathology": "benign",
+        "label": 1
+    },
+    {
+        "image": "images/im00435.jpg",
+        "scan_mask": "masks/scan/im00435.jpg",
+        "dimensions": [
+            1137,
+            844
+        ],
+        "bbox_labels": [
+            "nml"
+        ],
+        "bboxes": [
+            [
+                381,
+                120,
+                759,
+                459
+            ]
+        ],
+        "pathology": "normal",
+        "label": 0
+    },
+    {
+        "image": "images/im01148.jpg",
+        "scan_mask": "masks/scan/im01148.jpg",
+        "dimensions": [
+            1137,
+            844
+        ],
+        "bbox_labels": [
+            "nml"
+        ],
+        "bboxes": [
+            [
+                333,
+                220,
+                709,
+                439
+            ]
+        ],
+        "pathology": "normal",
+        "label": 0
+    },
+    {
+        "image": "images/im00482.jpg",
+        "scan_mask": "masks/scan/im00482.jpg",
+        "dimensions": [
+            1137,
+            844
+        ],
+        "bbox_labels": [
+            "nml"
+        ],
+        "bboxes": [
+            [
+                263,
+                197,
+                650,
+                298
+            ]
+        ],
+        "pathology": "normal",
+        "label": 0
+    },
+    {
+        "image": "images/im00387.jpg",
+        "scan_mask": "masks/scan/im00387.jpg",
+        "dimensions": [
+            1280,
+            848
+        ],
+        "bbox_labels": [
+            "nml"
+        ],
+        "bboxes": [
+            [
+                357,
+                245,
+                884,
+                644
+            ]
+        ],
+        "pathology": "normal",
+        "label": 0
+    },
+    {
+        "image": "images/im00523.jpg",
+        "scan_mask": "masks/scan/im00523.jpg",
+        "dimensions": [
+            1280,
+            848
+        ],
+        "bbox_labels": [
+            "nml"
+        ],
+        "bboxes": [
+            [
+                345,
+                286,
+                1131,
+                705
+            ]
+        ],
+        "pathology": "normal",
+        "label": 0
+    }
+]

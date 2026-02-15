@@ -1,0 +1,3285 @@
+[
+    {
+        "image": "images/1269.png",
+        "tumor_mask_binary": "masks/tumor/1269_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1269_multiclass.png",
+        "scan_mask": "masks/scan/1269.png",
+        "label": 5
+    },
+    {
+        "image": "images/1458.png",
+        "tumor_mask_binary": "masks/tumor/1458_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1458_multiclass.png",
+        "scan_mask": "masks/scan/1458.png",
+        "label": 7
+    },
+    {
+        "image": "images/700.png",
+        "tumor_mask_binary": "masks/tumor/700_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/700_multiclass.png",
+        "scan_mask": "masks/scan/700.png",
+        "label": 6
+    },
+    {
+        "image": "images/264.png",
+        "tumor_mask_binary": "masks/tumor/264_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/264_multiclass.png",
+        "scan_mask": "masks/scan/264.png",
+        "label": 2
+    },
+    {
+        "image": "images/1017.png",
+        "tumor_mask_binary": "masks/tumor/1017_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1017_multiclass.png",
+        "scan_mask": "masks/scan/1017.png",
+        "label": 2
+    },
+    {
+        "image": "images/991.png",
+        "tumor_mask_binary": "masks/tumor/991_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/991_multiclass.png",
+        "scan_mask": "masks/scan/991.png",
+        "label": 2
+    },
+    {
+        "image": "images/1337.png",
+        "tumor_mask_binary": "masks/tumor/1337_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1337_multiclass.png",
+        "scan_mask": "masks/scan/1337.png",
+        "label": 2
+    },
+    {
+        "image": "images/359.png",
+        "tumor_mask_binary": "masks/tumor/359_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/359_multiclass.png",
+        "scan_mask": "masks/scan/359.png",
+        "label": 3
+    },
+    {
+        "image": "images/1083.png",
+        "tumor_mask_binary": "masks/tumor/1083_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1083_multiclass.png",
+        "scan_mask": "masks/scan/1083.png",
+        "label": 2
+    },
+    {
+        "image": "images/1071.png",
+        "tumor_mask_binary": "masks/tumor/1071_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1071_multiclass.png",
+        "scan_mask": "masks/scan/1071.png",
+        "label": 2
+    },
+    {
+        "image": "images/271.png",
+        "tumor_mask_binary": "masks/tumor/271_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/271_multiclass.png",
+        "scan_mask": "masks/scan/271.png",
+        "label": 5
+    },
+    {
+        "image": "images/448.png",
+        "tumor_mask_binary": "masks/tumor/448_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/448_multiclass.png",
+        "scan_mask": "masks/scan/448.png",
+        "label": 0
+    },
+    {
+        "image": "images/1270.png",
+        "tumor_mask_binary": "masks/tumor/1270_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1270_multiclass.png",
+        "scan_mask": "masks/scan/1270.png",
+        "label": 1
+    },
+    {
+        "image": "images/747.png",
+        "tumor_mask_binary": "masks/tumor/747_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/747_multiclass.png",
+        "scan_mask": "masks/scan/747.png",
+        "label": 2
+    },
+    {
+        "image": "images/1229.png",
+        "tumor_mask_binary": "masks/tumor/1229_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1229_multiclass.png",
+        "scan_mask": "masks/scan/1229.png",
+        "label": 1
+    },
+    {
+        "image": "images/553.png",
+        "tumor_mask_binary": "masks/tumor/553_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/553_multiclass.png",
+        "scan_mask": "masks/scan/553.png",
+        "label": 2
+    },
+    {
+        "image": "images/580.png",
+        "tumor_mask_binary": "masks/tumor/580_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/580_multiclass.png",
+        "scan_mask": "masks/scan/580.png",
+        "label": 0
+    },
+    {
+        "image": "images/1218.png",
+        "tumor_mask_binary": "masks/tumor/1218_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1218_multiclass.png",
+        "scan_mask": "masks/scan/1218.png",
+        "label": 4
+    },
+    {
+        "image": "images/391.png",
+        "tumor_mask_binary": "masks/tumor/391_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/391_multiclass.png",
+        "scan_mask": "masks/scan/391.png",
+        "label": 0
+    },
+    {
+        "image": "images/582.png",
+        "tumor_mask_binary": "masks/tumor/582_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/582_multiclass.png",
+        "scan_mask": "masks/scan/582.png",
+        "label": 0
+    },
+    {
+        "image": "images/84.png",
+        "tumor_mask_binary": "masks/tumor/84_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/84_multiclass.png",
+        "scan_mask": "masks/scan/84.png",
+        "label": 0
+    },
+    {
+        "image": "images/1440.png",
+        "tumor_mask_binary": "masks/tumor/1440_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1440_multiclass.png",
+        "scan_mask": "masks/scan/1440.png",
+        "label": 7
+    },
+    {
+        "image": "images/89.png",
+        "tumor_mask_binary": "masks/tumor/89_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/89_multiclass.png",
+        "scan_mask": "masks/scan/89.png",
+        "label": 1
+    },
+    {
+        "image": "images/1454.png",
+        "tumor_mask_binary": "masks/tumor/1454_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1454_multiclass.png",
+        "scan_mask": "masks/scan/1454.png",
+        "label": 7
+    },
+    {
+        "image": "images/494.png",
+        "tumor_mask_binary": "masks/tumor/494_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/494_multiclass.png",
+        "scan_mask": "masks/scan/494.png",
+        "label": 6
+    },
+    {
+        "image": "images/847.png",
+        "tumor_mask_binary": "masks/tumor/847_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/847_multiclass.png",
+        "scan_mask": "masks/scan/847.png",
+        "label": 2
+    },
+    {
+        "image": "images/1277.png",
+        "tumor_mask_binary": "masks/tumor/1277_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1277_multiclass.png",
+        "scan_mask": "masks/scan/1277.png",
+        "label": 5
+    },
+    {
+        "image": "images/267.png",
+        "tumor_mask_binary": "masks/tumor/267_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/267_multiclass.png",
+        "scan_mask": "masks/scan/267.png",
+        "label": 2
+    },
+    {
+        "image": "images/1411.png",
+        "tumor_mask_binary": "masks/tumor/1411_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1411_multiclass.png",
+        "scan_mask": "masks/scan/1411.png",
+        "label": 0
+    },
+    {
+        "image": "images/693.png",
+        "tumor_mask_binary": "masks/tumor/693_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/693_multiclass.png",
+        "scan_mask": "masks/scan/693.png",
+        "label": 6
+    },
+    {
+        "image": "images/1329.png",
+        "tumor_mask_binary": "masks/tumor/1329_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1329_multiclass.png",
+        "scan_mask": "masks/scan/1329.png",
+        "label": 0
+    },
+    {
+        "image": "images/258.png",
+        "tumor_mask_binary": "masks/tumor/258_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/258_multiclass.png",
+        "scan_mask": "masks/scan/258.png",
+        "label": 5
+    },
+    {
+        "image": "images/1323.png",
+        "tumor_mask_binary": "masks/tumor/1323_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1323_multiclass.png",
+        "scan_mask": "masks/scan/1323.png",
+        "label": 5
+    },
+    {
+        "image": "images/1188.png",
+        "tumor_mask_binary": "masks/tumor/1188_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1188_multiclass.png",
+        "scan_mask": "masks/scan/1188.png",
+        "label": 0
+    },
+    {
+        "image": "images/1013.png",
+        "tumor_mask_binary": "masks/tumor/1013_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1013_multiclass.png",
+        "scan_mask": "masks/scan/1013.png",
+        "label": 4
+    },
+    {
+        "image": "images/862.png",
+        "tumor_mask_binary": "masks/tumor/862_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/862_multiclass.png",
+        "scan_mask": "masks/scan/862.png",
+        "label": 0
+    },
+    {
+        "image": "images/1079.png",
+        "tumor_mask_binary": "masks/tumor/1079_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1079_multiclass.png",
+        "scan_mask": "masks/scan/1079.png",
+        "label": 5
+    },
+    {
+        "image": "images/1352.png",
+        "tumor_mask_binary": "masks/tumor/1352_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1352_multiclass.png",
+        "scan_mask": "masks/scan/1352.png",
+        "label": 1
+    },
+    {
+        "image": "images/778.png",
+        "tumor_mask_binary": "masks/tumor/778_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/778_multiclass.png",
+        "scan_mask": "masks/scan/778.png",
+        "label": 0
+    },
+    {
+        "image": "images/948.png",
+        "tumor_mask_binary": "masks/tumor/948_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/948_multiclass.png",
+        "scan_mask": "masks/scan/948.png",
+        "label": 2
+    },
+    {
+        "image": "images/245.png",
+        "tumor_mask_binary": "masks/tumor/245_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/245_multiclass.png",
+        "scan_mask": "masks/scan/245.png",
+        "label": 5
+    },
+    {
+        "image": "images/536.png",
+        "tumor_mask_binary": "masks/tumor/536_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/536_multiclass.png",
+        "scan_mask": "masks/scan/536.png",
+        "label": 2
+    },
+    {
+        "image": "images/1208.png",
+        "tumor_mask_binary": "masks/tumor/1208_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1208_multiclass.png",
+        "scan_mask": "masks/scan/1208.png",
+        "label": 0
+    },
+    {
+        "image": "images/535.png",
+        "tumor_mask_binary": "masks/tumor/535_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/535_multiclass.png",
+        "scan_mask": "masks/scan/535.png",
+        "label": 2
+    },
+    {
+        "image": "images/331.png",
+        "tumor_mask_binary": "masks/tumor/331_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/331_multiclass.png",
+        "scan_mask": "masks/scan/331.png",
+        "label": 0
+    },
+    {
+        "image": "images/48.png",
+        "tumor_mask_binary": "masks/tumor/48_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/48_multiclass.png",
+        "scan_mask": "masks/scan/48.png",
+        "label": 2
+    },
+    {
+        "image": "images/784.png",
+        "tumor_mask_binary": "masks/tumor/784_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/784_multiclass.png",
+        "scan_mask": "masks/scan/784.png",
+        "label": 4
+    },
+    {
+        "image": "images/1032.png",
+        "tumor_mask_binary": "masks/tumor/1032_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1032_multiclass.png",
+        "scan_mask": "masks/scan/1032.png",
+        "label": 0
+    },
+    {
+        "image": "images/592.png",
+        "tumor_mask_binary": "masks/tumor/592_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/592_multiclass.png",
+        "scan_mask": "masks/scan/592.png",
+        "label": 5
+    },
+    {
+        "image": "images/361.png",
+        "tumor_mask_binary": "masks/tumor/361_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/361_multiclass.png",
+        "scan_mask": "masks/scan/361.png",
+        "label": 3
+    },
+    {
+        "image": "images/388.png",
+        "tumor_mask_binary": "masks/tumor/388_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/388_multiclass.png",
+        "scan_mask": "masks/scan/388.png",
+        "label": 0
+    },
+    {
+        "image": "images/27.png",
+        "tumor_mask_binary": "masks/tumor/27_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/27_multiclass.png",
+        "scan_mask": "masks/scan/27.png",
+        "label": 0
+    },
+    {
+        "image": "images/1130.png",
+        "tumor_mask_binary": "masks/tumor/1130_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1130_multiclass.png",
+        "scan_mask": "masks/scan/1130.png",
+        "label": 4
+    },
+    {
+        "image": "images/430.png",
+        "tumor_mask_binary": "masks/tumor/430_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/430_multiclass.png",
+        "scan_mask": "masks/scan/430.png",
+        "label": 3
+    },
+    {
+        "image": "images/16.png",
+        "tumor_mask_binary": "masks/tumor/16_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/16_multiclass.png",
+        "scan_mask": "masks/scan/16.png",
+        "label": 0
+    },
+    {
+        "image": "images/70.png",
+        "tumor_mask_binary": "masks/tumor/70_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/70_multiclass.png",
+        "scan_mask": "masks/scan/70.png",
+        "label": 2
+    },
+    {
+        "image": "images/741.png",
+        "tumor_mask_binary": "masks/tumor/741_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/741_multiclass.png",
+        "scan_mask": "masks/scan/741.png",
+        "label": 2
+    },
+    {
+        "image": "images/690.png",
+        "tumor_mask_binary": "masks/tumor/690_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/690_multiclass.png",
+        "scan_mask": "masks/scan/690.png",
+        "label": 5
+    },
+    {
+        "image": "images/1466.png",
+        "tumor_mask_binary": "masks/tumor/1466_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1466_multiclass.png",
+        "scan_mask": "masks/scan/1466.png",
+        "label": 7
+    },
+    {
+        "image": "images/442.png",
+        "tumor_mask_binary": "masks/tumor/442_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/442_multiclass.png",
+        "scan_mask": "masks/scan/442.png",
+        "label": 5
+    },
+    {
+        "image": "images/1384.png",
+        "tumor_mask_binary": "masks/tumor/1384_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1384_multiclass.png",
+        "scan_mask": "masks/scan/1384.png",
+        "label": 5
+    },
+    {
+        "image": "images/548.png",
+        "tumor_mask_binary": "masks/tumor/548_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/548_multiclass.png",
+        "scan_mask": "masks/scan/548.png",
+        "label": 1
+    },
+    {
+        "image": "images/1162.png",
+        "tumor_mask_binary": "masks/tumor/1162_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1162_multiclass.png",
+        "scan_mask": "masks/scan/1162.png",
+        "label": 0
+    },
+    {
+        "image": "images/1023.png",
+        "tumor_mask_binary": "masks/tumor/1023_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1023_multiclass.png",
+        "scan_mask": "masks/scan/1023.png",
+        "label": 0
+    },
+    {
+        "image": "images/1111.png",
+        "tumor_mask_binary": "masks/tumor/1111_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1111_multiclass.png",
+        "scan_mask": "masks/scan/1111.png",
+        "label": 5
+    },
+    {
+        "image": "images/191.png",
+        "tumor_mask_binary": "masks/tumor/191_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/191_multiclass.png",
+        "scan_mask": "masks/scan/191.png",
+        "label": 0
+    },
+    {
+        "image": "images/1055.png",
+        "tumor_mask_binary": "masks/tumor/1055_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1055_multiclass.png",
+        "scan_mask": "masks/scan/1055.png",
+        "label": 3
+    },
+    {
+        "image": "images/88.png",
+        "tumor_mask_binary": "masks/tumor/88_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/88_multiclass.png",
+        "scan_mask": "masks/scan/88.png",
+        "label": 5
+    },
+    {
+        "image": "images/296.png",
+        "tumor_mask_binary": "masks/tumor/296_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/296_multiclass.png",
+        "scan_mask": "masks/scan/296.png",
+        "label": 1
+    },
+    {
+        "image": "images/842.png",
+        "tumor_mask_binary": "masks/tumor/842_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/842_multiclass.png",
+        "scan_mask": "masks/scan/842.png",
+        "label": 0
+    },
+    {
+        "image": "images/253.png",
+        "tumor_mask_binary": "masks/tumor/253_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/253_multiclass.png",
+        "scan_mask": "masks/scan/253.png",
+        "label": 1
+    },
+    {
+        "image": "images/385.png",
+        "tumor_mask_binary": "masks/tumor/385_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/385_multiclass.png",
+        "scan_mask": "masks/scan/385.png",
+        "label": 1
+    },
+    {
+        "image": "images/973.png",
+        "tumor_mask_binary": "masks/tumor/973_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/973_multiclass.png",
+        "scan_mask": "masks/scan/973.png",
+        "label": 0
+    },
+    {
+        "image": "images/452.png",
+        "tumor_mask_binary": "masks/tumor/452_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/452_multiclass.png",
+        "scan_mask": "masks/scan/452.png",
+        "label": 6
+    },
+    {
+        "image": "images/1366.png",
+        "tumor_mask_binary": "masks/tumor/1366_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1366_multiclass.png",
+        "scan_mask": "masks/scan/1366.png",
+        "label": 0
+    },
+    {
+        "image": "images/1085.png",
+        "tumor_mask_binary": "masks/tumor/1085_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1085_multiclass.png",
+        "scan_mask": "masks/scan/1085.png",
+        "label": 5
+    },
+    {
+        "image": "images/896.png",
+        "tumor_mask_binary": "masks/tumor/896_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/896_multiclass.png",
+        "scan_mask": "masks/scan/896.png",
+        "label": 6
+    },
+    {
+        "image": "images/472.png",
+        "tumor_mask_binary": "masks/tumor/472_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/472_multiclass.png",
+        "scan_mask": "masks/scan/472.png",
+        "label": 1
+    },
+    {
+        "image": "images/493.png",
+        "tumor_mask_binary": "masks/tumor/493_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/493_multiclass.png",
+        "scan_mask": "masks/scan/493.png",
+        "label": 6
+    },
+    {
+        "image": "images/234.png",
+        "tumor_mask_binary": "masks/tumor/234_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/234_multiclass.png",
+        "scan_mask": "masks/scan/234.png",
+        "label": 2
+    },
+    {
+        "image": "images/679.png",
+        "tumor_mask_binary": "masks/tumor/679_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/679_multiclass.png",
+        "scan_mask": "masks/scan/679.png",
+        "label": 0
+    },
+    {
+        "image": "images/699.png",
+        "tumor_mask_binary": "masks/tumor/699_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/699_multiclass.png",
+        "scan_mask": "masks/scan/699.png",
+        "label": 6
+    },
+    {
+        "image": "images/501.png",
+        "tumor_mask_binary": "masks/tumor/501_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/501_multiclass.png",
+        "scan_mask": "masks/scan/501.png",
+        "label": 4
+    },
+    {
+        "image": "images/436.png",
+        "tumor_mask_binary": "masks/tumor/436_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/436_multiclass.png",
+        "scan_mask": "masks/scan/436.png",
+        "label": 2
+    },
+    {
+        "image": "images/249.png",
+        "tumor_mask_binary": "masks/tumor/249_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/249_multiclass.png",
+        "scan_mask": "masks/scan/249.png",
+        "label": 1
+    },
+    {
+        "image": "images/621.png",
+        "tumor_mask_binary": "masks/tumor/621_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/621_multiclass.png",
+        "scan_mask": "masks/scan/621.png",
+        "label": 5
+    },
+    {
+        "image": "images/322.png",
+        "tumor_mask_binary": "masks/tumor/322_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/322_multiclass.png",
+        "scan_mask": "masks/scan/322.png",
+        "label": 1
+    },
+    {
+        "image": "images/186.png",
+        "tumor_mask_binary": "masks/tumor/186_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/186_multiclass.png",
+        "scan_mask": "masks/scan/186.png",
+        "label": 5
+    },
+    {
+        "image": "images/653.png",
+        "tumor_mask_binary": "masks/tumor/653_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/653_multiclass.png",
+        "scan_mask": "masks/scan/653.png",
+        "label": 2
+    },
+    {
+        "image": "images/129.png",
+        "tumor_mask_binary": "masks/tumor/129_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/129_multiclass.png",
+        "scan_mask": "masks/scan/129.png",
+        "label": 5
+    },
+    {
+        "image": "images/912.png",
+        "tumor_mask_binary": "masks/tumor/912_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/912_multiclass.png",
+        "scan_mask": "masks/scan/912.png",
+        "label": 0
+    },
+    {
+        "image": "images/1257.png",
+        "tumor_mask_binary": "masks/tumor/1257_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1257_multiclass.png",
+        "scan_mask": "masks/scan/1257.png",
+        "label": 2
+    },
+    {
+        "image": "images/39.png",
+        "tumor_mask_binary": "masks/tumor/39_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/39_multiclass.png",
+        "scan_mask": "masks/scan/39.png",
+        "label": 0
+    },
+    {
+        "image": "images/506.png",
+        "tumor_mask_binary": "masks/tumor/506_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/506_multiclass.png",
+        "scan_mask": "masks/scan/506.png",
+        "label": 2
+    },
+    {
+        "image": "images/1464.png",
+        "tumor_mask_binary": "masks/tumor/1464_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1464_multiclass.png",
+        "scan_mask": "masks/scan/1464.png",
+        "label": 7
+    },
+    {
+        "image": "images/1038.png",
+        "tumor_mask_binary": "masks/tumor/1038_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1038_multiclass.png",
+        "scan_mask": "masks/scan/1038.png",
+        "label": 0
+    },
+    {
+        "image": "images/512.png",
+        "tumor_mask_binary": "masks/tumor/512_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/512_multiclass.png",
+        "scan_mask": "masks/scan/512.png",
+        "label": 2
+    },
+    {
+        "image": "images/1181.png",
+        "tumor_mask_binary": "masks/tumor/1181_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1181_multiclass.png",
+        "scan_mask": "masks/scan/1181.png",
+        "label": 3
+    },
+    {
+        "image": "images/228.png",
+        "tumor_mask_binary": "masks/tumor/228_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/228_multiclass.png",
+        "scan_mask": "masks/scan/228.png",
+        "label": 6
+    },
+    {
+        "image": "images/170.png",
+        "tumor_mask_binary": "masks/tumor/170_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/170_multiclass.png",
+        "scan_mask": "masks/scan/170.png",
+        "label": 2
+    },
+    {
+        "image": "images/1033.png",
+        "tumor_mask_binary": "masks/tumor/1033_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1033_multiclass.png",
+        "scan_mask": "masks/scan/1033.png",
+        "label": 5
+    },
+    {
+        "image": "images/883.png",
+        "tumor_mask_binary": "masks/tumor/883_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/883_multiclass.png",
+        "scan_mask": "masks/scan/883.png",
+        "label": 0
+    },
+    {
+        "image": "images/1065.png",
+        "tumor_mask_binary": "masks/tumor/1065_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1065_multiclass.png",
+        "scan_mask": "masks/scan/1065.png",
+        "label": 2
+    },
+    {
+        "image": "images/639.png",
+        "tumor_mask_binary": "masks/tumor/639_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/639_multiclass.png",
+        "scan_mask": "masks/scan/639.png",
+        "label": 0
+    },
+    {
+        "image": "images/981.png",
+        "tumor_mask_binary": "masks/tumor/981_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/981_multiclass.png",
+        "scan_mask": "masks/scan/981.png",
+        "label": 5
+    },
+    {
+        "image": "images/144.png",
+        "tumor_mask_binary": "masks/tumor/144_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/144_multiclass.png",
+        "scan_mask": "masks/scan/144.png",
+        "label": 5
+    },
+    {
+        "image": "images/98.png",
+        "tumor_mask_binary": "masks/tumor/98_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/98_multiclass.png",
+        "scan_mask": "masks/scan/98.png",
+        "label": 1
+    },
+    {
+        "image": "images/63.png",
+        "tumor_mask_binary": "masks/tumor/63_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/63_multiclass.png",
+        "scan_mask": "masks/scan/63.png",
+        "label": 1
+    },
+    {
+        "image": "images/382.png",
+        "tumor_mask_binary": "masks/tumor/382_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/382_multiclass.png",
+        "scan_mask": "masks/scan/382.png",
+        "label": 2
+    },
+    {
+        "image": "images/1092.png",
+        "tumor_mask_binary": "masks/tumor/1092_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1092_multiclass.png",
+        "scan_mask": "masks/scan/1092.png",
+        "label": 0
+    },
+    {
+        "image": "images/652.png",
+        "tumor_mask_binary": "masks/tumor/652_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/652_multiclass.png",
+        "scan_mask": "masks/scan/652.png",
+        "label": 5
+    },
+    {
+        "image": "images/1285.png",
+        "tumor_mask_binary": "masks/tumor/1285_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1285_multiclass.png",
+        "scan_mask": "masks/scan/1285.png",
+        "label": 0
+    },
+    {
+        "image": "images/689.png",
+        "tumor_mask_binary": "masks/tumor/689_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/689_multiclass.png",
+        "scan_mask": "masks/scan/689.png",
+        "label": 5
+    },
+    {
+        "image": "images/998.png",
+        "tumor_mask_binary": "masks/tumor/998_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/998_multiclass.png",
+        "scan_mask": "masks/scan/998.png",
+        "label": 2
+    },
+    {
+        "image": "images/487.png",
+        "tumor_mask_binary": "masks/tumor/487_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/487_multiclass.png",
+        "scan_mask": "masks/scan/487.png",
+        "label": 2
+    },
+    {
+        "image": "images/515.png",
+        "tumor_mask_binary": "masks/tumor/515_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/515_multiclass.png",
+        "scan_mask": "masks/scan/515.png",
+        "label": 5
+    },
+    {
+        "image": "images/1095.png",
+        "tumor_mask_binary": "masks/tumor/1095_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1095_multiclass.png",
+        "scan_mask": "masks/scan/1095.png",
+        "label": 2
+    },
+    {
+        "image": "images/1200.png",
+        "tumor_mask_binary": "masks/tumor/1200_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1200_multiclass.png",
+        "scan_mask": "masks/scan/1200.png",
+        "label": 0
+    },
+    {
+        "image": "images/1444.png",
+        "tumor_mask_binary": "masks/tumor/1444_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1444_multiclass.png",
+        "scan_mask": "masks/scan/1444.png",
+        "label": 7
+    },
+    {
+        "image": "images/524.png",
+        "tumor_mask_binary": "masks/tumor/524_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/524_multiclass.png",
+        "scan_mask": "masks/scan/524.png",
+        "label": 2
+    },
+    {
+        "image": "images/1341.png",
+        "tumor_mask_binary": "masks/tumor/1341_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1341_multiclass.png",
+        "scan_mask": "masks/scan/1341.png",
+        "label": 5
+    },
+    {
+        "image": "images/904.png",
+        "tumor_mask_binary": "masks/tumor/904_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/904_multiclass.png",
+        "scan_mask": "masks/scan/904.png",
+        "label": 2
+    },
+    {
+        "image": "images/90.png",
+        "tumor_mask_binary": "masks/tumor/90_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/90_multiclass.png",
+        "scan_mask": "masks/scan/90.png",
+        "label": 1
+    },
+    {
+        "image": "images/762.png",
+        "tumor_mask_binary": "masks/tumor/762_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/762_multiclass.png",
+        "scan_mask": "masks/scan/762.png",
+        "label": 1
+    },
+    {
+        "image": "images/158.png",
+        "tumor_mask_binary": "masks/tumor/158_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/158_multiclass.png",
+        "scan_mask": "masks/scan/158.png",
+        "label": 5
+    },
+    {
+        "image": "images/776.png",
+        "tumor_mask_binary": "masks/tumor/776_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/776_multiclass.png",
+        "scan_mask": "masks/scan/776.png",
+        "label": 2
+    },
+    {
+        "image": "images/1376.png",
+        "tumor_mask_binary": "masks/tumor/1376_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1376_multiclass.png",
+        "scan_mask": "masks/scan/1376.png",
+        "label": 4
+    },
+    {
+        "image": "images/145.png",
+        "tumor_mask_binary": "masks/tumor/145_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/145_multiclass.png",
+        "scan_mask": "masks/scan/145.png",
+        "label": 5
+    },
+    {
+        "image": "images/993.png",
+        "tumor_mask_binary": "masks/tumor/993_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/993_multiclass.png",
+        "scan_mask": "masks/scan/993.png",
+        "label": 0
+    },
+    {
+        "image": "images/802.png",
+        "tumor_mask_binary": "masks/tumor/802_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/802_multiclass.png",
+        "scan_mask": "masks/scan/802.png",
+        "label": 0
+    },
+    {
+        "image": "images/800.png",
+        "tumor_mask_binary": "masks/tumor/800_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/800_multiclass.png",
+        "scan_mask": "masks/scan/800.png",
+        "label": 0
+    },
+    {
+        "image": "images/520.png",
+        "tumor_mask_binary": "masks/tumor/520_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/520_multiclass.png",
+        "scan_mask": "masks/scan/520.png",
+        "label": 5
+    },
+    {
+        "image": "images/971.png",
+        "tumor_mask_binary": "masks/tumor/971_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/971_multiclass.png",
+        "scan_mask": "masks/scan/971.png",
+        "label": 2
+    },
+    {
+        "image": "images/953.png",
+        "tumor_mask_binary": "masks/tumor/953_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/953_multiclass.png",
+        "scan_mask": "masks/scan/953.png",
+        "label": 4
+    },
+    {
+        "image": "images/1039.png",
+        "tumor_mask_binary": "masks/tumor/1039_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1039_multiclass.png",
+        "scan_mask": "masks/scan/1039.png",
+        "label": 5
+    },
+    {
+        "image": "images/94.png",
+        "tumor_mask_binary": "masks/tumor/94_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/94_multiclass.png",
+        "scan_mask": "masks/scan/94.png",
+        "label": 1
+    },
+    {
+        "image": "images/1123.png",
+        "tumor_mask_binary": "masks/tumor/1123_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1123_multiclass.png",
+        "scan_mask": "masks/scan/1123.png",
+        "label": 1
+    },
+    {
+        "image": "images/1235.png",
+        "tumor_mask_binary": "masks/tumor/1235_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1235_multiclass.png",
+        "scan_mask": "masks/scan/1235.png",
+        "label": 0
+    },
+    {
+        "image": "images/687.png",
+        "tumor_mask_binary": "masks/tumor/687_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/687_multiclass.png",
+        "scan_mask": "masks/scan/687.png",
+        "label": 5
+    },
+    {
+        "image": "images/148.png",
+        "tumor_mask_binary": "masks/tumor/148_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/148_multiclass.png",
+        "scan_mask": "masks/scan/148.png",
+        "label": 1
+    },
+    {
+        "image": "images/1042.png",
+        "tumor_mask_binary": "masks/tumor/1042_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1042_multiclass.png",
+        "scan_mask": "masks/scan/1042.png",
+        "label": 2
+    },
+    {
+        "image": "images/477.png",
+        "tumor_mask_binary": "masks/tumor/477_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/477_multiclass.png",
+        "scan_mask": "masks/scan/477.png",
+        "label": 3
+    },
+    {
+        "image": "images/154.png",
+        "tumor_mask_binary": "masks/tumor/154_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/154_multiclass.png",
+        "scan_mask": "masks/scan/154.png",
+        "label": 5
+    },
+    {
+        "image": "images/539.png",
+        "tumor_mask_binary": "masks/tumor/539_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/539_multiclass.png",
+        "scan_mask": "masks/scan/539.png",
+        "label": 0
+    },
+    {
+        "image": "images/1089.png",
+        "tumor_mask_binary": "masks/tumor/1089_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1089_multiclass.png",
+        "scan_mask": "masks/scan/1089.png",
+        "label": 6
+    },
+    {
+        "image": "images/1413.png",
+        "tumor_mask_binary": "masks/tumor/1413_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1413_multiclass.png",
+        "scan_mask": "masks/scan/1413.png",
+        "label": 1
+    },
+    {
+        "image": "images/371.png",
+        "tumor_mask_binary": "masks/tumor/371_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/371_multiclass.png",
+        "scan_mask": "masks/scan/371.png",
+        "label": 3
+    },
+    {
+        "image": "images/387.png",
+        "tumor_mask_binary": "masks/tumor/387_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/387_multiclass.png",
+        "scan_mask": "masks/scan/387.png",
+        "label": 0
+    },
+    {
+        "image": "images/1339.png",
+        "tumor_mask_binary": "masks/tumor/1339_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1339_multiclass.png",
+        "scan_mask": "masks/scan/1339.png",
+        "label": 5
+    },
+    {
+        "image": "images/626.png",
+        "tumor_mask_binary": "masks/tumor/626_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/626_multiclass.png",
+        "scan_mask": "masks/scan/626.png",
+        "label": 3
+    },
+    {
+        "image": "images/714.png",
+        "tumor_mask_binary": "masks/tumor/714_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/714_multiclass.png",
+        "scan_mask": "masks/scan/714.png",
+        "label": 2
+    },
+    {
+        "image": "images/636.png",
+        "tumor_mask_binary": "masks/tumor/636_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/636_multiclass.png",
+        "scan_mask": "masks/scan/636.png",
+        "label": 2
+    },
+    {
+        "image": "images/1432.png",
+        "tumor_mask_binary": "masks/tumor/1432_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1432_multiclass.png",
+        "scan_mask": "masks/scan/1432.png",
+        "label": 7
+    },
+    {
+        "image": "images/152.png",
+        "tumor_mask_binary": "masks/tumor/152_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/152_multiclass.png",
+        "scan_mask": "masks/scan/152.png",
+        "label": 3
+    },
+    {
+        "image": "images/73.png",
+        "tumor_mask_binary": "masks/tumor/73_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/73_multiclass.png",
+        "scan_mask": "masks/scan/73.png",
+        "label": 4
+    },
+    {
+        "image": "images/83.png",
+        "tumor_mask_binary": "masks/tumor/83_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/83_multiclass.png",
+        "scan_mask": "masks/scan/83.png",
+        "label": 0
+    },
+    {
+        "image": "images/181.png",
+        "tumor_mask_binary": "masks/tumor/181_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/181_multiclass.png",
+        "scan_mask": "masks/scan/181.png",
+        "label": 2
+    },
+    {
+        "image": "images/594.png",
+        "tumor_mask_binary": "masks/tumor/594_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/594_multiclass.png",
+        "scan_mask": "masks/scan/594.png",
+        "label": 1
+    },
+    {
+        "image": "images/960.png",
+        "tumor_mask_binary": "masks/tumor/960_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/960_multiclass.png",
+        "scan_mask": "masks/scan/960.png",
+        "label": 5
+    },
+    {
+        "image": "images/1214.png",
+        "tumor_mask_binary": "masks/tumor/1214_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1214_multiclass.png",
+        "scan_mask": "masks/scan/1214.png",
+        "label": 0
+    },
+    {
+        "image": "images/748.png",
+        "tumor_mask_binary": "masks/tumor/748_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/748_multiclass.png",
+        "scan_mask": "masks/scan/748.png",
+        "label": 2
+    },
+    {
+        "image": "images/1291.png",
+        "tumor_mask_binary": "masks/tumor/1291_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1291_multiclass.png",
+        "scan_mask": "masks/scan/1291.png",
+        "label": 1
+    },
+    {
+        "image": "images/919.png",
+        "tumor_mask_binary": "masks/tumor/919_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/919_multiclass.png",
+        "scan_mask": "masks/scan/919.png",
+        "label": 2
+    },
+    {
+        "image": "images/854.png",
+        "tumor_mask_binary": "masks/tumor/854_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/854_multiclass.png",
+        "scan_mask": "masks/scan/854.png",
+        "label": 6
+    },
+    {
+        "image": "images/826.png",
+        "tumor_mask_binary": "masks/tumor/826_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/826_multiclass.png",
+        "scan_mask": "masks/scan/826.png",
+        "label": 0
+    },
+    {
+        "image": "images/261.png",
+        "tumor_mask_binary": "masks/tumor/261_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/261_multiclass.png",
+        "scan_mask": "masks/scan/261.png",
+        "label": 2
+    },
+    {
+        "image": "images/1374.png",
+        "tumor_mask_binary": "masks/tumor/1374_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1374_multiclass.png",
+        "scan_mask": "masks/scan/1374.png",
+        "label": 4
+    },
+    {
+        "image": "images/149.png",
+        "tumor_mask_binary": "masks/tumor/149_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/149_multiclass.png",
+        "scan_mask": "masks/scan/149.png",
+        "label": 1
+    },
+    {
+        "image": "images/1461.png",
+        "tumor_mask_binary": "masks/tumor/1461_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1461_multiclass.png",
+        "scan_mask": "masks/scan/1461.png",
+        "label": 7
+    },
+    {
+        "image": "images/125.png",
+        "tumor_mask_binary": "masks/tumor/125_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/125_multiclass.png",
+        "scan_mask": "masks/scan/125.png",
+        "label": 2
+    },
+    {
+        "image": "images/600.png",
+        "tumor_mask_binary": "masks/tumor/600_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/600_multiclass.png",
+        "scan_mask": "masks/scan/600.png",
+        "label": 4
+    },
+    {
+        "image": "images/255.png",
+        "tumor_mask_binary": "masks/tumor/255_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/255_multiclass.png",
+        "scan_mask": "masks/scan/255.png",
+        "label": 1
+    },
+    {
+        "image": "images/358.png",
+        "tumor_mask_binary": "masks/tumor/358_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/358_multiclass.png",
+        "scan_mask": "masks/scan/358.png",
+        "label": 3
+    },
+    {
+        "image": "images/1241.png",
+        "tumor_mask_binary": "masks/tumor/1241_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1241_multiclass.png",
+        "scan_mask": "masks/scan/1241.png",
+        "label": 2
+    },
+    {
+        "image": "images/210.png",
+        "tumor_mask_binary": "masks/tumor/210_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/210_multiclass.png",
+        "scan_mask": "masks/scan/210.png",
+        "label": 5
+    },
+    {
+        "image": "images/1416.png",
+        "tumor_mask_binary": "masks/tumor/1416_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1416_multiclass.png",
+        "scan_mask": "masks/scan/1416.png",
+        "label": 1
+    },
+    {
+        "image": "images/475.png",
+        "tumor_mask_binary": "masks/tumor/475_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/475_multiclass.png",
+        "scan_mask": "masks/scan/475.png",
+        "label": 2
+    },
+    {
+        "image": "images/1108.png",
+        "tumor_mask_binary": "masks/tumor/1108_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1108_multiclass.png",
+        "scan_mask": "masks/scan/1108.png",
+        "label": 2
+    },
+    {
+        "image": "images/620.png",
+        "tumor_mask_binary": "masks/tumor/620_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/620_multiclass.png",
+        "scan_mask": "masks/scan/620.png",
+        "label": 5
+    },
+    {
+        "image": "images/392.png",
+        "tumor_mask_binary": "masks/tumor/392_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/392_multiclass.png",
+        "scan_mask": "masks/scan/392.png",
+        "label": 0
+    },
+    {
+        "image": "images/403.png",
+        "tumor_mask_binary": "masks/tumor/403_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/403_multiclass.png",
+        "scan_mask": "masks/scan/403.png",
+        "label": 1
+    },
+    {
+        "image": "images/1234.png",
+        "tumor_mask_binary": "masks/tumor/1234_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1234_multiclass.png",
+        "scan_mask": "masks/scan/1234.png",
+        "label": 0
+    },
+    {
+        "image": "images/534.png",
+        "tumor_mask_binary": "masks/tumor/534_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/534_multiclass.png",
+        "scan_mask": "masks/scan/534.png",
+        "label": 2
+    },
+    {
+        "image": "images/266.png",
+        "tumor_mask_binary": "masks/tumor/266_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/266_multiclass.png",
+        "scan_mask": "masks/scan/266.png",
+        "label": 5
+    },
+    {
+        "image": "images/606.png",
+        "tumor_mask_binary": "masks/tumor/606_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/606_multiclass.png",
+        "scan_mask": "masks/scan/606.png",
+        "label": 3
+    },
+    {
+        "image": "images/779.png",
+        "tumor_mask_binary": "masks/tumor/779_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/779_multiclass.png",
+        "scan_mask": "masks/scan/779.png",
+        "label": 0
+    },
+    {
+        "image": "images/5.png",
+        "tumor_mask_binary": "masks/tumor/5_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/5_multiclass.png",
+        "scan_mask": "masks/scan/5.png",
+        "label": 4
+    },
+    {
+        "image": "images/770.png",
+        "tumor_mask_binary": "masks/tumor/770_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/770_multiclass.png",
+        "scan_mask": "masks/scan/770.png",
+        "label": 1
+    },
+    {
+        "image": "images/632.png",
+        "tumor_mask_binary": "masks/tumor/632_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/632_multiclass.png",
+        "scan_mask": "masks/scan/632.png",
+        "label": 5
+    },
+    {
+        "image": "images/930.png",
+        "tumor_mask_binary": "masks/tumor/930_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/930_multiclass.png",
+        "scan_mask": "masks/scan/930.png",
+        "label": 5
+    },
+    {
+        "image": "images/916.png",
+        "tumor_mask_binary": "masks/tumor/916_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/916_multiclass.png",
+        "scan_mask": "masks/scan/916.png",
+        "label": 2
+    },
+    {
+        "image": "images/1169.png",
+        "tumor_mask_binary": "masks/tumor/1169_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1169_multiclass.png",
+        "scan_mask": "masks/scan/1169.png",
+        "label": 0
+    },
+    {
+        "image": "images/897.png",
+        "tumor_mask_binary": "masks/tumor/897_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/897_multiclass.png",
+        "scan_mask": "masks/scan/897.png",
+        "label": 6
+    },
+    {
+        "image": "images/707.png",
+        "tumor_mask_binary": "masks/tumor/707_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/707_multiclass.png",
+        "scan_mask": "masks/scan/707.png",
+        "label": 2
+    },
+    {
+        "image": "images/96.png",
+        "tumor_mask_binary": "masks/tumor/96_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/96_multiclass.png",
+        "scan_mask": "masks/scan/96.png",
+        "label": 5
+    },
+    {
+        "image": "images/292.png",
+        "tumor_mask_binary": "masks/tumor/292_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/292_multiclass.png",
+        "scan_mask": "masks/scan/292.png",
+        "label": 0
+    },
+    {
+        "image": "images/1255.png",
+        "tumor_mask_binary": "masks/tumor/1255_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1255_multiclass.png",
+        "scan_mask": "masks/scan/1255.png",
+        "label": 1
+    },
+    {
+        "image": "images/911.png",
+        "tumor_mask_binary": "masks/tumor/911_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/911_multiclass.png",
+        "scan_mask": "masks/scan/911.png",
+        "label": 0
+    },
+    {
+        "image": "images/177.png",
+        "tumor_mask_binary": "masks/tumor/177_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/177_multiclass.png",
+        "scan_mask": "masks/scan/177.png",
+        "label": 1
+    },
+    {
+        "image": "images/288.png",
+        "tumor_mask_binary": "masks/tumor/288_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/288_multiclass.png",
+        "scan_mask": "masks/scan/288.png",
+        "label": 2
+    },
+    {
+        "image": "images/124.png",
+        "tumor_mask_binary": "masks/tumor/124_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/124_multiclass.png",
+        "scan_mask": "masks/scan/124.png",
+        "label": 5
+    },
+    {
+        "image": "images/560.png",
+        "tumor_mask_binary": "masks/tumor/560_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/560_multiclass.png",
+        "scan_mask": "masks/scan/560.png",
+        "label": 2
+    },
+    {
+        "image": "images/1238.png",
+        "tumor_mask_binary": "masks/tumor/1238_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1238_multiclass.png",
+        "scan_mask": "masks/scan/1238.png",
+        "label": 4
+    },
+    {
+        "image": "images/816.png",
+        "tumor_mask_binary": "masks/tumor/816_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/816_multiclass.png",
+        "scan_mask": "masks/scan/816.png",
+        "label": 2
+    },
+    {
+        "image": "images/546.png",
+        "tumor_mask_binary": "masks/tumor/546_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/546_multiclass.png",
+        "scan_mask": "masks/scan/546.png",
+        "label": 1
+    },
+    {
+        "image": "images/1012.png",
+        "tumor_mask_binary": "masks/tumor/1012_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1012_multiclass.png",
+        "scan_mask": "masks/scan/1012.png",
+        "label": 4
+    },
+    {
+        "image": "images/685.png",
+        "tumor_mask_binary": "masks/tumor/685_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/685_multiclass.png",
+        "scan_mask": "masks/scan/685.png",
+        "label": 5
+    },
+    {
+        "image": "images/445.png",
+        "tumor_mask_binary": "masks/tumor/445_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/445_multiclass.png",
+        "scan_mask": "masks/scan/445.png",
+        "label": 0
+    },
+    {
+        "image": "images/386.png",
+        "tumor_mask_binary": "masks/tumor/386_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/386_multiclass.png",
+        "scan_mask": "masks/scan/386.png",
+        "label": 1
+    },
+    {
+        "image": "images/952.png",
+        "tumor_mask_binary": "masks/tumor/952_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/952_multiclass.png",
+        "scan_mask": "masks/scan/952.png",
+        "label": 2
+    },
+    {
+        "image": "images/821.png",
+        "tumor_mask_binary": "masks/tumor/821_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/821_multiclass.png",
+        "scan_mask": "masks/scan/821.png",
+        "label": 1
+    },
+    {
+        "image": "images/363.png",
+        "tumor_mask_binary": "masks/tumor/363_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/363_multiclass.png",
+        "scan_mask": "masks/scan/363.png",
+        "label": 1
+    },
+    {
+        "image": "images/464.png",
+        "tumor_mask_binary": "masks/tumor/464_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/464_multiclass.png",
+        "scan_mask": "masks/scan/464.png",
+        "label": 2
+    },
+    {
+        "image": "images/1061.png",
+        "tumor_mask_binary": "masks/tumor/1061_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1061_multiclass.png",
+        "scan_mask": "masks/scan/1061.png",
+        "label": 1
+    },
+    {
+        "image": "images/76.png",
+        "tumor_mask_binary": "masks/tumor/76_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/76_multiclass.png",
+        "scan_mask": "masks/scan/76.png",
+        "label": 5
+    },
+    {
+        "image": "images/804.png",
+        "tumor_mask_binary": "masks/tumor/804_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/804_multiclass.png",
+        "scan_mask": "masks/scan/804.png",
+        "label": 0
+    },
+    {
+        "image": "images/878.png",
+        "tumor_mask_binary": "masks/tumor/878_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/878_multiclass.png",
+        "scan_mask": "masks/scan/878.png",
+        "label": 4
+    },
+    {
+        "image": "images/1307.png",
+        "tumor_mask_binary": "masks/tumor/1307_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1307_multiclass.png",
+        "scan_mask": "masks/scan/1307.png",
+        "label": 0
+    },
+    {
+        "image": "images/631.png",
+        "tumor_mask_binary": "masks/tumor/631_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/631_multiclass.png",
+        "scan_mask": "masks/scan/631.png",
+        "label": 5
+    },
+    {
+        "image": "images/1378.png",
+        "tumor_mask_binary": "masks/tumor/1378_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1378_multiclass.png",
+        "scan_mask": "masks/scan/1378.png",
+        "label": 1
+    },
+    {
+        "image": "images/26.png",
+        "tumor_mask_binary": "masks/tumor/26_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/26_multiclass.png",
+        "scan_mask": "masks/scan/26.png",
+        "label": 6
+    },
+    {
+        "image": "images/517.png",
+        "tumor_mask_binary": "masks/tumor/517_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/517_multiclass.png",
+        "scan_mask": "masks/scan/517.png",
+        "label": 2
+    },
+    {
+        "image": "images/496.png",
+        "tumor_mask_binary": "masks/tumor/496_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/496_multiclass.png",
+        "scan_mask": "masks/scan/496.png",
+        "label": 1
+    },
+    {
+        "image": "images/1170.png",
+        "tumor_mask_binary": "masks/tumor/1170_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1170_multiclass.png",
+        "scan_mask": "masks/scan/1170.png",
+        "label": 0
+    },
+    {
+        "image": "images/825.png",
+        "tumor_mask_binary": "masks/tumor/825_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/825_multiclass.png",
+        "scan_mask": "masks/scan/825.png",
+        "label": 0
+    },
+    {
+        "image": "images/316.png",
+        "tumor_mask_binary": "masks/tumor/316_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/316_multiclass.png",
+        "scan_mask": "masks/scan/316.png",
+        "label": 1
+    },
+    {
+        "image": "images/691.png",
+        "tumor_mask_binary": "masks/tumor/691_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/691_multiclass.png",
+        "scan_mask": "masks/scan/691.png",
+        "label": 5
+    },
+    {
+        "image": "images/773.png",
+        "tumor_mask_binary": "masks/tumor/773_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/773_multiclass.png",
+        "scan_mask": "masks/scan/773.png",
+        "label": 1
+    },
+    {
+        "image": "images/1252.png",
+        "tumor_mask_binary": "masks/tumor/1252_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1252_multiclass.png",
+        "scan_mask": "masks/scan/1252.png",
+        "label": 0
+    },
+    {
+        "image": "images/1388.png",
+        "tumor_mask_binary": "masks/tumor/1388_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1388_multiclass.png",
+        "scan_mask": "masks/scan/1388.png",
+        "label": 1
+    },
+    {
+        "image": "images/894.png",
+        "tumor_mask_binary": "masks/tumor/894_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/894_multiclass.png",
+        "scan_mask": "masks/scan/894.png",
+        "label": 1
+    },
+    {
+        "image": "images/581.png",
+        "tumor_mask_binary": "masks/tumor/581_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/581_multiclass.png",
+        "scan_mask": "masks/scan/581.png",
+        "label": 0
+    },
+    {
+        "image": "images/1221.png",
+        "tumor_mask_binary": "masks/tumor/1221_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1221_multiclass.png",
+        "scan_mask": "masks/scan/1221.png",
+        "label": 5
+    },
+    {
+        "image": "images/970.png",
+        "tumor_mask_binary": "masks/tumor/970_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/970_multiclass.png",
+        "scan_mask": "masks/scan/970.png",
+        "label": 2
+    },
+    {
+        "image": "images/638.png",
+        "tumor_mask_binary": "masks/tumor/638_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/638_multiclass.png",
+        "scan_mask": "masks/scan/638.png",
+        "label": 2
+    },
+    {
+        "image": "images/1199.png",
+        "tumor_mask_binary": "masks/tumor/1199_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1199_multiclass.png",
+        "scan_mask": "masks/scan/1199.png",
+        "label": 0
+    },
+    {
+        "image": "images/1082.png",
+        "tumor_mask_binary": "masks/tumor/1082_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1082_multiclass.png",
+        "scan_mask": "masks/scan/1082.png",
+        "label": 2
+    },
+    {
+        "image": "images/1054.png",
+        "tumor_mask_binary": "masks/tumor/1054_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1054_multiclass.png",
+        "scan_mask": "masks/scan/1054.png",
+        "label": 3
+    },
+    {
+        "image": "images/1358.png",
+        "tumor_mask_binary": "masks/tumor/1358_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1358_multiclass.png",
+        "scan_mask": "masks/scan/1358.png",
+        "label": 1
+    },
+    {
+        "image": "images/1175.png",
+        "tumor_mask_binary": "masks/tumor/1175_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1175_multiclass.png",
+        "scan_mask": "masks/scan/1175.png",
+        "label": 6
+    },
+    {
+        "image": "images/752.png",
+        "tumor_mask_binary": "masks/tumor/752_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/752_multiclass.png",
+        "scan_mask": "masks/scan/752.png",
+        "label": 6
+    },
+    {
+        "image": "images/1081.png",
+        "tumor_mask_binary": "masks/tumor/1081_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1081_multiclass.png",
+        "scan_mask": "masks/scan/1081.png",
+        "label": 5
+    },
+    {
+        "image": "images/476.png",
+        "tumor_mask_binary": "masks/tumor/476_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/476_multiclass.png",
+        "scan_mask": "masks/scan/476.png",
+        "label": 3
+    },
+    {
+        "image": "images/203.png",
+        "tumor_mask_binary": "masks/tumor/203_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/203_multiclass.png",
+        "scan_mask": "masks/scan/203.png",
+        "label": 5
+    },
+    {
+        "image": "images/1306.png",
+        "tumor_mask_binary": "masks/tumor/1306_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1306_multiclass.png",
+        "scan_mask": "masks/scan/1306.png",
+        "label": 1
+    },
+    {
+        "image": "images/440.png",
+        "tumor_mask_binary": "masks/tumor/440_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/440_multiclass.png",
+        "scan_mask": "masks/scan/440.png",
+        "label": 2
+    },
+    {
+        "image": "images/609.png",
+        "tumor_mask_binary": "masks/tumor/609_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/609_multiclass.png",
+        "scan_mask": "masks/scan/609.png",
+        "label": 3
+    },
+    {
+        "image": "images/884.png",
+        "tumor_mask_binary": "masks/tumor/884_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/884_multiclass.png",
+        "scan_mask": "masks/scan/884.png",
+        "label": 5
+    },
+    {
+        "image": "images/193.png",
+        "tumor_mask_binary": "masks/tumor/193_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/193_multiclass.png",
+        "scan_mask": "masks/scan/193.png",
+        "label": 5
+    },
+    {
+        "image": "images/229.png",
+        "tumor_mask_binary": "masks/tumor/229_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/229_multiclass.png",
+        "scan_mask": "masks/scan/229.png",
+        "label": 6
+    },
+    {
+        "image": "images/521.png",
+        "tumor_mask_binary": "masks/tumor/521_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/521_multiclass.png",
+        "scan_mask": "masks/scan/521.png",
+        "label": 5
+    },
+    {
+        "image": "images/740.png",
+        "tumor_mask_binary": "masks/tumor/740_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/740_multiclass.png",
+        "scan_mask": "masks/scan/740.png",
+        "label": 2
+    },
+    {
+        "image": "images/962.png",
+        "tumor_mask_binary": "masks/tumor/962_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/962_multiclass.png",
+        "scan_mask": "masks/scan/962.png",
+        "label": 5
+    },
+    {
+        "image": "images/1347.png",
+        "tumor_mask_binary": "masks/tumor/1347_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1347_multiclass.png",
+        "scan_mask": "masks/scan/1347.png",
+        "label": 0
+    },
+    {
+        "image": "images/1030.png",
+        "tumor_mask_binary": "masks/tumor/1030_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1030_multiclass.png",
+        "scan_mask": "masks/scan/1030.png",
+        "label": 0
+    },
+    {
+        "image": "images/1140.png",
+        "tumor_mask_binary": "masks/tumor/1140_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1140_multiclass.png",
+        "scan_mask": "masks/scan/1140.png",
+        "label": 0
+    },
+    {
+        "image": "images/47.png",
+        "tumor_mask_binary": "masks/tumor/47_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/47_multiclass.png",
+        "scan_mask": "masks/scan/47.png",
+        "label": 2
+    },
+    {
+        "image": "images/162.png",
+        "tumor_mask_binary": "masks/tumor/162_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/162_multiclass.png",
+        "scan_mask": "masks/scan/162.png",
+        "label": 0
+    },
+    {
+        "image": "images/1176.png",
+        "tumor_mask_binary": "masks/tumor/1176_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1176_multiclass.png",
+        "scan_mask": "masks/scan/1176.png",
+        "label": 6
+    },
+    {
+        "image": "images/126.png",
+        "tumor_mask_binary": "masks/tumor/126_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/126_multiclass.png",
+        "scan_mask": "masks/scan/126.png",
+        "label": 5
+    },
+    {
+        "image": "images/21.png",
+        "tumor_mask_binary": "masks/tumor/21_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/21_multiclass.png",
+        "scan_mask": "masks/scan/21.png",
+        "label": 6
+    },
+    {
+        "image": "images/323.png",
+        "tumor_mask_binary": "masks/tumor/323_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/323_multiclass.png",
+        "scan_mask": "masks/scan/323.png",
+        "label": 1
+    },
+    {
+        "image": "images/102.png",
+        "tumor_mask_binary": "masks/tumor/102_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/102_multiclass.png",
+        "scan_mask": "masks/scan/102.png",
+        "label": 1
+    },
+    {
+        "image": "images/672.png",
+        "tumor_mask_binary": "masks/tumor/672_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/672_multiclass.png",
+        "scan_mask": "masks/scan/672.png",
+        "label": 5
+    },
+    {
+        "image": "images/1076.png",
+        "tumor_mask_binary": "masks/tumor/1076_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1076_multiclass.png",
+        "scan_mask": "masks/scan/1076.png",
+        "label": 2
+    },
+    {
+        "image": "images/1157.png",
+        "tumor_mask_binary": "masks/tumor/1157_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1157_multiclass.png",
+        "scan_mask": "masks/scan/1157.png",
+        "label": 2
+    },
+    {
+        "image": "images/1104.png",
+        "tumor_mask_binary": "masks/tumor/1104_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1104_multiclass.png",
+        "scan_mask": "masks/scan/1104.png",
+        "label": 0
+    },
+    {
+        "image": "images/1302.png",
+        "tumor_mask_binary": "masks/tumor/1302_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1302_multiclass.png",
+        "scan_mask": "masks/scan/1302.png",
+        "label": 2
+    },
+    {
+        "image": "images/3.png",
+        "tumor_mask_binary": "masks/tumor/3_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/3_multiclass.png",
+        "scan_mask": "masks/scan/3.png",
+        "label": 4
+    },
+    {
+        "image": "images/15.png",
+        "tumor_mask_binary": "masks/tumor/15_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/15_multiclass.png",
+        "scan_mask": "masks/scan/15.png",
+        "label": 0
+    },
+    {
+        "image": "images/792.png",
+        "tumor_mask_binary": "masks/tumor/792_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/792_multiclass.png",
+        "scan_mask": "masks/scan/792.png",
+        "label": 0
+    },
+    {
+        "image": "images/1230.png",
+        "tumor_mask_binary": "masks/tumor/1230_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1230_multiclass.png",
+        "scan_mask": "masks/scan/1230.png",
+        "label": 1
+    },
+    {
+        "image": "images/1390.png",
+        "tumor_mask_binary": "masks/tumor/1390_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1390_multiclass.png",
+        "scan_mask": "masks/scan/1390.png",
+        "label": 5
+    },
+    {
+        "image": "images/558.png",
+        "tumor_mask_binary": "masks/tumor/558_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/558_multiclass.png",
+        "scan_mask": "masks/scan/558.png",
+        "label": 5
+    },
+    {
+        "image": "images/1340.png",
+        "tumor_mask_binary": "masks/tumor/1340_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1340_multiclass.png",
+        "scan_mask": "masks/scan/1340.png",
+        "label": 5
+    },
+    {
+        "image": "images/1295.png",
+        "tumor_mask_binary": "masks/tumor/1295_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1295_multiclass.png",
+        "scan_mask": "masks/scan/1295.png",
+        "label": 3
+    },
+    {
+        "image": "images/979.png",
+        "tumor_mask_binary": "masks/tumor/979_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/979_multiclass.png",
+        "scan_mask": "masks/scan/979.png",
+        "label": 3
+    },
+    {
+        "image": "images/1469.png",
+        "tumor_mask_binary": "masks/tumor/1469_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1469_multiclass.png",
+        "scan_mask": "masks/scan/1469.png",
+        "label": 7
+    },
+    {
+        "image": "images/495.png",
+        "tumor_mask_binary": "masks/tumor/495_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/495_multiclass.png",
+        "scan_mask": "masks/scan/495.png",
+        "label": 1
+    },
+    {
+        "image": "images/508.png",
+        "tumor_mask_binary": "masks/tumor/508_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/508_multiclass.png",
+        "scan_mask": "masks/scan/508.png",
+        "label": 5
+    },
+    {
+        "image": "images/168.png",
+        "tumor_mask_binary": "masks/tumor/168_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/168_multiclass.png",
+        "scan_mask": "masks/scan/168.png",
+        "label": 2
+    },
+    {
+        "image": "images/326.png",
+        "tumor_mask_binary": "masks/tumor/326_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/326_multiclass.png",
+        "scan_mask": "masks/scan/326.png",
+        "label": 0
+    },
+    {
+        "image": "images/937.png",
+        "tumor_mask_binary": "masks/tumor/937_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/937_multiclass.png",
+        "scan_mask": "masks/scan/937.png",
+        "label": 2
+    },
+    {
+        "image": "images/682.png",
+        "tumor_mask_binary": "masks/tumor/682_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/682_multiclass.png",
+        "scan_mask": "masks/scan/682.png",
+        "label": 4
+    },
+    {
+        "image": "images/1317.png",
+        "tumor_mask_binary": "masks/tumor/1317_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1317_multiclass.png",
+        "scan_mask": "masks/scan/1317.png",
+        "label": 6
+    },
+    {
+        "image": "images/114.png",
+        "tumor_mask_binary": "masks/tumor/114_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/114_multiclass.png",
+        "scan_mask": "masks/scan/114.png",
+        "label": 5
+    },
+    {
+        "image": "images/1393.png",
+        "tumor_mask_binary": "masks/tumor/1393_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1393_multiclass.png",
+        "scan_mask": "masks/scan/1393.png",
+        "label": 5
+    },
+    {
+        "image": "images/965.png",
+        "tumor_mask_binary": "masks/tumor/965_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/965_multiclass.png",
+        "scan_mask": "masks/scan/965.png",
+        "label": 5
+    },
+    {
+        "image": "images/377.png",
+        "tumor_mask_binary": "masks/tumor/377_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/377_multiclass.png",
+        "scan_mask": "masks/scan/377.png",
+        "label": 0
+    },
+    {
+        "image": "images/644.png",
+        "tumor_mask_binary": "masks/tumor/644_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/644_multiclass.png",
+        "scan_mask": "masks/scan/644.png",
+        "label": 0
+    },
+    {
+        "image": "images/1367.png",
+        "tumor_mask_binary": "masks/tumor/1367_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1367_multiclass.png",
+        "scan_mask": "masks/scan/1367.png",
+        "label": 0
+    },
+    {
+        "image": "images/299.png",
+        "tumor_mask_binary": "masks/tumor/299_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/299_multiclass.png",
+        "scan_mask": "masks/scan/299.png",
+        "label": 6
+    },
+    {
+        "image": "images/870.png",
+        "tumor_mask_binary": "masks/tumor/870_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/870_multiclass.png",
+        "scan_mask": "masks/scan/870.png",
+        "label": 2
+    },
+    {
+        "image": "images/1046.png",
+        "tumor_mask_binary": "masks/tumor/1046_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1046_multiclass.png",
+        "scan_mask": "masks/scan/1046.png",
+        "label": 0
+    },
+    {
+        "image": "images/1133.png",
+        "tumor_mask_binary": "masks/tumor/1133_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1133_multiclass.png",
+        "scan_mask": "masks/scan/1133.png",
+        "label": 3
+    },
+    {
+        "image": "images/1049.png",
+        "tumor_mask_binary": "masks/tumor/1049_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1049_multiclass.png",
+        "scan_mask": "masks/scan/1049.png",
+        "label": 0
+    },
+    {
+        "image": "images/718.png",
+        "tumor_mask_binary": "masks/tumor/718_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/718_multiclass.png",
+        "scan_mask": "masks/scan/718.png",
+        "label": 0
+    },
+    {
+        "image": "images/443.png",
+        "tumor_mask_binary": "masks/tumor/443_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/443_multiclass.png",
+        "scan_mask": "masks/scan/443.png",
+        "label": 2
+    },
+    {
+        "image": "images/1073.png",
+        "tumor_mask_binary": "masks/tumor/1073_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1073_multiclass.png",
+        "scan_mask": "masks/scan/1073.png",
+        "label": 2
+    },
+    {
+        "image": "images/1401.png",
+        "tumor_mask_binary": "masks/tumor/1401_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1401_multiclass.png",
+        "scan_mask": "masks/scan/1401.png",
+        "label": 2
+    },
+    {
+        "image": "images/1305.png",
+        "tumor_mask_binary": "masks/tumor/1305_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1305_multiclass.png",
+        "scan_mask": "masks/scan/1305.png",
+        "label": 2
+    },
+    {
+        "image": "images/136.png",
+        "tumor_mask_binary": "masks/tumor/136_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/136_multiclass.png",
+        "scan_mask": "masks/scan/136.png",
+        "label": 5
+    },
+    {
+        "image": "images/64.png",
+        "tumor_mask_binary": "masks/tumor/64_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/64_multiclass.png",
+        "scan_mask": "masks/scan/64.png",
+        "label": 1
+    },
+    {
+        "image": "images/1171.png",
+        "tumor_mask_binary": "masks/tumor/1171_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1171_multiclass.png",
+        "scan_mask": "masks/scan/1171.png",
+        "label": 0
+    },
+    {
+        "image": "images/1365.png",
+        "tumor_mask_binary": "masks/tumor/1365_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1365_multiclass.png",
+        "scan_mask": "masks/scan/1365.png",
+        "label": 0
+    },
+    {
+        "image": "images/1066.png",
+        "tumor_mask_binary": "masks/tumor/1066_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1066_multiclass.png",
+        "scan_mask": "masks/scan/1066.png",
+        "label": 5
+    },
+    {
+        "image": "images/159.png",
+        "tumor_mask_binary": "masks/tumor/159_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/159_multiclass.png",
+        "scan_mask": "masks/scan/159.png",
+        "label": 0
+    },
+    {
+        "image": "images/554.png",
+        "tumor_mask_binary": "masks/tumor/554_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/554_multiclass.png",
+        "scan_mask": "masks/scan/554.png",
+        "label": 2
+    },
+    {
+        "image": "images/473.png",
+        "tumor_mask_binary": "masks/tumor/473_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/473_multiclass.png",
+        "scan_mask": "masks/scan/473.png",
+        "label": 0
+    },
+    {
+        "image": "images/468.png",
+        "tumor_mask_binary": "masks/tumor/468_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/468_multiclass.png",
+        "scan_mask": "masks/scan/468.png",
+        "label": 6
+    },
+    {
+        "image": "images/8.png",
+        "tumor_mask_binary": "masks/tumor/8_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/8_multiclass.png",
+        "scan_mask": "masks/scan/8.png",
+        "label": 0
+    },
+    {
+        "image": "images/1382.png",
+        "tumor_mask_binary": "masks/tumor/1382_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1382_multiclass.png",
+        "scan_mask": "masks/scan/1382.png",
+        "label": 5
+    },
+    {
+        "image": "images/751.png",
+        "tumor_mask_binary": "masks/tumor/751_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/751_multiclass.png",
+        "scan_mask": "masks/scan/751.png",
+        "label": 6
+    },
+    {
+        "image": "images/1331.png",
+        "tumor_mask_binary": "masks/tumor/1331_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1331_multiclass.png",
+        "scan_mask": "masks/scan/1331.png",
+        "label": 0
+    },
+    {
+        "image": "images/1002.png",
+        "tumor_mask_binary": "masks/tumor/1002_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1002_multiclass.png",
+        "scan_mask": "masks/scan/1002.png",
+        "label": 5
+    },
+    {
+        "image": "images/1167.png",
+        "tumor_mask_binary": "masks/tumor/1167_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1167_multiclass.png",
+        "scan_mask": "masks/scan/1167.png",
+        "label": 0
+    },
+    {
+        "image": "images/985.png",
+        "tumor_mask_binary": "masks/tumor/985_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/985_multiclass.png",
+        "scan_mask": "masks/scan/985.png",
+        "label": 3
+    },
+    {
+        "image": "images/301.png",
+        "tumor_mask_binary": "masks/tumor/301_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/301_multiclass.png",
+        "scan_mask": "masks/scan/301.png",
+        "label": 1
+    },
+    {
+        "image": "images/863.png",
+        "tumor_mask_binary": "masks/tumor/863_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/863_multiclass.png",
+        "scan_mask": "masks/scan/863.png",
+        "label": 0
+    },
+    {
+        "image": "images/1288.png",
+        "tumor_mask_binary": "masks/tumor/1288_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1288_multiclass.png",
+        "scan_mask": "masks/scan/1288.png",
+        "label": 0
+    },
+    {
+        "image": "images/868.png",
+        "tumor_mask_binary": "masks/tumor/868_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/868_multiclass.png",
+        "scan_mask": "masks/scan/868.png",
+        "label": 0
+    },
+    {
+        "image": "images/1018.png",
+        "tumor_mask_binary": "masks/tumor/1018_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1018_multiclass.png",
+        "scan_mask": "masks/scan/1018.png",
+        "label": 2
+    },
+    {
+        "image": "images/1435.png",
+        "tumor_mask_binary": "masks/tumor/1435_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1435_multiclass.png",
+        "scan_mask": "masks/scan/1435.png",
+        "label": 7
+    },
+    {
+        "image": "images/921.png",
+        "tumor_mask_binary": "masks/tumor/921_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/921_multiclass.png",
+        "scan_mask": "masks/scan/921.png",
+        "label": 6
+    },
+    {
+        "image": "images/514.png",
+        "tumor_mask_binary": "masks/tumor/514_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/514_multiclass.png",
+        "scan_mask": "masks/scan/514.png",
+        "label": 5
+    },
+    {
+        "image": "images/1430.png",
+        "tumor_mask_binary": "masks/tumor/1430_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1430_multiclass.png",
+        "scan_mask": "masks/scan/1430.png",
+        "label": 7
+    },
+    {
+        "image": "images/1325.png",
+        "tumor_mask_binary": "masks/tumor/1325_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1325_multiclass.png",
+        "scan_mask": "masks/scan/1325.png",
+        "label": 0
+    },
+    {
+        "image": "images/1184.png",
+        "tumor_mask_binary": "masks/tumor/1184_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1184_multiclass.png",
+        "scan_mask": "masks/scan/1184.png",
+        "label": 3
+    },
+    {
+        "image": "images/1143.png",
+        "tumor_mask_binary": "masks/tumor/1143_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1143_multiclass.png",
+        "scan_mask": "masks/scan/1143.png",
+        "label": 0
+    },
+    {
+        "image": "images/453.png",
+        "tumor_mask_binary": "masks/tumor/453_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/453_multiclass.png",
+        "scan_mask": "masks/scan/453.png",
+        "label": 0
+    },
+    {
+        "image": "images/1381.png",
+        "tumor_mask_binary": "masks/tumor/1381_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1381_multiclass.png",
+        "scan_mask": "masks/scan/1381.png",
+        "label": 1
+    },
+    {
+        "image": "images/936.png",
+        "tumor_mask_binary": "masks/tumor/936_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/936_multiclass.png",
+        "scan_mask": "masks/scan/936.png",
+        "label": 2
+    },
+    {
+        "image": "images/333.png",
+        "tumor_mask_binary": "masks/tumor/333_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/333_multiclass.png",
+        "scan_mask": "masks/scan/333.png",
+        "label": 0
+    },
+    {
+        "image": "images/134.png",
+        "tumor_mask_binary": "masks/tumor/134_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/134_multiclass.png",
+        "scan_mask": "masks/scan/134.png",
+        "label": 5
+    },
+    {
+        "image": "images/944.png",
+        "tumor_mask_binary": "masks/tumor/944_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/944_multiclass.png",
+        "scan_mask": "masks/scan/944.png",
+        "label": 2
+    },
+    {
+        "image": "images/412.png",
+        "tumor_mask_binary": "masks/tumor/412_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/412_multiclass.png",
+        "scan_mask": "masks/scan/412.png",
+        "label": 6
+    },
+    {
+        "image": "images/220.png",
+        "tumor_mask_binary": "masks/tumor/220_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/220_multiclass.png",
+        "scan_mask": "masks/scan/220.png",
+        "label": 0
+    },
+    {
+        "image": "images/1336.png",
+        "tumor_mask_binary": "masks/tumor/1336_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1336_multiclass.png",
+        "scan_mask": "masks/scan/1336.png",
+        "label": 2
+    },
+    {
+        "image": "images/872.png",
+        "tumor_mask_binary": "masks/tumor/872_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/872_multiclass.png",
+        "scan_mask": "masks/scan/872.png",
+        "label": 2
+    },
+    {
+        "image": "images/306.png",
+        "tumor_mask_binary": "masks/tumor/306_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/306_multiclass.png",
+        "scan_mask": "masks/scan/306.png",
+        "label": 2
+    },
+    {
+        "image": "images/504.png",
+        "tumor_mask_binary": "masks/tumor/504_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/504_multiclass.png",
+        "scan_mask": "masks/scan/504.png",
+        "label": 2
+    },
+    {
+        "image": "images/336.png",
+        "tumor_mask_binary": "masks/tumor/336_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/336_multiclass.png",
+        "scan_mask": "masks/scan/336.png",
+        "label": 2
+    },
+    {
+        "image": "images/1244.png",
+        "tumor_mask_binary": "masks/tumor/1244_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1244_multiclass.png",
+        "scan_mask": "masks/scan/1244.png",
+        "label": 2
+    },
+    {
+        "image": "images/837.png",
+        "tumor_mask_binary": "masks/tumor/837_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/837_multiclass.png",
+        "scan_mask": "masks/scan/837.png",
+        "label": 3
+    },
+    {
+        "image": "images/732.png",
+        "tumor_mask_binary": "masks/tumor/732_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/732_multiclass.png",
+        "scan_mask": "masks/scan/732.png",
+        "label": 0
+    },
+    {
+        "image": "images/1308.png",
+        "tumor_mask_binary": "masks/tumor/1308_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1308_multiclass.png",
+        "scan_mask": "masks/scan/1308.png",
+        "label": 0
+    },
+    {
+        "image": "images/315.png",
+        "tumor_mask_binary": "masks/tumor/315_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/315_multiclass.png",
+        "scan_mask": "masks/scan/315.png",
+        "label": 0
+    },
+    {
+        "image": "images/585.png",
+        "tumor_mask_binary": "masks/tumor/585_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/585_multiclass.png",
+        "scan_mask": "masks/scan/585.png",
+        "label": 2
+    },
+    {
+        "image": "images/163.png",
+        "tumor_mask_binary": "masks/tumor/163_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/163_multiclass.png",
+        "scan_mask": "masks/scan/163.png",
+        "label": 0
+    },
+    {
+        "image": "images/1273.png",
+        "tumor_mask_binary": "masks/tumor/1273_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1273_multiclass.png",
+        "scan_mask": "masks/scan/1273.png",
+        "label": 1
+    },
+    {
+        "image": "images/1134.png",
+        "tumor_mask_binary": "masks/tumor/1134_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1134_multiclass.png",
+        "scan_mask": "masks/scan/1134.png",
+        "label": 3
+    },
+    {
+        "image": "images/661.png",
+        "tumor_mask_binary": "masks/tumor/661_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/661_multiclass.png",
+        "scan_mask": "masks/scan/661.png",
+        "label": 5
+    },
+    {
+        "image": "images/1427.png",
+        "tumor_mask_binary": "masks/tumor/1427_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1427_multiclass.png",
+        "scan_mask": "masks/scan/1427.png",
+        "label": 7
+    },
+    {
+        "image": "images/1024.png",
+        "tumor_mask_binary": "masks/tumor/1024_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1024_multiclass.png",
+        "scan_mask": "masks/scan/1024.png",
+        "label": 0
+    },
+    {
+        "image": "images/237.png",
+        "tumor_mask_binary": "masks/tumor/237_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/237_multiclass.png",
+        "scan_mask": "masks/scan/237.png",
+        "label": 2
+    },
+    {
+        "image": "images/206.png",
+        "tumor_mask_binary": "masks/tumor/206_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/206_multiclass.png",
+        "scan_mask": "masks/scan/206.png",
+        "label": 0
+    },
+    {
+        "image": "images/1062.png",
+        "tumor_mask_binary": "masks/tumor/1062_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1062_multiclass.png",
+        "scan_mask": "masks/scan/1062.png",
+        "label": 0
+    },
+    {
+        "image": "images/350.png",
+        "tumor_mask_binary": "masks/tumor/350_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/350_multiclass.png",
+        "scan_mask": "masks/scan/350.png",
+        "label": 2
+    },
+    {
+        "image": "images/429.png",
+        "tumor_mask_binary": "masks/tumor/429_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/429_multiclass.png",
+        "scan_mask": "masks/scan/429.png",
+        "label": 3
+    },
+    {
+        "image": "images/71.png",
+        "tumor_mask_binary": "masks/tumor/71_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/71_multiclass.png",
+        "scan_mask": "masks/scan/71.png",
+        "label": 0
+    },
+    {
+        "image": "images/627.png",
+        "tumor_mask_binary": "masks/tumor/627_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/627_multiclass.png",
+        "scan_mask": "masks/scan/627.png",
+        "label": 3
+    },
+    {
+        "image": "images/354.png",
+        "tumor_mask_binary": "masks/tumor/354_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/354_multiclass.png",
+        "scan_mask": "masks/scan/354.png",
+        "label": 3
+    },
+    {
+        "image": "images/1014.png",
+        "tumor_mask_binary": "masks/tumor/1014_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1014_multiclass.png",
+        "scan_mask": "masks/scan/1014.png",
+        "label": 5
+    },
+    {
+        "image": "images/431.png",
+        "tumor_mask_binary": "masks/tumor/431_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/431_multiclass.png",
+        "scan_mask": "masks/scan/431.png",
+        "label": 3
+    },
+    {
+        "image": "images/694.png",
+        "tumor_mask_binary": "masks/tumor/694_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/694_multiclass.png",
+        "scan_mask": "masks/scan/694.png",
+        "label": 6
+    },
+    {
+        "image": "images/1354.png",
+        "tumor_mask_binary": "masks/tumor/1354_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1354_multiclass.png",
+        "scan_mask": "masks/scan/1354.png",
+        "label": 1
+    },
+    {
+        "image": "images/225.png",
+        "tumor_mask_binary": "masks/tumor/225_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/225_multiclass.png",
+        "scan_mask": "masks/scan/225.png",
+        "label": 6
+    },
+    {
+        "image": "images/1179.png",
+        "tumor_mask_binary": "masks/tumor/1179_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1179_multiclass.png",
+        "scan_mask": "masks/scan/1179.png",
+        "label": 5
+    },
+    {
+        "image": "images/254.png",
+        "tumor_mask_binary": "masks/tumor/254_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/254_multiclass.png",
+        "scan_mask": "masks/scan/254.png",
+        "label": 1
+    },
+    {
+        "image": "images/1267.png",
+        "tumor_mask_binary": "masks/tumor/1267_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1267_multiclass.png",
+        "scan_mask": "masks/scan/1267.png",
+        "label": 5
+    },
+    {
+        "image": "images/791.png",
+        "tumor_mask_binary": "masks/tumor/791_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/791_multiclass.png",
+        "scan_mask": "masks/scan/791.png",
+        "label": 0
+    },
+    {
+        "image": "images/1468.png",
+        "tumor_mask_binary": "masks/tumor/1468_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1468_multiclass.png",
+        "scan_mask": "masks/scan/1468.png",
+        "label": 7
+    },
+    {
+        "image": "images/1224.png",
+        "tumor_mask_binary": "masks/tumor/1224_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1224_multiclass.png",
+        "scan_mask": "masks/scan/1224.png",
+        "label": 2
+    },
+    {
+        "image": "images/281.png",
+        "tumor_mask_binary": "masks/tumor/281_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/281_multiclass.png",
+        "scan_mask": "masks/scan/281.png",
+        "label": 6
+    },
+    {
+        "image": "images/344.png",
+        "tumor_mask_binary": "masks/tumor/344_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/344_multiclass.png",
+        "scan_mask": "masks/scan/344.png",
+        "label": 1
+    },
+    {
+        "image": "images/1132.png",
+        "tumor_mask_binary": "masks/tumor/1132_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1132_multiclass.png",
+        "scan_mask": "masks/scan/1132.png",
+        "label": 4
+    },
+    {
+        "image": "images/1311.png",
+        "tumor_mask_binary": "masks/tumor/1311_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1311_multiclass.png",
+        "scan_mask": "masks/scan/1311.png",
+        "label": 2
+    },
+    {
+        "image": "images/1357.png",
+        "tumor_mask_binary": "masks/tumor/1357_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1357_multiclass.png",
+        "scan_mask": "masks/scan/1357.png",
+        "label": 1
+    },
+    {
+        "image": "images/227.png",
+        "tumor_mask_binary": "masks/tumor/227_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/227_multiclass.png",
+        "scan_mask": "masks/scan/227.png",
+        "label": 6
+    },
+    {
+        "image": "images/295.png",
+        "tumor_mask_binary": "masks/tumor/295_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/295_multiclass.png",
+        "scan_mask": "masks/scan/295.png",
+        "label": 0
+    },
+    {
+        "image": "images/573.png",
+        "tumor_mask_binary": "masks/tumor/573_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/573_multiclass.png",
+        "scan_mask": "masks/scan/573.png",
+        "label": 5
+    },
+    {
+        "image": "images/649.png",
+        "tumor_mask_binary": "masks/tumor/649_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/649_multiclass.png",
+        "scan_mask": "masks/scan/649.png",
+        "label": 5
+    },
+    {
+        "image": "images/217.png",
+        "tumor_mask_binary": "masks/tumor/217_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/217_multiclass.png",
+        "scan_mask": "masks/scan/217.png",
+        "label": 5
+    },
+    {
+        "image": "images/610.png",
+        "tumor_mask_binary": "masks/tumor/610_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/610_multiclass.png",
+        "scan_mask": "masks/scan/610.png",
+        "label": 3
+    },
+    {
+        "image": "images/1122.png",
+        "tumor_mask_binary": "masks/tumor/1122_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1122_multiclass.png",
+        "scan_mask": "masks/scan/1122.png",
+        "label": 1
+    },
+    {
+        "image": "images/806.png",
+        "tumor_mask_binary": "masks/tumor/806_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/806_multiclass.png",
+        "scan_mask": "masks/scan/806.png",
+        "label": 5
+    },
+    {
+        "image": "images/1360.png",
+        "tumor_mask_binary": "masks/tumor/1360_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1360_multiclass.png",
+        "scan_mask": "masks/scan/1360.png",
+        "label": 5
+    },
+    {
+        "image": "images/947.png",
+        "tumor_mask_binary": "masks/tumor/947_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/947_multiclass.png",
+        "scan_mask": "masks/scan/947.png",
+        "label": 2
+    },
+    {
+        "image": "images/966.png",
+        "tumor_mask_binary": "masks/tumor/966_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/966_multiclass.png",
+        "scan_mask": "masks/scan/966.png",
+        "label": 1
+    },
+    {
+        "image": "images/923.png",
+        "tumor_mask_binary": "masks/tumor/923_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/923_multiclass.png",
+        "scan_mask": "masks/scan/923.png",
+        "label": 5
+    },
+    {
+        "image": "images/882.png",
+        "tumor_mask_binary": "masks/tumor/882_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/882_multiclass.png",
+        "scan_mask": "masks/scan/882.png",
+        "label": 0
+    },
+    {
+        "image": "images/1190.png",
+        "tumor_mask_binary": "masks/tumor/1190_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1190_multiclass.png",
+        "scan_mask": "masks/scan/1190.png",
+        "label": 0
+    },
+    {
+        "image": "images/179.png",
+        "tumor_mask_binary": "masks/tumor/179_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/179_multiclass.png",
+        "scan_mask": "masks/scan/179.png",
+        "label": 4
+    },
+    {
+        "image": "images/383.png",
+        "tumor_mask_binary": "masks/tumor/383_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/383_multiclass.png",
+        "scan_mask": "masks/scan/383.png",
+        "label": 3
+    },
+    {
+        "image": "images/248.png",
+        "tumor_mask_binary": "masks/tumor/248_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/248_multiclass.png",
+        "scan_mask": "masks/scan/248.png",
+        "label": 1
+    },
+    {
+        "image": "images/269.png",
+        "tumor_mask_binary": "masks/tumor/269_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/269_multiclass.png",
+        "scan_mask": "masks/scan/269.png",
+        "label": 2
+    },
+    {
+        "image": "images/906.png",
+        "tumor_mask_binary": "masks/tumor/906_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/906_multiclass.png",
+        "scan_mask": "masks/scan/906.png",
+        "label": 0
+    },
+    {
+        "image": "images/1078.png",
+        "tumor_mask_binary": "masks/tumor/1078_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1078_multiclass.png",
+        "scan_mask": "masks/scan/1078.png",
+        "label": 5
+    },
+    {
+        "image": "images/877.png",
+        "tumor_mask_binary": "masks/tumor/877_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/877_multiclass.png",
+        "scan_mask": "masks/scan/877.png",
+        "label": 4
+    },
+    {
+        "image": "images/925.png",
+        "tumor_mask_binary": "masks/tumor/925_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/925_multiclass.png",
+        "scan_mask": "masks/scan/925.png",
+        "label": 2
+    },
+    {
+        "image": "images/640.png",
+        "tumor_mask_binary": "masks/tumor/640_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/640_multiclass.png",
+        "scan_mask": "masks/scan/640.png",
+        "label": 0
+    },
+    {
+        "image": "images/137.png",
+        "tumor_mask_binary": "masks/tumor/137_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/137_multiclass.png",
+        "scan_mask": "masks/scan/137.png",
+        "label": 1
+    },
+    {
+        "image": "images/810.png",
+        "tumor_mask_binary": "masks/tumor/810_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/810_multiclass.png",
+        "scan_mask": "masks/scan/810.png",
+        "label": 2
+    },
+    {
+        "image": "images/1124.png",
+        "tumor_mask_binary": "masks/tumor/1124_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1124_multiclass.png",
+        "scan_mask": "masks/scan/1124.png",
+        "label": 1
+    },
+    {
+        "image": "images/1173.png",
+        "tumor_mask_binary": "masks/tumor/1173_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1173_multiclass.png",
+        "scan_mask": "masks/scan/1173.png",
+        "label": 6
+    },
+    {
+        "image": "images/1232.png",
+        "tumor_mask_binary": "masks/tumor/1232_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1232_multiclass.png",
+        "scan_mask": "masks/scan/1232.png",
+        "label": 1
+    },
+    {
+        "image": "images/325.png",
+        "tumor_mask_binary": "masks/tumor/325_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/325_multiclass.png",
+        "scan_mask": "masks/scan/325.png",
+        "label": 1
+    },
+    {
+        "image": "images/1335.png",
+        "tumor_mask_binary": "masks/tumor/1335_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1335_multiclass.png",
+        "scan_mask": "masks/scan/1335.png",
+        "label": 2
+    },
+    {
+        "image": "images/511.png",
+        "tumor_mask_binary": "masks/tumor/511_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/511_multiclass.png",
+        "scan_mask": "masks/scan/511.png",
+        "label": 2
+    },
+    {
+        "image": "images/1088.png",
+        "tumor_mask_binary": "masks/tumor/1088_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1088_multiclass.png",
+        "scan_mask": "masks/scan/1088.png",
+        "label": 6
+    },
+    {
+        "image": "images/701.png",
+        "tumor_mask_binary": "masks/tumor/701_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/701_multiclass.png",
+        "scan_mask": "masks/scan/701.png",
+        "label": 6
+    },
+    {
+        "image": "images/817.png",
+        "tumor_mask_binary": "masks/tumor/817_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/817_multiclass.png",
+        "scan_mask": "masks/scan/817.png",
+        "label": 2
+    },
+    {
+        "image": "images/856.png",
+        "tumor_mask_binary": "masks/tumor/856_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/856_multiclass.png",
+        "scan_mask": "masks/scan/856.png",
+        "label": 2
+    },
+    {
+        "image": "images/1410.png",
+        "tumor_mask_binary": "masks/tumor/1410_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1410_multiclass.png",
+        "scan_mask": "masks/scan/1410.png",
+        "label": 2
+    },
+    {
+        "image": "images/890.png",
+        "tumor_mask_binary": "masks/tumor/890_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/890_multiclass.png",
+        "scan_mask": "masks/scan/890.png",
+        "label": 5
+    },
+    {
+        "image": "images/441.png",
+        "tumor_mask_binary": "masks/tumor/441_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/441_multiclass.png",
+        "scan_mask": "masks/scan/441.png",
+        "label": 2
+    },
+    {
+        "image": "images/352.png",
+        "tumor_mask_binary": "masks/tumor/352_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/352_multiclass.png",
+        "scan_mask": "masks/scan/352.png",
+        "label": 3
+    },
+    {
+        "image": "images/614.png",
+        "tumor_mask_binary": "masks/tumor/614_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/614_multiclass.png",
+        "scan_mask": "masks/scan/614.png",
+        "label": 1
+    },
+    {
+        "image": "images/268.png",
+        "tumor_mask_binary": "masks/tumor/268_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/268_multiclass.png",
+        "scan_mask": "masks/scan/268.png",
+        "label": 2
+    },
+    {
+        "image": "images/1467.png",
+        "tumor_mask_binary": "masks/tumor/1467_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1467_multiclass.png",
+        "scan_mask": "masks/scan/1467.png",
+        "label": 7
+    },
+    {
+        "image": "images/793.png",
+        "tumor_mask_binary": "masks/tumor/793_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/793_multiclass.png",
+        "scan_mask": "masks/scan/793.png",
+        "label": 6
+    },
+    {
+        "image": "images/1091.png",
+        "tumor_mask_binary": "masks/tumor/1091_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1091_multiclass.png",
+        "scan_mask": "masks/scan/1091.png",
+        "label": 0
+    },
+    {
+        "image": "images/240.png",
+        "tumor_mask_binary": "masks/tumor/240_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/240_multiclass.png",
+        "scan_mask": "masks/scan/240.png",
+        "label": 0
+    },
+    {
+        "image": "images/1373.png",
+        "tumor_mask_binary": "masks/tumor/1373_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1373_multiclass.png",
+        "scan_mask": "masks/scan/1373.png",
+        "label": 2
+    },
+    {
+        "image": "images/1369.png",
+        "tumor_mask_binary": "masks/tumor/1369_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1369_multiclass.png",
+        "scan_mask": "masks/scan/1369.png",
+        "label": 0
+    },
+    {
+        "image": "images/1359.png",
+        "tumor_mask_binary": "masks/tumor/1359_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1359_multiclass.png",
+        "scan_mask": "masks/scan/1359.png",
+        "label": 5
+    },
+    {
+        "image": "images/1217.png",
+        "tumor_mask_binary": "masks/tumor/1217_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1217_multiclass.png",
+        "scan_mask": "masks/scan/1217.png",
+        "label": 0
+    },
+    {
+        "image": "images/735.png",
+        "tumor_mask_binary": "masks/tumor/735_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/735_multiclass.png",
+        "scan_mask": "masks/scan/735.png",
+        "label": 0
+    },
+    {
+        "image": "images/339.png",
+        "tumor_mask_binary": "masks/tumor/339_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/339_multiclass.png",
+        "scan_mask": "masks/scan/339.png",
+        "label": 1
+    },
+    {
+        "image": "images/399.png",
+        "tumor_mask_binary": "masks/tumor/399_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/399_multiclass.png",
+        "scan_mask": "masks/scan/399.png",
+        "label": 2
+    },
+    {
+        "image": "images/1025.png",
+        "tumor_mask_binary": "masks/tumor/1025_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1025_multiclass.png",
+        "scan_mask": "masks/scan/1025.png",
+        "label": 0
+    },
+    {
+        "image": "images/844.png",
+        "tumor_mask_binary": "masks/tumor/844_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/844_multiclass.png",
+        "scan_mask": "masks/scan/844.png",
+        "label": 0
+    },
+    {
+        "image": "images/155.png",
+        "tumor_mask_binary": "masks/tumor/155_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/155_multiclass.png",
+        "scan_mask": "masks/scan/155.png",
+        "label": 5
+    },
+    {
+        "image": "images/370.png",
+        "tumor_mask_binary": "masks/tumor/370_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/370_multiclass.png",
+        "scan_mask": "masks/scan/370.png",
+        "label": 3
+    },
+    {
+        "image": "images/313.png",
+        "tumor_mask_binary": "masks/tumor/313_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/313_multiclass.png",
+        "scan_mask": "masks/scan/313.png",
+        "label": 0
+    },
+    {
+        "image": "images/602.png",
+        "tumor_mask_binary": "masks/tumor/602_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/602_multiclass.png",
+        "scan_mask": "masks/scan/602.png",
+        "label": 5
+    },
+    {
+        "image": "images/656.png",
+        "tumor_mask_binary": "masks/tumor/656_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/656_multiclass.png",
+        "scan_mask": "masks/scan/656.png",
+        "label": 2
+    },
+    {
+        "image": "images/1364.png",
+        "tumor_mask_binary": "masks/tumor/1364_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1364_multiclass.png",
+        "scan_mask": "masks/scan/1364.png",
+        "label": 5
+    },
+    {
+        "image": "images/623.png",
+        "tumor_mask_binary": "masks/tumor/623_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/623_multiclass.png",
+        "scan_mask": "masks/scan/623.png",
+        "label": 3
+    },
+    {
+        "image": "images/12.png",
+        "tumor_mask_binary": "masks/tumor/12_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/12_multiclass.png",
+        "scan_mask": "masks/scan/12.png",
+        "label": 0
+    },
+    {
+        "image": "images/1271.png",
+        "tumor_mask_binary": "masks/tumor/1271_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1271_multiclass.png",
+        "scan_mask": "masks/scan/1271.png",
+        "label": 1
+    },
+    {
+        "image": "images/36.png",
+        "tumor_mask_binary": "masks/tumor/36_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/36_multiclass.png",
+        "scan_mask": "masks/scan/36.png",
+        "label": 0
+    },
+    {
+        "image": "images/864.png",
+        "tumor_mask_binary": "masks/tumor/864_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/864_multiclass.png",
+        "scan_mask": "masks/scan/864.png",
+        "label": 2
+    },
+    {
+        "image": "images/743.png",
+        "tumor_mask_binary": "masks/tumor/743_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/743_multiclass.png",
+        "scan_mask": "masks/scan/743.png",
+        "label": 2
+    },
+    {
+        "image": "images/595.png",
+        "tumor_mask_binary": "masks/tumor/595_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/595_multiclass.png",
+        "scan_mask": "masks/scan/595.png",
+        "label": 1
+    },
+    {
+        "image": "images/474.png",
+        "tumor_mask_binary": "masks/tumor/474_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/474_multiclass.png",
+        "scan_mask": "masks/scan/474.png",
+        "label": 2
+    },
+    {
+        "image": "images/703.png",
+        "tumor_mask_binary": "masks/tumor/703_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/703_multiclass.png",
+        "scan_mask": "masks/scan/703.png",
+        "label": 6
+    },
+    {
+        "image": "images/1460.png",
+        "tumor_mask_binary": "masks/tumor/1460_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1460_multiclass.png",
+        "scan_mask": "masks/scan/1460.png",
+        "label": 7
+    },
+    {
+        "image": "images/112.png",
+        "tumor_mask_binary": "masks/tumor/112_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/112_multiclass.png",
+        "scan_mask": "masks/scan/112.png",
+        "label": 5
+    },
+    {
+        "image": "images/201.png",
+        "tumor_mask_binary": "masks/tumor/201_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/201_multiclass.png",
+        "scan_mask": "masks/scan/201.png",
+        "label": 5
+    },
+    {
+        "image": "images/345.png",
+        "tumor_mask_binary": "masks/tumor/345_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/345_multiclass.png",
+        "scan_mask": "masks/scan/345.png",
+        "label": 1
+    },
+    {
+        "image": "images/917.png",
+        "tumor_mask_binary": "masks/tumor/917_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/917_multiclass.png",
+        "scan_mask": "masks/scan/917.png",
+        "label": 2
+    },
+    {
+        "image": "images/945.png",
+        "tumor_mask_binary": "masks/tumor/945_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/945_multiclass.png",
+        "scan_mask": "masks/scan/945.png",
+        "label": 2
+    },
+    {
+        "image": "images/1254.png",
+        "tumor_mask_binary": "masks/tumor/1254_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1254_multiclass.png",
+        "scan_mask": "masks/scan/1254.png",
+        "label": 0
+    },
+    {
+        "image": "images/1315.png",
+        "tumor_mask_binary": "masks/tumor/1315_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1315_multiclass.png",
+        "scan_mask": "masks/scan/1315.png",
+        "label": 5
+    },
+    {
+        "image": "images/356.png",
+        "tumor_mask_binary": "masks/tumor/356_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/356_multiclass.png",
+        "scan_mask": "masks/scan/356.png",
+        "label": 3
+    },
+    {
+        "image": "images/532.png",
+        "tumor_mask_binary": "masks/tumor/532_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/532_multiclass.png",
+        "scan_mask": "masks/scan/532.png",
+        "label": 2
+    },
+    {
+        "image": "images/180.png",
+        "tumor_mask_binary": "masks/tumor/180_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/180_multiclass.png",
+        "scan_mask": "masks/scan/180.png",
+        "label": 2
+    },
+    {
+        "image": "images/394.png",
+        "tumor_mask_binary": "masks/tumor/394_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/394_multiclass.png",
+        "scan_mask": "masks/scan/394.png",
+        "label": 0
+    },
+    {
+        "image": "images/1096.png",
+        "tumor_mask_binary": "masks/tumor/1096_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1096_multiclass.png",
+        "scan_mask": "masks/scan/1096.png",
+        "label": 0
+    },
+    {
+        "image": "images/551.png",
+        "tumor_mask_binary": "masks/tumor/551_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/551_multiclass.png",
+        "scan_mask": "masks/scan/551.png",
+        "label": 5
+    },
+    {
+        "image": "images/1086.png",
+        "tumor_mask_binary": "masks/tumor/1086_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1086_multiclass.png",
+        "scan_mask": "masks/scan/1086.png",
+        "label": 2
+    },
+    {
+        "image": "images/457.png",
+        "tumor_mask_binary": "masks/tumor/457_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/457_multiclass.png",
+        "scan_mask": "masks/scan/457.png",
+        "label": 1
+    },
+    {
+        "image": "images/488.png",
+        "tumor_mask_binary": "masks/tumor/488_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/488_multiclass.png",
+        "scan_mask": "masks/scan/488.png",
+        "label": 2
+    },
+    {
+        "image": "images/164.png",
+        "tumor_mask_binary": "masks/tumor/164_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/164_multiclass.png",
+        "scan_mask": "masks/scan/164.png",
+        "label": 2
+    },
+    {
+        "image": "images/1319.png",
+        "tumor_mask_binary": "masks/tumor/1319_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1319_multiclass.png",
+        "scan_mask": "masks/scan/1319.png",
+        "label": 6
+    },
+    {
+        "image": "images/957.png",
+        "tumor_mask_binary": "masks/tumor/957_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/957_multiclass.png",
+        "scan_mask": "masks/scan/957.png",
+        "label": 5
+    },
+    {
+        "image": "images/1404.png",
+        "tumor_mask_binary": "masks/tumor/1404_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/1404_multiclass.png",
+        "scan_mask": "masks/scan/1404.png",
+        "label": 5
+    },
+    {
+        "image": "images/934.png",
+        "tumor_mask_binary": "masks/tumor/934_binary.png",
+        "tumor_mask_multiclass": "masks/tumor/934_multiclass.png",
+        "scan_mask": "masks/scan/934.png",
+        "label": 2
+    }
+]

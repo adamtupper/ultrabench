@@ -1,10 +1,9 @@
-"""Divide the Open Kidney dataset into training, validation, and test splits
-using a 7:1:2 split. For the annotations, use those created by Sonographer 1.
-Each image is associated with a distinct patient so we do not need to worry
-about patient overlap between the splits. However, we do need to remove 20
-duplicate images. The splits are stratified based on the view label
-(longitudinal, transverse, other) to mitigate distribution shifts between the
-splits.
+"""Divide the Open Kidney dataset into training and test splits using an 8:2
+split. For the annotations, use those created by Sonographer 1. Each image is
+associated with a distinct patient so we do not need to worry about patient
+overlap between the splits. However, we do need to remove 20 duplicate images.
+The splits are stratified based on the view label (longitudinal, transverse,
+other) to mitigate distribution shifts between the splits.
 
 From inspecting the original code, the labels of the regions mask are as
 follows:
@@ -13,9 +12,9 @@ follows:
     - 2: Medulla
     - 3: Cortex
 
-Each example (a single image) is represented as an object in one of three JSON
-array files (`train.json`, `validation.json`, or `test.json`). Each object has
-the following key/value pairs:
+Each example (a single image) is represented as an object in one of two JSON
+array files (`train_val.json` or `test.json`). Each object has the following
+key/value pairs:
 
     - image:        The path to the image file.
     - scan_mask:    The path to the scan mask file.
@@ -221,23 +220,12 @@ def open_kidney(
         stratify=metadata["view"],
     )
 
-    # Separate the training and validation sets
-    train_examples, val_examples = train_test_split(
-        train_val_examples,
-        test_size=0.1,
-        random_state=42,
-        shuffle=True,
-        stratify=train_val_examples["view"],
-    )
-
-    print(f"# of training examples: {len(train_examples)}")
-    print(f"# of validation examples: {len(val_examples)}")
+    print(f"# of training examples: {len(train_val_examples)}")
     print(f"# of test examples: {len(test_examples)}")
 
-    # Save the training, validation, and test indices to a JSON file
+    # Save the training and test indices to a JSON file
     for split, subset in [
-        ("train", train_examples),
-        ("validation", val_examples),
+        ("train_val", train_val_examples),
         ("test", test_examples),
     ]:
         subset = subset.to_dict(orient="records")
