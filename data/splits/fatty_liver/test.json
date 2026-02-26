@@ -1,0 +1,882 @@
+[
+    {
+        "patient": 3,
+        "image": "images/3_0.png",
+        "scan_mask": "masks/scan/3_0.png",
+        "steatosis": 2,
+        "label": 0,
+        "pathology": "Normal"
+    },
+    {
+        "patient": 3,
+        "image": "images/3_1.png",
+        "scan_mask": "masks/scan/3_1.png",
+        "steatosis": 2,
+        "label": 0,
+        "pathology": "Normal"
+    },
+    {
+        "patient": 3,
+        "image": "images/3_2.png",
+        "scan_mask": "masks/scan/3_2.png",
+        "steatosis": 2,
+        "label": 0,
+        "pathology": "Normal"
+    },
+    {
+        "patient": 3,
+        "image": "images/3_3.png",
+        "scan_mask": "masks/scan/3_3.png",
+        "steatosis": 2,
+        "label": 0,
+        "pathology": "Normal"
+    },
+    {
+        "patient": 3,
+        "image": "images/3_4.png",
+        "scan_mask": "masks/scan/3_4.png",
+        "steatosis": 2,
+        "label": 0,
+        "pathology": "Normal"
+    },
+    {
+        "patient": 3,
+        "image": "images/3_5.png",
+        "scan_mask": "masks/scan/3_5.png",
+        "steatosis": 2,
+        "label": 0,
+        "pathology": "Normal"
+    },
+    {
+        "patient": 3,
+        "image": "images/3_6.png",
+        "scan_mask": "masks/scan/3_6.png",
+        "steatosis": 2,
+        "label": 0,
+        "pathology": "Normal"
+    },
+    {
+        "patient": 3,
+        "image": "images/3_7.png",
+        "scan_mask": "masks/scan/3_7.png",
+        "steatosis": 2,
+        "label": 0,
+        "pathology": "Normal"
+    },
+    {
+        "patient": 3,
+        "image": "images/3_8.png",
+        "scan_mask": "masks/scan/3_8.png",
+        "steatosis": 2,
+        "label": 0,
+        "pathology": "Normal"
+    },
+    {
+        "patient": 3,
+        "image": "images/3_9.png",
+        "scan_mask": "masks/scan/3_9.png",
+        "steatosis": 2,
+        "label": 0,
+        "pathology": "Normal"
+    },
+    {
+        "patient": 5,
+        "image": "images/5_0.png",
+        "scan_mask": "masks/scan/5_0.png",
+        "steatosis": 2,
+        "label": 0,
+        "pathology": "Normal"
+    },
+    {
+        "patient": 5,
+        "image": "images/5_1.png",
+        "scan_mask": "masks/scan/5_1.png",
+        "steatosis": 2,
+        "label": 0,
+        "pathology": "Normal"
+    },
+    {
+        "patient": 5,
+        "image": "images/5_2.png",
+        "scan_mask": "masks/scan/5_2.png",
+        "steatosis": 2,
+        "label": 0,
+        "pathology": "Normal"
+    },
+    {
+        "patient": 5,
+        "image": "images/5_3.png",
+        "scan_mask": "masks/scan/5_3.png",
+        "steatosis": 2,
+        "label": 0,
+        "pathology": "Normal"
+    },
+    {
+        "patient": 5,
+        "image": "images/5_4.png",
+        "scan_mask": "masks/scan/5_4.png",
+        "steatosis": 2,
+        "label": 0,
+        "pathology": "Normal"
+    },
+    {
+        "patient": 5,
+        "image": "images/5_5.png",
+        "scan_mask": "masks/scan/5_5.png",
+        "steatosis": 2,
+        "label": 0,
+        "pathology": "Normal"
+    },
+    {
+        "patient": 5,
+        "image": "images/5_6.png",
+        "scan_mask": "masks/scan/5_6.png",
+        "steatosis": 2,
+        "label": 0,
+        "pathology": "Normal"
+    },
+    {
+        "patient": 5,
+        "image": "images/5_7.png",
+        "scan_mask": "masks/scan/5_7.png",
+        "steatosis": 2,
+        "label": 0,
+        "pathology": "Normal"
+    },
+    {
+        "patient": 5,
+        "image": "images/5_8.png",
+        "scan_mask": "masks/scan/5_8.png",
+        "steatosis": 2,
+        "label": 0,
+        "pathology": "Normal"
+    },
+    {
+        "patient": 5,
+        "image": "images/5_9.png",
+        "scan_mask": "masks/scan/5_9.png",
+        "steatosis": 2,
+        "label": 0,
+        "pathology": "Normal"
+    },
+    {
+        "patient": 12,
+        "image": "images/12_0.png",
+        "scan_mask": "masks/scan/12_0.png",
+        "steatosis": 2,
+        "label": 0,
+        "pathology": "Normal"
+    },
+    {
+        "patient": 12,
+        "image": "images/12_1.png",
+        "scan_mask": "masks/scan/12_1.png",
+        "steatosis": 2,
+        "label": 0,
+        "pathology": "Normal"
+    },
+    {
+        "patient": 12,
+        "image": "images/12_2.png",
+        "scan_mask": "masks/scan/12_2.png",
+        "steatosis": 2,
+        "label": 0,
+        "pathology": "Normal"
+    },
+    {
+        "patient": 12,
+        "image": "images/12_3.png",
+        "scan_mask": "masks/scan/12_3.png",
+        "steatosis": 2,
+        "label": 0,
+        "pathology": "Normal"
+    },
+    {
+        "patient": 12,
+        "image": "images/12_4.png",
+        "scan_mask": "masks/scan/12_4.png",
+        "steatosis": 2,
+        "label": 0,
+        "pathology": "Normal"
+    },
+    {
+        "patient": 12,
+        "image": "images/12_5.png",
+        "scan_mask": "masks/scan/12_5.png",
+        "steatosis": 2,
+        "label": 0,
+        "pathology": "Normal"
+    },
+    {
+        "patient": 12,
+        "image": "images/12_6.png",
+        "scan_mask": "masks/scan/12_6.png",
+        "steatosis": 2,
+        "label": 0,
+        "pathology": "Normal"
+    },
+    {
+        "patient": 12,
+        "image": "images/12_7.png",
+        "scan_mask": "masks/scan/12_7.png",
+        "steatosis": 2,
+        "label": 0,
+        "pathology": "Normal"
+    },
+    {
+        "patient": 12,
+        "image": "images/12_8.png",
+        "scan_mask": "masks/scan/12_8.png",
+        "steatosis": 2,
+        "label": 0,
+        "pathology": "Normal"
+    },
+    {
+        "patient": 12,
+        "image": "images/12_9.png",
+        "scan_mask": "masks/scan/12_9.png",
+        "steatosis": 2,
+        "label": 0,
+        "pathology": "Normal"
+    },
+    {
+        "patient": 27,
+        "image": "images/27_0.png",
+        "scan_mask": "masks/scan/27_0.png",
+        "steatosis": 75,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 27,
+        "image": "images/27_1.png",
+        "scan_mask": "masks/scan/27_1.png",
+        "steatosis": 75,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 27,
+        "image": "images/27_2.png",
+        "scan_mask": "masks/scan/27_2.png",
+        "steatosis": 75,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 27,
+        "image": "images/27_3.png",
+        "scan_mask": "masks/scan/27_3.png",
+        "steatosis": 75,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 27,
+        "image": "images/27_4.png",
+        "scan_mask": "masks/scan/27_4.png",
+        "steatosis": 75,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 27,
+        "image": "images/27_5.png",
+        "scan_mask": "masks/scan/27_5.png",
+        "steatosis": 75,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 27,
+        "image": "images/27_6.png",
+        "scan_mask": "masks/scan/27_6.png",
+        "steatosis": 75,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 27,
+        "image": "images/27_7.png",
+        "scan_mask": "masks/scan/27_7.png",
+        "steatosis": 75,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 27,
+        "image": "images/27_8.png",
+        "scan_mask": "masks/scan/27_8.png",
+        "steatosis": 75,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 27,
+        "image": "images/27_9.png",
+        "scan_mask": "masks/scan/27_9.png",
+        "steatosis": 75,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 31,
+        "image": "images/31_0.png",
+        "scan_mask": "masks/scan/31_0.png",
+        "steatosis": 30,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 31,
+        "image": "images/31_1.png",
+        "scan_mask": "masks/scan/31_1.png",
+        "steatosis": 30,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 31,
+        "image": "images/31_2.png",
+        "scan_mask": "masks/scan/31_2.png",
+        "steatosis": 30,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 31,
+        "image": "images/31_3.png",
+        "scan_mask": "masks/scan/31_3.png",
+        "steatosis": 30,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 31,
+        "image": "images/31_4.png",
+        "scan_mask": "masks/scan/31_4.png",
+        "steatosis": 30,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 31,
+        "image": "images/31_5.png",
+        "scan_mask": "masks/scan/31_5.png",
+        "steatosis": 30,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 31,
+        "image": "images/31_6.png",
+        "scan_mask": "masks/scan/31_6.png",
+        "steatosis": 30,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 31,
+        "image": "images/31_7.png",
+        "scan_mask": "masks/scan/31_7.png",
+        "steatosis": 30,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 31,
+        "image": "images/31_8.png",
+        "scan_mask": "masks/scan/31_8.png",
+        "steatosis": 30,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 31,
+        "image": "images/31_9.png",
+        "scan_mask": "masks/scan/31_9.png",
+        "steatosis": 30,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 33,
+        "image": "images/33_0.png",
+        "scan_mask": "masks/scan/33_0.png",
+        "steatosis": 40,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 33,
+        "image": "images/33_1.png",
+        "scan_mask": "masks/scan/33_1.png",
+        "steatosis": 40,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 33,
+        "image": "images/33_2.png",
+        "scan_mask": "masks/scan/33_2.png",
+        "steatosis": 40,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 33,
+        "image": "images/33_3.png",
+        "scan_mask": "masks/scan/33_3.png",
+        "steatosis": 40,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 33,
+        "image": "images/33_4.png",
+        "scan_mask": "masks/scan/33_4.png",
+        "steatosis": 40,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 33,
+        "image": "images/33_5.png",
+        "scan_mask": "masks/scan/33_5.png",
+        "steatosis": 40,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 33,
+        "image": "images/33_6.png",
+        "scan_mask": "masks/scan/33_6.png",
+        "steatosis": 40,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 33,
+        "image": "images/33_7.png",
+        "scan_mask": "masks/scan/33_7.png",
+        "steatosis": 40,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 33,
+        "image": "images/33_8.png",
+        "scan_mask": "masks/scan/33_8.png",
+        "steatosis": 40,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 33,
+        "image": "images/33_9.png",
+        "scan_mask": "masks/scan/33_9.png",
+        "steatosis": 40,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 34,
+        "image": "images/34_0.png",
+        "scan_mask": "masks/scan/34_0.png",
+        "steatosis": 70,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 34,
+        "image": "images/34_1.png",
+        "scan_mask": "masks/scan/34_1.png",
+        "steatosis": 70,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 34,
+        "image": "images/34_2.png",
+        "scan_mask": "masks/scan/34_2.png",
+        "steatosis": 70,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 34,
+        "image": "images/34_3.png",
+        "scan_mask": "masks/scan/34_3.png",
+        "steatosis": 70,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 34,
+        "image": "images/34_4.png",
+        "scan_mask": "masks/scan/34_4.png",
+        "steatosis": 70,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 34,
+        "image": "images/34_5.png",
+        "scan_mask": "masks/scan/34_5.png",
+        "steatosis": 70,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 34,
+        "image": "images/34_6.png",
+        "scan_mask": "masks/scan/34_6.png",
+        "steatosis": 70,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 34,
+        "image": "images/34_7.png",
+        "scan_mask": "masks/scan/34_7.png",
+        "steatosis": 70,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 34,
+        "image": "images/34_8.png",
+        "scan_mask": "masks/scan/34_8.png",
+        "steatosis": 70,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 34,
+        "image": "images/34_9.png",
+        "scan_mask": "masks/scan/34_9.png",
+        "steatosis": 70,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 41,
+        "image": "images/41_0.png",
+        "scan_mask": "masks/scan/41_0.png",
+        "steatosis": 25,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 41,
+        "image": "images/41_1.png",
+        "scan_mask": "masks/scan/41_1.png",
+        "steatosis": 25,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 41,
+        "image": "images/41_2.png",
+        "scan_mask": "masks/scan/41_2.png",
+        "steatosis": 25,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 41,
+        "image": "images/41_3.png",
+        "scan_mask": "masks/scan/41_3.png",
+        "steatosis": 25,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 41,
+        "image": "images/41_4.png",
+        "scan_mask": "masks/scan/41_4.png",
+        "steatosis": 25,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 41,
+        "image": "images/41_5.png",
+        "scan_mask": "masks/scan/41_5.png",
+        "steatosis": 25,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 41,
+        "image": "images/41_6.png",
+        "scan_mask": "masks/scan/41_6.png",
+        "steatosis": 25,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 41,
+        "image": "images/41_7.png",
+        "scan_mask": "masks/scan/41_7.png",
+        "steatosis": 25,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 41,
+        "image": "images/41_8.png",
+        "scan_mask": "masks/scan/41_8.png",
+        "steatosis": 25,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 41,
+        "image": "images/41_9.png",
+        "scan_mask": "masks/scan/41_9.png",
+        "steatosis": 25,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 44,
+        "image": "images/44_0.png",
+        "scan_mask": "masks/scan/44_0.png",
+        "steatosis": 50,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 44,
+        "image": "images/44_1.png",
+        "scan_mask": "masks/scan/44_1.png",
+        "steatosis": 50,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 44,
+        "image": "images/44_2.png",
+        "scan_mask": "masks/scan/44_2.png",
+        "steatosis": 50,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 44,
+        "image": "images/44_3.png",
+        "scan_mask": "masks/scan/44_3.png",
+        "steatosis": 50,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 44,
+        "image": "images/44_4.png",
+        "scan_mask": "masks/scan/44_4.png",
+        "steatosis": 50,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 44,
+        "image": "images/44_5.png",
+        "scan_mask": "masks/scan/44_5.png",
+        "steatosis": 50,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 44,
+        "image": "images/44_6.png",
+        "scan_mask": "masks/scan/44_6.png",
+        "steatosis": 50,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 44,
+        "image": "images/44_7.png",
+        "scan_mask": "masks/scan/44_7.png",
+        "steatosis": 50,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 44,
+        "image": "images/44_8.png",
+        "scan_mask": "masks/scan/44_8.png",
+        "steatosis": 50,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 44,
+        "image": "images/44_9.png",
+        "scan_mask": "masks/scan/44_9.png",
+        "steatosis": 50,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 46,
+        "image": "images/46_0.png",
+        "scan_mask": "masks/scan/46_0.png",
+        "steatosis": 20,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 46,
+        "image": "images/46_1.png",
+        "scan_mask": "masks/scan/46_1.png",
+        "steatosis": 20,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 46,
+        "image": "images/46_2.png",
+        "scan_mask": "masks/scan/46_2.png",
+        "steatosis": 20,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 46,
+        "image": "images/46_3.png",
+        "scan_mask": "masks/scan/46_3.png",
+        "steatosis": 20,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 46,
+        "image": "images/46_4.png",
+        "scan_mask": "masks/scan/46_4.png",
+        "steatosis": 20,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 46,
+        "image": "images/46_5.png",
+        "scan_mask": "masks/scan/46_5.png",
+        "steatosis": 20,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 46,
+        "image": "images/46_6.png",
+        "scan_mask": "masks/scan/46_6.png",
+        "steatosis": 20,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 46,
+        "image": "images/46_7.png",
+        "scan_mask": "masks/scan/46_7.png",
+        "steatosis": 20,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 46,
+        "image": "images/46_8.png",
+        "scan_mask": "masks/scan/46_8.png",
+        "steatosis": 20,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 46,
+        "image": "images/46_9.png",
+        "scan_mask": "masks/scan/46_9.png",
+        "steatosis": 20,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 47,
+        "image": "images/47_0.png",
+        "scan_mask": "masks/scan/47_0.png",
+        "steatosis": 10,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 47,
+        "image": "images/47_1.png",
+        "scan_mask": "masks/scan/47_1.png",
+        "steatosis": 10,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 47,
+        "image": "images/47_2.png",
+        "scan_mask": "masks/scan/47_2.png",
+        "steatosis": 10,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 47,
+        "image": "images/47_3.png",
+        "scan_mask": "masks/scan/47_3.png",
+        "steatosis": 10,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 47,
+        "image": "images/47_4.png",
+        "scan_mask": "masks/scan/47_4.png",
+        "steatosis": 10,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 47,
+        "image": "images/47_5.png",
+        "scan_mask": "masks/scan/47_5.png",
+        "steatosis": 10,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 47,
+        "image": "images/47_6.png",
+        "scan_mask": "masks/scan/47_6.png",
+        "steatosis": 10,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 47,
+        "image": "images/47_7.png",
+        "scan_mask": "masks/scan/47_7.png",
+        "steatosis": 10,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 47,
+        "image": "images/47_8.png",
+        "scan_mask": "masks/scan/47_8.png",
+        "steatosis": 10,
+        "label": 1,
+        "pathology": "NFLD"
+    },
+    {
+        "patient": 47,
+        "image": "images/47_9.png",
+        "scan_mask": "masks/scan/47_9.png",
+        "steatosis": 10,
+        "label": 1,
+        "pathology": "NFLD"
+    }
+]

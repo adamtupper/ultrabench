@@ -1,13 +1,10 @@
-"""Prepare the training, validation, and test sets for the MMOTU dataset. The
-dataset is already pre-split into training and test data, ensuring that there
-is no patient overlap between these splits. However, no patient data is
-retained and therefore we cannot ensure that there is not any patient overlap
-when splitting the training set into training and validation data. We use an
-8:2 split to separate the training and validation sets.
+"""Prepare the training and test sets for the MMOTU dataset. The dataset is
+already pre-split into training and test data, ensuring that there is no
+patient overlap between these splits.
 
-Each example (a single image) is represented as an object in one of three JSON
-array files (`train.json`, `validation.json`, or `test.json`). Each object has
-the following key/value pairs:
+Each example (a single image) is represented as an object in one of two JSON
+array files (`train_val.json` or `test.json`). Each object has the following
+key/value pairs:
 
     - image:                    The path to the image file.
     - tumor_mask_binary:        The path to the binary mask file (tumor
@@ -33,7 +30,6 @@ import pandas as pd
 import skimage
 import skimage.io as io
 import typer
-from sklearn.model_selection import train_test_split
 from typing_extensions import Annotated
 
 from .utils import save_version_info
@@ -80,7 +76,7 @@ def generate_scan_mask(image: np.ndarray) -> np.ndarray:
     # Fill small holes
     mask = skimage.morphology.remove_small_holes(mask, area_threshold=1000)
 
-    # Reflect the smaller half of the mask to remove annoations fill and make the scan
+    # Reflect the smaller half of the mask to remove annotations fill and make the scan
     # symmetric
     _, width = mask.shape
     left_half = mask[:, : width // 2]
@@ -234,18 +230,9 @@ def mmotu(
     with open(os.path.join(output_dir, "test.json"), "w") as file:
         json.dump(test_examples, file, indent=4)
 
-    # Divide the training set into training and validation splits
-    examples = process_examples(raw_data_dir, output_dir, "train")
-    train_examples, val_examples = train_test_split(
-        examples,
-        test_size=0.2,
-        random_state=42,
-        shuffle=True,
-        stratify=[x["label"] for x in examples],
-    )
-
-    for split, examples in zip(["train", "validation"], [train_examples, val_examples]):
-        with open(os.path.join(output_dir, f"{split}.json"), "w") as file:
-            json.dump(examples, file, indent=4)
+    # Save the training set
+    train_val_examples = process_examples(raw_data_dir, output_dir, "train")
+    with open(os.path.join(output_dir, "train_val.json"), "w") as file:
+        json.dump(train_val_examples, file, indent=4)
 
     save_version_info(output_dir, __version__)

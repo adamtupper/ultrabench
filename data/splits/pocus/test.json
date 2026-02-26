@@ -1,0 +1,4237 @@
+[
+    {
+        "source": "Reg_Avi_Image011.jpg",
+        "image": "images/Reg_Avi_Image011.png",
+        "scan_mask": "masks/scan/Reg_Avi_Image011.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_efsumb2.png",
+        "image": "images/Reg_efsumb2.png",
+        "scan_mask": "masks/scan/Reg_efsumb2.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Pneu_Avi_plerual-effusion-consolidated-lung.JPG",
+        "image": "images/Pneu_Avi_plerual-effusion-consolidated-lung.png",
+        "scan_mask": "masks/scan/Pneu_Avi_plerual-effusion-consolidated-lung.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_subpleural-consolidation.JPG",
+        "image": "images/Pneu_Avi_subpleural-consolidation.png",
+        "scan_mask": "masks/scan/Pneu_Avi_subpleural-consolidation.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Cov_blines_thoraric_paperfig2.png",
+        "image": "images/Cov_blines_thoraric_paperfig2.png",
+        "scan_mask": "masks/scan/Cov_blines_thoraric_paperfig2.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_subpleuralthickening_thoraric_paperfig6.png",
+        "image": "images/Cov_subpleuralthickening_thoraric_paperfig6.png",
+        "scan_mask": "masks/scan/Cov_subpleuralthickening_thoraric_paperfig6.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Reg-Atlas-lungcurtain.gif",
+        "image": "images/Reg-Atlas-lungcurtain_0.png",
+        "scan_mask": "masks/scan/Reg-Atlas-lungcurtain_0.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg-Atlas-lungcurtain.gif",
+        "image": "images/Reg-Atlas-lungcurtain_1.png",
+        "scan_mask": "masks/scan/Reg-Atlas-lungcurtain_1.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg-Atlas-lungcurtain.gif",
+        "image": "images/Reg-Atlas-lungcurtain_2.png",
+        "scan_mask": "masks/scan/Reg-Atlas-lungcurtain_2.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg-Atlas-lungcurtain.gif",
+        "image": "images/Reg-Atlas-lungcurtain_3.png",
+        "scan_mask": "masks/scan/Reg-Atlas-lungcurtain_3.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg-Atlas-lungcurtain.gif",
+        "image": "images/Reg-Atlas-lungcurtain_4.png",
+        "scan_mask": "masks/scan/Reg-Atlas-lungcurtain_4.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg-Atlas-lungcurtain.gif",
+        "image": "images/Reg-Atlas-lungcurtain_5.png",
+        "scan_mask": "masks/scan/Reg-Atlas-lungcurtain_5.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg-Atlas-lungcurtain.gif",
+        "image": "images/Reg-Atlas-lungcurtain_6.png",
+        "scan_mask": "masks/scan/Reg-Atlas-lungcurtain_6.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg-Atlas-lungcurtain.gif",
+        "image": "images/Reg-Atlas-lungcurtain_7.png",
+        "scan_mask": "masks/scan/Reg-Atlas-lungcurtain_7.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg-Atlas-lungcurtain.gif",
+        "image": "images/Reg-Atlas-lungcurtain_8.png",
+        "scan_mask": "masks/scan/Reg-Atlas-lungcurtain_8.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg-Atlas-lungcurtain.gif",
+        "image": "images/Reg-Atlas-lungcurtain_9.png",
+        "scan_mask": "masks/scan/Reg-Atlas-lungcurtain_9.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg-Atlas-lungcurtain.gif",
+        "image": "images/Reg-Atlas-lungcurtain_10.png",
+        "scan_mask": "masks/scan/Reg-Atlas-lungcurtain_10.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg-Atlas-lungcurtain.gif",
+        "image": "images/Reg-Atlas-lungcurtain_11.png",
+        "scan_mask": "masks/scan/Reg-Atlas-lungcurtain_11.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg-Atlas-lungcurtain.gif",
+        "image": "images/Reg-Atlas-lungcurtain_12.png",
+        "scan_mask": "masks/scan/Reg-Atlas-lungcurtain_12.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg-Atlas-lungcurtain.gif",
+        "image": "images/Reg-Atlas-lungcurtain_13.png",
+        "scan_mask": "masks/scan/Reg-Atlas-lungcurtain_13.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg-Atlas-lungcurtain.gif",
+        "image": "images/Reg-Atlas-lungcurtain_14.png",
+        "scan_mask": "masks/scan/Reg-Atlas-lungcurtain_14.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg-Atlas-lungcurtain.gif",
+        "image": "images/Reg-Atlas-lungcurtain_15.png",
+        "scan_mask": "masks/scan/Reg-Atlas-lungcurtain_15.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg-Atlas-lungcurtain.gif",
+        "image": "images/Reg-Atlas-lungcurtain_16.png",
+        "scan_mask": "masks/scan/Reg-Atlas-lungcurtain_16.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg-Atlas-lungcurtain.gif",
+        "image": "images/Reg-Atlas-lungcurtain_17.png",
+        "scan_mask": "masks/scan/Reg-Atlas-lungcurtain_17.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg-Atlas-lungcurtain.gif",
+        "image": "images/Reg-Atlas-lungcurtain_18.png",
+        "scan_mask": "masks/scan/Reg-Atlas-lungcurtain_18.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg-Atlas-lungcurtain.gif",
+        "image": "images/Reg-Atlas-lungcurtain_19.png",
+        "scan_mask": "masks/scan/Reg-Atlas-lungcurtain_19.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg-NormalLungs.mp4",
+        "image": "images/Reg-NormalLungs_0.png",
+        "scan_mask": "masks/scan/Reg-NormalLungs_0.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg-NormalLungs.mp4",
+        "image": "images/Reg-NormalLungs_1.png",
+        "scan_mask": "masks/scan/Reg-NormalLungs_1.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg-NormalLungs.mp4",
+        "image": "images/Reg-NormalLungs_2.png",
+        "scan_mask": "masks/scan/Reg-NormalLungs_2.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg-NormalLungs.mp4",
+        "image": "images/Reg-NormalLungs_3.png",
+        "scan_mask": "masks/scan/Reg-NormalLungs_3.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg-NormalLungs.mp4",
+        "image": "images/Reg-NormalLungs_4.png",
+        "scan_mask": "masks/scan/Reg-NormalLungs_4.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg-NormalLungs.mp4",
+        "image": "images/Reg-NormalLungs_5.png",
+        "scan_mask": "masks/scan/Reg-NormalLungs_5.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg-NormalLungs.mp4",
+        "image": "images/Reg-NormalLungs_6.png",
+        "scan_mask": "masks/scan/Reg-NormalLungs_6.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg-NormalLungs.mp4",
+        "image": "images/Reg-NormalLungs_7.png",
+        "scan_mask": "masks/scan/Reg-NormalLungs_7.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg-NormalLungs.mp4",
+        "image": "images/Reg-NormalLungs_8.png",
+        "scan_mask": "masks/scan/Reg-NormalLungs_8.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg-NormalLungs.mp4",
+        "image": "images/Reg-NormalLungs_9.png",
+        "scan_mask": "masks/scan/Reg-NormalLungs_9.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg-NormalLungs.mp4",
+        "image": "images/Reg-NormalLungs_10.png",
+        "scan_mask": "masks/scan/Reg-NormalLungs_10.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg-NormalLungs.mp4",
+        "image": "images/Reg-NormalLungs_11.png",
+        "scan_mask": "masks/scan/Reg-NormalLungs_11.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg-NormalLungs.mp4",
+        "image": "images/Reg-NormalLungs_12.png",
+        "scan_mask": "masks/scan/Reg-NormalLungs_12.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg-NormalLungs.mp4",
+        "image": "images/Reg-NormalLungs_13.png",
+        "scan_mask": "masks/scan/Reg-NormalLungs_13.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg-NormalLungs.mp4",
+        "image": "images/Reg-NormalLungs_14.png",
+        "scan_mask": "masks/scan/Reg-NormalLungs_14.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg-NormalLungs.mp4",
+        "image": "images/Reg-NormalLungs_15.png",
+        "scan_mask": "masks/scan/Reg-NormalLungs_15.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg-NormalLungs.mp4",
+        "image": "images/Reg-NormalLungs_16.png",
+        "scan_mask": "masks/scan/Reg-NormalLungs_16.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_Avi_Image002.mp4",
+        "image": "images/Reg_Avi_Image002_0.png",
+        "scan_mask": "masks/scan/Reg_Avi_Image002_0.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_Avi_Image002.mp4",
+        "image": "images/Reg_Avi_Image002_1.png",
+        "scan_mask": "masks/scan/Reg_Avi_Image002_1.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_Avi_Image002.mp4",
+        "image": "images/Reg_Avi_Image002_2.png",
+        "scan_mask": "masks/scan/Reg_Avi_Image002_2.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_Avi_Image002.mp4",
+        "image": "images/Reg_Avi_Image002_3.png",
+        "scan_mask": "masks/scan/Reg_Avi_Image002_3.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_Avi_Image002.mp4",
+        "image": "images/Reg_Avi_Image002_4.png",
+        "scan_mask": "masks/scan/Reg_Avi_Image002_4.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_Avi_Image002.mp4",
+        "image": "images/Reg_Avi_Image002_5.png",
+        "scan_mask": "masks/scan/Reg_Avi_Image002_5.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_Avi_Image002.mp4",
+        "image": "images/Reg_Avi_Image002_6.png",
+        "scan_mask": "masks/scan/Reg_Avi_Image002_6.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_Avi_Image002.mp4",
+        "image": "images/Reg_Avi_Image002_7.png",
+        "scan_mask": "masks/scan/Reg_Avi_Image002_7.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_Avi_Image002.mp4",
+        "image": "images/Reg_Avi_Image002_8.png",
+        "scan_mask": "masks/scan/Reg_Avi_Image002_8.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_Avi_Image002.mp4",
+        "image": "images/Reg_Avi_Image002_9.png",
+        "scan_mask": "masks/scan/Reg_Avi_Image002_9.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_Avi_Image002.mp4",
+        "image": "images/Reg_Avi_Image002_10.png",
+        "scan_mask": "masks/scan/Reg_Avi_Image002_10.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_Avi_Image002.mp4",
+        "image": "images/Reg_Avi_Image002_11.png",
+        "scan_mask": "masks/scan/Reg_Avi_Image002_11.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_Avi_Image002.mp4",
+        "image": "images/Reg_Avi_Image002_12.png",
+        "scan_mask": "masks/scan/Reg_Avi_Image002_12.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_Avi_Video_004.mp4",
+        "image": "images/Reg_Avi_Video_004_0.png",
+        "scan_mask": "masks/scan/Reg_Avi_Video_004_0.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_Avi_Video_004.mp4",
+        "image": "images/Reg_Avi_Video_004_1.png",
+        "scan_mask": "masks/scan/Reg_Avi_Video_004_1.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_Avi_Video_004.mp4",
+        "image": "images/Reg_Avi_Video_004_2.png",
+        "scan_mask": "masks/scan/Reg_Avi_Video_004_2.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_Avi_Video_004.mp4",
+        "image": "images/Reg_Avi_Video_004_3.png",
+        "scan_mask": "masks/scan/Reg_Avi_Video_004_3.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_Avi_Video_004.mp4",
+        "image": "images/Reg_Avi_Video_004_4.png",
+        "scan_mask": "masks/scan/Reg_Avi_Video_004_4.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_Avi_Video_004.mp4",
+        "image": "images/Reg_Avi_Video_004_5.png",
+        "scan_mask": "masks/scan/Reg_Avi_Video_004_5.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_Avi_Video_004.mp4",
+        "image": "images/Reg_Avi_Video_004_6.png",
+        "scan_mask": "masks/scan/Reg_Avi_Video_004_6.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_Avi_Video_004.mp4",
+        "image": "images/Reg_Avi_Video_004_7.png",
+        "scan_mask": "masks/scan/Reg_Avi_Video_004_7.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_Avi_Video_004.mp4",
+        "image": "images/Reg_Avi_Video_004_8.png",
+        "scan_mask": "masks/scan/Reg_Avi_Video_004_8.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_Avi_Video_004.mp4",
+        "image": "images/Reg_Avi_Video_004_9.png",
+        "scan_mask": "masks/scan/Reg_Avi_Video_004_9.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_Avi_Video_004.mp4",
+        "image": "images/Reg_Avi_Video_004_10.png",
+        "scan_mask": "masks/scan/Reg_Avi_Video_004_10.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_Avi_Video_004.mp4",
+        "image": "images/Reg_Avi_Video_004_11.png",
+        "scan_mask": "masks/scan/Reg_Avi_Video_004_11.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_Avi_Video_004.mp4",
+        "image": "images/Reg_Avi_Video_004_12.png",
+        "scan_mask": "masks/scan/Reg_Avi_Video_004_12.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_0409_set5_vid2.avi",
+        "image": "images/Reg_northumbria_0409_set5_vid2_0.png",
+        "scan_mask": "masks/scan/Reg_northumbria_0409_set5_vid2_0.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_0409_set5_vid2.avi",
+        "image": "images/Reg_northumbria_0409_set5_vid2_1.png",
+        "scan_mask": "masks/scan/Reg_northumbria_0409_set5_vid2_1.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_0409_set5_vid2.avi",
+        "image": "images/Reg_northumbria_0409_set5_vid2_2.png",
+        "scan_mask": "masks/scan/Reg_northumbria_0409_set5_vid2_2.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_0409_set5_vid2.avi",
+        "image": "images/Reg_northumbria_0409_set5_vid2_3.png",
+        "scan_mask": "masks/scan/Reg_northumbria_0409_set5_vid2_3.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_0409_set5_vid2.avi",
+        "image": "images/Reg_northumbria_0409_set5_vid2_4.png",
+        "scan_mask": "masks/scan/Reg_northumbria_0409_set5_vid2_4.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_0409_set5_vid2.avi",
+        "image": "images/Reg_northumbria_0409_set5_vid2_5.png",
+        "scan_mask": "masks/scan/Reg_northumbria_0409_set5_vid2_5.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_0409_set5_vid2.avi",
+        "image": "images/Reg_northumbria_0409_set5_vid2_6.png",
+        "scan_mask": "masks/scan/Reg_northumbria_0409_set5_vid2_6.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_0409_set5_vid2.avi",
+        "image": "images/Reg_northumbria_0409_set5_vid2_7.png",
+        "scan_mask": "masks/scan/Reg_northumbria_0409_set5_vid2_7.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_0409_set5_vid2.avi",
+        "image": "images/Reg_northumbria_0409_set5_vid2_8.png",
+        "scan_mask": "masks/scan/Reg_northumbria_0409_set5_vid2_8.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_0409_set5_vid2.avi",
+        "image": "images/Reg_northumbria_0409_set5_vid2_9.png",
+        "scan_mask": "masks/scan/Reg_northumbria_0409_set5_vid2_9.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_0409_set5_vid2.avi",
+        "image": "images/Reg_northumbria_0409_set5_vid2_10.png",
+        "scan_mask": "masks/scan/Reg_northumbria_0409_set5_vid2_10.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_1009_vid3.avi",
+        "image": "images/Reg_northumbria_1009_vid3_0.png",
+        "scan_mask": "masks/scan/Reg_northumbria_1009_vid3_0.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_1009_vid3.avi",
+        "image": "images/Reg_northumbria_1009_vid3_1.png",
+        "scan_mask": "masks/scan/Reg_northumbria_1009_vid3_1.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_1009_vid3.avi",
+        "image": "images/Reg_northumbria_1009_vid3_2.png",
+        "scan_mask": "masks/scan/Reg_northumbria_1009_vid3_2.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_1009_vid3.avi",
+        "image": "images/Reg_northumbria_1009_vid3_3.png",
+        "scan_mask": "masks/scan/Reg_northumbria_1009_vid3_3.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_1009_vid3.avi",
+        "image": "images/Reg_northumbria_1009_vid3_4.png",
+        "scan_mask": "masks/scan/Reg_northumbria_1009_vid3_4.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_1009_vid3.avi",
+        "image": "images/Reg_northumbria_1009_vid3_5.png",
+        "scan_mask": "masks/scan/Reg_northumbria_1009_vid3_5.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_1009_vid3.avi",
+        "image": "images/Reg_northumbria_1009_vid3_6.png",
+        "scan_mask": "masks/scan/Reg_northumbria_1009_vid3_6.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_1009_vid3.avi",
+        "image": "images/Reg_northumbria_1009_vid3_7.png",
+        "scan_mask": "masks/scan/Reg_northumbria_1009_vid3_7.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_1009_vid3.avi",
+        "image": "images/Reg_northumbria_1009_vid3_8.png",
+        "scan_mask": "masks/scan/Reg_northumbria_1009_vid3_8.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_1009_vid3.avi",
+        "image": "images/Reg_northumbria_1009_vid3_9.png",
+        "scan_mask": "masks/scan/Reg_northumbria_1009_vid3_9.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_1009_vid3.avi",
+        "image": "images/Reg_northumbria_1009_vid3_10.png",
+        "scan_mask": "masks/scan/Reg_northumbria_1009_vid3_10.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_1009_vid3.avi",
+        "image": "images/Reg_northumbria_1009_vid3_11.png",
+        "scan_mask": "masks/scan/Reg_northumbria_1009_vid3_11.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_1009_vid3.avi",
+        "image": "images/Reg_northumbria_1009_vid3_12.png",
+        "scan_mask": "masks/scan/Reg_northumbria_1009_vid3_12.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_1009_vid7.avi",
+        "image": "images/Reg_northumbria_1009_vid7_0.png",
+        "scan_mask": "masks/scan/Reg_northumbria_1009_vid7_0.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_1009_vid7.avi",
+        "image": "images/Reg_northumbria_1009_vid7_1.png",
+        "scan_mask": "masks/scan/Reg_northumbria_1009_vid7_1.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_1009_vid7.avi",
+        "image": "images/Reg_northumbria_1009_vid7_2.png",
+        "scan_mask": "masks/scan/Reg_northumbria_1009_vid7_2.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_1009_vid7.avi",
+        "image": "images/Reg_northumbria_1009_vid7_3.png",
+        "scan_mask": "masks/scan/Reg_northumbria_1009_vid7_3.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_1009_vid7.avi",
+        "image": "images/Reg_northumbria_1009_vid7_4.png",
+        "scan_mask": "masks/scan/Reg_northumbria_1009_vid7_4.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_1009_vid7.avi",
+        "image": "images/Reg_northumbria_1009_vid7_5.png",
+        "scan_mask": "masks/scan/Reg_northumbria_1009_vid7_5.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_1009_vid7.avi",
+        "image": "images/Reg_northumbria_1009_vid7_6.png",
+        "scan_mask": "masks/scan/Reg_northumbria_1009_vid7_6.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_1009_vid7.avi",
+        "image": "images/Reg_northumbria_1009_vid7_7.png",
+        "scan_mask": "masks/scan/Reg_northumbria_1009_vid7_7.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_1009_vid7.avi",
+        "image": "images/Reg_northumbria_1009_vid7_8.png",
+        "scan_mask": "masks/scan/Reg_northumbria_1009_vid7_8.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_1009_vid7.avi",
+        "image": "images/Reg_northumbria_1009_vid7_9.png",
+        "scan_mask": "masks/scan/Reg_northumbria_1009_vid7_9.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_1009_vid7.avi",
+        "image": "images/Reg_northumbria_1009_vid7_10.png",
+        "scan_mask": "masks/scan/Reg_northumbria_1009_vid7_10.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_1009_vid7.avi",
+        "image": "images/Reg_northumbria_1009_vid7_11.png",
+        "scan_mask": "masks/scan/Reg_northumbria_1009_vid7_11.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_northumbria_1009_vid7.avi",
+        "image": "images/Reg_northumbria_1009_vid7_12.png",
+        "scan_mask": "masks/scan/Reg_northumbria_1009_vid7_12.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133138.mpeg",
+        "image": "images/Reg_pat1Image_133138_0.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133138_0.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133138.mpeg",
+        "image": "images/Reg_pat1Image_133138_1.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133138_1.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133138.mpeg",
+        "image": "images/Reg_pat1Image_133138_2.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133138_2.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133138.mpeg",
+        "image": "images/Reg_pat1Image_133138_3.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133138_3.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133138.mpeg",
+        "image": "images/Reg_pat1Image_133138_4.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133138_4.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133138.mpeg",
+        "image": "images/Reg_pat1Image_133138_5.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133138_5.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133138.mpeg",
+        "image": "images/Reg_pat1Image_133138_6.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133138_6.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133138.mpeg",
+        "image": "images/Reg_pat1Image_133138_7.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133138_7.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133138.mpeg",
+        "image": "images/Reg_pat1Image_133138_8.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133138_8.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133138.mpeg",
+        "image": "images/Reg_pat1Image_133138_9.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133138_9.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133138.mpeg",
+        "image": "images/Reg_pat1Image_133138_10.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133138_10.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133138.mpeg",
+        "image": "images/Reg_pat1Image_133138_11.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133138_11.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133138.mpeg",
+        "image": "images/Reg_pat1Image_133138_12.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133138_12.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133138.mpeg",
+        "image": "images/Reg_pat1Image_133138_13.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133138_13.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133138.mpeg",
+        "image": "images/Reg_pat1Image_133138_14.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133138_14.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133138.mpeg",
+        "image": "images/Reg_pat1Image_133138_15.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133138_15.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133138.mpeg",
+        "image": "images/Reg_pat1Image_133138_16.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133138_16.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133138.mpeg",
+        "image": "images/Reg_pat1Image_133138_17.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133138_17.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133138.mpeg",
+        "image": "images/Reg_pat1Image_133138_18.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133138_18.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133138.mpeg",
+        "image": "images/Reg_pat1Image_133138_19.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133138_19.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133138.mpeg",
+        "image": "images/Reg_pat1Image_133138_20.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133138_20.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133138.mpeg",
+        "image": "images/Reg_pat1Image_133138_21.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133138_21.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133138.mpeg",
+        "image": "images/Reg_pat1Image_133138_22.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133138_22.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133138.mpeg",
+        "image": "images/Reg_pat1Image_133138_23.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133138_23.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133138.mpeg",
+        "image": "images/Reg_pat1Image_133138_24.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133138_24.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133138.mpeg",
+        "image": "images/Reg_pat1Image_133138_25.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133138_25.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133138.mpeg",
+        "image": "images/Reg_pat1Image_133138_26.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133138_26.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133138.mpeg",
+        "image": "images/Reg_pat1Image_133138_27.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133138_27.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133138.mpeg",
+        "image": "images/Reg_pat1Image_133138_28.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133138_28.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133138.mpeg",
+        "image": "images/Reg_pat1Image_133138_29.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133138_29.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133232.mpeg",
+        "image": "images/Reg_pat1Image_133232_0.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133232_0.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133232.mpeg",
+        "image": "images/Reg_pat1Image_133232_1.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133232_1.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133232.mpeg",
+        "image": "images/Reg_pat1Image_133232_2.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133232_2.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133232.mpeg",
+        "image": "images/Reg_pat1Image_133232_3.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133232_3.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133232.mpeg",
+        "image": "images/Reg_pat1Image_133232_4.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133232_4.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133232.mpeg",
+        "image": "images/Reg_pat1Image_133232_5.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133232_5.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133232.mpeg",
+        "image": "images/Reg_pat1Image_133232_6.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133232_6.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133232.mpeg",
+        "image": "images/Reg_pat1Image_133232_7.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133232_7.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133232.mpeg",
+        "image": "images/Reg_pat1Image_133232_8.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133232_8.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133232.mpeg",
+        "image": "images/Reg_pat1Image_133232_9.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133232_9.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133232.mpeg",
+        "image": "images/Reg_pat1Image_133232_10.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133232_10.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133232.mpeg",
+        "image": "images/Reg_pat1Image_133232_11.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133232_11.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133232.mpeg",
+        "image": "images/Reg_pat1Image_133232_12.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133232_12.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133232.mpeg",
+        "image": "images/Reg_pat1Image_133232_13.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133232_13.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133232.mpeg",
+        "image": "images/Reg_pat1Image_133232_14.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133232_14.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133232.mpeg",
+        "image": "images/Reg_pat1Image_133232_15.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133232_15.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133232.mpeg",
+        "image": "images/Reg_pat1Image_133232_16.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133232_16.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133232.mpeg",
+        "image": "images/Reg_pat1Image_133232_17.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133232_17.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133232.mpeg",
+        "image": "images/Reg_pat1Image_133232_18.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133232_18.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133232.mpeg",
+        "image": "images/Reg_pat1Image_133232_19.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133232_19.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133232.mpeg",
+        "image": "images/Reg_pat1Image_133232_20.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133232_20.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133232.mpeg",
+        "image": "images/Reg_pat1Image_133232_21.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133232_21.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133232.mpeg",
+        "image": "images/Reg_pat1Image_133232_22.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133232_22.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133232.mpeg",
+        "image": "images/Reg_pat1Image_133232_23.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133232_23.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat1Image_133232.mpeg",
+        "image": "images/Reg_pat1Image_133232_24.png",
+        "scan_mask": "masks/scan/Reg_pat1Image_133232_24.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat2Image_133952.mpeg",
+        "image": "images/Reg_pat2Image_133952_0.png",
+        "scan_mask": "masks/scan/Reg_pat2Image_133952_0.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat2Image_133952.mpeg",
+        "image": "images/Reg_pat2Image_133952_1.png",
+        "scan_mask": "masks/scan/Reg_pat2Image_133952_1.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat2Image_133952.mpeg",
+        "image": "images/Reg_pat2Image_133952_2.png",
+        "scan_mask": "masks/scan/Reg_pat2Image_133952_2.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat2Image_133952.mpeg",
+        "image": "images/Reg_pat2Image_133952_3.png",
+        "scan_mask": "masks/scan/Reg_pat2Image_133952_3.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat2Image_133952.mpeg",
+        "image": "images/Reg_pat2Image_133952_4.png",
+        "scan_mask": "masks/scan/Reg_pat2Image_133952_4.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat2Image_133952.mpeg",
+        "image": "images/Reg_pat2Image_133952_5.png",
+        "scan_mask": "masks/scan/Reg_pat2Image_133952_5.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat2Image_133952.mpeg",
+        "image": "images/Reg_pat2Image_133952_6.png",
+        "scan_mask": "masks/scan/Reg_pat2Image_133952_6.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat2Image_133952.mpeg",
+        "image": "images/Reg_pat2Image_133952_7.png",
+        "scan_mask": "masks/scan/Reg_pat2Image_133952_7.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat2Image_133952.mpeg",
+        "image": "images/Reg_pat2Image_133952_8.png",
+        "scan_mask": "masks/scan/Reg_pat2Image_133952_8.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat2Image_133952.mpeg",
+        "image": "images/Reg_pat2Image_133952_9.png",
+        "scan_mask": "masks/scan/Reg_pat2Image_133952_9.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat2Image_133952.mpeg",
+        "image": "images/Reg_pat2Image_133952_10.png",
+        "scan_mask": "masks/scan/Reg_pat2Image_133952_10.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat2Image_133952.mpeg",
+        "image": "images/Reg_pat2Image_133952_11.png",
+        "scan_mask": "masks/scan/Reg_pat2Image_133952_11.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat2Image_133952.mpeg",
+        "image": "images/Reg_pat2Image_133952_12.png",
+        "scan_mask": "masks/scan/Reg_pat2Image_133952_12.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat2Image_133952.mpeg",
+        "image": "images/Reg_pat2Image_133952_13.png",
+        "scan_mask": "masks/scan/Reg_pat2Image_133952_13.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat2Image_133952.mpeg",
+        "image": "images/Reg_pat2Image_133952_14.png",
+        "scan_mask": "masks/scan/Reg_pat2Image_133952_14.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat2Image_133952.mpeg",
+        "image": "images/Reg_pat2Image_133952_15.png",
+        "scan_mask": "masks/scan/Reg_pat2Image_133952_15.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat2Image_133952.mpeg",
+        "image": "images/Reg_pat2Image_133952_16.png",
+        "scan_mask": "masks/scan/Reg_pat2Image_133952_16.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat2Image_133952.mpeg",
+        "image": "images/Reg_pat2Image_133952_17.png",
+        "scan_mask": "masks/scan/Reg_pat2Image_133952_17.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat2Image_133952.mpeg",
+        "image": "images/Reg_pat2Image_133952_18.png",
+        "scan_mask": "masks/scan/Reg_pat2Image_133952_18.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat2Image_133952.mpeg",
+        "image": "images/Reg_pat2Image_133952_19.png",
+        "scan_mask": "masks/scan/Reg_pat2Image_133952_19.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat2Image_133952.mpeg",
+        "image": "images/Reg_pat2Image_133952_20.png",
+        "scan_mask": "masks/scan/Reg_pat2Image_133952_20.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat2Image_133952.mpeg",
+        "image": "images/Reg_pat2Image_133952_21.png",
+        "scan_mask": "masks/scan/Reg_pat2Image_133952_21.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat2Image_133952.mpeg",
+        "image": "images/Reg_pat2Image_133952_22.png",
+        "scan_mask": "masks/scan/Reg_pat2Image_133952_22.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat2Image_133952.mpeg",
+        "image": "images/Reg_pat2Image_133952_23.png",
+        "scan_mask": "masks/scan/Reg_pat2Image_133952_23.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat2Image_133952.mpeg",
+        "image": "images/Reg_pat2Image_133952_24.png",
+        "scan_mask": "masks/scan/Reg_pat2Image_133952_24.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat2Image_133952.mpeg",
+        "image": "images/Reg_pat2Image_133952_25.png",
+        "scan_mask": "masks/scan/Reg_pat2Image_133952_25.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat2Image_133952.mpeg",
+        "image": "images/Reg_pat2Image_133952_26.png",
+        "scan_mask": "masks/scan/Reg_pat2Image_133952_26.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat2Image_133952.mpeg",
+        "image": "images/Reg_pat2Image_133952_27.png",
+        "scan_mask": "masks/scan/Reg_pat2Image_133952_27.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat2Image_133952.mpeg",
+        "image": "images/Reg_pat2Image_133952_28.png",
+        "scan_mask": "masks/scan/Reg_pat2Image_133952_28.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat2Image_133952.mpeg",
+        "image": "images/Reg_pat2Image_133952_29.png",
+        "scan_mask": "masks/scan/Reg_pat2Image_133952_29.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134711.mpeg",
+        "image": "images/Reg_pat3Image_134711_0.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134711_0.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134711.mpeg",
+        "image": "images/Reg_pat3Image_134711_1.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134711_1.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134711.mpeg",
+        "image": "images/Reg_pat3Image_134711_2.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134711_2.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134711.mpeg",
+        "image": "images/Reg_pat3Image_134711_3.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134711_3.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134711.mpeg",
+        "image": "images/Reg_pat3Image_134711_4.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134711_4.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134711.mpeg",
+        "image": "images/Reg_pat3Image_134711_5.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134711_5.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134711.mpeg",
+        "image": "images/Reg_pat3Image_134711_6.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134711_6.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134711.mpeg",
+        "image": "images/Reg_pat3Image_134711_7.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134711_7.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134711.mpeg",
+        "image": "images/Reg_pat3Image_134711_8.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134711_8.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134711.mpeg",
+        "image": "images/Reg_pat3Image_134711_9.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134711_9.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134711.mpeg",
+        "image": "images/Reg_pat3Image_134711_10.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134711_10.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134711.mpeg",
+        "image": "images/Reg_pat3Image_134711_11.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134711_11.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134711.mpeg",
+        "image": "images/Reg_pat3Image_134711_12.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134711_12.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134711.mpeg",
+        "image": "images/Reg_pat3Image_134711_13.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134711_13.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134711.mpeg",
+        "image": "images/Reg_pat3Image_134711_14.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134711_14.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134711.mpeg",
+        "image": "images/Reg_pat3Image_134711_15.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134711_15.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134711.mpeg",
+        "image": "images/Reg_pat3Image_134711_16.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134711_16.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134711.mpeg",
+        "image": "images/Reg_pat3Image_134711_17.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134711_17.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134711.mpeg",
+        "image": "images/Reg_pat3Image_134711_18.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134711_18.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134711.mpeg",
+        "image": "images/Reg_pat3Image_134711_19.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134711_19.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134711.mpeg",
+        "image": "images/Reg_pat3Image_134711_20.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134711_20.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134711.mpeg",
+        "image": "images/Reg_pat3Image_134711_21.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134711_21.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134711.mpeg",
+        "image": "images/Reg_pat3Image_134711_22.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134711_22.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134711.mpeg",
+        "image": "images/Reg_pat3Image_134711_23.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134711_23.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134711.mpeg",
+        "image": "images/Reg_pat3Image_134711_24.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134711_24.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134711.mpeg",
+        "image": "images/Reg_pat3Image_134711_25.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134711_25.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134711.mpeg",
+        "image": "images/Reg_pat3Image_134711_26.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134711_26.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134904.mpeg",
+        "image": "images/Reg_pat3Image_134904_0.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134904_0.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134904.mpeg",
+        "image": "images/Reg_pat3Image_134904_1.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134904_1.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134904.mpeg",
+        "image": "images/Reg_pat3Image_134904_2.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134904_2.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134904.mpeg",
+        "image": "images/Reg_pat3Image_134904_3.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134904_3.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134904.mpeg",
+        "image": "images/Reg_pat3Image_134904_4.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134904_4.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134904.mpeg",
+        "image": "images/Reg_pat3Image_134904_5.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134904_5.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134904.mpeg",
+        "image": "images/Reg_pat3Image_134904_6.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134904_6.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134904.mpeg",
+        "image": "images/Reg_pat3Image_134904_7.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134904_7.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134904.mpeg",
+        "image": "images/Reg_pat3Image_134904_8.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134904_8.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134904.mpeg",
+        "image": "images/Reg_pat3Image_134904_9.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134904_9.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134904.mpeg",
+        "image": "images/Reg_pat3Image_134904_10.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134904_10.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134904.mpeg",
+        "image": "images/Reg_pat3Image_134904_11.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134904_11.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134904.mpeg",
+        "image": "images/Reg_pat3Image_134904_12.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134904_12.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134904.mpeg",
+        "image": "images/Reg_pat3Image_134904_13.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134904_13.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134904.mpeg",
+        "image": "images/Reg_pat3Image_134904_14.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134904_14.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134904.mpeg",
+        "image": "images/Reg_pat3Image_134904_15.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134904_15.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134904.mpeg",
+        "image": "images/Reg_pat3Image_134904_16.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134904_16.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134904.mpeg",
+        "image": "images/Reg_pat3Image_134904_17.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134904_17.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134904.mpeg",
+        "image": "images/Reg_pat3Image_134904_18.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134904_18.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134904.mpeg",
+        "image": "images/Reg_pat3Image_134904_19.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134904_19.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134904.mpeg",
+        "image": "images/Reg_pat3Image_134904_20.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134904_20.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134904.mpeg",
+        "image": "images/Reg_pat3Image_134904_21.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134904_21.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134904.mpeg",
+        "image": "images/Reg_pat3Image_134904_22.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134904_22.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134904.mpeg",
+        "image": "images/Reg_pat3Image_134904_23.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134904_23.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134904.mpeg",
+        "image": "images/Reg_pat3Image_134904_24.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134904_24.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134904.mpeg",
+        "image": "images/Reg_pat3Image_134904_25.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134904_25.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134904.mpeg",
+        "image": "images/Reg_pat3Image_134904_26.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134904_26.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134904.mpeg",
+        "image": "images/Reg_pat3Image_134904_27.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134904_27.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134904.mpeg",
+        "image": "images/Reg_pat3Image_134904_28.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134904_28.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat3Image_134904.mpeg",
+        "image": "images/Reg_pat3Image_134904_29.png",
+        "scan_mask": "masks/scan/Reg_pat3Image_134904_29.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat4Image_140024.mpeg",
+        "image": "images/Reg_pat4Image_140024_0.png",
+        "scan_mask": "masks/scan/Reg_pat4Image_140024_0.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat4Image_140024.mpeg",
+        "image": "images/Reg_pat4Image_140024_1.png",
+        "scan_mask": "masks/scan/Reg_pat4Image_140024_1.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat4Image_140024.mpeg",
+        "image": "images/Reg_pat4Image_140024_2.png",
+        "scan_mask": "masks/scan/Reg_pat4Image_140024_2.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat4Image_140024.mpeg",
+        "image": "images/Reg_pat4Image_140024_3.png",
+        "scan_mask": "masks/scan/Reg_pat4Image_140024_3.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat4Image_140024.mpeg",
+        "image": "images/Reg_pat4Image_140024_4.png",
+        "scan_mask": "masks/scan/Reg_pat4Image_140024_4.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat4Image_140024.mpeg",
+        "image": "images/Reg_pat4Image_140024_5.png",
+        "scan_mask": "masks/scan/Reg_pat4Image_140024_5.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat4Image_140024.mpeg",
+        "image": "images/Reg_pat4Image_140024_6.png",
+        "scan_mask": "masks/scan/Reg_pat4Image_140024_6.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat4Image_140024.mpeg",
+        "image": "images/Reg_pat4Image_140024_7.png",
+        "scan_mask": "masks/scan/Reg_pat4Image_140024_7.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat4Image_140024.mpeg",
+        "image": "images/Reg_pat4Image_140024_8.png",
+        "scan_mask": "masks/scan/Reg_pat4Image_140024_8.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat4Image_140024.mpeg",
+        "image": "images/Reg_pat4Image_140024_9.png",
+        "scan_mask": "masks/scan/Reg_pat4Image_140024_9.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat4Image_140024.mpeg",
+        "image": "images/Reg_pat4Image_140024_10.png",
+        "scan_mask": "masks/scan/Reg_pat4Image_140024_10.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat4Image_140024.mpeg",
+        "image": "images/Reg_pat4Image_140024_11.png",
+        "scan_mask": "masks/scan/Reg_pat4Image_140024_11.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat4Image_140024.mpeg",
+        "image": "images/Reg_pat4Image_140024_12.png",
+        "scan_mask": "masks/scan/Reg_pat4Image_140024_12.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat4Image_140024.mpeg",
+        "image": "images/Reg_pat4Image_140024_13.png",
+        "scan_mask": "masks/scan/Reg_pat4Image_140024_13.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat4Image_140024.mpeg",
+        "image": "images/Reg_pat4Image_140024_14.png",
+        "scan_mask": "masks/scan/Reg_pat4Image_140024_14.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat4Image_140024.mpeg",
+        "image": "images/Reg_pat4Image_140024_15.png",
+        "scan_mask": "masks/scan/Reg_pat4Image_140024_15.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat4Image_140024.mpeg",
+        "image": "images/Reg_pat4Image_140024_16.png",
+        "scan_mask": "masks/scan/Reg_pat4Image_140024_16.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat4Image_140024.mpeg",
+        "image": "images/Reg_pat4Image_140024_17.png",
+        "scan_mask": "masks/scan/Reg_pat4Image_140024_17.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat4Image_140024.mpeg",
+        "image": "images/Reg_pat4Image_140024_18.png",
+        "scan_mask": "masks/scan/Reg_pat4Image_140024_18.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat4Image_140024.mpeg",
+        "image": "images/Reg_pat4Image_140024_19.png",
+        "scan_mask": "masks/scan/Reg_pat4Image_140024_19.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat4Image_140024.mpeg",
+        "image": "images/Reg_pat4Image_140024_20.png",
+        "scan_mask": "masks/scan/Reg_pat4Image_140024_20.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat4Image_140024.mpeg",
+        "image": "images/Reg_pat4Image_140024_21.png",
+        "scan_mask": "masks/scan/Reg_pat4Image_140024_21.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat4Image_140024.mpeg",
+        "image": "images/Reg_pat4Image_140024_22.png",
+        "scan_mask": "masks/scan/Reg_pat4Image_140024_22.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat4Image_140024.mpeg",
+        "image": "images/Reg_pat4Image_140024_23.png",
+        "scan_mask": "masks/scan/Reg_pat4Image_140024_23.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat4Image_140024.mpeg",
+        "image": "images/Reg_pat4Image_140024_24.png",
+        "scan_mask": "masks/scan/Reg_pat4Image_140024_24.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat4Image_140024.mpeg",
+        "image": "images/Reg_pat4Image_140024_25.png",
+        "scan_mask": "masks/scan/Reg_pat4Image_140024_25.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat4Image_140024.mpeg",
+        "image": "images/Reg_pat4Image_140024_26.png",
+        "scan_mask": "masks/scan/Reg_pat4Image_140024_26.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat4Image_140024.mpeg",
+        "image": "images/Reg_pat4Image_140024_27.png",
+        "scan_mask": "masks/scan/Reg_pat4Image_140024_27.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat4Image_140024.mpeg",
+        "image": "images/Reg_pat4Image_140024_28.png",
+        "scan_mask": "masks/scan/Reg_pat4Image_140024_28.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_pat4Image_140024.mpeg",
+        "image": "images/Reg_pat4Image_140024_29.png",
+        "scan_mask": "masks/scan/Reg_pat4Image_140024_29.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_recommendations_alines_mov1.mov",
+        "image": "images/Reg_recommendations_alines_mov1_0.png",
+        "scan_mask": "masks/scan/Reg_recommendations_alines_mov1_0.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_recommendations_alines_mov1.mov",
+        "image": "images/Reg_recommendations_alines_mov1_1.png",
+        "scan_mask": "masks/scan/Reg_recommendations_alines_mov1_1.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_recommendations_alines_mov1.mov",
+        "image": "images/Reg_recommendations_alines_mov1_2.png",
+        "scan_mask": "masks/scan/Reg_recommendations_alines_mov1_2.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_recommendations_alines_mov1.mov",
+        "image": "images/Reg_recommendations_alines_mov1_3.png",
+        "scan_mask": "masks/scan/Reg_recommendations_alines_mov1_3.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_recommendations_alines_mov1.mov",
+        "image": "images/Reg_recommendations_alines_mov1_4.png",
+        "scan_mask": "masks/scan/Reg_recommendations_alines_mov1_4.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_recommendations_alines_mov1.mov",
+        "image": "images/Reg_recommendations_alines_mov1_5.png",
+        "scan_mask": "masks/scan/Reg_recommendations_alines_mov1_5.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_recommendations_alines_mov1.mov",
+        "image": "images/Reg_recommendations_alines_mov1_6.png",
+        "scan_mask": "masks/scan/Reg_recommendations_alines_mov1_6.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_recommendations_alines_mov1.mov",
+        "image": "images/Reg_recommendations_alines_mov1_7.png",
+        "scan_mask": "masks/scan/Reg_recommendations_alines_mov1_7.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_recommendations_alines_mov1.mov",
+        "image": "images/Reg_recommendations_alines_mov1_8.png",
+        "scan_mask": "masks/scan/Reg_recommendations_alines_mov1_8.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_recommendations_alines_mov1.mov",
+        "image": "images/Reg_recommendations_alines_mov1_9.png",
+        "scan_mask": "masks/scan/Reg_recommendations_alines_mov1_9.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_recommendations_alines_mov1.mov",
+        "image": "images/Reg_recommendations_alines_mov1_10.png",
+        "scan_mask": "masks/scan/Reg_recommendations_alines_mov1_10.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_recommendations_alines_mov1.mov",
+        "image": "images/Reg_recommendations_alines_mov1_11.png",
+        "scan_mask": "masks/scan/Reg_recommendations_alines_mov1_11.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_recommendations_alines_mov1.mov",
+        "image": "images/Reg_recommendations_alines_mov1_12.png",
+        "scan_mask": "masks/scan/Reg_recommendations_alines_mov1_12.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_recommendations_alines_mov1.mov",
+        "image": "images/Reg_recommendations_alines_mov1_13.png",
+        "scan_mask": "masks/scan/Reg_recommendations_alines_mov1_13.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_recommendations_alines_mov1.mov",
+        "image": "images/Reg_recommendations_alines_mov1_14.png",
+        "scan_mask": "masks/scan/Reg_recommendations_alines_mov1_14.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_recommendations_alines_mov1.mov",
+        "image": "images/Reg_recommendations_alines_mov1_15.png",
+        "scan_mask": "masks/scan/Reg_recommendations_alines_mov1_15.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_recommendations_alines_mov1.mov",
+        "image": "images/Reg_recommendations_alines_mov1_16.png",
+        "scan_mask": "masks/scan/Reg_recommendations_alines_mov1_16.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_recommendations_alines_mov1.mov",
+        "image": "images/Reg_recommendations_alines_mov1_17.png",
+        "scan_mask": "masks/scan/Reg_recommendations_alines_mov1_17.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_recommendations_alines_mov1.mov",
+        "image": "images/Reg_recommendations_alines_mov1_18.png",
+        "scan_mask": "masks/scan/Reg_recommendations_alines_mov1_18.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_recommendations_alines_mov1.mov",
+        "image": "images/Reg_recommendations_alines_mov1_19.png",
+        "scan_mask": "masks/scan/Reg_recommendations_alines_mov1_19.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_recommendations_alines_mov1.mov",
+        "image": "images/Reg_recommendations_alines_mov1_20.png",
+        "scan_mask": "masks/scan/Reg_recommendations_alines_mov1_20.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_recommendations_alines_mov1.mov",
+        "image": "images/Reg_recommendations_alines_mov1_21.png",
+        "scan_mask": "masks/scan/Reg_recommendations_alines_mov1_21.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_recommendations_alines_mov1.mov",
+        "image": "images/Reg_recommendations_alines_mov1_22.png",
+        "scan_mask": "masks/scan/Reg_recommendations_alines_mov1_22.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_recommendations_alines_mov1.mov",
+        "image": "images/Reg_recommendations_alines_mov1_23.png",
+        "scan_mask": "masks/scan/Reg_recommendations_alines_mov1_23.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_recommendations_alines_mov1.mov",
+        "image": "images/Reg_recommendations_alines_mov1_24.png",
+        "scan_mask": "masks/scan/Reg_recommendations_alines_mov1_24.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_recommendations_alines_mov1.mov",
+        "image": "images/Reg_recommendations_alines_mov1_25.png",
+        "scan_mask": "masks/scan/Reg_recommendations_alines_mov1_25.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_recommendations_alines_mov1.mov",
+        "image": "images/Reg_recommendations_alines_mov1_26.png",
+        "scan_mask": "masks/scan/Reg_recommendations_alines_mov1_26.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_recommendations_alines_mov1.mov",
+        "image": "images/Reg_recommendations_alines_mov1_27.png",
+        "scan_mask": "masks/scan/Reg_recommendations_alines_mov1_27.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_recommendations_alines_mov1.mov",
+        "image": "images/Reg_recommendations_alines_mov1_28.png",
+        "scan_mask": "masks/scan/Reg_recommendations_alines_mov1_28.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Reg_recommendations_alines_mov1.mov",
+        "image": "images/Reg_recommendations_alines_mov1_29.png",
+        "scan_mask": "masks/scan/Reg_recommendations_alines_mov1_29.png",
+        "pathology": "regular",
+        "label": 0
+    },
+    {
+        "source": "Pneu-Atlas-pneumonia2.gif",
+        "image": "images/Pneu-Atlas-pneumonia2_0.png",
+        "scan_mask": "masks/scan/Pneu-Atlas-pneumonia2_0.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu-Atlas-pneumonia2.gif",
+        "image": "images/Pneu-Atlas-pneumonia2_1.png",
+        "scan_mask": "masks/scan/Pneu-Atlas-pneumonia2_1.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu-Atlas-pneumonia2.gif",
+        "image": "images/Pneu-Atlas-pneumonia2_2.png",
+        "scan_mask": "masks/scan/Pneu-Atlas-pneumonia2_2.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu-Atlas-pneumonia2.gif",
+        "image": "images/Pneu-Atlas-pneumonia2_3.png",
+        "scan_mask": "masks/scan/Pneu-Atlas-pneumonia2_3.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu-Atlas-pneumonia2.gif",
+        "image": "images/Pneu-Atlas-pneumonia2_4.png",
+        "scan_mask": "masks/scan/Pneu-Atlas-pneumonia2_4.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu-Atlas-pneumonia2.gif",
+        "image": "images/Pneu-Atlas-pneumonia2_5.png",
+        "scan_mask": "masks/scan/Pneu-Atlas-pneumonia2_5.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu-Atlas-pneumonia2.gif",
+        "image": "images/Pneu-Atlas-pneumonia2_6.png",
+        "scan_mask": "masks/scan/Pneu-Atlas-pneumonia2_6.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu-Atlas-pneumonia2.gif",
+        "image": "images/Pneu-Atlas-pneumonia2_7.png",
+        "scan_mask": "masks/scan/Pneu-Atlas-pneumonia2_7.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu-Atlas-pneumonia2.gif",
+        "image": "images/Pneu-Atlas-pneumonia2_8.png",
+        "scan_mask": "masks/scan/Pneu-Atlas-pneumonia2_8.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu-Atlas-pneumonia2.gif",
+        "image": "images/Pneu-Atlas-pneumonia2_9.png",
+        "scan_mask": "masks/scan/Pneu-Atlas-pneumonia2_9.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu-Atlas-pneumonia2.gif",
+        "image": "images/Pneu-Atlas-pneumonia2_10.png",
+        "scan_mask": "masks/scan/Pneu-Atlas-pneumonia2_10.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu-Atlas-pneumonia2.gif",
+        "image": "images/Pneu-Atlas-pneumonia2_11.png",
+        "scan_mask": "masks/scan/Pneu-Atlas-pneumonia2_11.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu-Atlas-pneumonia2.gif",
+        "image": "images/Pneu-Atlas-pneumonia2_12.png",
+        "scan_mask": "masks/scan/Pneu-Atlas-pneumonia2_12.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_001.mp4",
+        "image": "images/Pneu_Avi_Video_001_0.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_001_0.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_001.mp4",
+        "image": "images/Pneu_Avi_Video_001_1.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_001_1.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_001.mp4",
+        "image": "images/Pneu_Avi_Video_001_2.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_001_2.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_001.mp4",
+        "image": "images/Pneu_Avi_Video_001_3.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_001_3.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_001.mp4",
+        "image": "images/Pneu_Avi_Video_001_4.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_001_4.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_001.mp4",
+        "image": "images/Pneu_Avi_Video_001_5.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_001_5.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_001.mp4",
+        "image": "images/Pneu_Avi_Video_001_6.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_001_6.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_001.mp4",
+        "image": "images/Pneu_Avi_Video_001_7.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_001_7.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_001.mp4",
+        "image": "images/Pneu_Avi_Video_001_8.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_001_8.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_001.mp4",
+        "image": "images/Pneu_Avi_Video_001_9.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_001_9.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_001.mp4",
+        "image": "images/Pneu_Avi_Video_001_10.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_001_10.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_001.mp4",
+        "image": "images/Pneu_Avi_Video_001_11.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_001_11.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_001.mp4",
+        "image": "images/Pneu_Avi_Video_001_12.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_001_12.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_002.mp4",
+        "image": "images/Pneu_Avi_Video_002_0.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_002_0.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_002.mp4",
+        "image": "images/Pneu_Avi_Video_002_1.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_002_1.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_002.mp4",
+        "image": "images/Pneu_Avi_Video_002_2.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_002_2.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_002.mp4",
+        "image": "images/Pneu_Avi_Video_002_3.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_002_3.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_002.mp4",
+        "image": "images/Pneu_Avi_Video_002_4.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_002_4.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_002.mp4",
+        "image": "images/Pneu_Avi_Video_002_5.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_002_5.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_002.mp4",
+        "image": "images/Pneu_Avi_Video_002_6.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_002_6.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_002.mp4",
+        "image": "images/Pneu_Avi_Video_002_7.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_002_7.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_002.mp4",
+        "image": "images/Pneu_Avi_Video_002_8.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_002_8.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_002.mp4",
+        "image": "images/Pneu_Avi_Video_002_9.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_002_9.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_002.mp4",
+        "image": "images/Pneu_Avi_Video_002_10.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_002_10.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_002.mp4",
+        "image": "images/Pneu_Avi_Video_002_11.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_002_11.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_002.mp4",
+        "image": "images/Pneu_Avi_Video_002_12.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_002_12.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_002.mp4",
+        "image": "images/Pneu_Avi_Video_002_13.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_002_13.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_003.mp4",
+        "image": "images/Pneu_Avi_Video_003_0.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_003_0.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_003.mp4",
+        "image": "images/Pneu_Avi_Video_003_1.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_003_1.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_003.mp4",
+        "image": "images/Pneu_Avi_Video_003_2.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_003_2.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_003.mp4",
+        "image": "images/Pneu_Avi_Video_003_3.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_003_3.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_003.mp4",
+        "image": "images/Pneu_Avi_Video_003_4.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_003_4.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_003.mp4",
+        "image": "images/Pneu_Avi_Video_003_5.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_003_5.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_003.mp4",
+        "image": "images/Pneu_Avi_Video_003_6.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_003_6.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_003.mp4",
+        "image": "images/Pneu_Avi_Video_003_7.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_003_7.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_003.mp4",
+        "image": "images/Pneu_Avi_Video_003_8.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_003_8.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_003.mp4",
+        "image": "images/Pneu_Avi_Video_003_9.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_003_9.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_003.mp4",
+        "image": "images/Pneu_Avi_Video_003_10.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_003_10.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_003.mp4",
+        "image": "images/Pneu_Avi_Video_003_11.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_003_11.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_003.mp4",
+        "image": "images/Pneu_Avi_Video_003_12.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_003_12.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_003.mp4",
+        "image": "images/Pneu_Avi_Video_003_13.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_003_13.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_005.mp4",
+        "image": "images/Pneu_Avi_Video_005_0.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_005_0.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_005.mp4",
+        "image": "images/Pneu_Avi_Video_005_1.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_005_1.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_005.mp4",
+        "image": "images/Pneu_Avi_Video_005_2.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_005_2.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_005.mp4",
+        "image": "images/Pneu_Avi_Video_005_3.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_005_3.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_005.mp4",
+        "image": "images/Pneu_Avi_Video_005_4.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_005_4.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_005.mp4",
+        "image": "images/Pneu_Avi_Video_005_5.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_005_5.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_005.mp4",
+        "image": "images/Pneu_Avi_Video_005_6.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_005_6.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_005.mp4",
+        "image": "images/Pneu_Avi_Video_005_7.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_005_7.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_005.mp4",
+        "image": "images/Pneu_Avi_Video_005_8.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_005_8.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_005.mp4",
+        "image": "images/Pneu_Avi_Video_005_9.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_005_9.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_005.mp4",
+        "image": "images/Pneu_Avi_Video_005_10.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_005_10.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_005.mp4",
+        "image": "images/Pneu_Avi_Video_005_11.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_005_11.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_Avi_Video_005.mp4",
+        "image": "images/Pneu_Avi_Video_005_12.png",
+        "scan_mask": "masks/scan/Pneu_Avi_Video_005_12.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_0409_set3_vid2.avi",
+        "image": "images/Pneu_northumbria_0409_set3_vid2_0.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_0409_set3_vid2_0.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_0409_set3_vid2.avi",
+        "image": "images/Pneu_northumbria_0409_set3_vid2_1.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_0409_set3_vid2_1.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_0409_set3_vid2.avi",
+        "image": "images/Pneu_northumbria_0409_set3_vid2_2.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_0409_set3_vid2_2.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_0409_set3_vid2.avi",
+        "image": "images/Pneu_northumbria_0409_set3_vid2_3.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_0409_set3_vid2_3.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_0409_set3_vid2.avi",
+        "image": "images/Pneu_northumbria_0409_set3_vid2_4.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_0409_set3_vid2_4.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_0409_set3_vid2.avi",
+        "image": "images/Pneu_northumbria_0409_set3_vid2_5.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_0409_set3_vid2_5.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_0409_set3_vid2.avi",
+        "image": "images/Pneu_northumbria_0409_set3_vid2_6.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_0409_set3_vid2_6.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_0409_set3_vid2.avi",
+        "image": "images/Pneu_northumbria_0409_set3_vid2_7.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_0409_set3_vid2_7.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_0409_set3_vid2.avi",
+        "image": "images/Pneu_northumbria_0409_set3_vid2_8.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_0409_set3_vid2_8.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_0409_set3_vid2.avi",
+        "image": "images/Pneu_northumbria_0409_set3_vid2_9.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_0409_set3_vid2_9.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_0409_set3_vid2.avi",
+        "image": "images/Pneu_northumbria_0409_set3_vid2_10.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_0409_set3_vid2_10.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_0409_set3_vid2.avi",
+        "image": "images/Pneu_northumbria_0409_set3_vid2_11.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_0409_set3_vid2_11.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_0409_set3_vid2.avi",
+        "image": "images/Pneu_northumbria_0409_set3_vid2_12.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_0409_set3_vid2_12.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_0409_set6_vid5.avi",
+        "image": "images/Pneu_northumbria_0409_set6_vid5_0.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_0409_set6_vid5_0.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_0409_set6_vid5.avi",
+        "image": "images/Pneu_northumbria_0409_set6_vid5_1.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_0409_set6_vid5_1.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_0409_set6_vid5.avi",
+        "image": "images/Pneu_northumbria_0409_set6_vid5_2.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_0409_set6_vid5_2.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_0409_set6_vid5.avi",
+        "image": "images/Pneu_northumbria_0409_set6_vid5_3.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_0409_set6_vid5_3.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_0409_set6_vid5.avi",
+        "image": "images/Pneu_northumbria_0409_set6_vid5_4.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_0409_set6_vid5_4.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_0409_set6_vid5.avi",
+        "image": "images/Pneu_northumbria_0409_set6_vid5_5.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_0409_set6_vid5_5.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_0409_set6_vid5.avi",
+        "image": "images/Pneu_northumbria_0409_set6_vid5_6.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_0409_set6_vid5_6.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_0409_set6_vid5.avi",
+        "image": "images/Pneu_northumbria_0409_set6_vid5_7.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_0409_set6_vid5_7.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_0409_set6_vid5.avi",
+        "image": "images/Pneu_northumbria_0409_set6_vid5_8.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_0409_set6_vid5_8.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_0409_set6_vid5.avi",
+        "image": "images/Pneu_northumbria_0409_set6_vid5_9.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_0409_set6_vid5_9.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_0409_set6_vid5.avi",
+        "image": "images/Pneu_northumbria_0409_set6_vid5_10.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_0409_set6_vid5_10.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_0409_set6_vid5.avi",
+        "image": "images/Pneu_northumbria_0409_set6_vid5_11.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_0409_set6_vid5_11.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_0409_set6_vid5.avi",
+        "image": "images/Pneu_northumbria_0409_set6_vid5_12.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_0409_set6_vid5_12.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_0409_set6_vid5.avi",
+        "image": "images/Pneu_northumbria_0409_set6_vid5_13.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_0409_set6_vid5_13.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_1009_vid1.avi",
+        "image": "images/Pneu_northumbria_1009_vid1_0.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_1009_vid1_0.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_1009_vid1.avi",
+        "image": "images/Pneu_northumbria_1009_vid1_1.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_1009_vid1_1.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_1009_vid1.avi",
+        "image": "images/Pneu_northumbria_1009_vid1_2.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_1009_vid1_2.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_1009_vid1.avi",
+        "image": "images/Pneu_northumbria_1009_vid1_3.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_1009_vid1_3.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_1009_vid1.avi",
+        "image": "images/Pneu_northumbria_1009_vid1_4.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_1009_vid1_4.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_1009_vid1.avi",
+        "image": "images/Pneu_northumbria_1009_vid1_5.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_1009_vid1_5.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_1009_vid1.avi",
+        "image": "images/Pneu_northumbria_1009_vid1_6.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_1009_vid1_6.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_1009_vid1.avi",
+        "image": "images/Pneu_northumbria_1009_vid1_7.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_1009_vid1_7.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_1009_vid1.avi",
+        "image": "images/Pneu_northumbria_1009_vid1_8.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_1009_vid1_8.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_1009_vid1.avi",
+        "image": "images/Pneu_northumbria_1009_vid1_9.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_1009_vid1_9.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_1009_vid1.avi",
+        "image": "images/Pneu_northumbria_1009_vid1_10.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_1009_vid1_10.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_1009_vid1.avi",
+        "image": "images/Pneu_northumbria_1009_vid1_11.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_1009_vid1_11.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_1009_vid1.avi",
+        "image": "images/Pneu_northumbria_1009_vid1_12.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_1009_vid1_12.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu_northumbria_1009_vid1.avi",
+        "image": "images/Pneu_northumbria_1009_vid1_13.png",
+        "scan_mask": "masks/scan/Pneu_northumbria_1009_vid1_13.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu-grep-pneumonia4.mp4",
+        "image": "images/Pneu-grep-pneumonia4_0.png",
+        "scan_mask": "masks/scan/Pneu-grep-pneumonia4_0.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu-grep-pneumonia4.mp4",
+        "image": "images/Pneu-grep-pneumonia4_1.png",
+        "scan_mask": "masks/scan/Pneu-grep-pneumonia4_1.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu-grep-pneumonia4.mp4",
+        "image": "images/Pneu-grep-pneumonia4_2.png",
+        "scan_mask": "masks/scan/Pneu-grep-pneumonia4_2.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu-grep-pneumonia4.mp4",
+        "image": "images/Pneu-grep-pneumonia4_3.png",
+        "scan_mask": "masks/scan/Pneu-grep-pneumonia4_3.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu-grep-pneumonia4.mp4",
+        "image": "images/Pneu-grep-pneumonia4_4.png",
+        "scan_mask": "masks/scan/Pneu-grep-pneumonia4_4.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu-grep-pneumonia4.mp4",
+        "image": "images/Pneu-grep-pneumonia4_5.png",
+        "scan_mask": "masks/scan/Pneu-grep-pneumonia4_5.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu-grep-pneumonia4.mp4",
+        "image": "images/Pneu-grep-pneumonia4_6.png",
+        "scan_mask": "masks/scan/Pneu-grep-pneumonia4_6.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu-grep-pneumonia4.mp4",
+        "image": "images/Pneu-grep-pneumonia4_7.png",
+        "scan_mask": "masks/scan/Pneu-grep-pneumonia4_7.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu-grep-pneumonia4.mp4",
+        "image": "images/Pneu-grep-pneumonia4_8.png",
+        "scan_mask": "masks/scan/Pneu-grep-pneumonia4_8.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu-grep-pneumonia4.mp4",
+        "image": "images/Pneu-grep-pneumonia4_9.png",
+        "scan_mask": "masks/scan/Pneu-grep-pneumonia4_9.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu-grep-pneumonia4.mp4",
+        "image": "images/Pneu-grep-pneumonia4_10.png",
+        "scan_mask": "masks/scan/Pneu-grep-pneumonia4_10.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu-grep-pneumonia4.mp4",
+        "image": "images/Pneu-grep-pneumonia4_11.png",
+        "scan_mask": "masks/scan/Pneu-grep-pneumonia4_11.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu-grep-pneumonia4.mp4",
+        "image": "images/Pneu-grep-pneumonia4_12.png",
+        "scan_mask": "masks/scan/Pneu-grep-pneumonia4_12.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Pneu-grep-pneumonia4.mp4",
+        "image": "images/Pneu-grep-pneumonia4_13.png",
+        "scan_mask": "masks/scan/Pneu-grep-pneumonia4_13.png",
+        "pathology": "pneumonia",
+        "label": 1
+    },
+    {
+        "source": "Cov-Atlas-Day+3.gif",
+        "image": "images/Cov-Atlas-Day+3_0.png",
+        "scan_mask": "masks/scan/Cov-Atlas-Day+3_0.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-Atlas-Day+3.gif",
+        "image": "images/Cov-Atlas-Day+3_1.png",
+        "scan_mask": "masks/scan/Cov-Atlas-Day+3_1.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-Atlas-Day+3.gif",
+        "image": "images/Cov-Atlas-Day+3_2.png",
+        "scan_mask": "masks/scan/Cov-Atlas-Day+3_2.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-Atlas-Day+3.gif",
+        "image": "images/Cov-Atlas-Day+3_3.png",
+        "scan_mask": "masks/scan/Cov-Atlas-Day+3_3.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-Atlas-Day+3.gif",
+        "image": "images/Cov-Atlas-Day+3_4.png",
+        "scan_mask": "masks/scan/Cov-Atlas-Day+3_4.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-Atlas-Day+3.gif",
+        "image": "images/Cov-Atlas-Day+3_5.png",
+        "scan_mask": "masks/scan/Cov-Atlas-Day+3_5.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-Atlas-Day+3.gif",
+        "image": "images/Cov-Atlas-Day+3_6.png",
+        "scan_mask": "masks/scan/Cov-Atlas-Day+3_6.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-Atlas-Day+3.gif",
+        "image": "images/Cov-Atlas-Day+3_7.png",
+        "scan_mask": "masks/scan/Cov-Atlas-Day+3_7.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-Atlas-Day+3.gif",
+        "image": "images/Cov-Atlas-Day+3_8.png",
+        "scan_mask": "masks/scan/Cov-Atlas-Day+3_8.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-Atlas-Day+3.gif",
+        "image": "images/Cov-Atlas-Day+3_9.png",
+        "scan_mask": "masks/scan/Cov-Atlas-Day+3_9.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-Atlas-Day+3.gif",
+        "image": "images/Cov-Atlas-Day+3_10.png",
+        "scan_mask": "masks/scan/Cov-Atlas-Day+3_10.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-Atlas-Day+3.gif",
+        "image": "images/Cov-Atlas-Day+3_11.png",
+        "scan_mask": "masks/scan/Cov-Atlas-Day+3_11.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-Atlas-Day+3.gif",
+        "image": "images/Cov-Atlas-Day+3_12.png",
+        "scan_mask": "masks/scan/Cov-Atlas-Day+3_12.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_convex_volpecelli_sonographic_v1.mov",
+        "image": "images/Cov_convex_volpecelli_sonographic_v1_0.png",
+        "scan_mask": "masks/scan/Cov_convex_volpecelli_sonographic_v1_0.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_convex_volpecelli_sonographic_v1.mov",
+        "image": "images/Cov_convex_volpecelli_sonographic_v1_1.png",
+        "scan_mask": "masks/scan/Cov_convex_volpecelli_sonographic_v1_1.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_convex_volpecelli_sonographic_v1.mov",
+        "image": "images/Cov_convex_volpecelli_sonographic_v1_2.png",
+        "scan_mask": "masks/scan/Cov_convex_volpecelli_sonographic_v1_2.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_convex_volpecelli_sonographic_v1.mov",
+        "image": "images/Cov_convex_volpecelli_sonographic_v1_3.png",
+        "scan_mask": "masks/scan/Cov_convex_volpecelli_sonographic_v1_3.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_convex_volpecelli_sonographic_v1.mov",
+        "image": "images/Cov_convex_volpecelli_sonographic_v1_4.png",
+        "scan_mask": "masks/scan/Cov_convex_volpecelli_sonographic_v1_4.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_convex_volpecelli_sonographic_v1.mov",
+        "image": "images/Cov_convex_volpecelli_sonographic_v1_5.png",
+        "scan_mask": "masks/scan/Cov_convex_volpecelli_sonographic_v1_5.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_convex_volpecelli_sonographic_v1.mov",
+        "image": "images/Cov_convex_volpecelli_sonographic_v1_6.png",
+        "scan_mask": "masks/scan/Cov_convex_volpecelli_sonographic_v1_6.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_convex_volpecelli_sonographic_v1.mov",
+        "image": "images/Cov_convex_volpecelli_sonographic_v1_7.png",
+        "scan_mask": "masks/scan/Cov_convex_volpecelli_sonographic_v1_7.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_convex_volpecelli_sonographic_v1.mov",
+        "image": "images/Cov_convex_volpecelli_sonographic_v1_8.png",
+        "scan_mask": "masks/scan/Cov_convex_volpecelli_sonographic_v1_8.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_convex_volpecelli_sonographic_v1.mov",
+        "image": "images/Cov_convex_volpecelli_sonographic_v1_9.png",
+        "scan_mask": "masks/scan/Cov_convex_volpecelli_sonographic_v1_9.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_convex_volpecelli_sonographic_v1.mov",
+        "image": "images/Cov_convex_volpecelli_sonographic_v1_10.png",
+        "scan_mask": "masks/scan/Cov_convex_volpecelli_sonographic_v1_10.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_convex_volpecelli_sonographic_v1.mov",
+        "image": "images/Cov_convex_volpecelli_sonographic_v1_11.png",
+        "scan_mask": "masks/scan/Cov_convex_volpecelli_sonographic_v1_11.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_convex_volpecelli_sonographic_v1.mov",
+        "image": "images/Cov_convex_volpecelli_sonographic_v1_12.png",
+        "scan_mask": "masks/scan/Cov_convex_volpecelli_sonographic_v1_12.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_convex_volpecelli_sonographic_v1.mov",
+        "image": "images/Cov_convex_volpecelli_sonographic_v1_13.png",
+        "scan_mask": "masks/scan/Cov_convex_volpecelli_sonographic_v1_13.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_convex_volpecelli_sonographic_v1.mov",
+        "image": "images/Cov_convex_volpecelli_sonographic_v1_14.png",
+        "scan_mask": "masks/scan/Cov_convex_volpecelli_sonographic_v1_14.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_convex_volpecelli_sonographic_v1.mov",
+        "image": "images/Cov_convex_volpecelli_sonographic_v1_15.png",
+        "scan_mask": "masks/scan/Cov_convex_volpecelli_sonographic_v1_15.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_convex_volpecelli_sonographic_v1.mov",
+        "image": "images/Cov_convex_volpecelli_sonographic_v1_16.png",
+        "scan_mask": "masks/scan/Cov_convex_volpecelli_sonographic_v1_16.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_convex_volpecelli_sonographic_v1.mov",
+        "image": "images/Cov_convex_volpecelli_sonographic_v1_17.png",
+        "scan_mask": "masks/scan/Cov_convex_volpecelli_sonographic_v1_17.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_convex_volpecelli_sonographic_v1.mov",
+        "image": "images/Cov_convex_volpecelli_sonographic_v1_18.png",
+        "scan_mask": "masks/scan/Cov_convex_volpecelli_sonographic_v1_18.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_convex_volpecelli_sonographic_v1.mov",
+        "image": "images/Cov_convex_volpecelli_sonographic_v1_19.png",
+        "scan_mask": "masks/scan/Cov_convex_volpecelli_sonographic_v1_19.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_convex_volpecelli_sonographic_v1.mov",
+        "image": "images/Cov_convex_volpecelli_sonographic_v1_20.png",
+        "scan_mask": "masks/scan/Cov_convex_volpecelli_sonographic_v1_20.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_convex_volpecelli_sonographic_v1.mov",
+        "image": "images/Cov_convex_volpecelli_sonographic_v1_21.png",
+        "scan_mask": "masks/scan/Cov_convex_volpecelli_sonographic_v1_21.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_convex_volpecelli_sonographic_v1.mov",
+        "image": "images/Cov_convex_volpecelli_sonographic_v1_22.png",
+        "scan_mask": "masks/scan/Cov_convex_volpecelli_sonographic_v1_22.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_convex_volpecelli_sonographic_v1.mov",
+        "image": "images/Cov_convex_volpecelli_sonographic_v1_23.png",
+        "scan_mask": "masks/scan/Cov_convex_volpecelli_sonographic_v1_23.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_convex_volpecelli_sonographic_v1.mov",
+        "image": "images/Cov_convex_volpecelli_sonographic_v1_24.png",
+        "scan_mask": "masks/scan/Cov_convex_volpecelli_sonographic_v1_24.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_convex_volpecelli_sonographic_v1.mov",
+        "image": "images/Cov_convex_volpecelli_sonographic_v1_25.png",
+        "scan_mask": "masks/scan/Cov_convex_volpecelli_sonographic_v1_25.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_convex_volpecelli_sonographic_v1.mov",
+        "image": "images/Cov_convex_volpecelli_sonographic_v1_26.png",
+        "scan_mask": "masks/scan/Cov_convex_volpecelli_sonographic_v1_26.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_convex_volpecelli_sonographic_v1.mov",
+        "image": "images/Cov_convex_volpecelli_sonographic_v1_27.png",
+        "scan_mask": "masks/scan/Cov_convex_volpecelli_sonographic_v1_27.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_convex_volpecelli_sonographic_v1.mov",
+        "image": "images/Cov_convex_volpecelli_sonographic_v1_28.png",
+        "scan_mask": "masks/scan/Cov_convex_volpecelli_sonographic_v1_28.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_convex_volpecelli_sonographic_v1.mov",
+        "image": "images/Cov_convex_volpecelli_sonographic_v1_29.png",
+        "scan_mask": "masks/scan/Cov_convex_volpecelli_sonographic_v1_29.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_denault_proposedUS_vid5.mov",
+        "image": "images/Cov_denault_proposedUS_vid5_0.png",
+        "scan_mask": "masks/scan/Cov_denault_proposedUS_vid5_0.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_denault_proposedUS_vid5.mov",
+        "image": "images/Cov_denault_proposedUS_vid5_1.png",
+        "scan_mask": "masks/scan/Cov_denault_proposedUS_vid5_1.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_denault_proposedUS_vid5.mov",
+        "image": "images/Cov_denault_proposedUS_vid5_2.png",
+        "scan_mask": "masks/scan/Cov_denault_proposedUS_vid5_2.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_denault_proposedUS_vid5.mov",
+        "image": "images/Cov_denault_proposedUS_vid5_3.png",
+        "scan_mask": "masks/scan/Cov_denault_proposedUS_vid5_3.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_denault_proposedUS_vid5.mov",
+        "image": "images/Cov_denault_proposedUS_vid5_4.png",
+        "scan_mask": "masks/scan/Cov_denault_proposedUS_vid5_4.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_denault_proposedUS_vid5.mov",
+        "image": "images/Cov_denault_proposedUS_vid5_5.png",
+        "scan_mask": "masks/scan/Cov_denault_proposedUS_vid5_5.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_denault_proposedUS_vid5.mov",
+        "image": "images/Cov_denault_proposedUS_vid5_6.png",
+        "scan_mask": "masks/scan/Cov_denault_proposedUS_vid5_6.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_denault_proposedUS_vid5.mov",
+        "image": "images/Cov_denault_proposedUS_vid5_7.png",
+        "scan_mask": "masks/scan/Cov_denault_proposedUS_vid5_7.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_denault_proposedUS_vid5.mov",
+        "image": "images/Cov_denault_proposedUS_vid5_8.png",
+        "scan_mask": "masks/scan/Cov_denault_proposedUS_vid5_8.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_denault_proposedUS_vid5.mov",
+        "image": "images/Cov_denault_proposedUS_vid5_9.png",
+        "scan_mask": "masks/scan/Cov_denault_proposedUS_vid5_9.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_denault_proposedUS_vid5.mov",
+        "image": "images/Cov_denault_proposedUS_vid5_10.png",
+        "scan_mask": "masks/scan/Cov_denault_proposedUS_vid5_10.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_emdocs_vid3.gif",
+        "image": "images/Cov_emdocs_vid3_0.png",
+        "scan_mask": "masks/scan/Cov_emdocs_vid3_0.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_emdocs_vid3.gif",
+        "image": "images/Cov_emdocs_vid3_1.png",
+        "scan_mask": "masks/scan/Cov_emdocs_vid3_1.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_emdocs_vid3.gif",
+        "image": "images/Cov_emdocs_vid3_2.png",
+        "scan_mask": "masks/scan/Cov_emdocs_vid3_2.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_emdocs_vid3.gif",
+        "image": "images/Cov_emdocs_vid3_3.png",
+        "scan_mask": "masks/scan/Cov_emdocs_vid3_3.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_emdocs_vid3.gif",
+        "image": "images/Cov_emdocs_vid3_4.png",
+        "scan_mask": "masks/scan/Cov_emdocs_vid3_4.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_emdocs_vid3.gif",
+        "image": "images/Cov_emdocs_vid3_5.png",
+        "scan_mask": "masks/scan/Cov_emdocs_vid3_5.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_emdocs_vid3.gif",
+        "image": "images/Cov_emdocs_vid3_6.png",
+        "scan_mask": "masks/scan/Cov_emdocs_vid3_6.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_emdocs_vid3.gif",
+        "image": "images/Cov_emdocs_vid3_7.png",
+        "scan_mask": "masks/scan/Cov_emdocs_vid3_7.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_emdocs_vid3.gif",
+        "image": "images/Cov_emdocs_vid3_8.png",
+        "scan_mask": "masks/scan/Cov_emdocs_vid3_8.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_emdocs_vid3.gif",
+        "image": "images/Cov_emdocs_vid3_9.png",
+        "scan_mask": "masks/scan/Cov_emdocs_vid3_9.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7543.mp4",
+        "image": "images/Cov-grep-7543_0.png",
+        "scan_mask": "masks/scan/Cov-grep-7543_0.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7543.mp4",
+        "image": "images/Cov-grep-7543_1.png",
+        "scan_mask": "masks/scan/Cov-grep-7543_1.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7543.mp4",
+        "image": "images/Cov-grep-7543_2.png",
+        "scan_mask": "masks/scan/Cov-grep-7543_2.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7543.mp4",
+        "image": "images/Cov-grep-7543_3.png",
+        "scan_mask": "masks/scan/Cov-grep-7543_3.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7543.mp4",
+        "image": "images/Cov-grep-7543_4.png",
+        "scan_mask": "masks/scan/Cov-grep-7543_4.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7543.mp4",
+        "image": "images/Cov-grep-7543_5.png",
+        "scan_mask": "masks/scan/Cov-grep-7543_5.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7543.mp4",
+        "image": "images/Cov-grep-7543_6.png",
+        "scan_mask": "masks/scan/Cov-grep-7543_6.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7543.mp4",
+        "image": "images/Cov-grep-7543_7.png",
+        "scan_mask": "masks/scan/Cov-grep-7543_7.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7543.mp4",
+        "image": "images/Cov-grep-7543_8.png",
+        "scan_mask": "masks/scan/Cov-grep-7543_8.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7543.mp4",
+        "image": "images/Cov-grep-7543_9.png",
+        "scan_mask": "masks/scan/Cov-grep-7543_9.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7543.mp4",
+        "image": "images/Cov-grep-7543_10.png",
+        "scan_mask": "masks/scan/Cov-grep-7543_10.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7543.mp4",
+        "image": "images/Cov-grep-7543_11.png",
+        "scan_mask": "masks/scan/Cov-grep-7543_11.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7525.mp4",
+        "image": "images/Cov-grep-7525_0.png",
+        "scan_mask": "masks/scan/Cov-grep-7525_0.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7525.mp4",
+        "image": "images/Cov-grep-7525_1.png",
+        "scan_mask": "masks/scan/Cov-grep-7525_1.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7525.mp4",
+        "image": "images/Cov-grep-7525_2.png",
+        "scan_mask": "masks/scan/Cov-grep-7525_2.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7525.mp4",
+        "image": "images/Cov-grep-7525_3.png",
+        "scan_mask": "masks/scan/Cov-grep-7525_3.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7525.mp4",
+        "image": "images/Cov-grep-7525_4.png",
+        "scan_mask": "masks/scan/Cov-grep-7525_4.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7525.mp4",
+        "image": "images/Cov-grep-7525_5.png",
+        "scan_mask": "masks/scan/Cov-grep-7525_5.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7525.mp4",
+        "image": "images/Cov-grep-7525_6.png",
+        "scan_mask": "masks/scan/Cov-grep-7525_6.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7525.mp4",
+        "image": "images/Cov-grep-7525_7.png",
+        "scan_mask": "masks/scan/Cov-grep-7525_7.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7525.mp4",
+        "image": "images/Cov-grep-7525_8.png",
+        "scan_mask": "masks/scan/Cov-grep-7525_8.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7525.mp4",
+        "image": "images/Cov-grep-7525_9.png",
+        "scan_mask": "masks/scan/Cov-grep-7525_9.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7525.mp4",
+        "image": "images/Cov-grep-7525_10.png",
+        "scan_mask": "masks/scan/Cov-grep-7525_10.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7525.mp4",
+        "image": "images/Cov-grep-7525_11.png",
+        "scan_mask": "masks/scan/Cov-grep-7525_11.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7525.mp4",
+        "image": "images/Cov-grep-7525_12.png",
+        "scan_mask": "masks/scan/Cov-grep-7525_12.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7525.mp4",
+        "image": "images/Cov-grep-7525_13.png",
+        "scan_mask": "masks/scan/Cov-grep-7525_13.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7525.mp4",
+        "image": "images/Cov-grep-7525_14.png",
+        "scan_mask": "masks/scan/Cov-grep-7525_14.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7525.mp4",
+        "image": "images/Cov-grep-7525_15.png",
+        "scan_mask": "masks/scan/Cov-grep-7525_15.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7525.mp4",
+        "image": "images/Cov-grep-7525_16.png",
+        "scan_mask": "masks/scan/Cov-grep-7525_16.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7525.mp4",
+        "image": "images/Cov-grep-7525_17.png",
+        "scan_mask": "masks/scan/Cov-grep-7525_17.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7525.mp4",
+        "image": "images/Cov-grep-7525_18.png",
+        "scan_mask": "masks/scan/Cov-grep-7525_18.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7525.mp4",
+        "image": "images/Cov-grep-7525_19.png",
+        "scan_mask": "masks/scan/Cov-grep-7525_19.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7525.mp4",
+        "image": "images/Cov-grep-7525_20.png",
+        "scan_mask": "masks/scan/Cov-grep-7525_20.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7525.mp4",
+        "image": "images/Cov-grep-7525_21.png",
+        "scan_mask": "masks/scan/Cov-grep-7525_21.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7525.mp4",
+        "image": "images/Cov-grep-7525_22.png",
+        "scan_mask": "masks/scan/Cov-grep-7525_22.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7525.mp4",
+        "image": "images/Cov-grep-7525_23.png",
+        "scan_mask": "masks/scan/Cov-grep-7525_23.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7525.mp4",
+        "image": "images/Cov-grep-7525_24.png",
+        "scan_mask": "masks/scan/Cov-grep-7525_24.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7525.mp4",
+        "image": "images/Cov-grep-7525_25.png",
+        "scan_mask": "masks/scan/Cov-grep-7525_25.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7525.mp4",
+        "image": "images/Cov-grep-7525_26.png",
+        "scan_mask": "masks/scan/Cov-grep-7525_26.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7525.mp4",
+        "image": "images/Cov-grep-7525_27.png",
+        "scan_mask": "masks/scan/Cov-grep-7525_27.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7525.mp4",
+        "image": "images/Cov-grep-7525_28.png",
+        "scan_mask": "masks/scan/Cov-grep-7525_28.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grep-7525.mp4",
+        "image": "images/Cov-grep-7525_29.png",
+        "scan_mask": "masks/scan/Cov-grep-7525_29.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_Arnthfield_2020_Vid3.mp4",
+        "image": "images/Cov_Arnthfield_2020_Vid3_0.png",
+        "scan_mask": "masks/scan/Cov_Arnthfield_2020_Vid3_0.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_Arnthfield_2020_Vid3.mp4",
+        "image": "images/Cov_Arnthfield_2020_Vid3_1.png",
+        "scan_mask": "masks/scan/Cov_Arnthfield_2020_Vid3_1.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_Arnthfield_2020_Vid3.mp4",
+        "image": "images/Cov_Arnthfield_2020_Vid3_2.png",
+        "scan_mask": "masks/scan/Cov_Arnthfield_2020_Vid3_2.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_Arnthfield_2020_Vid3.mp4",
+        "image": "images/Cov_Arnthfield_2020_Vid3_3.png",
+        "scan_mask": "masks/scan/Cov_Arnthfield_2020_Vid3_3.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_Arnthfield_2020_Vid3.mp4",
+        "image": "images/Cov_Arnthfield_2020_Vid3_4.png",
+        "scan_mask": "masks/scan/Cov_Arnthfield_2020_Vid3_4.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_Arnthfield_2020_Vid3.mp4",
+        "image": "images/Cov_Arnthfield_2020_Vid3_5.png",
+        "scan_mask": "masks/scan/Cov_Arnthfield_2020_Vid3_5.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_Arnthfield_2020_Vid3.mp4",
+        "image": "images/Cov_Arnthfield_2020_Vid3_6.png",
+        "scan_mask": "masks/scan/Cov_Arnthfield_2020_Vid3_6.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_Arnthfield_2020_Vid3.mp4",
+        "image": "images/Cov_Arnthfield_2020_Vid3_7.png",
+        "scan_mask": "masks/scan/Cov_Arnthfield_2020_Vid3_7.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_Arnthfield_2020_Vid3.mp4",
+        "image": "images/Cov_Arnthfield_2020_Vid3_8.png",
+        "scan_mask": "masks/scan/Cov_Arnthfield_2020_Vid3_8.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_Arnthfield_2020_Vid3.mp4",
+        "image": "images/Cov_Arnthfield_2020_Vid3_9.png",
+        "scan_mask": "masks/scan/Cov_Arnthfield_2020_Vid3_9.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_Arnthfield_2020_Vid3.mp4",
+        "image": "images/Cov_Arnthfield_2020_Vid3_10.png",
+        "scan_mask": "masks/scan/Cov_Arnthfield_2020_Vid3_10.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov_Arnthfield_2020_Vid3.mp4",
+        "image": "images/Cov_Arnthfield_2020_Vid3_11.png",
+        "scan_mask": "masks/scan/Cov_Arnthfield_2020_Vid3_11.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-clarius3.gif",
+        "image": "images/Cov-clarius3_0.png",
+        "scan_mask": "masks/scan/Cov-clarius3_0.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-clarius3.gif",
+        "image": "images/Cov-clarius3_1.png",
+        "scan_mask": "masks/scan/Cov-clarius3_1.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-clarius3.gif",
+        "image": "images/Cov-clarius3_2.png",
+        "scan_mask": "masks/scan/Cov-clarius3_2.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-clarius3.gif",
+        "image": "images/Cov-clarius3_3.png",
+        "scan_mask": "masks/scan/Cov-clarius3_3.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-clarius3.gif",
+        "image": "images/Cov-clarius3_4.png",
+        "scan_mask": "masks/scan/Cov-clarius3_4.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-clarius3.gif",
+        "image": "images/Cov-clarius3_5.png",
+        "scan_mask": "masks/scan/Cov-clarius3_5.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-clarius3.gif",
+        "image": "images/Cov-clarius3_6.png",
+        "scan_mask": "masks/scan/Cov-clarius3_6.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-clarius3.gif",
+        "image": "images/Cov-clarius3_7.png",
+        "scan_mask": "masks/scan/Cov-clarius3_7.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-clarius3.gif",
+        "image": "images/Cov-clarius3_8.png",
+        "scan_mask": "masks/scan/Cov-clarius3_8.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-clarius3.gif",
+        "image": "images/Cov-clarius3_9.png",
+        "scan_mask": "masks/scan/Cov-clarius3_9.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-clarius3.gif",
+        "image": "images/Cov-clarius3_10.png",
+        "scan_mask": "masks/scan/Cov-clarius3_10.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-clarius3.gif",
+        "image": "images/Cov-clarius3_11.png",
+        "scan_mask": "masks/scan/Cov-clarius3_11.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-clarius3.gif",
+        "image": "images/Cov-clarius3_12.png",
+        "scan_mask": "masks/scan/Cov-clarius3_12.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-clarius3.gif",
+        "image": "images/Cov-clarius3_13.png",
+        "scan_mask": "masks/scan/Cov-clarius3_13.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-clarius3.gif",
+        "image": "images/Cov-clarius3_14.png",
+        "scan_mask": "masks/scan/Cov-clarius3_14.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-clarius3.gif",
+        "image": "images/Cov-clarius3_15.png",
+        "scan_mask": "masks/scan/Cov-clarius3_15.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-clarius3.gif",
+        "image": "images/Cov-clarius3_16.png",
+        "scan_mask": "masks/scan/Cov-clarius3_16.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-clarius3.gif",
+        "image": "images/Cov-clarius3_17.png",
+        "scan_mask": "masks/scan/Cov-clarius3_17.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-clarius3.gif",
+        "image": "images/Cov-clarius3_18.png",
+        "scan_mask": "masks/scan/Cov-clarius3_18.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-clarius3.gif",
+        "image": "images/Cov-clarius3_19.png",
+        "scan_mask": "masks/scan/Cov-clarius3_19.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-clarius3.gif",
+        "image": "images/Cov-clarius3_20.png",
+        "scan_mask": "masks/scan/Cov-clarius3_20.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-clarius3.gif",
+        "image": "images/Cov-clarius3_21.png",
+        "scan_mask": "masks/scan/Cov-clarius3_21.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-clarius3.gif",
+        "image": "images/Cov-clarius3_22.png",
+        "scan_mask": "masks/scan/Cov-clarius3_22.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-clarius3.gif",
+        "image": "images/Cov-clarius3_23.png",
+        "scan_mask": "masks/scan/Cov-clarius3_23.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-clarius3.gif",
+        "image": "images/Cov-clarius3_24.png",
+        "scan_mask": "masks/scan/Cov-clarius3_24.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-clarius3.gif",
+        "image": "images/Cov-clarius3_25.png",
+        "scan_mask": "masks/scan/Cov-clarius3_25.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-clarius3.gif",
+        "image": "images/Cov-clarius3_26.png",
+        "scan_mask": "masks/scan/Cov-clarius3_26.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-clarius3.gif",
+        "image": "images/Cov-clarius3_27.png",
+        "scan_mask": "masks/scan/Cov-clarius3_27.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-clarius3.gif",
+        "image": "images/Cov-clarius3_28.png",
+        "scan_mask": "masks/scan/Cov-clarius3_28.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-clarius3.gif",
+        "image": "images/Cov-clarius3_29.png",
+        "scan_mask": "masks/scan/Cov-clarius3_29.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grepmed2.mp4",
+        "image": "images/Cov-grepmed2_0.png",
+        "scan_mask": "masks/scan/Cov-grepmed2_0.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grepmed2.mp4",
+        "image": "images/Cov-grepmed2_1.png",
+        "scan_mask": "masks/scan/Cov-grepmed2_1.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grepmed2.mp4",
+        "image": "images/Cov-grepmed2_2.png",
+        "scan_mask": "masks/scan/Cov-grepmed2_2.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grepmed2.mp4",
+        "image": "images/Cov-grepmed2_3.png",
+        "scan_mask": "masks/scan/Cov-grepmed2_3.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grepmed2.mp4",
+        "image": "images/Cov-grepmed2_4.png",
+        "scan_mask": "masks/scan/Cov-grepmed2_4.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grepmed2.mp4",
+        "image": "images/Cov-grepmed2_5.png",
+        "scan_mask": "masks/scan/Cov-grepmed2_5.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grepmed2.mp4",
+        "image": "images/Cov-grepmed2_6.png",
+        "scan_mask": "masks/scan/Cov-grepmed2_6.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grepmed2.mp4",
+        "image": "images/Cov-grepmed2_7.png",
+        "scan_mask": "masks/scan/Cov-grepmed2_7.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grepmed2.mp4",
+        "image": "images/Cov-grepmed2_8.png",
+        "scan_mask": "masks/scan/Cov-grepmed2_8.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grepmed2.mp4",
+        "image": "images/Cov-grepmed2_9.png",
+        "scan_mask": "masks/scan/Cov-grepmed2_9.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grepmed2.mp4",
+        "image": "images/Cov-grepmed2_10.png",
+        "scan_mask": "masks/scan/Cov-grepmed2_10.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grepmed2.mp4",
+        "image": "images/Cov-grepmed2_11.png",
+        "scan_mask": "masks/scan/Cov-grepmed2_11.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grepmed2.mp4",
+        "image": "images/Cov-grepmed2_12.png",
+        "scan_mask": "masks/scan/Cov-grepmed2_12.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grepmed2.mp4",
+        "image": "images/Cov-grepmed2_13.png",
+        "scan_mask": "masks/scan/Cov-grepmed2_13.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grepmed2.mp4",
+        "image": "images/Cov-grepmed2_14.png",
+        "scan_mask": "masks/scan/Cov-grepmed2_14.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grepmed2.mp4",
+        "image": "images/Cov-grepmed2_15.png",
+        "scan_mask": "masks/scan/Cov-grepmed2_15.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grepmed2.mp4",
+        "image": "images/Cov-grepmed2_16.png",
+        "scan_mask": "masks/scan/Cov-grepmed2_16.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grepmed2.mp4",
+        "image": "images/Cov-grepmed2_17.png",
+        "scan_mask": "masks/scan/Cov-grepmed2_17.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grepmed2.mp4",
+        "image": "images/Cov-grepmed2_18.png",
+        "scan_mask": "masks/scan/Cov-grepmed2_18.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grepmed2.mp4",
+        "image": "images/Cov-grepmed2_19.png",
+        "scan_mask": "masks/scan/Cov-grepmed2_19.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grepmed2.mp4",
+        "image": "images/Cov-grepmed2_20.png",
+        "scan_mask": "masks/scan/Cov-grepmed2_20.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grepmed2.mp4",
+        "image": "images/Cov-grepmed2_21.png",
+        "scan_mask": "masks/scan/Cov-grepmed2_21.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grepmed2.mp4",
+        "image": "images/Cov-grepmed2_22.png",
+        "scan_mask": "masks/scan/Cov-grepmed2_22.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grepmed2.mp4",
+        "image": "images/Cov-grepmed2_23.png",
+        "scan_mask": "masks/scan/Cov-grepmed2_23.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grepmed2.mp4",
+        "image": "images/Cov-grepmed2_24.png",
+        "scan_mask": "masks/scan/Cov-grepmed2_24.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grepmed2.mp4",
+        "image": "images/Cov-grepmed2_25.png",
+        "scan_mask": "masks/scan/Cov-grepmed2_25.png",
+        "pathology": "covid",
+        "label": 2
+    },
+    {
+        "source": "Cov-grepmed2.mp4",
+        "image": "images/Cov-grepmed2_26.png",
+        "scan_mask": "masks/scan/Cov-grepmed2_26.png",
+        "pathology": "covid",
+        "label": 2
+    }
+]

@@ -1,6 +1,6 @@
 """Build the POCUS image dataset by extracting the frames from the videos and
-copying the images. The dataset is split into training, validation, and test
-sets using a 7:1:2 split.
+copying the images. The dataset is split into training and test sets using an
+8:2 split.
 
 Notes:
     - Following the same procedure as the authors of the original paper, we
@@ -10,14 +10,14 @@ Notes:
       not include the viral pneumonia class in the dataset due to the lack of
       examples.
     - The frames extracted from videos are grouped by the video source when
-      splitting the dataset into training, validation, and test sets to prevent
-      data leakage.
-    - In total, there are 2102 examples split into 1468 training, 177
-      validation, and 457 test examples.
+      splitting the dataset into training and test sets to prevent data
+      leakage.
+    - In total, there are 2102 examples split into 1645 training and 457 test
+      examples.
 
-Each example (a single image) is represented as an object in one of three JSON
-array files (`train.json`, `validation.json`, or `test.json`). Each object has
-the following key/value pairs:
+Each example (a single image) is represented as an object in one of two JSON
+array files (`train_val.json` or `test.json`). Each object has the following
+key/value pairs:
 
     - source:       The name of the source video or image file.
     - image:        The path to the image file.
@@ -252,8 +252,7 @@ def pocus(
         str, typer.Argument(help="The output directory for the processed datasets")
     ],
 ) -> None:
-    """Prepare the training, validation and test sets for the POCUS
-    dataset.
+    """Prepare the training and test sets for the POCUS dataset.
 
     Args:
         raw_data_dir: The path to the raw data directory.
@@ -368,7 +367,7 @@ def pocus(
 
     print(f"Number of examples: {len(examples)}")
 
-    # Split the dataset into training, validation, and test sets
+    # Split the dataset into training and test sets
     splitter = GroupShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
     train_val_indices, test_indices = next(
         splitter.split(X=examples, groups=examples["source"])
@@ -376,25 +375,16 @@ def pocus(
     train_val_examples = examples.iloc[train_val_indices]
     test_examples = examples.iloc[test_indices]
 
-    splitter = GroupShuffleSplit(n_splits=1, test_size=0.1, random_state=42)
-    train_indices, val_indices = next(
-        splitter.split(X=train_val_examples, groups=train_val_examples["source"])
-    )
-    train_examples = train_val_examples.iloc[train_indices]
-    val_examples = train_val_examples.iloc[val_indices]
-
-    # Save the training, validation, and test examples as JSON files
+    # Save the training and test examples as JSON files
     for split, examples in [
-        ("train", train_examples),
-        ("validation", val_examples),
+        ("train_val", train_val_examples),
         ("test", test_examples),
     ]:
         file_path = os.path.join(output_dir, f"{split}.json")
         with open(file_path, "w") as f:
             json.dump(examples.to_dict(orient="records"), f, indent=4)
 
-    print(f"Training examples: {len(train_examples)}")
-    print(f"Validation examples: {len(val_examples)}")
+    print(f"Training examples: {len(train_val_examples)}")
     print(f"Test examples: {len(test_examples)}")
 
     save_version_info(output_dir, __version__)

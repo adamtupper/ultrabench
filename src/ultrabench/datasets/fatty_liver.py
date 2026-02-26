@@ -1,11 +1,11 @@
-"""Split the Fatty Liver dataset into training, validation, and test sets using
-a 7:1:2 split. The dataset consists of 550 images collected from 55 patients
-(10 images per patient). The images are split by patient to ensure that there
-is no patient overlap between the splits.
+"""Split the Fatty Liver dataset into training and test sets using an 8:2
+split. The dataset consists of 550 images collected from 55 patients (10 images
+per patient). The images are split by patient to ensure that there is no
+patient overlap between the splits.
 
-Each example (a single image) is represented as an object in one of three JSON
-array files (`train.json`, `validation.json`, or `test.json`). Each object has
-the following key/value pairs:
+Each example (a single image) is represented as an object in one of two JSON
+array files (`train_val.json` or `test.json`). Each object has the following
+key/value pairs:
 
     - patient:      The patient ID.
     - image:        The path to the image file.
@@ -94,8 +94,7 @@ def fatty_liver(
         str, typer.Argument(help="The output directory for the processed datasets")
     ],
 ) -> None:
-    """Prepare the training, validation, and test sets for the Fatty Liver
-    dataset.
+    """Prepare the training and test sets for the Fatty Liver dataset.
 
     Args:
         raw_data_path: The path to the raw data file.
@@ -147,7 +146,7 @@ def fatty_liver(
             )
     examples = pd.DataFrame.from_records(examples)
 
-    # Split the dataset into training, validation, and test sets
+    # Split the dataset into training and test sets
     splitter = GroupShuffleSplit(n_splits=1, test_size=0.2, random_state=0)
     train_val_indices, test_indices = next(
         splitter.split(X=examples, groups=examples["patient"])
@@ -155,17 +154,9 @@ def fatty_liver(
     train_val_examples = examples.iloc[train_val_indices]
     test_examples = examples.iloc[test_indices]
 
-    splitter = GroupShuffleSplit(n_splits=1, test_size=0.1, random_state=0)
-    train_indices, val_indices = next(
-        splitter.split(X=train_val_examples, groups=train_val_examples["patient"])
-    )
-    train_examples = train_val_examples.iloc[train_indices]
-    val_examples = train_val_examples.iloc[val_indices]
-
-    # Save the training, validation, and test indices to a JSON file
+    # Save the training and test indices to a JSON file
     for split, subset in [
-        ("train", train_examples),
-        ("validation", val_examples),
+        ("train_val", train_val_examples),
         ("test", test_examples),
     ]:
         subset = subset.to_dict(orient="records")

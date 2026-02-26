@@ -1,11 +1,11 @@
-"""Split the CAMUS dataset into training, validation, and test sets using a
-7:1:2 split, ensuring that there is no patient overlap between the splits.
+"""Split the CAMUS dataset into training and test sets using a 8:2 split,
+ensuring that there is no patient overlap between the splits.
 
 The images and masks are extracted from the NIfTI files and saved as 8-bit PNG
 files. The corresponding metadata for each sequence is the ".cfg" files.
 
-Each example (a single image) is represented as an object in one of three JSON
-array files (`train.json`, `validation.json`, or `test.json`). Each object has
+Each example (a single image) is represented as an object in one of two JSON
+array files (`train_val.json` or `test.json`). Each object has
 the following key/value pairs:
 
     - patient:          The patient ID.
@@ -84,7 +84,7 @@ def extract_images_and_masks(dataset_dir: str, output_dir: str) -> None:
     for nifti_file in glob.glob(
         os.path.join(dataset_dir, "database_nifti", "**", "*_half_sequence*.nii.gz")
     ):
-        images = nib.load(nifti_file).get_fdata().astype(np.uint8)
+        images = nib.load(nifti_file).get_fdata().astype(np.uint8)  # type: ignore
         patient, view = nifti_file.split("/")[-1].split("_")[:2]
         for i in range(images.shape[2]):
             image = np.rot90(images[:, :, i], axes=(1, 0)).astype(
@@ -180,7 +180,7 @@ def camus(
         str, typer.Argument(help="The output directory for the processed datasets")
     ],
 ) -> None:
-    """Divide the CAMUS dataset into training, validation, and test splits.
+    """Divide the CAMUS dataset into training and test splits.
 
     Args:
         raw_data_dir: The path to the raw data directory.
@@ -196,7 +196,7 @@ def camus(
     # Extract and save images and masks
     extract_images_and_masks(raw_data_dir, output_dir)
 
-    # Split the dataset into training, validation, and test sets
+    # Split the dataset into training and test sets
     splitter = GroupShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
     train_val_indices, test_indices = next(
         splitter.split(X=metadata, groups=metadata["patient"])
@@ -204,17 +204,9 @@ def camus(
     train_val_examples = metadata.iloc[train_val_indices]
     test_examples = metadata.iloc[test_indices]
 
-    splitter = GroupShuffleSplit(n_splits=1, test_size=0.1, random_state=42)
-    train_indices, val_indices = next(
-        splitter.split(X=train_val_examples, groups=train_val_examples["patient"])
-    )
-    train_examples = train_val_examples.iloc[train_indices]
-    val_examples = train_val_examples.iloc[val_indices]
-
-    # Save the training, validation, and test examples as JSON files
+    # Save the training and test examples as JSON files
     for split, examples in [
-        ("train", train_examples),
-        ("validation", val_examples),
+        ("train_val", train_val_examples),
         ("test", test_examples),
     ]:
         file_path = os.path.join(output_dir, f"{split}.json")

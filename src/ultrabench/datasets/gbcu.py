@@ -1,14 +1,12 @@
-"""Prepare the training, validation, and test sets for the GBCU dataset. We use
-the predefined training and test data split, and additionally separate 10% of
-the training set to serve as a validation set.
+"""Prepare the training and test sets for the GBCU dataset. We use the
+predefined training and test data split.
 
-While there is no patient overlap between the training and test splits, patient
-information is not publicly available and therefore we cannot prevent patient
-overlap between the training and validation sets.
+While patient information is not publicly available, there is no patient
+overlap between the training and test splits.
 
-Each example (a single image) is represented as an object in one of three JSON
-array files (`train.json`, `validation.json`, or `test.json`). Each object has
-the following key/value pairs:
+Each example (a single image) is represented as an object in one of two JSON
+array files (`train_val.json` or `test.json`). Each object has the following
+key/value pairs:
 
     - image:        The path to the image file.
     - dimensions:   The dimensions of the image (width, height).
@@ -36,7 +34,6 @@ from importlib.metadata import version
 import numpy as np
 import skimage
 import typer
-from sklearn.model_selection import train_test_split
 from typing_extensions import Annotated
 
 from .utils import save_version_info
@@ -128,7 +125,7 @@ def gbcu(
         str, typer.Argument(help="The output directory for the processed datasets")
     ],
 ) -> None:
-    """Prepare the training, validation, and test sets for the GBCU dataset.
+    """Prepare the training and test sets for the GBCU dataset.
 
     Args:
         raw_data_dir: The path to the raw data directory.
@@ -172,41 +169,32 @@ def gbcu(
     with open(os.path.join(output_dir, "test.json"), "w") as f:
         json.dump(test_set, f, indent=4)
 
-    # Process the training set into training and validation sets
+    # Process the training set
     with open(os.path.join(raw_data_dir, TRAIN_FILE), "r") as f:
         csv_reader = csv.reader(f, delimiter=",")
-        train_data = [(image, int(label)) for image, label in csv_reader]
+        train_val_data = [(image, int(label)) for image, label in csv_reader]
 
-    train_images, val_images = train_test_split(
-        train_data,
-        test_size=0.1,
-        random_state=42,
-        shuffle=True,
-        stratify=[label for _, label in train_data],
-    )
+    train_val_set = []
+    for filename, label in train_val_data:
+        # Copy the image to the output directory
+        shutil.copy(
+            os.path.join(raw_data_dir, IMAGE_DIR, filename),
+            os.path.join(output_dir, "images"),
+        )
 
-    for split, data in [("train", train_images), ("validation", val_images)]:
-        split_set = []
-        for filename, label in data:
-            # Copy the image to the output directory
-            shutil.copy(
-                os.path.join(raw_data_dir, IMAGE_DIR, filename),
-                os.path.join(output_dir, "images"),
-            )
+        # Generate the scan mask
+        image = skimage.io.imread(os.path.join(output_dir, "images", filename))
+        scan_mask = generate_scan_mask(image)
+        skimage.io.imsave(
+            os.path.join(output_dir, "masks", "scan", filename),
+            scan_mask,
+            check_contrast=False,
+        )
 
-            # Generate the scan mask
-            image = skimage.io.imread(os.path.join(output_dir, "images", filename))
-            scan_mask = generate_scan_mask(image)
-            skimage.io.imsave(
-                os.path.join(output_dir, "masks", "scan", filename),
-                scan_mask,
-                check_contrast=False,
-            )
+        # Create metadata entry
+        train_val_set.append(collate_info(filename, label, bbox_annotations))
 
-            # Create metadata entry
-            split_set.append(collate_info(filename, label, bbox_annotations))
-
-        with open(os.path.join(output_dir, f"{split}.json"), "w") as f:
-            json.dump(split_set, f, indent=4)
+    with open(os.path.join(output_dir, "train_val.json"), "w") as f:
+        json.dump(train_val_set, f, indent=4)
 
     save_version_info(output_dir, __version__)

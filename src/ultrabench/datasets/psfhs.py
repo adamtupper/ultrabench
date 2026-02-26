@@ -1,12 +1,11 @@
-"""Split the PSFHS dataset into training, validation, and test sets using a
-7:1:2 split. The dataset consists of 1358 images from 1124 patients.
-Unfortunately, there is no metadata to provide additional information about the
-patients or the images. Therefore, we cannot ensure that there is no patient
-overlap between the splits.
+"""Split the PSFHS dataset into training and test sets using an 8:2 split. The
+dataset consists of 1358 images from 1124 patients. Unfortunately, there is no
+metadata to provide additional information about the patients or the images.
+Therefore, we cannot ensure that there is no patient overlap between the splits.
 
-Each example (a single image) is represented as an object in one of three JSON
-array files (`train.json`, `validation.json`, or `test.json`). Each object has
-the following key/value pairs:
+Each example (a single image) is represented as an object in one of two JSON
+array files (`train_val.json` or `test.json`). Each object has the following
+key/value pairs:
 
     - image:            The path to the image file.
     - psfh_mask:        The path to the PS-FH mask file.
@@ -101,8 +100,7 @@ def psfhs(
         str, typer.Argument(help="The output directory for the processed datasets")
     ],
 ) -> None:
-    """Prepare the training, validation and test sets for the PSFHS
-    dataset.
+    """Prepare the training and test sets for the PSFHS dataset.
 
     Args:
         raw_data_dir: The path to the raw data directory.
@@ -184,15 +182,9 @@ def psfhs(
         examples, test_size=0.2, random_state=42, shuffle=True
     )
 
-    # Separate the training and validation sets
-    train_examples, val_examples = train_test_split(
-        train_val_examples, test_size=0.1, random_state=42, shuffle=True
-    )
-
-    # Save the training, validation, and test indices to a JSON file
+    # Save the training and test indices to a JSON file
     for split, subset in [
-        ("train", train_examples),
-        ("validation", val_examples),
+        ("train_val", train_val_examples),
         ("test", test_examples),
     ]:
         subset = subset.to_dict(orient="records")
