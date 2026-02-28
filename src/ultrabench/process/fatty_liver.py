@@ -88,7 +88,7 @@ def verify_args(raw_data_path: str, output_dir: str) -> None:
     ), "A matching version of the Fatty Liver dataset already exists"
 
 
-def fatty_liver(
+def process_fatty_liver(
     raw_data_path: Annotated[str, typer.Argument(help="The path to the raw data")],
     output_dir: Annotated[
         str, typer.Argument(help="The output directory for the processed datasets")
