@@ -30,7 +30,7 @@ EXTRACTED_DIRNAME = "covid19_ultrasound-master"
 def download_pocus(
     download_dir: Annotated[
         str, typer.Argument(help="The directory to download the dataset into")
-    ],
+    ] = ".",
 ) -> None:
     """Download the POCUS dataset from GitHub (covid19_ultrasound repository).
 

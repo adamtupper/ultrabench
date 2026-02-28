@@ -17,7 +17,7 @@ from zenodo_get import download as zenodo_download
 def download_fatty_liver(
     download_dir: Annotated[
         str, typer.Argument(help="The directory to download the dataset into")
-    ],
+    ] = ".",
 ) -> None:
     """Download the Fatty Liver dataset from Zenodo (Record 1009146).
 

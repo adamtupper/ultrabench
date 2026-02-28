@@ -27,7 +27,7 @@ URLS = [
 def download_butterfly(
     download_dir: Annotated[
         str, typer.Argument(help="The directory to download the dataset into")
-    ],
+    ] = ".",
 ) -> None:
     """Download the Butterfly dataset archives from GitHub releases.
 

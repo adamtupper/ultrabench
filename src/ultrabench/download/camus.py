@@ -26,7 +26,7 @@ ARCHIVE_FILENAME = "camus.zip"
 def download_camus(
     download_dir: Annotated[
         str, typer.Argument(help="The directory to download the dataset into")
-    ],
+    ] = ".",
 ) -> None:
     """Download the CAMUS dataset from the CREATIS database.
 
