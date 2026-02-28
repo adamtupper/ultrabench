@@ -6,10 +6,21 @@ import zipfile
 
 import requests
 import typer
+from rich.progress import (
+    BarColumn,
+    DownloadColumn,
+    Progress,
+    SpinnerColumn,
+    TextColumn,
+    TransferSpeedColumn,
+)
 
 
 def download_file(url: str, dest_path: str) -> None:
     """Download a file from a URL to a local path, streaming with progress output.
+
+    Displays a Rich progress bar when the server provides Content-Length, or a
+    spinner when the total size is unknown.
 
     Args:
         url: The URL of the file to download.
@@ -18,25 +29,30 @@ def download_file(url: str, dest_path: str) -> None:
     response = requests.get(url, stream=True, timeout=60)
     response.raise_for_status()
 
-    total = int(response.headers.get("content-length", 0))
-    downloaded = 0
+    total = int(response.headers.get("content-length", 0)) or None
     chunk_size = 1024 * 1024  # 1 MB
-
     filename = os.path.basename(dest_path)
-    typer.echo(f"Downloading {filename}...")
-
-    with open(dest_path, "wb") as f:
-        for chunk in response.iter_content(chunk_size=chunk_size):
-            f.write(chunk)
-            downloaded += len(chunk)
-            if total:
-                pct = downloaded / total * 100
-                typer.echo(
-                    f"\r  {pct:.1f}% ({downloaded // 1024 // 1024} MB)", nl=False
-                )
 
     if total:
-        typer.echo("")  # newline after progress
+        columns = [
+            TextColumn(filename),
+            BarColumn(),
+            DownloadColumn(),
+            TransferSpeedColumn(),
+        ]
+    else:
+        columns = [
+            SpinnerColumn(),
+            TextColumn(f"Downloading {filename}..."),
+            DownloadColumn(),
+        ]
+
+    with Progress(*columns, transient=True) as progress:
+        task = progress.add_task("", total=total)
+        with open(dest_path, "wb") as f:
+            for chunk in response.iter_content(chunk_size=chunk_size):
+                f.write(chunk)
+                progress.update(task, advance=len(chunk))
 
 
 def extract_archive(archive_path: str, output_dir: str) -> None:
