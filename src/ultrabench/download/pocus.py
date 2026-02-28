@@ -13,6 +13,7 @@ Usage:
 
 import os
 import shutil
+from datetime import date
 from typing import Annotated
 
 import typer
@@ -39,19 +40,22 @@ def download_pocus(
     Args:
         download_dir: The directory to download the dataset into.
     """
-    os.makedirs(download_dir, exist_ok=True)
+    date_str = date.today().strftime("%Y%m%d")
+    output_dir = os.path.join(download_dir, f"pocus_raw_{date_str}")
+    os.makedirs(output_dir, exist_ok=True)
     typer.echo("Downloading POCUS dataset from GitHub...")
 
-    dest = os.path.join(download_dir, ARCHIVE_FILENAME)
+    dest = os.path.join(output_dir, ARCHIVE_FILENAME)
     download_file(REPO_ZIP_URL, dest)
-    extract_archive(dest, download_dir)
+    extract_archive(dest, output_dir)
     os.remove(dest)
 
     # Rename the extracted folder to a cleaner name
-    extracted_path = os.path.join(download_dir, EXTRACTED_DIRNAME)
-    final_path = os.path.join(download_dir, "covid19_ultrasound")
+    extracted_path = os.path.join(output_dir, EXTRACTED_DIRNAME)
     if os.path.exists(extracted_path):
-        shutil.move(extracted_path, final_path)
+        shutil.move(extracted_path, os.path.join(output_dir, "covid19_ultrasound"))
 
-    typer.echo(f"Download complete. Data saved to: {final_path}")
-    typer.echo(f"Pass '{final_path}' as RAW_DATA_DIR to `ultrabench pocus process`.")
+    typer.echo(f"Download complete. Saved to {output_dir}.")
+    typer.echo(
+        f"Process the dataset by running `ultrabench process pocus {output_dir}`."
+    )

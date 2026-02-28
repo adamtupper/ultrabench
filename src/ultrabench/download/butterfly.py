@@ -10,6 +10,7 @@ Usage:
 """
 
 import os
+from datetime import date
 from typing import Annotated
 
 import typer
@@ -33,14 +34,19 @@ def download_butterfly(
     Args:
         download_dir: The directory to download the dataset into.
     """
-    os.makedirs(download_dir, exist_ok=True)
+    date_str = date.today().strftime("%Y%m%d")
+    output_dir = os.path.join(download_dir, f"butterfly_raw_{date_str}")
+    os.makedirs(output_dir, exist_ok=True)
     typer.echo("Downloading Butterfly dataset from GitHub releases...")
 
     for url in URLS:
         filename = url.split("/")[-1]
-        dest = os.path.join(download_dir, filename)
+        dest = os.path.join(output_dir, filename)
         download_file(url, dest)
-        extract_archive(dest, download_dir)
+        extract_archive(dest, output_dir)
         os.remove(dest)
 
-    typer.echo(f"Download complete. Data saved to: {download_dir}")
+    typer.echo(f"Download complete. Saved to {output_dir}.")
+    typer.echo(
+        f"Process the dataset by running `ultrabench process butterfly {output_dir}`."
+    )

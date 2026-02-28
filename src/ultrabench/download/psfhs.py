@@ -7,6 +7,7 @@ Usage:
 """
 
 import os
+from datetime import date
 from typing import Annotated
 
 import typer
@@ -23,7 +24,12 @@ def download_psfhs(
     Args:
         download_dir: The directory to download the dataset into.
     """
-    os.makedirs(download_dir, exist_ok=True)
+    date_str = date.today().strftime("%Y%m%d")
+    output_dir = os.path.join(download_dir, f"psfhs_raw_{date_str}")
+    os.makedirs(output_dir, exist_ok=True)
     typer.echo("Downloading PSFHS dataset from Zenodo (Record 10969427)...")
-    zenodo_download("10969427", output_dir=download_dir)
-    typer.echo(f"Download complete. Data saved to: {download_dir}")
+    zenodo_download("10969427", output_dir=output_dir)
+    typer.echo(f"Download complete. Saved to {output_dir}.")
+    typer.echo(
+        f"Process the dataset by running `ultrabench process psfhs {output_dir}`."
+    )

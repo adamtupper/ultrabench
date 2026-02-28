@@ -7,6 +7,7 @@ Usage:
 """
 
 import os
+from datetime import date
 from typing import Annotated
 
 import typer
@@ -23,7 +24,10 @@ def download_aul(
     Args:
         download_dir: The directory to download the dataset into.
     """
-    os.makedirs(download_dir, exist_ok=True)
+    date_str = date.today().strftime("%Y%m%d")
+    output_dir = os.path.join(download_dir, f"aul_raw_{date_str}")
+    os.makedirs(output_dir, exist_ok=True)
     typer.echo("Downloading AUL dataset from Zenodo (Record 7272660)...")
-    zenodo_get.download("7272660", output_dir=download_dir)
-    typer.echo(f"Download complete. Data saved to: {download_dir}")
+    zenodo_get.download("7272660", output_dir=output_dir)
+    typer.echo(f"Download complete. Saved to {output_dir}.")
+    typer.echo(f"Process the dataset by running `ultrabench process aul {output_dir}`.")

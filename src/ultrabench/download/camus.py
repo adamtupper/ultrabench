@@ -12,6 +12,7 @@ Usage:
 """
 
 import os
+from datetime import date
 from typing import Annotated
 
 import typer
@@ -32,12 +33,17 @@ def download_camus(
     Args:
         download_dir: The directory to download the dataset into.
     """
-    os.makedirs(download_dir, exist_ok=True)
+    date_str = date.today().strftime("%Y%m%d")
+    output_dir = os.path.join(download_dir, f"camus_raw_{date_str}")
+    os.makedirs(output_dir, exist_ok=True)
     typer.echo("Downloading CAMUS dataset from the CREATIS database...")
 
-    dest = os.path.join(download_dir, ARCHIVE_FILENAME)
+    dest = os.path.join(output_dir, ARCHIVE_FILENAME)
     download_file(DOWNLOAD_URL, dest)
-    extract_archive(dest, download_dir)
+    extract_archive(dest, output_dir)
     os.remove(dest)
 
-    typer.echo(f"Download complete. Data saved to: {download_dir}")
+    typer.echo(f"Download complete. Saved to {output_dir}.")
+    typer.echo(
+        f"Process the dataset by running `ultrabench process camus {output_dir}`."
+    )
