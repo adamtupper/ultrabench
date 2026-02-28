@@ -78,7 +78,7 @@ def verify_args(raw_data_dir: str, output_dir: str) -> None:
     ), "A matching version of the Butterfly dataset already exists"
 
 
-def butterfly(
+def process_butterfly(
     raw_data_dir: Annotated[str, typer.Argument(help="The path to the raw data")],
     output_dir: Annotated[
         str, typer.Argument(help="The output directory for the processed datasets")

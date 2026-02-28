@@ -30,6 +30,8 @@ dependencies = [
     "scikit-learn >=1.5.0",
     "simpleitk >=2.3.1",
     "typer >=0.15.1",
+    "requests >=2.32.0",
+    "zenodo-get >=3.0.0",
 ]
 
 [dependency-groups]

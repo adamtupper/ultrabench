@@ -221,7 +221,7 @@ def verify_args(raw_data_dir: str, output_dir: str) -> None:
     ), "A matching version of the Stanford Thyroid dataset already exists"
 
 
-def stanford_thyroid(
+def process_stanford_thyroid(
     raw_data_dir: Annotated[str, typer.Argument(help="The path to the raw data")],
     output_dir: Annotated[
         str, typer.Argument(help="The output directory for the processed datasets")
