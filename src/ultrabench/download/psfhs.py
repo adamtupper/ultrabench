@@ -21,7 +21,7 @@ def download_psfhs(
         str, typer.Argument(help="The directory to download the dataset into")
     ] = ".",
 ) -> None:
-    """Download the PSFHS dataset from Zenodo (Record 10969427).
+    """Download the PSFHS dataset from Zenodo.
 
     Args:
         download_dir: The directory to download the dataset into.
@@ -29,7 +29,7 @@ def download_psfhs(
     date_str = date.today().strftime("%Y%m%d")
     output_dir = os.path.join(download_dir, f"psfhs_raw_{date_str}")
     os.makedirs(output_dir, exist_ok=True)
-    typer.echo("Downloading PSFHS dataset from Zenodo (Record 10969427)...")
+    typer.echo("Downloading PSFHS dataset from Zenodo...")
     zenodo_download("10969427", output_dir=output_dir)
 
     for filename in os.listdir(output_dir):

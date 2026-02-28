@@ -29,7 +29,7 @@ def download_butterfly(
         str, typer.Argument(help="The directory to download the dataset into")
     ] = ".",
 ) -> None:
-    """Download the Butterfly dataset archives from GitHub releases.
+    """Download the Butterfly dataset archives from GitHub.
 
     Args:
         download_dir: The directory to download the dataset into.
@@ -37,7 +37,7 @@ def download_butterfly(
     date_str = date.today().strftime("%Y%m%d")
     output_dir = os.path.join(download_dir, f"butterfly_raw_{date_str}")
     os.makedirs(output_dir, exist_ok=True)
-    typer.echo("Downloading Butterfly dataset from GitHub releases...")
+    typer.echo("Downloading Butterfly dataset from GitHub...")
 
     for url in URLS:
         filename = url.split("/")[-1]

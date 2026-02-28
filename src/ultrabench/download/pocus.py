@@ -32,7 +32,7 @@ def download_pocus(
         str, typer.Argument(help="The directory to download the dataset into")
     ] = ".",
 ) -> None:
-    """Download the POCUS dataset from GitHub (covid19_ultrasound repository).
+    """Download the POCUS dataset from GitHub.
 
     The repository is downloaded as a ZIP archive and extracted. Pass the
     resulting directory to `ultrabench pocus process` as the RAW_DATA_DIR.

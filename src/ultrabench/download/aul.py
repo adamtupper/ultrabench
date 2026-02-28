@@ -21,7 +21,7 @@ def download_aul(
         str, typer.Argument(help="The directory to download the dataset into")
     ] = ".",
 ) -> None:
-    """Download the AUL dataset from Zenodo (Record 7272660).
+    """Download the AUL dataset from Zenodo.
 
     Args:
         download_dir: The directory to download the dataset into.
@@ -29,7 +29,7 @@ def download_aul(
     date_str = date.today().strftime("%Y%m%d")
     output_dir = os.path.join(download_dir, f"aul_raw_{date_str}")
     os.makedirs(output_dir, exist_ok=True)
-    typer.echo("Downloading AUL dataset from Zenodo (Record 7272660)...")
+    typer.echo("Downloading AUL dataset from Zenodo...")
     zenodo_get.download("7272660", output_dir=output_dir)
 
     for filename in os.listdir(output_dir):
