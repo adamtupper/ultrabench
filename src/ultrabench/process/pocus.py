@@ -30,7 +30,6 @@ Usage:
     ultrabench pocus RAW_DATA_DIR OUTPUT_DIR
 """
 
-import argparse
 import json
 import os
 from importlib.metadata import version
@@ -42,10 +41,11 @@ import imageio
 import numpy as np
 import pandas as pd
 import skimage
+import skimage.io as io
 import typer
 from sklearn.model_selection import GroupShuffleSplit
 
-from .utils import save_version_info
+from .utils import resize_and_pad, save_version_info, to_3_channel
 
 __version__ = version("ultrabench")
 
@@ -69,105 +69,38 @@ VIDEO_EXTENSIONS = (".mpeg", ".gif", ".mp4", ".m4v", ".avi", ".mov")
 VIDEO_INFO_TEMPLATE = "--> {}: {} frames at {:.2f} Hz, {} dimensions"
 
 
-def parse_args() -> argparse.Namespace:
-    """Parse command-line arguments.
-
-    Returns:
-        The parsed arguments.
-    """
-    parser = argparse.ArgumentParser(prog="prepare_pocus.py")
-    parser.add_argument(
-        "--dataset_dir",
-        type=str,
-        help="The path to the original dataset directory",
-        required=True,
-    )
-    parser.add_argument(
-        "--output_dir",
-        type=str,
-        help="The directory in which to save the processed dataset",
-        required=True,
-    )
-    parser.add_argument(
-        "--version",
-        type=int,
-        help="The version number to assign the processed dataset",
-        required=True,
-    )
-
-    args = parser.parse_args()
-    assert os.path.isdir(args.dataset_dir), "dataset_dir must be an existing directory"
-    assert os.path.exists(args.output_dir), "output_dir must be an existing directory"
-    assert not os.path.exists(
-        os.path.join(args.output_dir, OUTPUT_NAME.format(args.version))
-    ), "a version of the dataset with this version number already exists"
-
-    return args
-
-
 def generate_scan_mask(image: np.ndarray) -> np.ndarray:
     """Generate a scan mask using morphological operations.
 
     Args:
-        image: The input image array.
+        image: The input 2D grayscale image array.
 
     Returns:
         A binary mask of the scan region.
     """
-    # Convert the image to single-channel grayscale
-    image = image.mean(axis=-1).astype(np.uint8) if image.ndim == 3 else image
-
-    # Dynamic/adaptive thresholding to separate foreground
     threshold = skimage.filters.threshold_local(image, block_size=3)
     mask = image > threshold
     mask = mask > 0
-
-    # Fill small holes
     mask = skimage.morphology.remove_small_holes(mask, area_threshold=500)
-
-    # Remove small objects
     mask = skimage.morphology.remove_small_objects(mask, min_size=32)
 
-    # Reflect the larger half of the mask to compensate for shadows
+    # Reflect the larger half to compensate for shadows
     _, width = mask.shape
     left_half = mask[:, : width // 2]
     right_half = mask[:, width // 2 :]
-    left_sum = np.sum(left_half)
-    right_sum = np.sum(right_half)
-
-    # Determine which half has the smaller sum and reflect it
-    if left_sum > right_sum:
+    if np.sum(left_half) > np.sum(right_half):
         right_half = np.fliplr(left_half)
     else:
         left_half = np.fliplr(right_half)
-
-    # Merge the two halves back together (pad/crop if image width is odd)
     mask = np.hstack((left_half, right_half))
 
     if mask.shape[1] < image.shape[1]:
-        # Pad the mask by adding a single column of zeros to the right
         mask = np.hstack((mask, np.zeros((mask.shape[0], 1))))
     elif mask.shape[1] > image.shape[1]:
-        # Crop the mask by removing the rightmost column
         mask = mask[:, :-1]
 
-    # Extract convex hull of the mask
     mask = skimage.morphology.convex_hull_image(mask)
-
     return mask.astype(np.uint8)
-
-
-def image_filter(path: str, prefix: str) -> bool:
-    """Filter the images in the directory.
-
-    Args:
-        path: The path to the file.
-        prefix: The prefix to match.
-
-    Returns:
-        True if the file matches the criteria, False otherwise.
-    """
-    return path.endswith(IMAGE_EXTENSIONS) and path.startswith(prefix)
 
 
 def extract_frames_ffmpeg(video_path: str) -> tuple[np.ndarray, float]:
@@ -251,22 +184,54 @@ def process_pocus(
     output_dir: Annotated[
         str, typer.Argument(help="The output directory for the processed datasets")
     ],
+    size: Annotated[
+        int, typer.Option(help="Test image size (height and width in pixels)")
+    ] = 256,
 ) -> None:
     """Prepare the training and test sets for the POCUS dataset.
 
     Args:
         raw_data_dir: The path to the raw data directory.
         output_dir: The path to the output directory.
+        size: The height and width of the test images in pixels.
     """
     verify_args(raw_data_dir, output_dir)
 
-    output_dir = os.path.join(output_dir, OUTPUT_NAME.format(__version__))
+    dataset_dir = os.path.join(output_dir, OUTPUT_NAME.format(__version__))
+    test_dir_name = f"test_{size}"
 
-    # Copy the images and add them to a list of examples
-    examples = []
+    # Collect source-level metadata (no file I/O) to determine the split
     image_dir = os.path.join(raw_data_dir, INPUT_IMAGE_DIR)
-    os.makedirs(os.path.join(output_dir, "images"), exist_ok=True)
-    os.makedirs(os.path.join(output_dir, "masks", "scan"), exist_ok=True)
+    video_dir = os.path.join(raw_data_dir, INPUT_VIDEO_DIR)
+
+    source_records = []
+    for abbr, label in ABBR_TO_LABEL.items():
+        for file in os.listdir(image_dir):
+            if file.endswith(IMAGE_EXTENSIONS) and file.lower().startswith(abbr):
+                source_records.append({"source": file, "pathology": label})
+        for file in os.listdir(video_dir):
+            if file.endswith(VIDEO_EXTENSIONS) and file.lower().startswith(abbr):
+                source_records.append({"source": file, "pathology": label})
+
+    sources_df = pd.DataFrame(source_records)
+
+    # Split by source to avoid data leakage between train and test
+    splitter = GroupShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
+    train_indices, test_indices = next(
+        splitter.split(X=sources_df, groups=sources_df["source"])
+    )
+    test_sources = set(sources_df.iloc[test_indices]["source"])
+
+    # Create output directories
+    for split_dir_name in ["train_val", test_dir_name]:
+        split_dir = os.path.join(dataset_dir, split_dir_name)
+        os.makedirs(os.path.join(split_dir, "images"), exist_ok=True)
+        os.makedirs(os.path.join(split_dir, "masks", "scan"), exist_ok=True)
+
+    train_examples = []
+    test_examples = []
+
+    # Process image files
     for abbr, label in ABBR_TO_LABEL.items():
         files = [
             p
@@ -274,40 +239,41 @@ def process_pocus(
             if p.endswith(IMAGE_EXTENSIONS) and p.lower().startswith(abbr)
         ]
         for file in files:
-            # Convert any 1-channel (greyscale) or 4-channel (RGBA) images to 3-channel
-            # images
-            image = skimage.io.imread(os.path.join(image_dir, file))
-            if image.ndim == 2:
-                image = np.stack([image] * 3, axis=-1)
-            elif image.shape[-1] == 4:
-                image = skimage.color.rgba2rgb(image)
-                image = (image * 255).astype(np.uint8)
-            skimage.io.imsave(
-                os.path.join(output_dir, "images", f"{Path(file).stem}.png"), image
+            is_test = file in test_sources
+            split_dir = os.path.join(
+                dataset_dir, test_dir_name if is_test else "train_val"
             )
 
-            # Generate a scan mask for the image
-            mask = generate_scan_mask(image)
-            skimage.io.imsave(
-                os.path.join(output_dir, "masks", "scan", f"{Path(file).stem}.png"),
+            raw_image = io.imread(os.path.join(image_dir, file))
+            gray = (
+                raw_image.mean(axis=-1).astype(np.uint8)
+                if raw_image.ndim == 3
+                else raw_image
+            )
+            mask = generate_scan_mask(gray)
+            image = to_3_channel(raw_image)
+            if is_test:
+                image = resize_and_pad(image, size, order=1)
+                mask = resize_and_pad(mask, size, order=0)
+
+            stem = Path(file).stem
+            io.imsave(os.path.join(split_dir, "images", f"{stem}.png"), image)
+            io.imsave(
+                os.path.join(split_dir, "masks", "scan", f"{stem}.png"),
                 mask,
                 check_contrast=False,
             )
 
-            examples.append(
-                {
-                    "source": file,
-                    "image": os.path.join("images", f"{Path(file).stem}.png"),
-                    "scan_mask": os.path.join(
-                        "masks", "scan", f"{Path(file).stem}.png"
-                    ),
-                    "pathology": label,
-                    "label": LABEL_TO_CLASS[label],
-                }
-            )
+            example = {
+                "source": file,
+                "image": f"images/{stem}.png",
+                "scan_mask": f"masks/scan/{stem}.png",
+                "pathology": label,
+                "label": LABEL_TO_CLASS[label],
+            }
+            (test_examples if is_test else train_examples).append(example)
 
-    # Extract the frames from the videos and add them to the list of examples
-    video_dir = os.path.join(raw_data_dir, INPUT_VIDEO_DIR)
+    # Process video files
     for abbr, label in ABBR_TO_LABEL.items():
         files = [
             p
@@ -315,12 +281,16 @@ def process_pocus(
             if p.endswith(VIDEO_EXTENSIONS) and p.lower().startswith(abbr)
         ]
         for file in files:
+            is_test = file in test_sources
+            split_dir = os.path.join(
+                dataset_dir, test_dir_name if is_test else "train_val"
+            )
+
             if file.endswith(".gif"):
                 frames, frame_rate = extract_frames_opencv(
                     os.path.join(video_dir, file)
                 )
             else:
-                # Process with imageio/ffmpeg
                 frames, frame_rate = extract_frames_ffmpeg(
                     os.path.join(video_dir, file)
                 )
@@ -329,62 +299,42 @@ def process_pocus(
             frames = frames[1::every_nth_frame][:MAX_FRAMES]
 
             for i, frame in enumerate(frames):
-                # Save the frame as a 3-channel image
-                if frame.ndim == 2:
-                    frame = np.stack([frame] * 3, axis=-1)
-                elif frame.shape[-1] == 4:
-                    frame = skimage.color.rgba2rgb(frame)
-                    image = (image * 255).astype(np.uint8)
-                skimage.io.imsave(
-                    os.path.join(output_dir, "images", f"{Path(file).stem}_{i}.png"),
-                    frame,
+                gray = (
+                    frame.mean(axis=-1).astype(np.uint8) if frame.ndim == 3 else frame
                 )
+                mask = generate_scan_mask(gray)
+                image = to_3_channel(frame)
+                if is_test:
+                    image = resize_and_pad(image, size, order=1)
+                    mask = resize_and_pad(mask, size, order=0)
 
-                # Generate a scan mask for the frame
-                mask = generate_scan_mask(frame)
-                skimage.io.imsave(
-                    os.path.join(
-                        output_dir, "masks", "scan", f"{Path(file).stem}_{i}.png"
-                    ),
+                stem = f"{Path(file).stem}_{i}"
+                io.imsave(os.path.join(split_dir, "images", f"{stem}.png"), image)
+                io.imsave(
+                    os.path.join(split_dir, "masks", "scan", f"{stem}.png"),
                     mask,
                     check_contrast=False,
                 )
 
-                examples.append(
-                    {
-                        "source": file,
-                        "image": os.path.join("images", f"{Path(file).stem}_{i}.png"),
-                        "scan_mask": os.path.join(
-                            "masks", "scan", f"{Path(file).stem}_{i}.png"
-                        ),
-                        "pathology": label,
-                        "label": LABEL_TO_CLASS[label],
-                    }
-                )
+                example = {
+                    "source": file,
+                    "image": f"images/{stem}.png",
+                    "scan_mask": f"masks/scan/{stem}.png",
+                    "pathology": label,
+                    "label": LABEL_TO_CLASS[label],
+                }
+                (test_examples if is_test else train_examples).append(example)
 
-    # Create a DataFrame with the examples
-    examples = pd.DataFrame(examples)
-
-    print(f"Number of examples: {len(examples)}")
-
-    # Split the dataset into training and test sets
-    splitter = GroupShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
-    train_val_indices, test_indices = next(
-        splitter.split(X=examples, groups=examples["source"])
-    )
-    train_val_examples = examples.iloc[train_val_indices]
-    test_examples = examples.iloc[test_indices]
-
-    # Save the training and test examples as JSON files
-    for split, examples in [
-        ("train_val", train_val_examples),
-        ("test", test_examples),
-    ]:
-        file_path = os.path.join(output_dir, f"{split}.json")
-        with open(file_path, "w") as f:
-            json.dump(examples.to_dict(orient="records"), f, indent=4)
-
-    print(f"Training examples: {len(train_val_examples)}")
+    print(f"Number of examples: {len(train_examples) + len(test_examples)}")
+    print(f"Training examples: {len(train_examples)}")
     print(f"Test examples: {len(test_examples)}")
 
-    save_version_info(output_dir, __version__)
+    # Save the metadata JSON files inside their split directories
+    train_dir = os.path.join(dataset_dir, "train_val")
+    test_dir = os.path.join(dataset_dir, test_dir_name)
+    with open(os.path.join(train_dir, "train_val.json"), "w") as f:
+        json.dump(train_examples, f, indent=4)
+    with open(os.path.join(test_dir, "test.json"), "w") as f:
+        json.dump(test_examples, f, indent=4)
+
+    save_version_info(dataset_dir, __version__)

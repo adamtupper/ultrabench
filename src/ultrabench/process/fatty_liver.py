@@ -31,7 +31,7 @@ import typer
 from sklearn.model_selection import GroupShuffleSplit
 from typing_extensions import Annotated
 
-from .utils import save_version_info
+from .utils import resize_and_pad, save_version_info, to_3_channel
 
 __version__ = version("ultrabench")
 
@@ -43,34 +43,20 @@ def generate_scan_mask(image: np.ndarray) -> np.ndarray:
     """Generate a scan mask using morphological operations.
 
     Args:
-        image: The input image array.
+        image: The input 2D image array.
 
     Returns:
         A binary mask of the scan region.
     """
-    # Threshold the image
     mask = image > 0
-
-    # Remove small objects
     mask = skimage.morphology.remove_small_objects(mask, min_size=2000)
-
-    # Erode the mask
     for i in range(5):
         mask = skimage.morphology.binary_erosion(mask)
-
-    # Remove remaining small objects
     mask = skimage.morphology.remove_small_objects(mask, min_size=2000)
-
-    # Dilate the mask
     for i in range(5):
         mask = skimage.morphology.binary_dilation(mask)
-
-    # Fill small holes
     mask = skimage.morphology.remove_small_holes(mask, area_threshold=1000)
-
-    # Extract convex hull of the mask
     mask = skimage.morphology.convex_hull_image(mask)
-
     return mask.astype(np.uint8)
 
 
@@ -93,60 +79,49 @@ def process_fatty_liver(
     output_dir: Annotated[
         str, typer.Argument(help="The output directory for the processed datasets")
     ],
+    size: Annotated[
+        int, typer.Option(help="Test image size (height and width in pixels)")
+    ] = 256,
 ) -> None:
     """Prepare the training and test sets for the Fatty Liver dataset.
 
     Args:
         raw_data_path: The path to the raw data file.
         output_dir: The path to the output directory.
+        size: The height and width of the test images in pixels.
     """
+    verify_args(raw_data_path, output_dir)
 
-    output_dir = os.path.join(output_dir, OUTPUT_NAME.format(__version__))
+    dataset_dir = os.path.join(output_dir, OUTPUT_NAME.format(__version__))
+    test_dir_name = f"test_{size}"
 
     # Load the data
     data = scipy.io.loadmat(raw_data_path)
-    examples = data["data"][0]
-    patient_ids = np.array([examples[0][0][0] for examples in examples])
-    labels = np.array([examples[1][0][0] for examples in examples])
-    steatosis_values = np.array([examples[2][0][0] for examples in examples])
-    frame_sequences = [examples[3] for examples in examples]
+    entries = data["data"][0]
+    patient_ids = np.array([e[0][0][0] for e in entries])
+    labels = np.array([e[1][0][0] for e in entries])
+    steatosis_values = np.array([e[2][0][0] for e in entries])
+    frame_sequences = [e[3] for e in entries]
 
-    # Save each frame as a PNG image
-    image_dir = os.path.join(output_dir, "images")
-    os.makedirs(image_dir, exist_ok=True)
-    for id, frames in zip(patient_ids, frame_sequences):
-        for i in range(frames.shape[0]):
-            image_path = os.path.join(image_dir, f"{id}_{i}.png")
-            io.imsave(image_path, frames[i])
-
-    # Generate a scan mask for each image
-    mask_dir = os.path.join(output_dir, "masks", "scan")
-    os.makedirs(mask_dir, exist_ok=True)
-    for id, frames in zip(patient_ids, frame_sequences):
-        for i in range(frames.shape[0]):
-            mask_path = os.path.join(mask_dir, f"{id}_{i}.png")
-            mask = generate_scan_mask(frames[i])
-            io.imsave(mask_path, mask, check_contrast=False)
-
-    # Create a dataframe of examples
-    examples = []
-    for id, label, steatosis_value, frames in zip(
+    # Build a per-frame DataFrame for splitting (no file I/O yet)
+    records = []
+    for patient_id, label, steatosis, frames in zip(
         patient_ids, labels, steatosis_values, frame_sequences
     ):
         for i in range(frames.shape[0]):
-            examples.append(
+            records.append(
                 {
-                    "patient": id,
-                    "image": os.path.join("images", f"{id}_{i}.png"),
-                    "scan_mask": os.path.join("masks", "scan", f"{id}_{i}.png"),
-                    "steatosis": steatosis_value,
+                    "patient": patient_id,
+                    "image": f"images/{patient_id}_{i}.png",
+                    "scan_mask": f"masks/scan/{patient_id}_{i}.png",
+                    "steatosis": steatosis,
                     "label": label,
                     "pathology": LABEL_TO_CLASS[label],
                 }
             )
-    examples = pd.DataFrame.from_records(examples)
+    examples = pd.DataFrame.from_records(records)
 
-    # Split the dataset into training and test sets
+    # Determine the train/test split from patient IDs before any file I/O
     splitter = GroupShuffleSplit(n_splits=1, test_size=0.2, random_state=0)
     train_val_indices, test_indices = next(
         splitter.split(X=examples, groups=examples["patient"])
@@ -154,14 +129,56 @@ def process_fatty_liver(
     train_val_examples = examples.iloc[train_val_indices]
     test_examples = examples.iloc[test_indices]
 
-    # Save the training and test indices to a JSON file
-    for split, subset in [
-        ("train_val", train_val_examples),
-        ("test", test_examples),
+    test_image_paths = set(test_examples["image"])
+
+    # Save images and masks to the correct split directories
+    for split_name, split_examples, split_dir, is_test in [
+        (
+            "train_val",
+            train_val_examples,
+            os.path.join(dataset_dir, "train_val"),
+            False,
+        ),
+        ("test", test_examples, os.path.join(dataset_dir, test_dir_name), True),
     ]:
-        subset = subset.to_dict(orient="records")
+        os.makedirs(os.path.join(split_dir, "images"), exist_ok=True)
+        os.makedirs(os.path.join(split_dir, "masks", "scan"), exist_ok=True)
 
-        with open(os.path.join(output_dir, f"{split}.json"), "w") as f:
-            json.dump(subset, f, indent=4)
+    for patient_id, label, steatosis, frames in zip(
+        patient_ids, labels, steatosis_values, frame_sequences
+    ):
+        for i in range(frames.shape[0]):
+            rel_image_path = f"images/{patient_id}_{i}.png"
+            is_test = rel_image_path in test_image_paths
+            split_dir = os.path.join(
+                dataset_dir, test_dir_name if is_test else "train_val"
+            )
 
-    save_version_info(output_dir, __version__)
+            frame = frames[i]
+            mask = generate_scan_mask(frame)
+            image = to_3_channel(frame)
+            if is_test:
+                image = resize_and_pad(image, size, order=1)
+                mask = resize_and_pad(mask, size, order=0)
+
+            io.imsave(
+                os.path.join(split_dir, "images", f"{patient_id}_{i}.png"),
+                image,
+                check_contrast=False,
+            )
+            io.imsave(
+                os.path.join(split_dir, "masks", "scan", f"{patient_id}_{i}.png"),
+                mask,
+                check_contrast=False,
+            )
+
+    # Save the metadata JSON files inside their split directories
+    for split, subset, split_dir in [
+        ("train_val", train_val_examples, os.path.join(dataset_dir, "train_val")),
+        ("test", test_examples, os.path.join(dataset_dir, test_dir_name)),
+    ]:
+        with open(os.path.join(split_dir, f"{split}.json"), "w") as f:
+            json.dump(subset.to_dict(orient="records"), f, indent=4)
+        print(f"Number of {split} examples: {len(subset)}")
+
+    save_version_info(dataset_dir, __version__)

@@ -18,15 +18,16 @@ Usage:
 import glob
 import json
 import os
-import shutil
 from importlib.metadata import version
 
+import numpy as np
 import pandas as pd
 import skimage
+import skimage.io as io
 import typer
 from typing_extensions import Annotated
 
-from .utils import save_version_info
+from .utils import resize_and_pad, save_version_info, to_3_channel
 
 __version__ = version("ultrabench")
 
@@ -44,24 +45,18 @@ CLASS_TO_LABEL = {
 }
 
 
-def generate_scan_mask(
-    output_dir: str, rel_image_path: str, rel_mask_path: str
-) -> None:
+def generate_scan_mask(image: np.ndarray) -> np.ndarray:
     """Generate a scan mask for an image using morphological operations.
 
     Args:
-        output_dir: The output directory for the dataset.
-        rel_image_path: The path to the image file.
-        rel_mask_path: The path to save the scan mask file.
+        image: The input 2D grayscale image.
+
+    Returns:
+        A binary mask of the scan region.
     """
-    image = skimage.io.imread(rel_image_path)
-    mask = image > 0  # Threshold the image
-    mask = skimage.morphology.convex_hull_image(mask)  # Extract convex hull of the mask
-    skimage.io.imsave(
-        os.path.join(output_dir, rel_mask_path),
-        mask.astype("uint8"),
-        check_contrast=False,
-    )
+    mask = image > 0
+    mask = skimage.morphology.convex_hull_image(mask)
+    return mask.astype("uint8")
 
 
 def verify_args(raw_data_dir: str, output_dir: str) -> None:
@@ -83,17 +78,22 @@ def process_butterfly(
     output_dir: Annotated[
         str, typer.Argument(help="The output directory for the processed datasets")
     ],
+    size: Annotated[
+        int, typer.Option(help="Test image size (height and width in pixels)")
+    ] = 256,
 ) -> None:
     """Prepare the training and test sets for the Butterfly dataset.
 
     Args:
         raw_data_dir: The path to the raw data directory.
         output_dir: The path to the output directory.
+        size: The height and width of the test images in pixels.
     """
     # Verify arguments
     verify_args(raw_data_dir, output_dir)
 
     dataset_dir = os.path.join(output_dir, OUTPUT_NAME.format(__version__))
+    test_dir_name = f"test_{size}"
 
     # Parse the metadata for each example
     examples = []
@@ -116,28 +116,46 @@ def process_butterfly(
         )
     df = pd.DataFrame.from_records(examples)
 
-    # Create output directories for images and scan masks
-    mask_dir = os.path.join(dataset_dir, "masks", "scan")
-    os.makedirs(mask_dir, exist_ok=True)
+    train_df = df[df["subset"] == "train"]
+    test_df = df[df["subset"] == "test"]
 
-    image_dir = os.path.join(dataset_dir, "images")
-    os.makedirs(image_dir, exist_ok=True)
-
-    # Create scan masks and copy images
-    for row in df.itertuples(index=False):
-        generate_scan_mask(dataset_dir, str(row.filepath), str(row.scan_mask))
-        shutil.copy(str(row.filepath), os.path.join(image_dir, str(row.filename)))
-
-    # Save the metadata for the training and test sets to a JSON file
-    for split, subset in [
-        ("train_val", df[df["subset"] == "train"]),
-        ("test", df[df["subset"] == "test"]),
+    for split_name, subset_df, split_dir, is_test in [
+        ("train_val", train_df, os.path.join(dataset_dir, "train_val"), False),
+        ("test", test_df, os.path.join(dataset_dir, test_dir_name), True),
     ]:
-        subset = subset.drop(
+        image_dir = os.path.join(split_dir, "images")
+        mask_dir = os.path.join(split_dir, "masks", "scan")
+        os.makedirs(image_dir, exist_ok=True)
+        os.makedirs(mask_dir, exist_ok=True)
+
+        for row in subset_df.itertuples(index=False):
+            raw_image = io.imread(str(row.filepath))
+            # Use 2D image for scan mask generation
+            gray = (
+                raw_image.mean(axis=-1).astype("uint8")
+                if raw_image.ndim == 3
+                else raw_image
+            )
+            mask = generate_scan_mask(gray)
+
+            image = to_3_channel(raw_image)
+            if is_test:
+                image = resize_and_pad(image, size, order=1)
+                mask = resize_and_pad(mask, size, order=0)
+
+            io.imsave(
+                os.path.join(image_dir, str(row.filename)), image, check_contrast=False
+            )
+            io.imsave(
+                os.path.join(mask_dir, str(row.filename)), mask, check_contrast=False
+            )
+
+        subset_records = subset_df.drop(
             ["filepath", "subset", "filename"], axis="columns"
         ).to_dict(orient="records")
+        with open(os.path.join(split_dir, f"{split_name}.json"), "w") as f:
+            json.dump(subset_records, f, indent=4)
 
-        with open(os.path.join(dataset_dir, f"{split}.json"), "w") as f:
-            json.dump(subset, f, indent=4)
+        print(f"Number of {split_name} examples: {len(subset_df)}")
 
     save_version_info(dataset_dir, __version__)

@@ -40,7 +40,7 @@ import typer
 from sklearn.model_selection import train_test_split
 from typing_extensions import Annotated
 
-from .utils import save_version_info
+from .utils import resize_and_pad, save_version_info, to_3_channel
 
 __version__ = version("ultrabench")
 
@@ -91,7 +91,7 @@ def collect_examples(dataset_dir: str) -> list[dict[str, Any]]:
                 "mass_polygon_path": mass_polygon_path,
                 "pathology": class_name,
                 "label": CLASS_TO_LABEL[class_name],
-                "image": f"images/{new_filename}.jpg",
+                "image": f"images/{new_filename}.png",
                 "scan_mask": f"masks/scan/{new_filename}.png",
                 "liver_mask": f"masks/liver/{new_filename}.png"
                 if has_liver_polygon
@@ -122,6 +122,8 @@ def generate_scan_mask(image_path: str) -> np.ndarray:
         A binary mask of the scan region.
     """
     image = io.imread(image_path)
+    if image.ndim == 3:
+        image = image.mean(axis=-1).astype("uint8")
 
     # Threshold the image
     mask = image > 1
@@ -156,39 +158,39 @@ def generate_mask(image_shape: tuple[int, int], polygon_file: str) -> np.ndarray
     return mask
 
 
-def copy_images(output_dir: str, df: pd.DataFrame) -> None:
-    """Save the images as PNG files in the output directory.
-
-    3-channel images are converted to single-channel images by using the mean
-    intensity across the three channels.
+def copy_images(split_dir: str, df: pd.DataFrame, size: int | None = None) -> None:
+    """Save the images as 3-channel PNG files in the split directory.
 
     Args:
-        output_dir: The path to the output directory.
+        split_dir: The path to the split directory (train/ or test_{size}/).
         df: The DataFrame containing the examples.
+        size: If provided, resize and pad images to size×size pixels.
     """
-    image_dir = os.path.join(output_dir, "images")
+    image_dir = os.path.join(split_dir, "images")
     os.makedirs(image_dir, exist_ok=True)
     for _, example in df.iterrows():
-        source_filename = os.path.basename(example["image_path"])
-        dest_filename = example["pathology"].lower() + "_" + source_filename
+        dest_filename = f"{example['filename']}.png"
 
         image = io.imread(example["image_path"])
-        if image.ndim == 3:
-            image = image.mean(axis=-1).astype("uint8")
+        image = to_3_channel(image)
+        if size is not None:
+            image = resize_and_pad(image, size, order=1)
 
         io.imsave(os.path.join(image_dir, dest_filename), image, check_contrast=False)
 
 
-def generate_masks(output_dir: str, df: pd.DataFrame) -> None:
+def generate_masks(split_dir: str, df: pd.DataFrame, size: int | None = None) -> None:
     """Generate and save the scan, liver, and mass masks for the examples.
 
     Args:
-        output_dir: The path to the output directory.
+        split_dir: The path to the split directory (train/ or test_{size}/).
         df: The DataFrame containing the examples.
+        size: If provided, resize and pad masks to size×size pixels using
+            nearest-neighbor interpolation.
     """
-    scan_mask_dir = os.path.join(output_dir, "masks", "scan")
-    liver_mask_dir = os.path.join(output_dir, "masks", "liver")
-    mass_mask_dir = os.path.join(output_dir, "masks", "mass")
+    scan_mask_dir = os.path.join(split_dir, "masks", "scan")
+    liver_mask_dir = os.path.join(split_dir, "masks", "liver")
+    mass_mask_dir = os.path.join(split_dir, "masks", "mass")
     os.makedirs(scan_mask_dir, exist_ok=True)
     os.makedirs(liver_mask_dir, exist_ok=True)
     os.makedirs(mass_mask_dir, exist_ok=True)
@@ -198,17 +200,25 @@ def generate_masks(output_dir: str, df: pd.DataFrame) -> None:
 
         if example["scan_polygon_path"]:
             scan_mask = generate_mask(image.shape[:2], example["scan_polygon_path"])
-            scan_mask_path = os.path.join(scan_mask_dir, f"{example['filename']}.png")
-            io.imsave(scan_mask_path, scan_mask, check_contrast=False)
         else:
             scan_mask = generate_scan_mask(example["image_path"])
-            scan_mask_path = os.path.join(scan_mask_dir, f"{example['filename']}.png")
-            io.imsave(scan_mask_path, scan_mask, check_contrast=False)
+        if size is not None:
+            scan_mask = resize_and_pad(scan_mask, size, order=0)
+        io.imsave(
+            os.path.join(scan_mask_dir, f"{example['filename']}.png"),
+            scan_mask,
+            check_contrast=False,
+        )
 
         if example["liver_mask"]:
             liver_mask = generate_mask(image.shape[:2], example["liver_polygon_path"])
-            liver_mask_path = os.path.join(liver_mask_dir, f"{example['filename']}.png")
-            io.imsave(liver_mask_path, liver_mask, check_contrast=False)
+            if size is not None:
+                liver_mask = resize_and_pad(liver_mask, size, order=0)
+            io.imsave(
+                os.path.join(liver_mask_dir, f"{example['filename']}.png"),
+                liver_mask,
+                check_contrast=False,
+            )
 
         if example["mass_mask"]:
             if os.path.exists(example["mass_polygon_path"]):
@@ -216,15 +226,20 @@ def generate_masks(output_dir: str, df: pd.DataFrame) -> None:
             else:
                 # Create an empty mask for images with no mass
                 mass_mask = np.zeros(image.shape[:2], dtype="uint8")
-            mass_mask_path = os.path.join(mass_mask_dir, f"{example['filename']}.png")
-            io.imsave(mass_mask_path, mass_mask, check_contrast=False)
+            if size is not None:
+                mass_mask = resize_and_pad(mass_mask, size, order=0)
+            io.imsave(
+                os.path.join(mass_mask_dir, f"{example['filename']}.png"),
+                mass_mask,
+                check_contrast=False,
+            )
 
 
-def save_examples(output_dir: str, df: pd.DataFrame, split: str) -> None:
-    """Save the examples to a JSON file.
+def save_examples(split_dir: str, df: pd.DataFrame, split: str) -> None:
+    """Save the examples to a JSON file inside the split directory.
 
     Args:
-        output_dir: The path to the output directory.
+        split_dir: The path to the split directory (train/ or test_{size}/).
         df: The DataFrame containing the examples.
         split: The dataset split (train_val, or test).
     """
@@ -237,7 +252,7 @@ def save_examples(output_dir: str, df: pd.DataFrame, split: str) -> None:
     ]
     df = df.drop(columns=columns_to_drop)
     examples = df.to_dict(orient="records")
-    with open(os.path.join(output_dir, f"{split}.json"), "w") as f:
+    with open(os.path.join(split_dir, f"{split}.json"), "w") as f:
         json.dump(examples, f, indent=4)
 
 
@@ -263,6 +278,9 @@ def process_aul(
     output_dir: Annotated[
         str, typer.Argument(help="The output directory for the processed datasets")
     ],
+    size: Annotated[
+        int, typer.Option(help="Test image size (height and width in pixels)")
+    ] = 256,
 ) -> None:
     """Prepare the training and test sets for the mass classification,
     mass segmentation and liver segmentation tasks.
@@ -270,6 +288,7 @@ def process_aul(
     Args:
         raw_data_dir: The path to the raw data directory.
         output_dir: The path to the output directory.
+        size: The height and width of the test images in pixels.
     """
     # Verify arguments
     verify_args(raw_data_dir, output_dir)
@@ -285,29 +304,43 @@ def process_aul(
         df, test_size=0.2, random_state=42, shuffle=True, stratify=df["label"]
     )
 
+    test_dir_name = f"test_{size}"
+
     # Create mass classification/segmentation dataset
     mass_dataset_dir = os.path.join(output_dir, OUTPUT_NAME_MASS.format(__version__))
-    for split, subset_df in [
-        ("train_val", train_val_df),
-        ("test", test_df),
-    ]:
-        copy_images(mass_dataset_dir, subset_df)
-        generate_masks(mass_dataset_dir, subset_df)
-        save_examples(mass_dataset_dir, subset_df, split)
-        save_version_info(mass_dataset_dir, __version__)
+    mass_train_dir = os.path.join(mass_dataset_dir, "train_val")
+    mass_test_dir = os.path.join(mass_dataset_dir, test_dir_name)
 
-        print(f"Mass dataset - Number of {split} examples: {len(subset_df)}")
+    copy_images(mass_train_dir, train_val_df)
+    generate_masks(mass_train_dir, train_val_df)
+    save_examples(mass_train_dir, train_val_df, "train_val")
+
+    copy_images(mass_test_dir, test_df, size=size)
+    generate_masks(mass_test_dir, test_df, size=size)
+    save_examples(mass_test_dir, test_df, "test")
+
+    save_version_info(mass_dataset_dir, __version__)
+
+    print(f"Mass dataset - Number of train_val examples: {len(train_val_df)}")
+    print(f"Mass dataset - Number of test examples: {len(test_df)}")
 
     # Create liver segmentation dataset
-    liver_dataset_dir = os.path.join(output_dir, OUTPUT_NAME_LIVER.format(__version__))
-    for split, subset_df in [
-        ("train_val", train_val_df),
-        ("test", test_df),
-    ]:
-        subset_df = subset_df.dropna(subset=["liver_mask"])
-        copy_images(liver_dataset_dir, subset_df)
-        generate_masks(liver_dataset_dir, subset_df)
-        save_examples(liver_dataset_dir, subset_df, split)
-        save_version_info(liver_dataset_dir, __version__)
+    liver_train_val_df = train_val_df.dropna(subset=["liver_mask"])
+    liver_test_df = test_df.dropna(subset=["liver_mask"])
 
-        print(f"Liver dataset - Number of {split} examples: {len(subset_df)}")
+    liver_dataset_dir = os.path.join(output_dir, OUTPUT_NAME_LIVER.format(__version__))
+    liver_train_dir = os.path.join(liver_dataset_dir, "train_val")
+    liver_test_dir = os.path.join(liver_dataset_dir, test_dir_name)
+
+    copy_images(liver_train_dir, liver_train_val_df)
+    generate_masks(liver_train_dir, liver_train_val_df)
+    save_examples(liver_train_dir, liver_train_val_df, "train_val")
+
+    copy_images(liver_test_dir, liver_test_df, size=size)
+    generate_masks(liver_test_dir, liver_test_df, size=size)
+    save_examples(liver_test_dir, liver_test_df, "test")
+
+    save_version_info(liver_dataset_dir, __version__)
+
+    print(f"Liver dataset - Number of train_val examples: {len(liver_train_val_df)}")
+    print(f"Liver dataset - Number of test examples: {len(liver_test_df)}")

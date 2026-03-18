@@ -28,15 +28,15 @@ Usage:
 import csv
 import json
 import os
-import shutil
 from importlib.metadata import version
 
 import numpy as np
 import skimage
+import skimage.io as io
 import typer
 from typing_extensions import Annotated
 
-from .utils import save_version_info
+from .utils import resize_and_pad, save_version_info, to_3_channel
 
 __version__ = version("ultrabench")
 
@@ -47,32 +47,34 @@ IMAGE_DIR = "imgs"
 OUTPUT_NAME = "gbcu_v{}"
 
 
-def collate_info(filename: str, label: int, bbox_annotations: dict) -> dict:
+def collate_info(
+    raw_filename: str, png_filename: str, label: int, bbox_annotations: dict
+) -> dict:
     """Collate the information for an image.
 
     Args:
-        filename: The image filename.
+        raw_filename: The original image filename used to look up bbox annotations.
+        png_filename: The output PNG filename used for image and mask paths.
         label: The pathology label.
-        bbox_annotations: The bounding box annotations.
+        bbox_annotations: The bounding box annotations keyed by raw filename.
 
     Returns:
         The collated information for the image.
     """
-    annotations = bbox_annotations[filename]
+    annotations = bbox_annotations[raw_filename]
     dimensions, bboxes = annotations["dim"], annotations["bbs"]
     bbox_labels, bboxes = zip(*bboxes)
 
     pathology = "normal" if label == 0 else "benign" if label == 1 else "malignant"
-    pathology_encoded = label
 
     return {
-        "image": os.path.join("images", filename),
-        "scan_mask": os.path.join("masks", "scan", filename),
+        "image": os.path.join("images", png_filename),
+        "scan_mask": os.path.join("masks", "scan", png_filename),
         "dimensions": dimensions,
         "bbox_labels": bbox_labels,
         "bboxes": bboxes,
         "pathology": pathology,
-        "label": pathology_encoded,
+        "label": label,
     }
 
 
@@ -80,28 +82,18 @@ def generate_scan_mask(image: np.ndarray) -> np.ndarray:
     """Generate a scan mask using morphological operations.
 
     Args:
-        image: The input image array.
+        image: The input 2D grayscale image array.
 
     Returns:
         A binary mask of the scan region.
     """
-    # Threshold the image
     mask = image > 0
-
-    # Remove small objects
     mask = skimage.morphology.remove_small_objects(mask, min_size=2000)
-
-    # Erode the mask
     for i in range(5):
         mask = skimage.morphology.binary_erosion(mask)
-
-    # Dilate the mask
     for i in range(5):
         mask = skimage.morphology.binary_dilation(mask)
-
-    # Extract convex hull of the mask
     mask = skimage.morphology.convex_hull_image(mask)
-
     return mask.astype(np.uint8)
 
 
@@ -124,18 +116,27 @@ def process_gbcu(
     output_dir: Annotated[
         str, typer.Argument(help="The output directory for the processed datasets")
     ],
+    size: Annotated[
+        int, typer.Option(help="Test image size (height and width in pixels)")
+    ] = 256,
 ) -> None:
     """Prepare the training and test sets for the GBCU dataset.
 
     Args:
         raw_data_dir: The path to the raw data directory.
         output_dir: The path to the output directory.
+        size: The height and width of the test images in pixels.
     """
     verify_args(raw_data_dir, output_dir)
 
-    output_dir = os.path.join(output_dir, OUTPUT_NAME.format(__version__))
-    os.makedirs(os.path.join(output_dir, "images"))
-    os.makedirs(os.path.join(output_dir, "masks", "scan"))
+    dataset_dir = os.path.join(output_dir, OUTPUT_NAME.format(__version__))
+    test_dir_name = f"test_{size}"
+    train_dir = os.path.join(dataset_dir, "train_val")
+    test_dir = os.path.join(dataset_dir, test_dir_name)
+
+    for split_dir in [train_dir, test_dir]:
+        os.makedirs(os.path.join(split_dir, "images"))
+        os.makedirs(os.path.join(split_dir, "masks", "scan"))
 
     # Load the bounding box annotations
     with open(os.path.join(raw_data_dir, BBOX_FILE), "r") as f:
@@ -148,26 +149,32 @@ def process_gbcu(
 
     test_set = []
     for filename, label in test_data:
-        # Copy the image to the output directory
-        shutil.copy(
-            os.path.join(raw_data_dir, IMAGE_DIR, filename),
-            os.path.join(output_dir, "images", filename),
+        raw_image = io.imread(os.path.join(raw_data_dir, IMAGE_DIR, filename))
+        gray = (
+            raw_image.mean(axis=-1).astype("uint8")
+            if raw_image.ndim == 3
+            else raw_image
         )
+        scan_mask = generate_scan_mask(gray)
+        image = to_3_channel(raw_image)
+        image = resize_and_pad(image, size, order=1)
+        scan_mask = resize_and_pad(scan_mask, size, order=0)
 
-        # Generate the scan mask
-        image = skimage.io.imread(os.path.join(output_dir, "images", filename))
-        scan_mask = generate_scan_mask(image)
-        skimage.io.imsave(
-            os.path.join(output_dir, "masks", "scan", filename),
+        png_filename = os.path.splitext(filename)[0] + ".png"
+        io.imsave(
+            os.path.join(test_dir, "images", png_filename), image, check_contrast=False
+        )
+        io.imsave(
+            os.path.join(test_dir, "masks", "scan", png_filename),
             scan_mask,
             check_contrast=False,
         )
+        test_set.append(collate_info(filename, png_filename, label, bbox_annotations))
 
-        # Create metadata entry
-        test_set.append(collate_info(filename, label, bbox_annotations))
-
-    with open(os.path.join(output_dir, "test.json"), "w") as f:
+    with open(os.path.join(test_dir, "test.json"), "w") as f:
         json.dump(test_set, f, indent=4)
+
+    print(f"Number of test examples: {len(test_set)}")
 
     # Process the training set
     with open(os.path.join(raw_data_dir, TRAIN_FILE), "r") as f:
@@ -176,25 +183,31 @@ def process_gbcu(
 
     train_val_set = []
     for filename, label in train_val_data:
-        # Copy the image to the output directory
-        shutil.copy(
-            os.path.join(raw_data_dir, IMAGE_DIR, filename),
-            os.path.join(output_dir, "images"),
+        raw_image = io.imread(os.path.join(raw_data_dir, IMAGE_DIR, filename))
+        gray = (
+            raw_image.mean(axis=-1).astype("uint8")
+            if raw_image.ndim == 3
+            else raw_image
         )
+        scan_mask = generate_scan_mask(gray)
+        image = to_3_channel(raw_image)
 
-        # Generate the scan mask
-        image = skimage.io.imread(os.path.join(output_dir, "images", filename))
-        scan_mask = generate_scan_mask(image)
-        skimage.io.imsave(
-            os.path.join(output_dir, "masks", "scan", filename),
+        png_filename = os.path.splitext(filename)[0] + ".png"
+        io.imsave(
+            os.path.join(train_dir, "images", png_filename), image, check_contrast=False
+        )
+        io.imsave(
+            os.path.join(train_dir, "masks", "scan", png_filename),
             scan_mask,
             check_contrast=False,
         )
+        train_val_set.append(
+            collate_info(filename, png_filename, label, bbox_annotations)
+        )
 
-        # Create metadata entry
-        train_val_set.append(collate_info(filename, label, bbox_annotations))
-
-    with open(os.path.join(output_dir, "train_val.json"), "w") as f:
+    with open(os.path.join(train_dir, "train_val.json"), "w") as f:
         json.dump(train_val_set, f, indent=4)
 
-    save_version_info(output_dir, __version__)
+    print(f"Number of train_val examples: {len(train_val_set)}")
+
+    save_version_info(dataset_dir, __version__)

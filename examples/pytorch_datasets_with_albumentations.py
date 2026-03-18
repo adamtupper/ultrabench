@@ -2,6 +2,7 @@
 augmentation and preprocessing.
 """
 
+import glob
 import json
 import os
 
@@ -12,20 +13,22 @@ from torch.utils.data import Dataset
 
 
 class JSON_Dataset(Dataset):
-    def __init__(self, root_dir: str, split: str, transform=None) -> None:
+    def __init__(self, root_dir: str, transform=None) -> None:
         """Initialize the JSON_Dataset.
 
         Args:
-            root_dir: Directory with all the images.
-            split: The split to use, i.e. "train", "validation" or
-                "test".
+            root_dir: Path to the split directory (e.g.,
+                ``dataset_v1/train_val/`` or ``dataset_v1/test_256/``).
+                Must contain exactly one JSON metadata file.
             transform: Optional transform to be applied on a sample.
         """
         self.root_dir = root_dir
-        self.split = split
         self.transform = transform
 
-        with open(os.path.join(root_dir, f"{split}.json"), "r") as f:
+        json_files = glob.glob(os.path.join(root_dir, "*.json"))
+        if len(json_files) != 1:
+            raise ValueError(f"More than one JSON file found in {root_dir}.")
+        with open(json_files[0]) as f:
             self.metadata = json.load(f)
 
     def __len__(self) -> int:
@@ -39,7 +42,6 @@ class ClassificationDataset(JSON_Dataset):
     def __init__(
         self,
         root_dir: str,
-        split: str,
         transform=None,
         image_key: str = "image",
         label_key: str = "label",
@@ -48,14 +50,15 @@ class ClassificationDataset(JSON_Dataset):
         """Initialize the ClassificationDataset.
 
         Args:
-            root_dir: Directory with all the images.
-            split: The split to use, i.e. "train", "validation" or "test".
+            root_dir: Path to the split directory (e.g.,
+                ``dataset_v1/train_val/`` or ``dataset_v1/test_256/``).
+                Must contain exactly one JSON metadata file.
             transform: Optional transform to be applied on a sample.
             image_key: The key for the image path in the metadata.
             label_key: The key for the label in the metadata.
             scan_mask_key: The key for the scan mask path in the metadata.
         """
-        super().__init__(root_dir, split, transform)
+        super().__init__(root_dir, transform)
         self.image_key = image_key
         self.label_key = label_key
         self.scan_mask_key = scan_mask_key
@@ -66,9 +69,6 @@ class ClassificationDataset(JSON_Dataset):
 
         image_path = os.path.join(self.root_dir, self.metadata[idx][self.image_key])
         image = io.imread(image_path)
-        if image.ndim != 3:
-            # Convert single channel images to three channel images
-            image = np.stack([image] * 3, axis=-1)
 
         label = self.metadata[idx][self.label_key]
 
@@ -88,7 +88,6 @@ class SegmentationDataset(JSON_Dataset):
     def __init__(
         self,
         root_dir: str,
-        split: str,
         transform=None,
         image_key: str = "image",
         mask_key: str = "mask",
@@ -97,14 +96,15 @@ class SegmentationDataset(JSON_Dataset):
         """Initialize the SegmentationDataset.
 
         Args:
-            root_dir: Directory with all the images.
-            split: The split to use ("train", "validation" or "test").
+            root_dir: Path to the split directory (e.g.,
+                ``dataset_v1/train_val/`` or ``dataset_v1/test_256/``).
+                Must contain exactly one JSON metadata file.
             transform: Optional transform to be applied on a sample.
             image_key: The key for the image path in the metadata.
             mask_key: The key for the mask path in the metadata.
             scan_mask_key: The key for the scan mask path in the metadata.
         """
-        super().__init__(root_dir, split, transform)
+        super().__init__(root_dir, transform)
         self.image_key = image_key
         self.mask_key = mask_key
         self.scan_mask_key = scan_mask_key
@@ -115,9 +115,6 @@ class SegmentationDataset(JSON_Dataset):
 
         image_path = os.path.join(self.root_dir, self.metadata[idx][self.image_key])
         image = io.imread(image_path)
-        if image.ndim != 3:
-            # Convert single channel images to three channel images
-            image = np.stack([image] * 3, axis=-1)
 
         mask_path = os.path.join(self.root_dir, self.metadata[idx][self.mask_key])
         mask = io.imread(mask_path).astype(np.uint8)

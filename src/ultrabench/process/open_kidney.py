@@ -32,17 +32,17 @@ Usage:
 import ast
 import json
 import os
-import shutil
 from importlib.metadata import version
 
 import numpy as np
 import pandas as pd
 import skimage
+import skimage.io as io
 import typer
 from sklearn.model_selection import train_test_split
 from typing_extensions import Annotated
 
-from .utils import save_version_info
+from .utils import resize_and_pad, save_version_info, to_3_channel
 
 __version__ = version("ultrabench")
 
@@ -55,53 +55,35 @@ def generate_scan_mask(image: np.ndarray) -> np.ndarray:
     """Generate a scan mask using morphological operations.
 
     Args:
-        image: The input image array.
+        image: The input 2D grayscale image array.
 
     Returns:
         A binary mask of the scan region.
     """
-    # Threshold the image
     mask = image > 0
-
-    # Erode the mask
     for i in range(5):
         mask = skimage.morphology.binary_erosion(mask)
-
-    # Dilate the mask
     for i in range(5):
         mask = skimage.morphology.binary_dilation(mask)
-
-    # Fill small holes
     mask = skimage.morphology.remove_small_holes(mask, area_threshold=1000)
 
-    # Label the connected components
+    # Keep only the largest connected component
     label = skimage.measure.label(mask)
-
-    # Keep the only the largest connected component
     regions = skimage.measure.regionprops(label)
     largest_region = max(regions, key=lambda x: x.area)
     mask = label == largest_region.label
 
-    # Reflect the larger half of the mask to fill larger gaps in the fan and make it
-    # symmetric
+    # Reflect the larger half to fill gaps and make the mask symmetric
     _, width = mask.shape
     left_half = mask[:, : width // 2]
     right_half = mask[:, width // 2 :]
-    left_sum = np.sum(left_half)
-    right_sum = np.sum(right_half)
-
-    # Determine which half has the greater sum and reflect it
-    if left_sum > right_sum:
+    if np.sum(left_half) > np.sum(right_half):
         right_half = np.fliplr(left_half)
     else:
         left_half = np.fliplr(right_half)
-
-    # Merge the two halves back together
     mask = np.hstack((left_half, right_half))
 
-    # Extract convex hull of the mask
     mask = skimage.morphology.convex_hull_image(mask)
-
     return mask.astype(np.uint8)
 
 
@@ -124,18 +106,23 @@ def process_open_kidney(
     output_dir: Annotated[
         str, typer.Argument(help="The output directory for the processed datasets")
     ],
+    size: Annotated[
+        int, typer.Option(help="Test image size (height and width in pixels)")
+    ] = 256,
 ) -> None:
     """Prepare the Open Kidney dataset.
 
     Args:
         raw_data_dir: The path to the raw data directory.
         output_dir: The path to the output directory.
+        size: The height and width of the test images in pixels.
     """
     verify_args(raw_data_dir, output_dir)
 
-    output_dir = os.path.join(output_dir, OUTPUT_NAME.format(__version__))
+    dataset_dir = os.path.join(output_dir, OUTPUT_NAME.format(__version__))
+    test_dir_name = f"test_{size}"
 
-    # Load the metadata and extract transplant labels from the comments
+    # Load metadata from CSV (no image I/O)
     metadata = pd.read_csv(os.path.join(raw_data_dir, CLINICAL_METADATA_FILE))
     metadata["quality"] = metadata["file_attributes"].apply(
         lambda x: ast.literal_eval(str(x)).get("Quality", None)
@@ -154,52 +141,22 @@ def process_open_kidney(
         columns=["file_attributes", "region_attributes", "region_shape_attributes"],
         inplace=True,
     )
-
-    # Keep only one entry per image (only the region annotation are different) and
-    # remove the duplicates
     metadata = metadata.drop_duplicates("file_id")
 
     print(f"Total # of images: {len(metadata)}")
 
-    # Copy the images and masks to the output directory
-    image_dir = os.path.join(output_dir, "images")
-    scan_mask_dir = os.path.join(output_dir, "masks", "scan")
-    capsule_mask_dir = os.path.join(output_dir, "masks", "capsule")
-    regions_mask_dir = os.path.join(output_dir, "masks", "regions")
-    os.makedirs(image_dir, exist_ok=True)
-    os.makedirs(scan_mask_dir, exist_ok=True)
-    os.makedirs(capsule_mask_dir, exist_ok=True)
-    os.makedirs(regions_mask_dir, exist_ok=True)
+    # Determine the train/test split from the view label before any file I/O
+    train_val_examples, test_examples = train_test_split(
+        metadata,
+        test_size=0.2,
+        random_state=42,
+        shuffle=True,
+        stratify=metadata["view"],
+    )
 
-    for _, row in metadata.iterrows():
-        # Load, convert to single-channel, and save the image
-        image = skimage.io.imread(os.path.join(raw_data_dir, "images", row["filename"]))
-        if image.ndim == 3:
-            image = np.mean(image, axis=-1).astype(np.uint8)
-        skimage.io.imsave(os.path.join(image_dir, row["filename"]), image)
+    test_filenames = set(test_examples["filename"])
 
-        # Generate and save the scan mask
-        scan_mask = generate_scan_mask(image)
-        skimage.io.imsave(
-            os.path.join(scan_mask_dir, row["filename"]),
-            scan_mask,
-            check_contrast=False,
-        )
-
-        # Copy the capsule and regions masks
-        for mask in ["capsule", "regions"]:
-            mask_file = os.path.join(
-                raw_data_dir,
-                "labels",
-                f"reviewed_masks_{SONOGRAPHER}",
-                mask,
-                row["filename"],
-            )
-            shutil.copy(
-                mask_file, os.path.join(output_dir, "masks", mask, row["filename"])
-            )
-
-    # Add relative paths to the images and masks
+    # Add relative path columns
     metadata["image"] = metadata["filename"].map(lambda x: os.path.join("images", x))
     metadata["scan_mask"] = metadata["filename"].map(
         lambda x: os.path.join("masks", "scan", x)
@@ -210,27 +167,82 @@ def process_open_kidney(
     metadata["regions_mask"] = metadata["filename"].map(
         lambda x: os.path.join("masks", "regions", x)
     )
+    train_val_examples = metadata.loc[train_val_examples.index]
+    test_examples = metadata.loc[test_examples.index]
 
-    # Separate the test set
-    train_val_examples, test_examples = train_test_split(
-        metadata,
-        test_size=0.2,
-        random_state=42,
-        shuffle=True,
-        stratify=metadata["view"],
-    )
+    # Create output directories
+    for split_dir_name in ["train_val", test_dir_name]:
+        split_dir = os.path.join(dataset_dir, split_dir_name)
+        os.makedirs(os.path.join(split_dir, "images"), exist_ok=True)
+        os.makedirs(os.path.join(split_dir, "masks", "scan"), exist_ok=True)
+        os.makedirs(os.path.join(split_dir, "masks", "capsule"), exist_ok=True)
+        os.makedirs(os.path.join(split_dir, "masks", "regions"), exist_ok=True)
+
+    # Process and save images and masks to the correct split directory
+    for _, row in metadata.iterrows():
+        is_test = row["filename"] in test_filenames
+        split_dir = os.path.join(dataset_dir, test_dir_name if is_test else "train_val")
+
+        raw_image = io.imread(os.path.join(raw_data_dir, "images", row["filename"]))
+        gray = (
+            np.mean(raw_image, axis=-1).astype(np.uint8)
+            if raw_image.ndim == 3
+            else raw_image
+        )
+        scan_mask = generate_scan_mask(gray)
+
+        capsule_mask = io.imread(
+            os.path.join(
+                raw_data_dir,
+                "labels",
+                f"reviewed_masks_{SONOGRAPHER}",
+                "capsule",
+                row["filename"],
+            )
+        )
+        regions_mask = io.imread(
+            os.path.join(
+                raw_data_dir,
+                "labels",
+                f"reviewed_masks_{SONOGRAPHER}",
+                "regions",
+                row["filename"],
+            )
+        )
+
+        image = to_3_channel(raw_image)
+        if is_test:
+            image = resize_and_pad(image, size, order=1)
+            scan_mask = resize_and_pad(scan_mask, size, order=0)
+            capsule_mask = resize_and_pad(capsule_mask, size, order=0)
+            regions_mask = resize_and_pad(regions_mask, size, order=0)
+
+        io.imsave(os.path.join(split_dir, "images", row["filename"]), image)
+        io.imsave(
+            os.path.join(split_dir, "masks", "scan", row["filename"]),
+            scan_mask,
+            check_contrast=False,
+        )
+        io.imsave(
+            os.path.join(split_dir, "masks", "capsule", row["filename"]),
+            capsule_mask,
+            check_contrast=False,
+        )
+        io.imsave(
+            os.path.join(split_dir, "masks", "regions", row["filename"]),
+            regions_mask,
+            check_contrast=False,
+        )
 
     print(f"# of training examples: {len(train_val_examples)}")
     print(f"# of test examples: {len(test_examples)}")
 
-    # Save the training and test indices to a JSON file
-    for split, subset in [
-        ("train_val", train_val_examples),
-        ("test", test_examples),
+    # Save the metadata JSON files inside their split directories
+    for split, subset, split_dir in [
+        ("train_val", train_val_examples, os.path.join(dataset_dir, "train_val")),
+        ("test", test_examples, os.path.join(dataset_dir, test_dir_name)),
     ]:
-        subset = subset.to_dict(orient="records")
+        with open(os.path.join(split_dir, f"{split}.json"), "w") as f:
+            json.dump(subset.to_dict(orient="records"), f, indent=4)
 
-        with open(os.path.join(output_dir, f"{split}.json"), "w") as f:
-            json.dump(subset, f, indent=4)
-
-    save_version_info(output_dir, __version__)
+    save_version_info(dataset_dir, __version__)
