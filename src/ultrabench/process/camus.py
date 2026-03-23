@@ -39,7 +39,7 @@ import yaml
 from sklearn.model_selection import GroupShuffleSplit
 from typing_extensions import Annotated
 
-from .utils import save_version_info
+from .utils import resize_and_pad, save_version_info, to_3_channel
 
 __version__ = version("ultrabench")
 
@@ -55,31 +55,39 @@ def segment_fan(image: np.ndarray) -> np.ndarray:
     """Generate a fan-shaped mask using morphological operations.
 
     Args:
-        image: The input image array.
+        image: The input 2D image array.
 
     Returns:
         A binary mask of the fan-shaped region.
     """
-    # Threshold the image
     mask = image > 0
-
-    # Extract convex hull of the mask
     mask = skimage.morphology.convex_hull_image(mask)
-
     return mask.astype(np.uint8)
 
 
-def extract_images_and_masks(dataset_dir: str, output_dir: str) -> None:
-    """Extract the images and masks from the NIfTI files and save them as
-    8-bit PNG files.
+def extract_images_and_masks(
+    dataset_dir: str,
+    train_dir: str,
+    test_dir: str,
+    test_filenames: set[str],
+    size: int,
+) -> None:
+    """Extract images and masks from NIfTI files and save them as PNG files.
+
+    Images are routed to the train or test split directory based on their
+    filename. Test images are resized and padded to size×size pixels.
 
     Args:
-        dataset_dir: The path to the dataset directory.
-        output_dir: The path to the output directory.
+        dataset_dir: The path to the raw dataset directory.
+        train_dir: The path to the training split output directory.
+        test_dir: The path to the test split output directory.
+        test_filenames: The set of filenames belonging to the test split.
+        size: The target height and width for test images in pixels.
     """
-    os.makedirs(os.path.join(output_dir, "images"), exist_ok=True)
-    os.makedirs(os.path.join(output_dir, "masks", "scan"), exist_ok=True)
-    os.makedirs(os.path.join(output_dir, "masks", "structures"), exist_ok=True)
+    for split_dir in [train_dir, test_dir]:
+        os.makedirs(os.path.join(split_dir, "images"), exist_ok=True)
+        os.makedirs(os.path.join(split_dir, "masks", "scan"), exist_ok=True)
+        os.makedirs(os.path.join(split_dir, "masks", "structures"), exist_ok=True)
 
     for nifti_file in glob.glob(
         os.path.join(dataset_dir, "database_nifti", "**", "*_half_sequence*.nii.gz")
@@ -87,29 +95,35 @@ def extract_images_and_masks(dataset_dir: str, output_dir: str) -> None:
         images = nib.load(nifti_file).get_fdata().astype(np.uint8)  # type: ignore
         patient, view = nifti_file.split("/")[-1].split("_")[:2]
         for i in range(images.shape[2]):
-            image = np.rot90(images[:, :, i], axes=(1, 0)).astype(
-                np.uint8
-            )  # Rotate the image 90 degrees clockwise
+            image = np.rot90(images[:, :, i], axes=(1, 0)).astype(np.uint8)
             output_filename = f"{patient}_view{view}_frame{i + 1}.png"
+
+            is_test = output_filename in test_filenames
+            split_dir = test_dir if is_test else train_dir
+
             if "_gt" in nifti_file:
+                mask = image
+                if is_test:
+                    mask = resize_and_pad(mask, size, order=0)
                 skimage.io.imsave(
-                    os.path.join(output_dir, "masks", "structures", output_filename),
-                    image,
+                    os.path.join(split_dir, "masks", "structures", output_filename),
+                    mask,
                     check_contrast=False,
                 )
             else:
-                # Generate the scan mask
                 scan_mask = segment_fan(image)
+                image_3ch = to_3_channel(image)
+                if is_test:
+                    scan_mask = resize_and_pad(scan_mask, size, order=0)
+                    image_3ch = resize_and_pad(image_3ch, size, order=1)
                 skimage.io.imsave(
-                    os.path.join(output_dir, "masks", "scan", output_filename),
+                    os.path.join(split_dir, "masks", "scan", output_filename),
                     scan_mask,
                     check_contrast=False,
                 )
-
-                # Save the image
                 skimage.io.imsave(
-                    os.path.join(output_dir, "images", output_filename),
-                    image,
+                    os.path.join(split_dir, "images", output_filename),
+                    image_3ch,
                     check_contrast=False,
                 )
 
@@ -155,9 +169,7 @@ def extract_metadata(dataset_dir: str) -> pd.DataFrame:
             row["ES"] = True if config["ES"] == frame else False
             metadata.append(row)
 
-    df = pd.DataFrame(metadata)
-
-    return df
+    return pd.DataFrame(metadata)
 
 
 def verify_args(raw_data_dir: str, output_dir: str) -> None:
@@ -179,22 +191,26 @@ def process_camus(
     output_dir: Annotated[
         str, typer.Argument(help="The output directory for the processed datasets")
     ],
+    size: Annotated[
+        int, typer.Option(help="Test image size (height and width in pixels)")
+    ] = 256,
 ) -> None:
     """Divide the CAMUS dataset into training and test splits.
 
     Args:
         raw_data_dir: The path to the raw data directory.
         output_dir: The path to the output directory.
+        size: The height and width of the test images in pixels.
     """
     verify_args(raw_data_dir, output_dir)
 
-    output_dir = os.path.join(output_dir, OUTPUT_NAME.format(__version__))
+    dataset_dir = os.path.join(output_dir, OUTPUT_NAME.format(__version__))
+    test_dir_name = f"test_{size}"
+    train_dir = os.path.join(dataset_dir, "train_val")
+    test_dir = os.path.join(dataset_dir, test_dir_name)
 
-    # Extract clinical metadata
+    # Extract clinical metadata (reads only .cfg files, no images loaded)
     metadata = extract_metadata(raw_data_dir)
-
-    # Extract and save images and masks
-    extract_images_and_masks(raw_data_dir, output_dir)
 
     # Split the dataset into training and test sets
     splitter = GroupShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
@@ -204,13 +220,19 @@ def process_camus(
     train_val_examples = metadata.iloc[train_val_indices]
     test_examples = metadata.iloc[test_indices]
 
-    # Save the training and test examples as JSON files
-    for split, examples in [
-        ("train_val", train_val_examples),
-        ("test", test_examples),
-    ]:
-        file_path = os.path.join(output_dir, f"{split}.json")
-        with open(file_path, "w") as f:
-            json.dump(examples.to_dict(orient="records"), f, indent=4)
+    # Build the set of test filenames for routing during image extraction
+    test_filenames = {os.path.basename(p) for p in test_examples["image"]}
 
-    save_version_info(output_dir, __version__)
+    # Extract and save images and masks, routing to correct split directory
+    extract_images_and_masks(raw_data_dir, train_dir, test_dir, test_filenames, size)
+
+    # Save the training and test examples as JSON files inside their split dirs
+    for split, examples, split_dir in [
+        ("train_val", train_val_examples, train_dir),
+        ("test", test_examples, test_dir),
+    ]:
+        with open(os.path.join(split_dir, f"{split}.json"), "w") as f:
+            json.dump(examples.to_dict(orient="records"), f, indent=4)
+        print(f"Number of {split} examples: {len(examples)}")
+
+    save_version_info(dataset_dir, __version__)

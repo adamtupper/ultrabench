@@ -51,7 +51,7 @@ import skimage.io as io
 import typer
 from sklearn.model_selection import GroupShuffleSplit
 
-from .utils import save_version_info
+from .utils import resize_and_pad, save_version_info, to_3_channel
 
 __version__ = version("ultrabench")
 DATASET_FILE = "dataset.hdf5"
@@ -171,39 +171,27 @@ def generate_scan_mask(image: np.ndarray) -> np.ndarray:
     """Generate a scan mask using morphological operations.
 
     Args:
-        image: The input image array.
+        image: The input 2D image array.
 
     Returns:
         A binary mask of the scan region.
     """
-    # Threshold the image
     mask = image > 1
-
-    # Fill small holes
     mask = skimage.morphology.remove_small_holes(mask, area_threshold=64)
-
-    # Erode the mask
     for _ in range(30):
         mask = skimage.morphology.binary_erosion(mask)
-
-    # Dilate the mask
     for _ in range(30):
         mask = skimage.morphology.binary_dilation(mask)
 
-    # Logical OR of left and right halves to mitigate shadows
+    # Logical OR of each half reflected onto the other to mitigate shadows
     _, width = mask.shape
     left_half = mask[:, : width // 2]
     right_half = mask[:, width // 2 :]
-
     left_half = np.logical_or(left_half, np.fliplr(right_half))
     right_half = np.logical_or(right_half, np.fliplr(left_half))
-
-    # Merge the two halves back together
     mask = np.hstack((left_half, right_half))
 
-    # Extract convex hull of the mask
     mask = skimage.morphology.convex_hull_image(mask)
-
     return mask.astype(np.uint8)
 
 
@@ -226,73 +214,107 @@ def process_stanford_thyroid(
     output_dir: Annotated[
         str, typer.Argument(help="The output directory for the processed datasets")
     ],
+    size: Annotated[
+        int, typer.Option(help="Test image size (height and width in pixels)")
+    ] = 256,
 ) -> None:
     """Preprocess the Stanford Thyroid Ultrasound Cine-clip dataset.
 
     Args:
         raw_data_dir: The path to the raw data directory.
         output_dir: The path to the output directory.
+        size: The height and width of the test images in pixels.
     """
     verify_args(raw_data_dir, output_dir)
 
-    output_dir = os.path.join(output_dir, OUTPUT_NAME.format(__version__))
+    dataset_dir = os.path.join(output_dir, OUTPUT_NAME.format(__version__))
+    test_dir_name = f"test_{size}"
 
-    # Load the image and mask data, and the metadata
-    dataset = h5py.File(os.path.join(raw_data_dir, DATASET_FILE), "r")
     metadata = pd.read_csv(os.path.join(raw_data_dir, METADATA_FILE))
-
-    # Load the list of patients to include (those whose scans were acquired using a
-    # convex probe)
     included_patients = set(PATIENTS)
 
-    # Create the output directories
-    images_dir = os.path.join(output_dir, "images")
-    tumor_masks_dir = os.path.join(output_dir, "masks", "tumor")
-    scan_masks_dir = os.path.join(output_dir, "masks", "scan")
-    os.makedirs(images_dir)
-    os.makedirs(tumor_masks_dir)
-    os.makedirs(scan_masks_dir)
+    # First pass: collect patient IDs for all included examples (no image loading)
+    with h5py.File(os.path.join(raw_data_dir, DATASET_FILE), "r") as dataset:
+        annot_ids = dataset["annot_id"].asstr()[:]
 
-    # For each image, create a dictionary containing the associated metadata, and save
-    # the image and mask as PNG files
-    examples = []
-    for i in range(len(dataset["image"])):
-        patient_id, image, mask = (
-            dataset["annot_id"].asstr()[i],
-            dataset["image"][i],
-            dataset["mask"][i],
-        )
-        patient_metadata = metadata[metadata["annot_id"] == patient_id]
-        assert len(patient_metadata) == 1, (
-            f"metadata for patient {patient_id} not found"
-        )
-
+    index_records = []
+    for i, patient_id in enumerate(annot_ids):
         if int(patient_id.removesuffix("_")) not in included_patients:
             continue
+        index_records.append({"hdf5_index": i, "patient": patient_id.removesuffix("_")})
 
-        # Map the mask values from {0, 255} to {0, 1}
-        mask = (mask == 255).astype("uint8")
+    index_df = pd.DataFrame(index_records)
 
-        # Save the image and tumor mask as PNG files
-        image_path = f"images/{patient_id}{i}.png"
-        tumor_mask_path = f"masks/tumor/{patient_id}{i}.png"
-        io.imsave(os.path.join(output_dir, image_path), image, check_contrast=False)
-        io.imsave(os.path.join(output_dir, tumor_mask_path), mask, check_contrast=False)
+    # Determine the train/test split from patient groups before image I/O
+    splitter = GroupShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
+    train_val_indices, test_indices = next(
+        splitter.split(X=index_df, groups=index_df["patient"])
+    )
+    test_hdf5_indices = set(index_df.iloc[test_indices]["hdf5_index"])
 
-        # Generate the scan mask
-        scan_mask = generate_scan_mask(image)
-        scan_mask_path = f"masks/scan/{patient_id}{i}.png"
-        io.imsave(
-            os.path.join(output_dir, scan_mask_path), scan_mask, check_contrast=False
-        )
+    # Confirm the number of patients
+    actual = len(index_df["patient"].unique())
+    expected = len(included_patients)
+    assert actual == expected, (
+        f"The actual ({actual}) and expected ({expected}) number of patients does not match!"  # noqa: E501
+    )
 
-        # Create the metadata dictionary
-        examples.append(
-            {
+    # Create output directories
+    for split_dir_name in ["train_val", test_dir_name]:
+        split_dir = os.path.join(dataset_dir, split_dir_name)
+        os.makedirs(os.path.join(split_dir, "images"))
+        os.makedirs(os.path.join(split_dir, "masks", "tumor"))
+        os.makedirs(os.path.join(split_dir, "masks", "scan"))
+
+    # Second pass: load images and masks, save to correct split directory
+    train_examples = []
+    test_examples = []
+
+    with h5py.File(os.path.join(raw_data_dir, DATASET_FILE), "r") as dataset:
+        for row in index_df.itertuples(index=False):
+            i = row.hdf5_index
+            patient_id = annot_ids[i]
+            image = dataset["image"][i]
+            mask = dataset["mask"][i]
+            patient_metadata = metadata[metadata["annot_id"] == patient_id]
+
+            is_test = i in test_hdf5_indices
+            split_dir = os.path.join(
+                dataset_dir, test_dir_name if is_test else "train_val"
+            )
+
+            # Map mask values from {0, 255} to {0, 1}
+            tumor_mask = (mask == 255).astype("uint8")
+            scan_mask = generate_scan_mask(image)
+            image_3ch = to_3_channel(image)
+
+            if is_test:
+                image_3ch = resize_and_pad(image_3ch, size, order=1)
+                tumor_mask = resize_and_pad(tumor_mask, size, order=0)
+                scan_mask = resize_and_pad(scan_mask, size, order=0)
+
+            stem = f"{patient_id}{i}"
+            io.imsave(
+                os.path.join(split_dir, "images", f"{stem}.png"),
+                image_3ch,
+                check_contrast=False,
+            )
+            io.imsave(
+                os.path.join(split_dir, "masks", "tumor", f"{stem}.png"),
+                tumor_mask,
+                check_contrast=False,
+            )
+            io.imsave(
+                os.path.join(split_dir, "masks", "scan", f"{stem}.png"),
+                scan_mask,
+                check_contrast=False,
+            )
+
+            example = {
                 "patient": patient_id.removesuffix("_"),
-                "image": image_path,
-                "tumor_mask": tumor_mask_path,
-                "scan_mask": scan_mask_path,
+                "image": f"images/{stem}.png",
+                "tumor_mask": f"masks/tumor/{stem}.png",
+                "scan_mask": f"masks/scan/{stem}.png",
                 "label": (patient_metadata["ti-rads_level"] > 3).astype(int).item(),
                 "age": patient_metadata["age"].item(),
                 "sex": patient_metadata["sex"].item(),
@@ -310,36 +332,18 @@ def process_stanford_thyroid(
                 ].item(),
                 "histopath_diagnosis": patient_metadata["histopath_diagnosis"].item(),
             }
-        )
+            example["pathology"] = "benign" if example["label"] == 0 else "malignant"
+            (test_examples if is_test else train_examples).append(example)
 
-    dataset.close()
+    # Save the metadata JSON files inside their split directories
+    train_dir = os.path.join(dataset_dir, "train_val")
+    test_dir = os.path.join(dataset_dir, test_dir_name)
+    with open(os.path.join(train_dir, "train_val.json"), "w") as f:
+        json.dump(train_examples, f, indent=4)
+    with open(os.path.join(test_dir, "test.json"), "w") as f:
+        json.dump(test_examples, f, indent=4)
 
-    # Add pathology labels
-    examples = pd.DataFrame.from_records(examples)
-    examples["pathology"] = examples["label"].map({0: "benign", 1: "malignant"})
+    print(f"Training examples: {len(train_examples)}")
+    print(f"Test examples: {len(test_examples)}")
 
-    # Confirm the number of patients
-    actual = len(examples["patient"].unique())
-    expected = len(included_patients)
-    assert actual == expected, (
-        f"The actual ({actual}) and expected ({expected}) number of patients does not match!"  # noqa: E501
-    )
-
-    # Split the examples into training and test sets
-    splitter = GroupShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
-    train_val_indices, test_indices = next(
-        splitter.split(X=examples, groups=examples["patient"])
-    )
-    train_val_examples = examples.iloc[train_val_indices]
-    test_examples = examples.iloc[test_indices]
-
-    # Save the training and test examples as JSON files
-    for split, examples in [
-        ("train_val", train_val_examples),
-        ("test", test_examples),
-    ]:
-        file_path = os.path.join(output_dir, f"{split}.json")
-        with open(file_path, "w") as f:
-            json.dump(examples.to_dict(orient="records"), f, indent=4)
-
-    save_version_info(output_dir, __version__)
+    save_version_info(dataset_dir, __version__)
