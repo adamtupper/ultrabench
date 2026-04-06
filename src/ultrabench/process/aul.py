@@ -30,6 +30,7 @@ import glob
 import json
 import os
 from importlib.metadata import version
+from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -40,7 +41,13 @@ import typer
 from sklearn.model_selection import train_test_split
 from typing_extensions import Annotated
 
-from .utils import resize_and_pad, save_version_info, to_3_channel
+from .utils import (
+    generate_classification_ground_truth,
+    generate_segmentation_ground_truth,
+    resize_and_pad,
+    save_version_info,
+    to_3_channel,
+)
 
 __version__ = version("ultrabench")
 
@@ -318,6 +325,25 @@ def process_aul(
     copy_images(mass_test_dir, test_df, size=size)
     generate_masks(mass_test_dir, test_df, size=size)
     save_examples(mass_test_dir, test_df, "test")
+
+    mass_test_examples = test_df.drop(
+        columns=[
+            "filename",
+            "image_path",
+            "scan_polygon_path",
+            "liver_polygon_path",
+            "mass_polygon_path",
+        ]
+    ).to_dict(orient="records")
+    generate_classification_ground_truth(
+        mass_test_examples, Path(mass_test_dir) / "ground_truth_classification.csv"
+    )
+    generate_segmentation_ground_truth(
+        mass_test_examples,
+        mask_key="mass_mask",
+        classes=[1],
+        output_path=Path(mass_test_dir) / "ground_truth_segmentation.csv",
+    )
 
     save_version_info(mass_dataset_dir, __version__)
 
