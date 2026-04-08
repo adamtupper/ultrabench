@@ -1,9 +1,14 @@
 """Utility functions for dataset processing."""
 
 import os
+from pathlib import Path
 
 import numpy as np
+import pandas as pd
+import skimage.io
 import skimage.transform
+
+from ultrabench.core.rle import mask_to_rle
 
 
 def save_version_info(output_dir: str, version: str) -> None:
@@ -43,6 +48,68 @@ def to_3_channel(image: np.ndarray) -> np.ndarray:
     raise ValueError(
         f"Expected a single-channel or 3-channel image, got shape {image.shape}."
     )
+
+
+def generate_classification_ground_truth(
+    examples: list[dict], output_path: Path
+) -> None:
+    """Create a CSV file with the ground-truth labels.
+
+    Generate a CSV with columns "image_id" and "label", where each row
+    corresponds to one example. The "image_id" column contains the image
+    identifier (e.g., relative filepath) and the "label" column contains
+    the class label.
+
+    Args:
+        examples: List of example dicts, each containing `image` and
+            `label` keys.
+        output_path: Destination path for the CSV file (including
+            filename).
+    """
+    rows = [{"image_id": x["image"], "label": x["label"]} for x in examples]
+    pd.DataFrame(rows).to_csv(output_path, index=False)
+
+
+def generate_segmentation_ground_truth(
+    examples: list[dict],
+    mask_key: str,
+    classes: list[int],
+    output_path: Path,
+) -> None:
+    """Create a segmentation ground truth CSV with RLE-encoded masks.
+
+    Generate a CSV with columns "image_id", "class_id", and
+    "encoded_pixels", where each row corresponds to one (image, class)
+    pair. The "encoded_pixels" column contains the RLE-encoded binary
+    mask for that class, or an empty string if the mask is all zeros.
+
+    Rows are ordered by image: all classes for image 1, then image 2,
+    etc.
+
+    Args:
+        examples: List of example dicts, each containing `image` and
+            [mask_key] keys
+        mask_key: The key in the example dicts that contains the path to
+            the segmentation mask.
+        classes: The list of foreground class IDs.
+        output_path: Destination path for the CSV file (including
+            the filename).
+    """
+    rows = []
+    for example in examples:
+        mask = skimage.io.imread(str(output_path.parent / example[mask_key]))
+        for cls in classes:
+            binary_mask = (mask == cls).astype(np.uint8)
+            encoded = mask_to_rle(binary_mask)
+            rows.append(
+                {
+                    "image_id": example["image"],
+                    "class_id": cls,
+                    "encoded_pixels": encoded,
+                }
+            )
+
+    pd.DataFrame(rows).to_csv(output_path, index=False)
 
 
 def resize_and_pad(image: np.ndarray, size: int, order: int = 1) -> np.ndarray:
