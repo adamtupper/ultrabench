@@ -1,0 +1,5 @@
+defaults:
+  - task: segmentation
+
+ground_truth: ???
+predictions: ???
