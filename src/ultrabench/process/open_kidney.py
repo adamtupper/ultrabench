@@ -98,7 +98,7 @@ def verify_args(raw_data_dir: str, output_dir: str) -> None:
     assert os.path.isdir(output_dir), "output_dir must be an existing directory"
     assert not os.path.exists(
         os.path.join(output_dir, OUTPUT_NAME.format(__version__))
-    ), "A matching version of the CAMUS dataset already exists"
+    ), "A matching version of the Open Kidney dataset already exists"
 
 
 def process_open_kidney(
