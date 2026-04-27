@@ -29,6 +29,7 @@ import csv
 import json
 import os
 from importlib.metadata import version
+from pathlib import Path
 
 import numpy as np
 import skimage
@@ -36,7 +37,12 @@ import skimage.io as io
 import typer
 from typing_extensions import Annotated
 
-from .utils import resize_and_pad, save_version_info, to_3_channel
+from .utils import (
+    generate_classification_ground_truth,
+    resize_and_pad,
+    save_version_info,
+    to_3_channel,
+)
 
 __version__ = version("ultrabench")
 
@@ -173,6 +179,10 @@ def process_gbcu(
 
     with open(os.path.join(test_dir, "test.json"), "w") as f:
         json.dump(test_set, f, indent=4)
+
+    generate_classification_ground_truth(
+        test_set, Path(test_dir) / "ground_truth_classification.csv"
+    )
 
     print(f"Number of test examples: {len(test_set)}")
 

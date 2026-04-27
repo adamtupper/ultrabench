@@ -45,7 +45,12 @@ import skimage.io as io
 import typer
 from sklearn.model_selection import GroupShuffleSplit
 
-from .utils import resize_and_pad, save_version_info, to_3_channel
+from .utils import (
+    generate_classification_ground_truth,
+    resize_and_pad,
+    save_version_info,
+    to_3_channel,
+)
 
 __version__ = version("ultrabench")
 
@@ -60,8 +65,8 @@ LABEL_TO_CLASS = {
     "pneumonia": 1,
     "covid": 2,
 }
-INPUT_IMAGE_DIR = "data/pocus_images/convex"
-INPUT_VIDEO_DIR = "data/pocus_videos/convex"
+INPUT_IMAGE_DIR = "covid19_ultrasound/data/pocus_images/convex"
+INPUT_VIDEO_DIR = "covid19_ultrasound/data/pocus_videos/convex"
 FRAME_RATE = 3
 MAX_FRAMES = 30
 IMAGE_EXTENSIONS = (".png", ".jpg", ".jpeg", ".JPG", ".PNG")
@@ -336,5 +341,9 @@ def process_pocus(
         json.dump(train_examples, f, indent=4)
     with open(os.path.join(test_dir, "test.json"), "w") as f:
         json.dump(test_examples, f, indent=4)
+
+    generate_classification_ground_truth(
+        test_examples, Path(test_dir) / "ground_truth_classification.csv"
+    )
 
     save_version_info(dataset_dir, __version__)

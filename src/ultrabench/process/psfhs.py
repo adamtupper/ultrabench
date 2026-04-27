@@ -19,6 +19,7 @@ import glob
 import json
 import os
 from importlib.metadata import version
+from pathlib import Path
 from typing import Annotated
 
 import numpy as np
@@ -29,7 +30,12 @@ import skimage.io as io
 import typer
 from sklearn.model_selection import train_test_split
 
-from .utils import resize_and_pad, save_version_info, to_3_channel
+from .utils import (
+    generate_segmentation_ground_truth,
+    resize_and_pad,
+    save_version_info,
+    to_3_channel,
+)
 
 __version__ = version("ultrabench")
 
@@ -101,6 +107,7 @@ def process_psfhs(
     test_dir_name = f"test_{size}"
 
     # Collect all image paths (no I/O) to determine the split before processing
+    raw_data_dir = os.path.join(raw_data_dir, "PSFHS")
     image_paths = glob.glob(os.path.join(raw_data_dir, "image_mha", "*.mha"))
 
     records = [
@@ -176,5 +183,14 @@ def process_psfhs(
                 subset.drop(columns=cols_to_drop).to_dict(orient="records"), f, indent=4
             )
         print(f"Number of {split} examples: {len(subset)}")
+
+    generate_segmentation_ground_truth(
+        test_examples.drop(columns=["image_path", "filename"]).to_dict(
+            orient="records"
+        ),
+        mask_key="psfh_mask",
+        classes=[1],
+        output_path=Path(dataset_dir) / test_dir_name / "ground_truth_segmentation.csv",
+    )
 
     save_version_info(dataset_dir, __version__)

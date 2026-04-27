@@ -23,6 +23,7 @@ Usage:
 import json
 import os
 from importlib.metadata import version
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -31,7 +32,13 @@ import skimage.io as io
 import typer
 from typing_extensions import Annotated
 
-from .utils import resize_and_pad, save_version_info, to_3_channel
+from .utils import (
+    generate_classification_ground_truth,
+    generate_segmentation_ground_truth,
+    resize_and_pad,
+    save_version_info,
+    to_3_channel,
+)
 
 __version__ = version("ultrabench")
 
@@ -225,6 +232,23 @@ def process_mmotu(
     test_examples = process_examples(raw_data_dir, test_dir, "test", size=size)
     with open(os.path.join(test_dir, "test.json"), "w") as file:
         json.dump(test_examples, file, indent=4)
+
+    generate_classification_ground_truth(
+        test_examples, Path(test_dir) / "ground_truth_classification.csv"
+    )
+    generate_segmentation_ground_truth(
+        test_examples,
+        mask_key="tumor_mask_binary",
+        classes=[1],
+        output_path=Path(test_dir) / "ground_truth_segmentation_binary.csv",
+    )
+    generate_segmentation_ground_truth(
+        test_examples,
+        mask_key="tumor_mask_multiclass",
+        classes=[1, 2, 3, 4, 5, 6, 7, 8],
+        output_path=Path(test_dir) / "ground_truth_segmentation_multiclass.csv",
+    )
+
     print(f"Number of test examples: {len(test_examples)}")
 
     train_val_examples = process_examples(raw_data_dir, train_dir, "train")

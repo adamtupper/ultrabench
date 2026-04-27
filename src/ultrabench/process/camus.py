@@ -29,6 +29,7 @@ import glob
 import json
 import os
 from importlib.metadata import version
+from pathlib import Path
 
 import nibabel as nib
 import numpy as np
@@ -39,7 +40,13 @@ import yaml
 from sklearn.model_selection import GroupShuffleSplit
 from typing_extensions import Annotated
 
-from .utils import resize_and_pad, save_version_info, to_3_channel
+from .utils import (
+    generate_classification_ground_truth,
+    generate_segmentation_ground_truth,
+    resize_and_pad,
+    save_version_info,
+    to_3_channel,
+)
 
 __version__ = version("ultrabench")
 
@@ -203,6 +210,7 @@ def process_camus(
         size: The height and width of the test images in pixels.
     """
     verify_args(raw_data_dir, output_dir)
+    raw_data_dir = os.path.join(raw_data_dir, "CAMUS_public")
 
     dataset_dir = os.path.join(output_dir, OUTPUT_NAME.format(__version__))
     test_dir_name = f"test_{size}"
@@ -234,5 +242,16 @@ def process_camus(
         with open(os.path.join(split_dir, f"{split}.json"), "w") as f:
             json.dump(examples.to_dict(orient="records"), f, indent=4)
         print(f"Number of {split} examples: {len(examples)}")
+
+    test_records = test_examples.to_dict(orient="records")
+    generate_classification_ground_truth(
+        test_records, Path(test_dir) / "ground_truth_classification.csv"
+    )
+    generate_segmentation_ground_truth(
+        test_records,
+        mask_key="mask",
+        classes=[1, 2, 3],
+        output_path=Path(test_dir) / "ground_truth_segmentation.csv",
+    )
 
     save_version_info(dataset_dir, __version__)

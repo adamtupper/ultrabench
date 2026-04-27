@@ -31,5 +31,5 @@ def download_fatty_liver(
     zenodo_download("1009146", output_dir=output_dir)
     typer.echo(f"Download complete. Saved to {output_dir}.")
     typer.echo(
-        f"Process the dataset by running `ultrabench process fatty-liver {output_dir}`."
+        f"Process the dataset by running `ultrabench process fatty-liver {output_dir}/dataset_liver_bmodes_steatosis_assessment_IJCARS.mat`."  # noqa: E501
     )

@@ -33,6 +33,7 @@ import ast
 import json
 import os
 from importlib.metadata import version
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -42,7 +43,12 @@ import typer
 from sklearn.model_selection import train_test_split
 from typing_extensions import Annotated
 
-from .utils import resize_and_pad, save_version_info, to_3_channel
+from .utils import (
+    generate_segmentation_ground_truth,
+    resize_and_pad,
+    save_version_info,
+    to_3_channel,
+)
 
 __version__ = version("ultrabench")
 
@@ -244,5 +250,20 @@ def process_open_kidney(
     ]:
         with open(os.path.join(split_dir, f"{split}.json"), "w") as f:
             json.dump(subset.to_dict(orient="records"), f, indent=4)
+
+    test_records = test_examples.to_dict(orient="records")
+    test_dir = Path(dataset_dir) / test_dir_name
+    generate_segmentation_ground_truth(
+        test_records,
+        mask_key="capsule_mask",
+        classes=[1],
+        output_path=test_dir / "ground_truth_segmentation_capsule.csv",
+    )
+    generate_segmentation_ground_truth(
+        test_records,
+        mask_key="regions_mask",
+        classes=[1, 2, 3],
+        output_path=test_dir / "ground_truth_segmentation_regions.csv",
+    )
 
     save_version_info(dataset_dir, __version__)

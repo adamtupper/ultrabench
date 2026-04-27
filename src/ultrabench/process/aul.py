@@ -171,7 +171,7 @@ def copy_images(split_dir: str, df: pd.DataFrame, size: int | None = None) -> No
     Args:
         split_dir: The path to the split directory (train/ or test_{size}/).
         df: The DataFrame containing the examples.
-        size: If provided, resize and pad images to size×size pixels.
+        size: If provided, resize and pad images to size x size pixels.
     """
     image_dir = os.path.join(split_dir, "images")
     os.makedirs(image_dir, exist_ok=True)
@@ -365,6 +365,22 @@ def process_aul(
     copy_images(liver_test_dir, liver_test_df, size=size)
     generate_masks(liver_test_dir, liver_test_df, size=size)
     save_examples(liver_test_dir, liver_test_df, "test")
+
+    liver_test_examples = liver_test_df.drop(
+        columns=[
+            "filename",
+            "image_path",
+            "scan_polygon_path",
+            "liver_polygon_path",
+            "mass_polygon_path",
+        ]
+    ).to_dict(orient="records")
+    generate_segmentation_ground_truth(
+        liver_test_examples,
+        mask_key="liver_mask",
+        classes=[1],
+        output_path=Path(liver_test_dir) / "ground_truth_segmentation.csv",
+    )
 
     save_version_info(liver_dataset_dir, __version__)
 
