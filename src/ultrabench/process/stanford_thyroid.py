@@ -41,6 +41,7 @@ Usage:
 import json
 import os
 from importlib.metadata import version
+from pathlib import Path
 from typing import Annotated
 
 import h5py
@@ -51,7 +52,13 @@ import skimage.io as io
 import typer
 from sklearn.model_selection import GroupShuffleSplit
 
-from .utils import resize_and_pad, save_version_info, to_3_channel
+from .utils import (
+    generate_classification_ground_truth,
+    generate_segmentation_ground_truth,
+    resize_and_pad,
+    save_version_info,
+    to_3_channel,
+)
 
 __version__ = version("ultrabench")
 DATASET_FILE = "dataset.hdf5"
@@ -342,6 +349,16 @@ def process_stanford_thyroid(
         json.dump(train_examples, f, indent=4)
     with open(os.path.join(test_dir, "test.json"), "w") as f:
         json.dump(test_examples, f, indent=4)
+
+    generate_classification_ground_truth(
+        test_examples, Path(test_dir) / "ground_truth_classification.csv"
+    )
+    generate_segmentation_ground_truth(
+        test_examples,
+        mask_key="tumor_mask",
+        classes=[1],
+        output_path=Path(test_dir) / "ground_truth_segmentation.csv",
+    )
 
     print(f"Training examples: {len(train_examples)}")
     print(f"Test examples: {len(test_examples)}")

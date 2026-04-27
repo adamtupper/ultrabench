@@ -24,11 +24,11 @@ def save_version_info(output_dir: str, version: str) -> None:
 
 
 def to_3_channel(image: np.ndarray) -> np.ndarray:
-    """Convert a single-channel image to a 3-channel (RGB) array.
+    """Convert images to a 3-channel (RGB) array.
 
-    Replicates the single channel across all three channels. Raises a
-    ValueError for inputs that are not single-channel (2D, HxWx1) or
-    already 3-channel (HxWx3).
+    Converts single-channel images (2D or HxWx1) and 4-channel
+    (RGBA) images to 3-channel by replicating the single channel or
+    dropping the alpha channel, respectively.
 
     Args:
         image: The input image array.
@@ -45,6 +45,8 @@ def to_3_channel(image: np.ndarray) -> np.ndarray:
         return np.concatenate([image] * 3, axis=-1)
     if image.ndim == 3 and image.shape[-1] == 3:
         return image
+    if image.ndim == 3 and image.shape[-1] == 4:
+        return image[:, :, :3]
     raise ValueError(
         f"Expected a single-channel or 3-channel image, got shape {image.shape}."
     )

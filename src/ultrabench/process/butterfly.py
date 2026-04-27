@@ -19,6 +19,7 @@ import glob
 import json
 import os
 from importlib.metadata import version
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -27,7 +28,12 @@ import skimage.io as io
 import typer
 from typing_extensions import Annotated
 
-from .utils import resize_and_pad, save_version_info, to_3_channel
+from .utils import (
+    generate_classification_ground_truth,
+    resize_and_pad,
+    save_version_info,
+    to_3_channel,
+)
 
 __version__ = version("ultrabench")
 
@@ -155,6 +161,11 @@ def process_butterfly(
         ).to_dict(orient="records")
         with open(os.path.join(split_dir, f"{split_name}.json"), "w") as f:
             json.dump(subset_records, f, indent=4)
+
+        if is_test:
+            generate_classification_ground_truth(
+                subset_records, Path(split_dir) / "ground_truth_classification.csv"
+            )
 
         print(f"Number of {split_name} examples: {len(subset_df)}")
 
