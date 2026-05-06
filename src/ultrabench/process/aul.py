@@ -205,7 +205,7 @@ def generate_masks(split_dir: str, df: pd.DataFrame, size: int | None = None) ->
     for _, example in df.iterrows():
         image = io.imread(example["image_path"])
 
-        if example["scan_polygon_path"]:
+        if not pd.isna(example["scan_polygon_path"]):
             scan_mask = generate_mask(image.shape[:2], example["scan_polygon_path"])
         else:
             scan_mask = generate_scan_mask(example["image_path"])
@@ -217,7 +217,7 @@ def generate_masks(split_dir: str, df: pd.DataFrame, size: int | None = None) ->
             check_contrast=False,
         )
 
-        if example["liver_mask"]:
+        if not pd.isna(example["liver_mask"]):
             liver_mask = generate_mask(image.shape[:2], example["liver_polygon_path"])
             if size is not None:
                 liver_mask = resize_and_pad(liver_mask, size, order=0)
@@ -227,7 +227,7 @@ def generate_masks(split_dir: str, df: pd.DataFrame, size: int | None = None) ->
                 check_contrast=False,
             )
 
-        if example["mass_mask"]:
+        if not pd.isna(example["mass_mask"]):
             if os.path.exists(example["mass_polygon_path"]):
                 mass_mask = generate_mask(image.shape[:2], example["mass_polygon_path"])
             else:
