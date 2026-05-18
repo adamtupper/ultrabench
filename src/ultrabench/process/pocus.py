@@ -1,36 +1,41 @@
-"""Build the POCUS image dataset by extracting the frames from the videos and
-copying the images. The dataset is split into training and test sets using an
-8:2 split.
+"""Prepare the POCUS dataset as a Hugging Face DatasetDict by extracting
+frames from videos and copying still images. The dataset is split into
+training and test sets using an 8:2 split.
 
 Notes:
-    - Following the same procedure as the authors of the original paper, we
-      sample the videos at a rate of 3 Hz upto a maximum of 30 frames.
+    - Following the same procedure as the authors of the original paper,
+      we sample the videos at a rate of 3 Hz up to a maximum of 30
+      frames.
     - We include only convex probe ultrasound images in the dataset.
-    - Following the same procedure as the authors of the original paper, we do
-      not include the viral pneumonia class in the dataset due to the lack of
-      examples.
-    - The frames extracted from videos are grouped by the video source when
-      splitting the dataset into training and test sets to prevent data
-      leakage.
-    - In total, there are 2102 examples split into 1645 training and 457 test
-      examples.
+    - Following the same procedure as the authors of the original paper,
+      we do not include the viral pneumonia class in the dataset due to
+      the lack of examples.
+    - The frames extracted from videos are grouped by the video source
+      when splitting the dataset into training and test sets to prevent
+      data leakage.
 
-Each example (a single image) is represented as an object in one of two JSON
-array files (`train_val.json` or `test.json`). Each object has the following
-key/value pairs:
+The resulting dataset has three splits:
 
-    - source:       The name of the source video or image file.
-    - image:        The path to the image file.
-    - scan_mask:    The path to the scan mask file.
-    - pathology:    The pathology of the mass (regular, pneumonia, or covid).
-    - label:        The pathology of the mass encoded as an integer
-                    (regular = 0, pneumonia = 1, covid = 2).
+    - train: original-size images.
+    - test: original-size images.
+    - test.{size}: same examples as test, resized so the longest edge
+      measures {size} px and then zero-padded to {size} x {size} px.
+
+Each example has the following features:
+
+    - filename: Image filename stem (or video stem with frame index).
+    - label: ClassLabel encoding the lung pathology.
+    - image: 3-channel ultrasound image.
+    - scan_mask: Single-channel binary scan mask.
+
+A ground-truth CSV file is also created for the test split:
+
+    - ground_truth_classification.csv
 
 Usage:
     ultrabench pocus RAW_DATA_DIR OUTPUT_DIR
 """
 
-import json
 import os
 from importlib.metadata import version
 from pathlib import Path
@@ -43,10 +48,21 @@ import pandas as pd
 import skimage
 import skimage.io as io
 import typer
+from datasets import (
+    ClassLabel,
+    Dataset,
+    DatasetDict,
+    DatasetInfo,
+    Features,
+    Image,
+    Value,
+)
+from huggingface_hub import CommitOperationAdd, HfApi
 from sklearn.model_selection import GroupShuffleSplit
+from tqdm.auto import tqdm
 
 from .utils import (
-    generate_classification_ground_truth,
+    generate_classification_ground_truth_from_records,
     resize_and_pad,
     save_version_info,
     to_3_channel,
@@ -54,14 +70,14 @@ from .utils import (
 
 __version__ = version("ultrabench")
 
-OUTPUT_NAME = "pocus_v{}"
+OUTPUT_NAME = "UltraBench/POCUS"
 ABBR_TO_LABEL = {
-    "reg": "regular",
+    "reg": "normal",
     "pne": "pneumonia",
     "cov": "covid",
 }
 LABEL_TO_CLASS = {
-    "regular": 0,
+    "normal": 0,
     "pneumonia": 1,
     "covid": 2,
 }
@@ -72,6 +88,36 @@ MAX_FRAMES = 30
 IMAGE_EXTENSIONS = (".png", ".jpg", ".jpeg", ".JPG", ".PNG")
 VIDEO_EXTENSIONS = (".mpeg", ".gif", ".mp4", ".m4v", ".avi", ".mov")
 VIDEO_INFO_TEMPLATE = "--> {}: {} frames at {:.2f} Hz, {} dimensions"
+DATASET_INFO = DatasetInfo(
+    description=("Convex probe lung ultrasound images for COVID-19 classification."),
+    citation="""
+    @article{born2021pocus,
+        author  = {Born, J. and Wiedemann, N. and Cossio, M. and
+                   Buhre, C. and Br{\\"{a}}ndle, G. and Leidermann, K.
+                   and Goulet, J. and Aujayeb, A. and Moor, M. and
+                   Rieck, B. and Borgwardt, K.},
+        title   = {Accelerating Detection of Lung Pathologies with
+                   Explainable Ultrasound Image Analysis},
+        journal = {Applied Sciences},
+        volume  = {11},
+        number  = {2},
+        pages   = {672},
+        year    = {2021},
+        doi     = {10.3390/app11020672},
+    }
+    """,
+    homepage="https://github.com/jannisborn/covid19_ultrasound",
+    features=Features(
+        {
+            "filename": Value("string"),
+            "source": Value("string"),
+            "label": ClassLabel(names=["normal", "pneumonia", "covid"]),
+            "image": Image(),
+            "scan_mask": Image(),
+        }
+    ),
+    license="cc",
+)
 
 
 def generate_scan_mask(image: np.ndarray) -> np.ndarray:
@@ -170,6 +216,29 @@ def extract_frames_opencv(video_path: str) -> tuple[np.ndarray, float]:
     return frames, frame_rate
 
 
+def _process_pocus_image(
+    raw_image: np.ndarray, size: int | None = None
+) -> tuple[np.ndarray, np.ndarray]:
+    """Process a single raw image into an image/mask pair.
+
+    Args:
+        raw_image: The raw image array.
+        size: If provided, resize and pad arrays to size x size pixels.
+
+    Returns:
+        A tuple of (image, scan_mask) numpy arrays.
+    """
+    gray = (
+        raw_image.mean(axis=-1).astype(np.uint8) if raw_image.ndim == 3 else raw_image
+    )
+    mask = generate_scan_mask(gray)
+    image = to_3_channel(raw_image)
+    if size is not None:
+        image = resize_and_pad(image, size, order=1)
+        mask = resize_and_pad(mask, size, order=0)
+    return image, mask
+
+
 def verify_args(raw_data_dir: str, output_dir: str) -> None:
     """Verify the command line arguments.
 
@@ -179,9 +248,9 @@ def verify_args(raw_data_dir: str, output_dir: str) -> None:
     """
     assert os.path.isdir(raw_data_dir), "raw_data_dir must be an existing directory"
     assert os.path.isdir(output_dir), "output_dir must be an existing directory"
-    assert not os.path.exists(
-        os.path.join(output_dir, OUTPUT_NAME.format(__version__))
-    ), "A matching version of the POCUS dataset already exists"
+    assert not os.path.exists(os.path.join(output_dir, OUTPUT_NAME)), (
+        "A matching version of the POCUS dataset already exists"
+    )
 
 
 def process_pocus(
@@ -192,6 +261,10 @@ def process_pocus(
     size: Annotated[
         int, typer.Option(help="Test image size (height and width in pixels)")
     ] = 256,
+    publish: Annotated[
+        bool,
+        typer.Option(help="Whether to publish the dataset to the Hugging Face Hub"),
+    ] = False,
 ) -> None:
     """Prepare the training and test sets for the POCUS dataset.
 
@@ -199,11 +272,11 @@ def process_pocus(
         raw_data_dir: The path to the raw data directory.
         output_dir: The path to the output directory.
         size: The height and width of the test images in pixels.
+        publish: Whether to publish the dataset to the HF Hub.
     """
     verify_args(raw_data_dir, output_dir)
 
-    dataset_dir = os.path.join(output_dir, OUTPUT_NAME.format(__version__))
-    test_dir_name = f"test_{size}"
+    output_path = Path(output_dir) / OUTPUT_NAME
 
     # Collect source-level metadata (no file I/O) to determine the split
     image_dir = os.path.join(raw_data_dir, INPUT_IMAGE_DIR)
@@ -213,10 +286,10 @@ def process_pocus(
     for abbr, label in ABBR_TO_LABEL.items():
         for file in os.listdir(image_dir):
             if file.endswith(IMAGE_EXTENSIONS) and file.lower().startswith(abbr):
-                source_records.append({"source": file, "pathology": label})
+                source_records.append({"source": file, "label": label})
         for file in os.listdir(video_dir):
             if file.endswith(VIDEO_EXTENSIONS) and file.lower().startswith(abbr):
-                source_records.append({"source": file, "pathology": label})
+                source_records.append({"source": file, "label": label})
 
     sources_df = pd.DataFrame(source_records)
 
@@ -227,17 +300,12 @@ def process_pocus(
     )
     test_sources = set(sources_df.iloc[test_indices]["source"])
 
-    # Create output directories
-    for split_dir_name in ["train_val", test_dir_name]:
-        split_dir = os.path.join(dataset_dir, split_dir_name)
-        os.makedirs(os.path.join(split_dir, "images"), exist_ok=True)
-        os.makedirs(os.path.join(split_dir, "masks", "scan"), exist_ok=True)
-
-    train_examples = []
-    test_examples = []
+    train_records: list[dict] = []
+    test_records: list[dict] = []
+    test_resized_records: list[dict] = []
 
     # Process image files
-    for abbr, label in ABBR_TO_LABEL.items():
+    for abbr, label in tqdm(ABBR_TO_LABEL.items(), desc="Processing image files"):
         files = [
             p
             for p in os.listdir(image_dir)
@@ -245,41 +313,34 @@ def process_pocus(
         ]
         for file in files:
             is_test = file in test_sources
-            split_dir = os.path.join(
-                dataset_dir, test_dir_name if is_test else "train_val"
-            )
-
             raw_image = io.imread(os.path.join(image_dir, file))
-            gray = (
-                raw_image.mean(axis=-1).astype(np.uint8)
-                if raw_image.ndim == 3
-                else raw_image
-            )
-            mask = generate_scan_mask(gray)
-            image = to_3_channel(raw_image)
-            if is_test:
-                image = resize_and_pad(image, size, order=1)
-                mask = resize_and_pad(mask, size, order=0)
-
+            image, mask = _process_pocus_image(raw_image)
             stem = Path(file).stem
-            io.imsave(os.path.join(split_dir, "images", f"{stem}.png"), image)
-            io.imsave(
-                os.path.join(split_dir, "masks", "scan", f"{stem}.png"),
-                mask,
-                check_contrast=False,
-            )
 
-            example = {
+            record = {
+                "filename": stem,
                 "source": file,
-                "image": f"images/{stem}.png",
-                "scan_mask": f"masks/scan/{stem}.png",
-                "pathology": label,
                 "label": LABEL_TO_CLASS[label],
+                "image": image,
+                "scan_mask": mask,
             }
-            (test_examples if is_test else train_examples).append(example)
+            if is_test:
+                test_records.append(record)
+                image_r, mask_r = _process_pocus_image(raw_image, size=size)
+                test_resized_records.append(
+                    {
+                        "filename": stem,
+                        "source": file,
+                        "label": LABEL_TO_CLASS[label],
+                        "image": image_r,
+                        "scan_mask": mask_r,
+                    }
+                )
+            else:
+                train_records.append(record)
 
     # Process video files
-    for abbr, label in ABBR_TO_LABEL.items():
+    for abbr, label in tqdm(ABBR_TO_LABEL.items(), desc="Processing video files"):
         files = [
             p
             for p in os.listdir(video_dir)
@@ -287,9 +348,6 @@ def process_pocus(
         ]
         for file in files:
             is_test = file in test_sources
-            split_dir = os.path.join(
-                dataset_dir, test_dir_name if is_test else "train_val"
-            )
 
             if file.endswith(".gif"):
                 frames, frame_rate = extract_frames_opencv(
@@ -304,46 +362,71 @@ def process_pocus(
             frames = frames[1::every_nth_frame][:MAX_FRAMES]
 
             for i, frame in enumerate(frames):
-                gray = (
-                    frame.mean(axis=-1).astype(np.uint8) if frame.ndim == 3 else frame
-                )
-                mask = generate_scan_mask(gray)
-                image = to_3_channel(frame)
-                if is_test:
-                    image = resize_and_pad(image, size, order=1)
-                    mask = resize_and_pad(mask, size, order=0)
-
+                image, mask = _process_pocus_image(frame)
                 stem = f"{Path(file).stem}_{i}"
-                io.imsave(os.path.join(split_dir, "images", f"{stem}.png"), image)
-                io.imsave(
-                    os.path.join(split_dir, "masks", "scan", f"{stem}.png"),
-                    mask,
-                    check_contrast=False,
-                )
 
-                example = {
+                record = {
+                    "filename": stem,
                     "source": file,
-                    "image": f"images/{stem}.png",
-                    "scan_mask": f"masks/scan/{stem}.png",
-                    "pathology": label,
                     "label": LABEL_TO_CLASS[label],
+                    "image": image,
+                    "scan_mask": mask,
                 }
-                (test_examples if is_test else train_examples).append(example)
+                if is_test:
+                    test_records.append(record)
+                    image_r, mask_r = _process_pocus_image(frame, size=size)
+                    test_resized_records.append(
+                        {
+                            "filename": stem,
+                            "source": file,
+                            "label": LABEL_TO_CLASS[label],
+                            "image": image_r,
+                            "scan_mask": mask_r,
+                        }
+                    )
+                else:
+                    train_records.append(record)
 
-    print(f"Number of examples: {len(train_examples) + len(test_examples)}")
-    print(f"Training examples: {len(train_examples)}")
-    print(f"Test examples: {len(test_examples)}")
+    print(f"Number of examples: {len(train_records) + len(test_records)}")
+    print(f"Training examples: {len(train_records)}")
+    print(f"Test examples: {len(test_records)}")
 
-    # Save the metadata JSON files inside their split directories
-    train_dir = os.path.join(dataset_dir, "train_val")
-    test_dir = os.path.join(dataset_dir, test_dir_name)
-    with open(os.path.join(train_dir, "train_val.json"), "w") as f:
-        json.dump(train_examples, f, indent=4)
-    with open(os.path.join(test_dir, "test.json"), "w") as f:
-        json.dump(test_examples, f, indent=4)
-
-    generate_classification_ground_truth(
-        test_examples, Path(test_dir) / "ground_truth_classification.csv"
+    dataset = DatasetDict(
+        {
+            "train": Dataset.from_list(train_records, info=DATASET_INFO),
+            "test": Dataset.from_list(test_records, info=DATASET_INFO),
+            f"test.{size}": Dataset.from_list(test_resized_records, info=DATASET_INFO),
+        }
     )
 
-    save_version_info(dataset_dir, __version__)
+    dataset.save_to_disk(str(output_path))
+
+    generate_classification_ground_truth_from_records(
+        test_records,
+        output_path / f"test.{size}" / "ground_truth_classification.csv",
+    )
+
+    save_version_info(str(output_path), __version__)
+
+    if publish:
+        dataset.push_to_hub(
+            OUTPUT_NAME,
+            commit_message=f"Update the dataset to Version {__version__}.",
+            private=True,
+        )
+
+        api = HfApi()
+        operations = [
+            CommitOperationAdd(
+                path_in_repo="test-ground-truth-classification.csv",
+                path_or_fileobj=output_path
+                / f"test.{size}"
+                / "ground_truth_classification.csv",
+            ),
+        ]
+        api.create_commit(
+            repo_id=OUTPUT_NAME,
+            repo_type="dataset",
+            operations=operations,
+            commit_message=f"Update ground truth CSV files for Version {__version__}.",
+        )

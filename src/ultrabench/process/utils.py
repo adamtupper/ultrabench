@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 import skimage.io
 import skimage.transform
+from tqdm.auto import tqdm
 
 from ultrabench.core.rle import mask_to_rle
 
@@ -111,6 +112,66 @@ def generate_segmentation_ground_truth(
                 }
             )
 
+    pd.DataFrame(rows).to_csv(output_path, index=False)
+
+
+def generate_classification_ground_truth_from_records(
+    records: list[dict], output_path: Path
+) -> None:
+    """Create a classification ground-truth CSV from a list of records.
+
+    Generate a CSV with columns "filename" and "label", where each row
+    corresponds to one example.
+
+    Args:
+        records: List of record dicts, each containing "filename" and
+            "label" keys.
+        output_path: Destination path for the CSV file (including
+            filename).
+    """
+    rows = [
+        {"image_id": r["filename"], "label": r["label"]}
+        for r in tqdm(records, desc="Generating classification ground truth CSV")
+    ]
+    pd.DataFrame(rows).to_csv(output_path, index=False)
+
+
+def generate_segmentation_ground_truth_from_records(
+    records: list[dict],
+    mask_key: str,
+    classes: list[int],
+    output_path: Path,
+) -> None:
+    """Create a segmentation ground-truth CSV from a list of records.
+
+    Generate a CSV with columns "image_id", "class_id", and
+    "encoded_pixels", where each row corresponds to one (image, class)
+    pair. "encoded_pixels" is a run-length encoded (RLE) string. Records
+    where record[mask_key] is None are skipped.
+
+    Args:
+        records: List of record dicts, each containing "filename" and
+            a key matching mask_key whose value is a numpy uint8 array
+            or None.
+        mask_key: The key in each record that contains the mask array.
+        classes: The list of foreground class IDs.
+        output_path: Destination path for the CSV file (including
+            filename).
+    """
+    rows = []
+    for r in tqdm(records, desc="Generating segmentation ground truth CSV"):
+        mask = r[mask_key]
+        if mask is None:
+            continue
+        for cls in classes:
+            binary_mask = (mask == cls).astype(np.uint8)
+            rows.append(
+                {
+                    "filename": r["filename"],
+                    "class_id": cls,
+                    "encoded_pixels": mask_to_rle(binary_mask),
+                }
+            )
     pd.DataFrame(rows).to_csv(output_path, index=False)
 
 

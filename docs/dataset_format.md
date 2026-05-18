@@ -17,7 +17,7 @@ Downloadable datasets:
 | AUL | `ultrabench download aul <output_dir>` |
 | Butterfly | `ultrabench download butterfly <output_dir>` |
 | CAMUS | `ultrabench download camus <output_dir>` |
-| Fatty Liver | `ultrabench download fatty-liver <output_dir>` |
+| MASLD | `ultrabench download masld <output_dir>` |
 | POCUS | `ultrabench download pocus <output_dir>` |
 | PSFHS | `ultrabench download psfhs <output_dir>` |
 
@@ -42,7 +42,7 @@ All 10 datasets are supported:
 | AUL | `ultrabench process aul <raw_dir> <output_dir>` |
 | Butterfly | `ultrabench process butterfly <raw_dir> <output_dir>` |
 | CAMUS | `ultrabench process camus <raw_dir> <output_dir>` |
-| Fatty Liver | `ultrabench process fatty-liver <raw_dir> <output_dir>` |
+| MASLD | `ultrabench process MASLD <raw_dir> <output_dir>` |
 | GBCU | `ultrabench process gbcu <raw_dir> <output_dir>` |
 | MMOTU | `ultrabench process mmotu <raw_dir> <output_dir>` |
 | Open Kidney | `ultrabench process open-kidney <raw_dir> <output_dir>` |

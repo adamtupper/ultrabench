@@ -1,26 +1,32 @@
-"""Prepare the training and test sets for the MMOTU dataset. The dataset is
-already pre-split into training and test data, ensuring that there is no
-patient overlap between these splits.
+"""Prepare the training and test sets for the MMOTU-2D dataset. The
+dataset is already pre-split into training and test data, ensuring
+that there is no patient overlap between the splits.
 
-Each example (a single image) is represented as an object in one of two JSON
-array files (`train_val.json` or `test.json`). Each object has the following
-key/value pairs:
+The resulting dataset has three splits:
 
-    - image:                    The path to the image file.
-    - tumor_mask_binary:        The path to the binary mask file (tumor
-                                segmentation).
-    - tumor_mask_multiclass:    The path to the multi-class mask file (tumor
-                                segmentation by type).
-    - scan_mask:                The path to the scan mask file (scan
-                                segmentation).
-    - label:                    The class label of the image.
+    - train: original-size images.
+    - test: original-size images.
+    - test.{size}: same examples as test, resized so the longest edge
+      measures {size} px and then zero-padded to {size} x {size} px.
 
+Each example has the following features:
+
+    - filename: Original filename without the file extension.
+    - image: 3-channel ultrasound image.
+    - scan_mask: Single-channel binary scan mask.
+    - tumor_mask: Single-channel binary tumor mask.
+    - tumor_type: ClassLabel encoding the tumor type.
+
+Two ground-truth CSV files are also created for the test split for
+use by the evaluation layer:
+
+    - ground_truth_classification.csv
+    - ground_truth_segmentation.csv
 
 Usage:
-    ultrabench mmotu RAW_DATA_DIR OUTPUT_DIR
+    ultrabench process mmotu RAW_DATA_DIR OUTPUT_DIR
 """
 
-import json
 import os
 from importlib.metadata import version
 from pathlib import Path
@@ -30,11 +36,22 @@ import pandas as pd
 import skimage
 import skimage.io as io
 import typer
+from datasets import (
+    ClassLabel,
+    Dataset,
+    DatasetDict,
+    DatasetInfo,
+    Features,
+    Image,
+    Value,
+)
+from huggingface_hub import CommitOperationAdd, HfApi
+from tqdm.auto import tqdm
 from typing_extensions import Annotated
 
 from .utils import (
-    generate_classification_ground_truth,
-    generate_segmentation_ground_truth,
+    generate_classification_ground_truth_from_records,
+    generate_segmentation_ground_truth_from_records,
     resize_and_pad,
     save_version_info,
     to_3_channel,
@@ -42,18 +59,57 @@ from .utils import (
 
 __version__ = version("ultrabench")
 
-OUTPUT_NAME = "mmotu_v{}"
-PIXEL_TO_CLASS = {
-    (0, 0, 0): 0,  # Background
-    (64, 0, 0): 1,  # Chocolate cyst
-    (0, 64, 0): 2,  # Serious cystadenoma
-    (0, 0, 64): 3,  # Teratoma
-    (64, 0, 64): 4,  # Theca cell tumor
-    (64, 64, 0): 5,  # Simple cyst
-    (64, 64, 64): 6,  # Normal ovary
-    (0, 128, 0): 7,  # Mucinous cystadenoma
-    (0, 0, 128): 8,  # High grade serous
-}
+OUTPUT_NAME = "UltraBench/MMOTU-2D"
+DATASET_INFO = DatasetInfo(
+    description=(
+        "A dataset of ovarian tumor ultrasound images for ovarian "
+        "tumor segmentation and classification."
+    ),
+    citation="""
+    @article{lyu2026_mmotu,
+        title = {Unsupervised cross-domain semantic segmentation on
+                 multi-modality ovarian tumor ultrasound data},
+        journal = {Pattern Recognition},
+        volume = {171},
+        pages = {112311},
+        year = {2026},
+        issn = {0031-3203},
+        doi = {https://doi.org/10.1016/j.patcog.2025.112311},
+        url = {https://www.sciencedirect.com/science/article/pii/S0031320325009720},
+        author = {Shuchang Lyu and
+                  Qi Zhao and
+                  Wenpei Bai and
+                  Linghan Cai and
+                  Guangliang Cheng and
+                  Guangxia Cui and
+                  Min Yang and
+                  Lijiang Chen and
+                  Huiyu Zhou}
+    }
+    """,
+    homepage="https://github.com/cv516Buaa/MMOTU_DS2Net",
+    license="unknown",
+    features=Features(
+        {
+            "filename": Value("string"),
+            "image": Image(),
+            "scan_mask": Image(),
+            "tumor_mask": Image(),
+            "tumor_type": ClassLabel(
+                names=[
+                    "chocolate_cyst",
+                    "serous_cystadenoma",
+                    "teratoma",
+                    "theca_cell_tumour",
+                    "simple_cyst",
+                    "normal_ovary",
+                    "mucinous_cystadenoma",
+                    "high_grade_serous_cystadenocarcinoma",
+                ]
+            ),
+        }
+    ),
+)
 
 
 def generate_scan_mask(image: np.ndarray) -> np.ndarray:
@@ -66,10 +122,10 @@ def generate_scan_mask(image: np.ndarray) -> np.ndarray:
         A binary mask of the scan region.
     """
     mask = image > 0
-    for i in range(10):
+    for _ in range(10):
         mask = skimage.morphology.binary_erosion(mask)
     mask = skimage.morphology.remove_small_objects(mask, min_size=5000)
-    for i in range(10):
+    for _ in range(10):
         mask = skimage.morphology.binary_dilation(mask)
     mask = skimage.morphology.remove_small_holes(mask, area_threshold=1000)
 
@@ -93,18 +149,18 @@ def generate_scan_mask(image: np.ndarray) -> np.ndarray:
 
 
 def process_examples(
-    dataset_dir: str, split_dir: str, split: str, size: int | None = None
+    dataset_dir: str, split: str, size: int | None = None
 ) -> list[dict]:
-    """Process the examples for a given split.
+    """Process the examples for a given split into record dicts.
 
     Args:
         dataset_dir: The path to the dataset directory.
-        split_dir: The path to the split output directory (train/ or test_{size}/).
-        split: The dataset split (train or test).
-        size: If provided, resize and pad images and masks to size×size pixels.
+        split: The dataset split ("train" or "test").
+        size: If provided, resize and pad images and masks to
+            size x size pixels.
 
     Returns:
-        A list of example dictionaries.
+        A list of example dictionaries with numpy array values.
     """
     prefix = "train" if split == "train" else "val"
 
@@ -120,67 +176,35 @@ def process_examples(
     label_df["image"] = label_df["image"].str.removesuffix(".JPG")
 
     examples = []
-    for filename in filenames:
+    for filename in tqdm(filenames, desc=f"Processing {split} split"):
         image_path = os.path.join(dataset_dir, "OTU_2d", "images", f"{filename}.JPG")
         binary_mask_path = os.path.join(
             dataset_dir, "OTU_2d", "annotations", f"{filename}_binary.PNG"
         )
-        multiclass_mask_path = os.path.join(
-            dataset_dir, "OTU_2d", "annotations", f"{filename}.PNG"
-        )
-        label = int(label_df.loc[label_df["image"] == filename, "label"].values[0])
+        tumor_type = int(label_df.loc[label_df["image"] == filename, "label"].values[0])
 
         raw_image = io.imread(image_path)
-        # Use 2D grayscale for scan mask generation
         gray = (
             raw_image.mean(axis=-1).astype(np.uint8)
             if raw_image.ndim == 3
             else raw_image
         )
         scan_mask = generate_scan_mask(gray)
-
-        # Load and convert the binary and multiclass masks
-        binary_mask = io.imread(binary_mask_path)
-        multiclass_mask = io.imread(multiclass_mask_path)
-        multiclass_mask = np.apply_along_axis(
-            lambda x: PIXEL_TO_CLASS[tuple(x)], axis=-1, arr=multiclass_mask
-        ).astype(np.uint8)
-
+        tumor_mask = io.imread(binary_mask_path)
         image = to_3_channel(raw_image)
+
         if size is not None:
             image = resize_and_pad(image, size, order=1)
-            binary_mask = resize_and_pad(binary_mask, size, order=0)
-            multiclass_mask = resize_and_pad(multiclass_mask, size, order=0)
+            tumor_mask = resize_and_pad(tumor_mask, size, order=0)
             scan_mask = resize_and_pad(scan_mask, size, order=0)
-
-        io.imsave(
-            os.path.join(split_dir, "images", f"{filename}.png"),
-            image,
-            check_contrast=False,
-        )
-        io.imsave(
-            os.path.join(split_dir, "masks", "tumor", f"{filename}_binary.png"),
-            binary_mask,
-            check_contrast=False,
-        )
-        io.imsave(
-            os.path.join(split_dir, "masks", "tumor", f"{filename}_multiclass.png"),
-            multiclass_mask,
-            check_contrast=False,
-        )
-        io.imsave(
-            os.path.join(split_dir, "masks", "scan", f"{filename}.png"),
-            scan_mask,
-            check_contrast=False,
-        )
 
         examples.append(
             {
-                "image": f"images/{filename}.png",
-                "tumor_mask_binary": f"masks/tumor/{filename}_binary.png",
-                "tumor_mask_multiclass": f"masks/tumor/{filename}_multiclass.png",
-                "scan_mask": f"masks/scan/{filename}.png",
-                "label": label,
+                "filename": filename,
+                "image": image,
+                "scan_mask": scan_mask,
+                "tumor_mask": tumor_mask,
+                "tumor_type": tumor_type,
             }
         )
 
@@ -196,64 +220,87 @@ def verify_args(raw_data_dir: str, output_dir: str) -> None:
     """
     assert os.path.isdir(raw_data_dir), "raw_data_dir must be an existing directory"
     assert os.path.isdir(output_dir), "output_dir must be an existing directory"
-    assert not os.path.exists(
-        os.path.join(output_dir, OUTPUT_NAME.format(__version__))
-    ), "A matching version of the MMOTU dataset already exists"
+    assert not os.path.exists(os.path.join(output_dir, OUTPUT_NAME)), (
+        "A version of the MMOTU dataset already exists"
+    )
 
 
 def process_mmotu(
     raw_data_dir: Annotated[str, typer.Argument(help="The path to the raw data")],
     output_dir: Annotated[
-        str, typer.Argument(help="The output directory for the processed datasets")
+        str, typer.Argument(help="The output directory for the processed dataset")
     ],
     size: Annotated[
         int, typer.Option(help="Test image size (height and width in pixels)")
     ] = 256,
+    publish: Annotated[
+        bool,
+        typer.Option(help="Whether to publish the dataset to the Hugging Face Hub"),
+    ] = False,
 ) -> None:
-    """Prepare the training and test sets for the MMOTU dataset.
+    """Prepare the MMOTU-2D dataset as a Hugging Face DatasetDict.
 
     Args:
         raw_data_dir: The path to the raw data directory.
         output_dir: The path to the output directory.
-        size: The height and width of the test images in pixels.
+        size: The height and width of the resized test images in pixels.
+        publish: Whether to publish the dataset to the Hugging Face Hub.
     """
     verify_args(raw_data_dir, output_dir)
 
-    dataset_dir = os.path.join(output_dir, OUTPUT_NAME.format(__version__))
-    test_dir_name = f"test_{size}"
-    train_dir = os.path.join(dataset_dir, "train_val")
-    test_dir = os.path.join(dataset_dir, test_dir_name)
+    train_records = process_examples(raw_data_dir, "train")
+    test_records = process_examples(raw_data_dir, "test")
+    test_resized_records = process_examples(raw_data_dir, "test", size=size)
 
-    for split_dir in [train_dir, test_dir]:
-        os.makedirs(os.path.join(split_dir, "images"))
-        os.makedirs(os.path.join(split_dir, "masks", "tumor"))
-        os.makedirs(os.path.join(split_dir, "masks", "scan"))
-
-    test_examples = process_examples(raw_data_dir, test_dir, "test", size=size)
-    with open(os.path.join(test_dir, "test.json"), "w") as file:
-        json.dump(test_examples, file, indent=4)
-
-    generate_classification_ground_truth(
-        test_examples, Path(test_dir) / "ground_truth_classification.csv"
+    dataset = DatasetDict(
+        {
+            "train": Dataset.from_list(train_records, info=DATASET_INFO),
+            "test": Dataset.from_list(test_records, info=DATASET_INFO),
+            f"test.{size}": Dataset.from_list(test_resized_records, info=DATASET_INFO),
+        }
     )
-    generate_segmentation_ground_truth(
-        test_examples,
-        mask_key="tumor_mask_binary",
+
+    output_path = Path(output_dir) / OUTPUT_NAME
+    dataset.save_to_disk(str(output_path))
+
+    generate_classification_ground_truth_from_records(
+        [{"filename": r["filename"], "label": r["tumor_type"]} for r in test_records],
+        output_path / f"test.{size}" / "ground_truth_classification.csv",
+    )
+    generate_segmentation_ground_truth_from_records(
+        test_records,
+        mask_key="tumor_mask",
         classes=[1],
-        output_path=Path(test_dir) / "ground_truth_segmentation_binary.csv",
-    )
-    generate_segmentation_ground_truth(
-        test_examples,
-        mask_key="tumor_mask_multiclass",
-        classes=[1, 2, 3, 4, 5, 6, 7, 8],
-        output_path=Path(test_dir) / "ground_truth_segmentation_multiclass.csv",
+        output_path=output_path / f"test.{size}" / "ground_truth_segmentation.csv",
     )
 
-    print(f"Number of test examples: {len(test_examples)}")
+    save_version_info(str(output_path), __version__)
 
-    train_val_examples = process_examples(raw_data_dir, train_dir, "train")
-    with open(os.path.join(train_dir, "train_val.json"), "w") as file:
-        json.dump(train_val_examples, file, indent=4)
-    print(f"Number of train_val examples: {len(train_val_examples)}")
+    if publish:
+        dataset.push_to_hub(
+            OUTPUT_NAME,
+            commit_message=f"Update the dataset to Version {__version__}.",
+            private=True,
+        )
 
-    save_version_info(dataset_dir, __version__)
+        api = HfApi()
+        operations = [
+            CommitOperationAdd(
+                path_in_repo="test-ground-truth-classification.csv",
+                path_or_fileobj=output_path
+                / f"test.{size}"
+                / "ground_truth_classification.csv",
+            ),
+            CommitOperationAdd(
+                path_in_repo=f"test.{size}-ground-truth-segmentation.csv",
+                path_or_fileobj=output_path
+                / f"test.{size}"
+                / "ground_truth_segmentation.csv",
+            ),
+        ]
+        api.create_commit(
+            repo_id=OUTPUT_NAME,
+            repo_type="dataset",
+            operations=operations,
+            commit_message=f"Update ground truth CSV files for Version {__version__}.",
+        )

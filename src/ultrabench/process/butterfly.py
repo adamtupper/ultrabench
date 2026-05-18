@@ -1,22 +1,31 @@
-"""Prepare the Butterfly dataset. The existing training and test splits
-are preserved.
+"""Prepare the Butterfly dataset as a Hugging Face DatasetDict. The
+existing training and test splits are preserved.
 
-Each example (a single image) is represented as an object in one of two JSON
-array files (`train_val.json` or `test.json`). Each object has the following
-key/value pairs:
+The resulting dataset has three splits:
 
+    - train: original-size images.
+    - test: original-size images.
+    - test.{size}: same examples as test, resized so the longest edge
+      measures {size} px and then zero-padded to {size} x {size} px.
+
+Each example has the following features:
+
+    - filename: Composite image filename (without the file extension),
+      prefixed by the patient ID and label.
     - patient: The patient ID.
-    - image: The path to the image file.
-    - scan_mask: The path to the scan mask file.
-    - class: The class name.
-    - label: The integer label corresponding to the class.
+    - label: ClassLabel encoding the organ class.
+    - image: 3-channel ultrasound image.
+    - scan_mask: Single-channel binary scan mask.
+
+A ground-truth CSV file is also created for the test split:
+
+    - ground_truth_classification.csv
 
 Usage:
     ultrabench butterfly RAW_DATA_DIR OUTPUT_DIR
 """
 
 import glob
-import json
 import os
 from importlib.metadata import version
 from pathlib import Path
@@ -26,10 +35,21 @@ import pandas as pd
 import skimage
 import skimage.io as io
 import typer
+from datasets import (
+    ClassLabel,
+    Dataset,
+    DatasetDict,
+    DatasetInfo,
+    Features,
+    Image,
+    Value,
+)
+from huggingface_hub import CommitOperationAdd, HfApi
+from tqdm.auto import tqdm
 from typing_extensions import Annotated
 
 from .utils import (
-    generate_classification_ground_truth,
+    generate_classification_ground_truth_from_records,
     resize_and_pad,
     save_version_info,
     to_3_channel,
@@ -37,7 +57,7 @@ from .utils import (
 
 __version__ = version("ultrabench")
 
-OUTPUT_NAME = "butterfly_v{}"
+OUTPUT_NAME = "UltraBench/Butterfly"
 CLASS_TO_LABEL = {
     "carotid": 0,
     "2ch": 1,
@@ -49,6 +69,40 @@ CLASS_TO_LABEL = {
     "plax": 7,
     "morisons_pouch": 8,
 }
+DATASET_INFO = DatasetInfo(
+    description=("A multi-region ultrasound image dataset for organ classification."),
+    citation="""
+    @misc{butterfly2018,
+        author = {Butterfly Network},
+        title  = {ButterflyNetwork/MITGrandHack2018},
+        year   = {2018},
+        url    = {https://github.com/ButterflyNetwork/MITGrandHack2018},
+    }
+    """,
+    homepage="https://github.com/ButterflyNetwork/MITGrandHack2018",
+    features=Features(
+        {
+            "filename": Value("string"),
+            "patient": Value("int32"),
+            "label": ClassLabel(
+                names=[
+                    "carotid",
+                    "2ch",
+                    "lungs",
+                    "ivc",
+                    "4ch",
+                    "bladder",
+                    "thyroid",
+                    "plax",
+                    "morisons_pouch",
+                ]
+            ),
+            "image": Image(),
+            "scan_mask": Image(),
+        }
+    ),
+    license="other",
+)
 
 
 def generate_scan_mask(image: np.ndarray) -> np.ndarray:
@@ -65,6 +119,60 @@ def generate_scan_mask(image: np.ndarray) -> np.ndarray:
     return mask.astype("uint8")
 
 
+def _process_butterfly_example(row: pd.Series, size: int | None = None) -> dict:
+    """Process a single DataFrame row into a record dict.
+
+    Loads the raw image and generates a scan mask as numpy arrays.
+    If size is provided, the image and mask are resized and padded to
+    size x size.
+
+    Args:
+        row: A row from the examples DataFrame, with columns
+            filepath, patient, label, and filename.
+        size: If provided, resize and pad arrays to size x size pixels.
+
+    Returns:
+        A dict with keys filename, patient, label, image, and
+        scan_mask. Image values are numpy arrays.
+    """
+    raw_image = io.imread(str(row["filepath"]))
+    gray = raw_image.mean(axis=-1).astype("uint8") if raw_image.ndim == 3 else raw_image
+    scan_mask = generate_scan_mask(gray)
+    image = to_3_channel(raw_image)
+    if size is not None:
+        image = resize_and_pad(image, size, order=1)
+        scan_mask = resize_and_pad(scan_mask, size, order=0)
+
+    return {
+        "filename": Path(row["filename"]).stem,
+        "patient": int(row["patient"]),
+        "label": int(row["label"]),
+        "image": image,
+        "scan_mask": scan_mask,
+    }
+
+
+def _make_train_generator(train_df: pd.DataFrame):
+    """Return a generator function that yields train records one by one.
+
+    Args:
+        train_df: Training split metadata DataFrame.
+
+    Returns:
+        A zero-argument generator function.
+    """
+
+    def generator():
+        for _, row in tqdm(
+            train_df.iterrows(),
+            total=len(train_df),
+            desc="Processing train split",
+        ):
+            yield _process_butterfly_example(row)
+
+    return generator
+
+
 def verify_args(raw_data_dir: str, output_dir: str) -> None:
     """Verify the command line arguments.
 
@@ -74,9 +182,9 @@ def verify_args(raw_data_dir: str, output_dir: str) -> None:
     """
     assert os.path.isdir(raw_data_dir), "raw_data_dir must be an existing directory"
     assert os.path.isdir(output_dir), "output_dir must be an existing directory"
-    assert not os.path.exists(
-        os.path.join(output_dir, OUTPUT_NAME.format(__version__))
-    ), "A matching version of the Butterfly dataset already exists"
+    assert not os.path.exists(os.path.join(output_dir, OUTPUT_NAME)), (
+        "A matching version of the Butterfly dataset already exists"
+    )
 
 
 def process_butterfly(
@@ -87,6 +195,10 @@ def process_butterfly(
     size: Annotated[
         int, typer.Option(help="Test image size (height and width in pixels)")
     ] = 256,
+    publish: Annotated[
+        bool,
+        typer.Option(help="Whether to publish the dataset to the Hugging Face Hub"),
+    ] = False,
 ) -> None:
     """Prepare the training and test sets for the Butterfly dataset.
 
@@ -94,12 +206,11 @@ def process_butterfly(
         raw_data_dir: The path to the raw data directory.
         output_dir: The path to the output directory.
         size: The height and width of the test images in pixels.
+        publish: Whether to publish the dataset to the HF Hub.
     """
-    # Verify arguments
     verify_args(raw_data_dir, output_dir)
 
-    dataset_dir = os.path.join(output_dir, OUTPUT_NAME.format(__version__))
-    test_dir_name = f"test_{size}"
+    output_path = Path(output_dir) / OUTPUT_NAME
 
     # Parse the metadata for each example
     examples = []
@@ -112,12 +223,9 @@ def process_butterfly(
             {
                 "subset": "train" if "training" in subset else "test",
                 "patient": int(patient),
-                "class": label,
                 "label": CLASS_TO_LABEL[label],
                 "filename": new_filename,
                 "filepath": path,
-                "image": f"images/{new_filename}",
-                "scan_mask": f"masks/scan/{new_filename}",
             }
         )
     df = pd.DataFrame.from_records(examples)
@@ -125,48 +233,65 @@ def process_butterfly(
     train_df = df[df["subset"] == "train"]
     test_df = df[df["subset"] == "test"]
 
-    for split_name, subset_df, split_dir, is_test in [
-        ("train_val", train_df, os.path.join(dataset_dir, "train_val"), False),
-        ("test", test_df, os.path.join(dataset_dir, test_dir_name), True),
-    ]:
-        image_dir = os.path.join(split_dir, "images")
-        mask_dir = os.path.join(split_dir, "masks", "scan")
-        os.makedirs(image_dir, exist_ok=True)
-        os.makedirs(mask_dir, exist_ok=True)
+    test_records = [
+        _process_butterfly_example(row)
+        for _, row in tqdm(
+            test_df.iterrows(),
+            total=len(test_df),
+            desc="Processing test split",
+        )
+    ]
+    test_resized_records = [
+        _process_butterfly_example(row, size=size)
+        for _, row in tqdm(
+            test_df.iterrows(),
+            total=len(test_df),
+            desc=f"Processing test.{size} split",
+        )
+    ]
 
-        for row in subset_df.itertuples(index=False):
-            raw_image = io.imread(str(row.filepath))
-            # Use 2D image for scan mask generation
-            gray = (
-                raw_image.mean(axis=-1).astype("uint8")
-                if raw_image.ndim == 3
-                else raw_image
-            )
-            mask = generate_scan_mask(gray)
+    dataset = DatasetDict(
+        {
+            "train": Dataset.from_generator(
+                _make_train_generator(train_df),
+                features=DATASET_INFO.features,
+            ),
+            "test": Dataset.from_list(test_records, info=DATASET_INFO),
+            f"test.{size}": Dataset.from_list(test_resized_records, info=DATASET_INFO),
+        }
+    )
 
-            image = to_3_channel(raw_image)
-            if is_test:
-                image = resize_and_pad(image, size, order=1)
-                mask = resize_and_pad(mask, size, order=0)
+    dataset.save_to_disk(str(output_path))
 
-            io.imsave(
-                os.path.join(image_dir, str(row.filename)), image, check_contrast=False
-            )
-            io.imsave(
-                os.path.join(mask_dir, str(row.filename)), mask, check_contrast=False
-            )
+    generate_classification_ground_truth_from_records(
+        test_records,
+        output_path / f"test.{size}" / "ground_truth_classification.csv",
+    )
 
-        subset_records = subset_df.drop(
-            ["filepath", "subset", "filename"], axis="columns"
-        ).to_dict(orient="records")
-        with open(os.path.join(split_dir, f"{split_name}.json"), "w") as f:
-            json.dump(subset_records, f, indent=4)
+    print(f"Number of train examples: {len(train_df)}")
+    print(f"Number of test examples: {len(test_records)}")
 
-        if is_test:
-            generate_classification_ground_truth(
-                subset_records, Path(split_dir) / "ground_truth_classification.csv"
-            )
+    save_version_info(str(output_path), __version__)
 
-        print(f"Number of {split_name} examples: {len(subset_df)}")
+    if publish:
+        dataset.push_to_hub(
+            OUTPUT_NAME,
+            commit_message=f"Update the dataset to Version {__version__}.",
+            private=True,
+        )
 
-    save_version_info(dataset_dir, __version__)
+        api = HfApi()
+        operations = [
+            CommitOperationAdd(
+                path_in_repo="test-ground-truth-classification.csv",
+                path_or_fileobj=output_path
+                / f"test.{size}"
+                / "ground_truth_classification.csv",
+            ),
+        ]
+        api.create_commit(
+            repo_id=OUTPUT_NAME,
+            repo_type="dataset",
+            operations=operations,
+            commit_message=f"Update ground truth CSV files for Version {__version__}.",
+        )

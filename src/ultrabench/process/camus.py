@@ -1,32 +1,45 @@
-"""Split the CAMUS dataset into training and test sets using a 8:2 split,
-ensuring that there is no patient overlap between the splits.
+"""Split the CAMUS dataset using the original train, validation, and
+test splits provided with the dataset.
 
-The images and masks are extracted from the NIfTI files and saved as 8-bit PNG
-files. The corresponding metadata for each sequence is the ".cfg" files.
+The images and masks are extracted from the NIfTI files. The
+corresponding metadata for each sequence is in the ".cfg" files.
 
-Each example (a single image) is represented as an object in one of two JSON
-array files (`train_val.json` or `test.json`). Each object has
-the following key/value pairs:
+The resulting dataset has three splits:
 
-    - patient:          The patient ID.
-    - view:             The view of the sequence (2CH or 4CH).
-    - frame:            The frame number of the image in the sequence.
-    - sex:              The sex of the patient.
-    - age:              The age of the patient.
-    - image_quality:    The image quality of the image.
-    - EF:               The ejection fraction.
-    - frame_rate:       The frame rate of the sequence.
-    - image:            The path to the image file.
-    - mask:             The path to the mask file.
-    - label:            The quality of the image encoded as an integer
-                        (poor = 0, medium = 1, good = 2).
+    - train: original-size images (original train + validation patients).
+    - test: original-size images (original test patients).
+    - test.{size}: same examples as test, resized so the longest edge
+      measures {size} px and then zero-padded to {size} x {size} px.
+
+Each example has the following features:
+
+    - filename: Unique image identifier.
+    - patient: Patient ID.
+    - view: View of the sequence (2CH or 4CH).
+    - frame: Frame number of the image in the sequence.
+    - sex: Sex of the patient (M or F).
+    - age: Age of the patient.
+    - image_quality: ClassLabel encoding the image quality
+      (poor=0, medium=1, good=2).
+    - ejection_fraction: Ejection fraction.
+    - end_systole: End-Systole flag.
+    - end_diastole: End-Diastole flag.
+    - frame_rate: Frame rate of the sequence.
+    - image: 3-channel ultrasound image.
+    - mask: Single-channel multi-class cardiac structure mask.
+    - scan_mask: Single-channel binary scan mask.
+
+Two ground-truth CSV files are also created for the test split for
+use by the evaluation layer:
+
+    - ground_truth_classification.csv
+    - ground_truth_segmentation.csv
 
 Usage:
-    ultrabench camus RAW_DATA_DIR OUTPUT_DIR
+    ultrabench process camus RAW_DATA_DIR OUTPUT_DIR
 """
 
 import glob
-import json
 import os
 from importlib.metadata import version
 from pathlib import Path
@@ -37,12 +50,22 @@ import pandas as pd
 import skimage
 import typer
 import yaml
-from sklearn.model_selection import GroupShuffleSplit
+from datasets import (
+    ClassLabel,
+    Dataset,
+    DatasetDict,
+    DatasetInfo,
+    Features,
+    Image,
+    Value,
+)
+from huggingface_hub import CommitOperationAdd, HfApi
+from tqdm.auto import tqdm
 from typing_extensions import Annotated
 
 from .utils import (
-    generate_classification_ground_truth,
-    generate_segmentation_ground_truth,
+    generate_classification_ground_truth_from_records,
+    generate_segmentation_ground_truth_from_records,
     resize_and_pad,
     save_version_info,
     to_3_channel,
@@ -50,16 +73,69 @@ from .utils import (
 
 __version__ = version("ultrabench")
 
-OUTPUT_NAME = "camus_v{}"
+OUTPUT_NAME = "UltraBench/CAMUS"
 CLASS_TO_LABEL = {
     "Poor": 0,
     "Medium": 1,
     "Good": 2,
 }
+DATASET_INFO = DatasetInfo(
+    description=(
+        "A dataset of apical four-chamber and two-chamber cardiac "
+        "ultrasound images for cardiac structure segmentation and "
+        "image quality assessment."
+    ),
+    citation="""
+    @article{leclerc2019_camus,
+        author={Leclerc, Sarah and
+                Smistad, Erik and
+                Pedrosa, João and
+                Østvik, Andreas and
+                Cervenansky, Frederic and
+                Espinosa, Florian and
+                Espeland, Torvald and
+                Berg, Erik Andreas Rye and
+                Jodoin, Pierre-Marc and
+                Grenier, Thomas and
+                Lartizien, Carole and
+                D’hooge, Jan and
+                Lovstakken, Lasse and
+                Bernard, Olivier},
+        journal={IEEE Transactions on Medical Imaging},
+        title={Deep Learning for Segmentation Using an Open Large-Scale
+               Dataset in 2D Echocardiography},
+        year={2019},
+        volume={38},
+        number={9},
+        pages={2198-2210},
+        doi={10.1109/TMI.2019.2900516}}
+    }
+    """,
+    homepage="https://www.creatis.insa-lyon.fr/Challenge/camus/",
+    license="cc-by-nc-sa-4.0",
+    features=Features(
+        {
+            "filename": Value("string"),
+            "patient": Value("string"),
+            "view": Value("string"),
+            "frame": Value("int32"),
+            "sex": Value("string"),
+            "age": Value("int32"),
+            "image_quality": ClassLabel(names=["poor", "medium", "good"]),
+            "ejection_fraction": Value("float32"),
+            "end_systole": Value("bool"),
+            "end_diastole": Value("bool"),
+            "frame_rate": Value("float32"),
+            "image": Image(),
+            "mask": Image(),
+            "scan_mask": Image(),
+        }
+    ),
+)
 
 
 def segment_fan(image: np.ndarray) -> np.ndarray:
-    """Generate a fan-shaped mask using morphological operations.
+    """Generate a fan-shaped scan mask using morphological operations.
 
     Args:
         image: The input 2D image array.
@@ -70,69 +146,6 @@ def segment_fan(image: np.ndarray) -> np.ndarray:
     mask = image > 0
     mask = skimage.morphology.convex_hull_image(mask)
     return mask.astype(np.uint8)
-
-
-def extract_images_and_masks(
-    dataset_dir: str,
-    train_dir: str,
-    test_dir: str,
-    test_filenames: set[str],
-    size: int,
-) -> None:
-    """Extract images and masks from NIfTI files and save them as PNG files.
-
-    Images are routed to the train or test split directory based on their
-    filename. Test images are resized and padded to size×size pixels.
-
-    Args:
-        dataset_dir: The path to the raw dataset directory.
-        train_dir: The path to the training split output directory.
-        test_dir: The path to the test split output directory.
-        test_filenames: The set of filenames belonging to the test split.
-        size: The target height and width for test images in pixels.
-    """
-    for split_dir in [train_dir, test_dir]:
-        os.makedirs(os.path.join(split_dir, "images"), exist_ok=True)
-        os.makedirs(os.path.join(split_dir, "masks", "scan"), exist_ok=True)
-        os.makedirs(os.path.join(split_dir, "masks", "structures"), exist_ok=True)
-
-    for nifti_file in glob.glob(
-        os.path.join(dataset_dir, "database_nifti", "**", "*_half_sequence*.nii.gz")
-    ):
-        images = nib.load(nifti_file).get_fdata().astype(np.uint8)  # type: ignore
-        patient, view = nifti_file.split("/")[-1].split("_")[:2]
-        for i in range(images.shape[2]):
-            image = np.rot90(images[:, :, i], axes=(1, 0)).astype(np.uint8)
-            output_filename = f"{patient}_view{view}_frame{i + 1}.png"
-
-            is_test = output_filename in test_filenames
-            split_dir = test_dir if is_test else train_dir
-
-            if "_gt" in nifti_file:
-                mask = image
-                if is_test:
-                    mask = resize_and_pad(mask, size, order=0)
-                skimage.io.imsave(
-                    os.path.join(split_dir, "masks", "structures", output_filename),
-                    mask,
-                    check_contrast=False,
-                )
-            else:
-                scan_mask = segment_fan(image)
-                image_3ch = to_3_channel(image)
-                if is_test:
-                    scan_mask = resize_and_pad(scan_mask, size, order=0)
-                    image_3ch = resize_and_pad(image_3ch, size, order=1)
-                skimage.io.imsave(
-                    os.path.join(split_dir, "masks", "scan", output_filename),
-                    scan_mask,
-                    check_contrast=False,
-                )
-                skimage.io.imsave(
-                    os.path.join(split_dir, "images", output_filename),
-                    image_3ch,
-                    check_contrast=False,
-                )
 
 
 def extract_metadata(dataset_dir: str) -> pd.DataFrame:
@@ -148,8 +161,8 @@ def extract_metadata(dataset_dir: str) -> pd.DataFrame:
     for file_path in glob.glob(
         os.path.join(dataset_dir, "database_nifti", "**", "*.cfg")
     ):
-        patient_id, filename = file_path.split("/")[-2:]
-        patient_id = int(patient_id.removeprefix("patient"))
+        patient_dir, filename = file_path.split("/")[-2:]
+        patient_id = int(patient_dir.removeprefix("patient"))
         view = filename.removesuffix(".cfg").split("_")[-1]
 
         with open(file_path, "r") as config_file:
@@ -157,7 +170,6 @@ def extract_metadata(dataset_dir: str) -> pd.DataFrame:
 
         for i in range(config["NbFrame"]):
             frame = i + 1
-            filename = f"patient{patient_id:04d}_view{view}_frame{frame}.png"
             row = {
                 "patient": patient_id,
                 "view": view,
@@ -165,18 +177,122 @@ def extract_metadata(dataset_dir: str) -> pd.DataFrame:
                 "sex": config["Sex"],
                 "age": config["Age"],
                 "image_quality": config["ImageQuality"],
-                "EF": config["EF"],
+                "ejection_fraction": config["EF"],
                 "frame_rate": config["FrameRate"],
-                "image": f"images/{filename}",
-                "mask": f"masks/structures/{filename}",
-                "scan_mask": f"masks/scan/{filename}",
-                "label": CLASS_TO_LABEL[config["ImageQuality"]],
+                "end_diastole": config["ED"] == frame,
+                "end_systole": config["ES"] == frame,
             }
-            row["ED"] = True if config["ED"] == frame else False
-            row["ES"] = True if config["ES"] == frame else False
             metadata.append(row)
 
     return pd.DataFrame(metadata)
+
+
+def load_split_patients(file_path: str) -> set[int]:
+    """Load patient IDs from a dataset split text file.
+
+    Each line of the file contains a patient string of the form
+    "patient{id:04d}".
+
+    Args:
+        file_path: Path to the split text file.
+
+    Returns:
+        A set of integer patient IDs.
+    """
+    with open(file_path, "r") as f:
+        lines = f.read().splitlines()
+    return {int(line.removeprefix("patient")) for line in lines if line}
+
+
+def _records_from_nifti(
+    patient_id: int,
+    view: str,
+    rows: pd.DataFrame,
+    raw_data_dir: str,
+    size: int | None = None,
+) -> list[dict]:
+    """Process all frames from one (patient, view) NIfTI file.
+
+    Loads the NIfTI image and ground-truth volumes once, then extracts
+    each requested frame as a record dict.
+
+    Args:
+        patient_id: Integer patient ID.
+        view: View string (e.g. "2CH" or "4CH").
+        rows: Subset of the metadata DataFrame for this (patient, view).
+        raw_data_dir: The path to the raw dataset directory.
+        size: If provided, resize and pad arrays to size x size pixels.
+
+    Returns:
+        A list of record dicts, one per frame.
+    """
+    patient_str = f"patient{patient_id:04d}"
+    nifti_dir = os.path.join(raw_data_dir, "database_nifti", patient_str)
+    image_path = os.path.join(nifti_dir, f"{patient_str}_{view}_half_sequence.nii.gz")
+    mask_path = os.path.join(nifti_dir, f"{patient_str}_{view}_half_sequence_gt.nii.gz")
+
+    image_vol = nib.load(image_path).get_fdata().astype(np.uint8)  # type: ignore
+    mask_vol = nib.load(mask_path).get_fdata().astype(np.uint8)  # type: ignore
+
+    records = []
+    for _, row in rows.iterrows():
+        frame_idx = row["frame"] - 1
+        image = np.rot90(image_vol[:, :, frame_idx], axes=(1, 0)).astype(np.uint8)
+        mask = np.rot90(mask_vol[:, :, frame_idx], axes=(1, 0)).astype(np.uint8)
+        scan_mask = segment_fan(image)
+        image_3ch = to_3_channel(image)
+
+        if size is not None:
+            image_3ch = resize_and_pad(image_3ch, size, order=1)
+            mask = resize_and_pad(mask, size, order=0)
+            scan_mask = resize_and_pad(scan_mask, size, order=0)
+
+        records.append(
+            {
+                "filename": f"{patient_str}_{view}_half_sequence_{row['frame']}",
+                "patient": row["patient"],
+                "view": row["view"],
+                "frame": int(row["frame"]),
+                "sex": row["sex"],
+                "age": int(row["age"]),
+                "image_quality": CLASS_TO_LABEL[row["image_quality"]],
+                "ejection_fraction": float(row["ejection_fraction"]),
+                "end_systole": bool(row["end_systole"]),
+                "end_diastole": bool(row["end_diastole"]),
+                "frame_rate": float(row["frame_rate"]),
+                "image": image_3ch,
+                "mask": mask,
+                "scan_mask": scan_mask,
+            }
+        )
+
+    return records
+
+
+def _make_train_generator(train_df: pd.DataFrame, raw_data_dir: str):
+    """Return a generator function that yields train records one by one.
+
+    Groups the metadata by (patient, view) so each NIfTI file is
+    loaded only once.
+
+    Args:
+        train_df: Training split metadata DataFrame.
+        raw_data_dir: The path to the raw dataset directory.
+
+    Returns:
+        A zero-argument generator function.
+    """
+    groups = list(train_df.groupby(["patient", "view"]))
+
+    def generator():
+        for (patient_id, view), group in tqdm(
+            groups,
+            desc="Processing train split",
+        ):
+            for record in _records_from_nifti(patient_id, view, group, raw_data_dir):
+                yield record
+
+    return generator
 
 
 def verify_args(raw_data_dir: str, output_dir: str) -> None:
@@ -188,70 +304,110 @@ def verify_args(raw_data_dir: str, output_dir: str) -> None:
     """
     assert os.path.isdir(raw_data_dir), "raw_data_dir must be an existing directory"
     assert os.path.isdir(output_dir), "output_dir must be an existing directory"
-    assert not os.path.exists(
-        os.path.join(output_dir, OUTPUT_NAME.format(__version__))
-    ), "A matching version of the CAMUS dataset already exists"
+    assert not os.path.exists(os.path.join(output_dir, OUTPUT_NAME)), (
+        "A version of the CAMUS dataset already exists"
+    )
 
 
 def process_camus(
     raw_data_dir: Annotated[str, typer.Argument(help="The path to the raw data")],
     output_dir: Annotated[
-        str, typer.Argument(help="The output directory for the processed datasets")
+        str, typer.Argument(help="The output directory for the processed dataset")
     ],
     size: Annotated[
         int, typer.Option(help="Test image size (height and width in pixels)")
     ] = 256,
+    publish: Annotated[
+        bool,
+        typer.Option(help="Whether to publish the dataset to the Hugging Face Hub"),
+    ] = False,
 ) -> None:
-    """Divide the CAMUS dataset into training and test splits.
+    """Prepare the CAMUS dataset as a Hugging Face DatasetDict.
 
     Args:
         raw_data_dir: The path to the raw data directory.
         output_dir: The path to the output directory.
-        size: The height and width of the test images in pixels.
+        size: The height and width of the resized test images in pixels.
+        publish: Whether to publish the dataset to the Hugging Face Hub.
     """
     verify_args(raw_data_dir, output_dir)
     raw_data_dir = os.path.join(raw_data_dir, "CAMUS_public")
 
-    dataset_dir = os.path.join(output_dir, OUTPUT_NAME.format(__version__))
-    test_dir_name = f"test_{size}"
-    train_dir = os.path.join(dataset_dir, "train_val")
-    test_dir = os.path.join(dataset_dir, test_dir_name)
-
-    # Extract clinical metadata (reads only .cfg files, no images loaded)
     metadata = extract_metadata(raw_data_dir)
 
-    # Split the dataset into training and test sets
-    splitter = GroupShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
-    train_val_indices, test_indices = next(
-        splitter.split(X=metadata, groups=metadata["patient"])
+    split_dir = os.path.join(raw_data_dir, "database_split")
+    train_patients = load_split_patients(
+        os.path.join(split_dir, "subgroup_training.txt")
+    ) | load_split_patients(os.path.join(split_dir, "subgroup_validation.txt"))
+    test_patients = load_split_patients(os.path.join(split_dir, "subgroup_testing.txt"))
+    train_df = metadata[metadata["patient"].isin(train_patients)]
+    test_df = metadata[metadata["patient"].isin(test_patients)]
+
+    # Process test splits into lists (≈20% of data, fits in memory)
+    test_records = []
+    test_resized_records = []
+    test_groups = list(test_df.groupby(["patient", "view"]))
+    for (patient_id, view), group in tqdm(test_groups, desc="Processing test split"):
+        test_records.extend(_records_from_nifti(patient_id, view, group, raw_data_dir))
+        test_resized_records.extend(
+            _records_from_nifti(patient_id, view, group, raw_data_dir, size=size)
+        )
+
+    dataset = DatasetDict(
+        {
+            "train": Dataset.from_generator(
+                _make_train_generator(train_df, raw_data_dir),
+                features=DATASET_INFO.features,
+            ),
+            "test": Dataset.from_list(test_records, info=DATASET_INFO),
+            f"test.{size}": Dataset.from_list(test_resized_records, info=DATASET_INFO),
+        }
     )
-    train_val_examples = metadata.iloc[train_val_indices]
-    test_examples = metadata.iloc[test_indices]
 
-    # Build the set of test filenames for routing during image extraction
-    test_filenames = {os.path.basename(p) for p in test_examples["image"]}
+    output_path = Path(output_dir) / OUTPUT_NAME
+    dataset.save_to_disk(str(output_path))
 
-    # Extract and save images and masks, routing to correct split directory
-    extract_images_and_masks(raw_data_dir, train_dir, test_dir, test_filenames, size)
-
-    # Save the training and test examples as JSON files inside their split dirs
-    for split, examples, split_dir in [
-        ("train_val", train_val_examples, train_dir),
-        ("test", test_examples, test_dir),
-    ]:
-        with open(os.path.join(split_dir, f"{split}.json"), "w") as f:
-            json.dump(examples.to_dict(orient="records"), f, indent=4)
-        print(f"Number of {split} examples: {len(examples)}")
-
-    test_records = test_examples.to_dict(orient="records")
-    generate_classification_ground_truth(
-        test_records, Path(test_dir) / "ground_truth_classification.csv"
+    generate_classification_ground_truth_from_records(
+        [
+            {"filename": r["filename"], "label": r["image_quality"]}
+            for r in test_records
+        ],
+        output_path / f"test.{size}" / "ground_truth_classification.csv",
     )
-    generate_segmentation_ground_truth(
+    generate_segmentation_ground_truth_from_records(
         test_records,
         mask_key="mask",
         classes=[1, 2, 3],
-        output_path=Path(test_dir) / "ground_truth_segmentation.csv",
+        output_path=output_path / f"test.{size}" / "ground_truth_segmentation.csv",
     )
 
-    save_version_info(dataset_dir, __version__)
+    save_version_info(str(output_path), __version__)
+
+    if publish:
+        dataset.push_to_hub(
+            OUTPUT_NAME,
+            commit_message=f"Update the dataset to Version {__version__}.",
+            private=True,
+        )
+
+        api = HfApi()
+        operations = [
+            CommitOperationAdd(
+                path_in_repo="test-ground-truth-classification.csv",
+                path_or_fileobj=output_path
+                / f"test.{size}"
+                / "ground_truth_classification.csv",
+            ),
+            CommitOperationAdd(
+                path_in_repo=f"test.{size}-ground-truth-segmentation.csv",
+                path_or_fileobj=output_path
+                / f"test.{size}"
+                / "ground_truth_segmentation.csv",
+            ),
+        ]
+        api.create_commit(
+            repo_id=OUTPUT_NAME,
+            repo_type="dataset",
+            operations=operations,
+            commit_message=f"Update ground truth CSV files for Version {__version__}.",
+        )

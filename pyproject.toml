@@ -19,6 +19,7 @@ license = "MIT"
 license-files = ["LICEN[CS]E*"]
 
 dependencies = [
+    "datasets >= 4.0.0",
     "h5py >=3.11.0",
     "hydra-core >=1.3",
     "imageio[ffmpeg] >=0.5.1",

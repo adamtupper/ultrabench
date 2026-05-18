@@ -1,22 +1,32 @@
-"""Split the PSFHS dataset into training and test sets using an 8:2 split. The
-dataset consists of 1358 images from 1124 patients. Unfortunately, there is no
-metadata to provide additional information about the patients or the images.
-Therefore, we cannot ensure that there is no patient overlap between the splits.
+"""Split the PSFHS dataset into training and test sets using an 8:2
+split. The dataset consists of 1358 images from 1124 patients.
+Unfortunately, there is no metadata to provide additional information
+about the patients or the images. Therefore, we cannot ensure that there
+is no patient overlap between the splits.
 
-Each example (a single image) is represented as an object in one of two JSON
-array files (`train_val.json` or `test.json`). Each object has the following
-key/value pairs:
+The resulting dataset has two splits:
 
-    - image:            The path to the image file.
-    - psfh_mask:        The path to the PS-FH mask file.
-    - scan_mask:        The path to the scan mask file.
+    - train: images in their original 256 x 256 px resolution.
+    - test: images in their original 256 x 256 px resolution.
+
+Each example has the following features:
+
+    - filename: Original filename without the file extension.
+    - image: 3-channel ultrasound image.
+    - scan_mask: Single-channel binary scan mask.
+    - psfh_mask: Single-channel multi-class PS-FH segmentation mask
+      (background=0, pubic symphysis=1, fetal head=2).
+
+One ground-truth CSV file is also created for the test split for use
+by the evaluation layer:
+
+    - ground_truth_segmentation.csv
 
 Usage:
-    ultrabench psfhs RAW_DATA_DIR OUTPUT_DIR
+    ultrabench process psfhs RAW_DATA_DIR OUTPUT_DIR
 """
 
 import glob
-import json
 import os
 from importlib.metadata import version
 from pathlib import Path
@@ -26,20 +36,65 @@ import numpy as np
 import pandas as pd
 import SimpleITK as sitk
 import skimage
-import skimage.io as io
 import typer
+from datasets import (
+    Dataset,
+    DatasetDict,
+    DatasetInfo,
+    Features,
+    Image,
+    Value,
+)
+from huggingface_hub import CommitOperationAdd, HfApi
 from sklearn.model_selection import train_test_split
+from tqdm.auto import tqdm
 
 from .utils import (
-    generate_segmentation_ground_truth,
-    resize_and_pad,
+    generate_segmentation_ground_truth_from_records,
     save_version_info,
     to_3_channel,
 )
 
 __version__ = version("ultrabench")
 
-OUTPUT_NAME = "psfhs_v{}"
+OUTPUT_NAME = "UltraBench/PSFHS"
+DATASET_INFO = DatasetInfo(
+    description=(
+        "A dataset of intrapartum ultrasound images with pixel-level "
+        "segmentation masks for the pubic symphysis and fetal head."
+    ),
+    citation="""
+    @article{chen2024_psfhs,
+        title = {{{PSFHS}}: {{Intrapartum Ultrasound Image Dataset}} for
+                {{AI-Based Segmentation}} of {{Pubic Symphysis}} and
+                {{Fetal Head}}},
+        author = {Chen, Gaowen and
+                  Bai, Jieyun and
+                  Ou, Zhanhong and
+                  Lu, Yaosheng and
+                  Wang, Huijin},
+        year = 2024,
+        month = may,
+        journal = {Scientific Data},
+        volume = {11},
+        number = {1},
+        pages = {436},
+        publisher = {Nature Publishing Group},
+        issn = {2052-4463},
+        doi = {10.1038/s41597-024-03266-4}
+    }
+    """,
+    homepage="https://zenodo.org/records/10969427",
+    license="cc-by-4.0",
+    features=Features(
+        {
+            "filename": Value("string"),
+            "image": Image(),
+            "scan_mask": Image(),
+            "psfh_mask": Image(),
+        }
+    ),
+)
 
 
 def generate_scan_mask(image: np.ndarray) -> np.ndarray:
@@ -54,9 +109,9 @@ def generate_scan_mask(image: np.ndarray) -> np.ndarray:
     mask = image > 1
     mask = skimage.morphology.remove_small_objects(mask, min_size=64)
     mask = skimage.morphology.remove_small_holes(mask, area_threshold=1000)
-    for i in range(3):
+    for _ in range(3):
         mask = skimage.morphology.binary_erosion(mask)
-    for i in range(3):
+    for _ in range(3):
         mask = skimage.morphology.binary_dilation(mask)
 
     # Take the union of each half reflected onto the other to make it symmetric
@@ -71,6 +126,34 @@ def generate_scan_mask(image: np.ndarray) -> np.ndarray:
     return mask.astype(np.uint8)
 
 
+def _process_psfhs_example(image_path: str) -> dict:
+    """Process a single image into a record dict.
+
+    Args:
+        image_path: The path to the .mha image file.
+
+    Returns:
+        A dict with keys filename, image, scan_mask, and psfh_mask,
+        with numpy array values.
+    """
+    filename = os.path.basename(image_path).replace(".mha", "")
+    raw = sitk.GetArrayFromImage(sitk.ReadImage(image_path))
+    gray = raw.mean(axis=0).astype(np.uint8) if raw.ndim == 3 else raw
+
+    scan_mask = generate_scan_mask(gray)
+    image = to_3_channel(gray)
+
+    mask_path = image_path.replace("image_mha", "label_mha")
+    psfh_mask = sitk.GetArrayFromImage(sitk.ReadImage(mask_path))
+
+    return {
+        "filename": filename,
+        "image": image,
+        "scan_mask": scan_mask,
+        "psfh_mask": psfh_mask,
+    }
+
+
 def verify_args(raw_data_dir: str, output_dir: str) -> None:
     """Verify the command line arguments.
 
@@ -80,117 +163,93 @@ def verify_args(raw_data_dir: str, output_dir: str) -> None:
     """
     assert os.path.isdir(raw_data_dir), "raw_data_dir must be an existing directory"
     assert os.path.isdir(output_dir), "output_dir must be an existing directory"
-    assert not os.path.exists(
-        os.path.join(output_dir, OUTPUT_NAME.format(__version__))
-    ), "A matching version of the PSFHS dataset already exists"
+    assert not os.path.exists(os.path.join(output_dir, OUTPUT_NAME)), (
+        "A version of the PSFHS dataset already exists"
+    )
 
 
 def process_psfhs(
     raw_data_dir: Annotated[str, typer.Argument(help="The path to the raw data")],
     output_dir: Annotated[
-        str, typer.Argument(help="The output directory for the processed datasets")
+        str, typer.Argument(help="The output directory for the processed dataset")
     ],
-    size: Annotated[
-        int, typer.Option(help="Test image size (height and width in pixels)")
-    ] = 256,
+    publish: Annotated[
+        bool,
+        typer.Option(help="Whether to publish the dataset to the Hugging Face Hub"),
+    ] = False,
 ) -> None:
-    """Prepare the training and test sets for the PSFHS dataset.
+    """Prepare the PSFHS dataset as a Hugging Face DatasetDict.
 
     Args:
         raw_data_dir: The path to the raw data directory.
         output_dir: The path to the output directory.
-        size: The height and width of the test images in pixels.
+        publish: Whether to publish the dataset to the Hugging Face Hub.
     """
     verify_args(raw_data_dir, output_dir)
 
-    dataset_dir = os.path.join(output_dir, OUTPUT_NAME.format(__version__))
-    test_dir_name = f"test_{size}"
+    psfhs_dir = os.path.join(raw_data_dir, "PSFHS")
+    image_paths = glob.glob(os.path.join(psfhs_dir, "image_mha", "*.mha"))
+    filenames = [os.path.basename(p).replace(".mha", "") for p in image_paths]
 
-    # Collect all image paths (no I/O) to determine the split before processing
-    raw_data_dir = os.path.join(raw_data_dir, "PSFHS")
-    image_paths = glob.glob(os.path.join(raw_data_dir, "image_mha", "*.mha"))
+    examples = pd.DataFrame({"image_path": image_paths, "filename": filenames})
 
-    records = [
-        {
-            "image_path": p,
-            "filename": os.path.basename(p).replace(".mha", ".png"),
-            "image": f"images/{os.path.basename(p).replace('.mha', '.png')}",
-            "scan_mask": f"masks/scan/{os.path.basename(p).replace('.mha', '.png')}",
-            "psfh_mask": f"masks/psfh/{os.path.basename(p).replace('.mha', '.png')}",
-        }
-        for p in image_paths
-    ]
-    examples = pd.DataFrame(records)
-
-    print(f"Number of examples: {len(examples)}")
-
-    # Determine the train/test split before any image I/O
     train_val_examples, test_examples = train_test_split(
         examples, test_size=0.2, random_state=42, shuffle=True
     )
-    test_filenames = set(test_examples["filename"])
 
-    # Create output directories
-    for split_dir_name in ["train_val", test_dir_name]:
-        split_dir = os.path.join(dataset_dir, split_dir_name)
-        os.makedirs(os.path.join(split_dir, "images"), exist_ok=True)
-        os.makedirs(os.path.join(split_dir, "masks", "scan"), exist_ok=True)
-        os.makedirs(os.path.join(split_dir, "masks", "psfh"), exist_ok=True)
-
-    # Load, convert, and save each image and mask to the correct split directory
-    for _, row in examples.iterrows():
-        is_test = row["filename"] in test_filenames
-        split_dir = os.path.join(dataset_dir, test_dir_name if is_test else "train_val")
-
-        raw = sitk.GetArrayFromImage(sitk.ReadImage(row["image_path"]))
-        gray = raw.mean(axis=0).astype(np.uint8) if raw.ndim == 3 else raw
-
-        scan_mask = generate_scan_mask(gray)
-        image = to_3_channel(gray)
-
-        mask_path = row["image_path"].replace("image_mha", "label_mha")
-        psfh_mask = sitk.GetArrayFromImage(sitk.ReadImage(mask_path))
-
-        if is_test:
-            image = resize_and_pad(image, size, order=1)
-            scan_mask = resize_and_pad(scan_mask, size, order=0)
-            psfh_mask = resize_and_pad(psfh_mask, size, order=0)
-
-        io.imsave(
-            os.path.join(split_dir, "images", row["filename"]),
-            image,
-            check_contrast=False,
+    train_records = [
+        _process_psfhs_example(row["image_path"])
+        for _, row in tqdm(
+            train_val_examples.iterrows(),
+            total=len(train_val_examples),
+            desc="Processing train split",
         )
-        io.imsave(
-            os.path.join(split_dir, "masks", "scan", row["filename"]),
-            scan_mask,
-            check_contrast=False,
+    ]
+    test_records = [
+        _process_psfhs_example(row["image_path"])
+        for _, row in tqdm(
+            test_examples.iterrows(),
+            total=len(test_examples),
+            desc="Processing test split",
         )
-        io.imsave(
-            os.path.join(split_dir, "masks", "psfh", row["filename"]),
-            psfh_mask,
-            check_contrast=False,
-        )
+    ]
 
-    # Save metadata JSON files inside their split directories
-    for split, subset, split_dir in [
-        ("train_val", train_val_examples, os.path.join(dataset_dir, "train_val")),
-        ("test", test_examples, os.path.join(dataset_dir, test_dir_name)),
-    ]:
-        cols_to_drop = ["image_path", "filename"]
-        with open(os.path.join(split_dir, f"{split}.json"), "w") as f:
-            json.dump(
-                subset.drop(columns=cols_to_drop).to_dict(orient="records"), f, indent=4
-            )
-        print(f"Number of {split} examples: {len(subset)}")
-
-    generate_segmentation_ground_truth(
-        test_examples.drop(columns=["image_path", "filename"]).to_dict(
-            orient="records"
-        ),
-        mask_key="psfh_mask",
-        classes=[1],
-        output_path=Path(dataset_dir) / test_dir_name / "ground_truth_segmentation.csv",
+    dataset = DatasetDict(
+        {
+            "train": Dataset.from_list(train_records, info=DATASET_INFO),
+            "test": Dataset.from_list(test_records, info=DATASET_INFO),
+        }
     )
 
-    save_version_info(dataset_dir, __version__)
+    output_path = Path(output_dir) / OUTPUT_NAME
+    dataset.save_to_disk(str(output_path))
+
+    generate_segmentation_ground_truth_from_records(
+        test_records,
+        mask_key="psfh_mask",
+        classes=[1, 2],
+        output_path=output_path / "test" / "ground_truth_segmentation.csv",
+    )
+
+    save_version_info(str(output_path), __version__)
+
+    if publish:
+        dataset.push_to_hub(
+            OUTPUT_NAME,
+            commit_message=f"Update the dataset to Version {__version__}.",
+            private=True,
+        )
+
+        api = HfApi()
+        operations = [
+            CommitOperationAdd(
+                path_in_repo="test-ground-truth-segmentation.csv",
+                path_or_fileobj=output_path / "test" / "ground_truth_segmentation.csv",
+            ),
+        ]
+        api.create_commit(
+            repo_id=OUTPUT_NAME,
+            repo_type="dataset",
+            operations=operations,
+            commit_message=f"Update ground truth CSV files for Version {__version__}.",
+        )

@@ -1,26 +1,38 @@
-"""Split the Annotated Ultrasound Liver (AUL) dataset into training and test
-sets using a 8:2 split. The dataset consists of 735 images from different
-patients.
+"""Split the Annotated Ultrasound Liver (AUL) dataset into training and
+test sets using a stratified (by label) 8:2 split. Save the resulting
+dataset as a Hugging Face dataset.
 
-Two versions of the dataset are created, one for liver segmentation and one for
-mass classification/segmentation. This is because one of the examples
-(image 374.jpg) is missing a liver segmentation mask and is therefore excluded
-from the liver segmentation task. For images 229.jpg and 306.jpg, the scan
-annotations actually correspond to the liver (they are missing the scan
-annotations).
+Corrections:
 
-Each example (a single image) is represented as an object in one of two JSON
-array files (`train_val.json` or `test.json`). Each object has the following
-key/value pairs:
+    - For images 229.jpg and 306.jpg the scan annotations actually
+      correspond to the liver, so the scan masks are generated via
+      morphological operations instead.
+    - Image 374.jpg is missing a liver segmentation mask, so its
+      liver_mask feature is None.
 
-    - image: The path to the image file.
-    - scan_mask:  The path to the scan mask file.
-    - liver_mask: The path to the liver mask file.
-    - mass_mask: The path to the mass mask file.
-    - pathology: The pathology of the mass (normal/no mass, benign or
-        malignant).
-    - label: The pathology of the mass encoded as an integer (normal/no
-        mass = 0, benign = 1, malignant = 2).
+The resulting dataset has three splits:
+
+    - train: original-size images.
+    - test: original-size images.
+    - test.{size}: same examples as test, resized so the longest edge
+      measures {size} px and then zero-padded to {size} x {size} px.
+
+Each example has the following features:
+
+    - filename: Original filename without the file extension.
+    - image: 3-channel ultrasound image.
+    - scan_mask: Single-channel binary scan mask.
+    - liver_mask: Single-channel binary liver mask.
+    - mass_mask: Single-channel binary mass mask.
+    - label: ClassLabel encoding the mass pathology (normal=0, benign=1,
+      malignant=2).
+
+Three ground-truth CSV files are also created for each test split for
+use by the evaluation layer:
+
+    - ground_truth_classification.csv
+    - ground_truth_segmentation_mass.csv
+    - ground_truth_segmentation_liver.csv
 
 Usage:
     ultrabench aul RAW_DATA_DIR OUTPUT_DIR
@@ -38,12 +50,23 @@ import pandas as pd
 import skimage
 import skimage.io as io
 import typer
+from datasets import (
+    ClassLabel,
+    Dataset,
+    DatasetDict,
+    DatasetInfo,
+    Features,
+    Image,
+    Value,
+)
+from huggingface_hub import CommitOperationAdd, HfApi
 from sklearn.model_selection import train_test_split
+from tqdm.auto import tqdm
 from typing_extensions import Annotated
 
 from .utils import (
-    generate_classification_ground_truth,
-    generate_segmentation_ground_truth,
+    generate_classification_ground_truth_from_records,
+    generate_segmentation_ground_truth_from_records,
     resize_and_pad,
     save_version_info,
     to_3_channel,
@@ -51,13 +74,54 @@ from .utils import (
 
 __version__ = version("ultrabench")
 
-OUTPUT_NAME_MASS = "aul_mass_v{}"
-OUTPUT_NAME_LIVER = "aul_liver_v{}"
+OUTPUT_NAME = "UltraBench/AUL-test"
 CLASS_TO_LABEL = {
     "Normal": 0,
     "Benign": 1,
     "Malignant": 2,
 }
+DATASET_INFO = DatasetInfo(
+    description=(
+        "A dataset of liver ultrasound images for liver and mass "
+        "segmentation, and liver mass classification."
+    ),
+    citation="""
+    @dataset{yiming2022_aul,
+        author       = {Xu Yiming and
+                        Zheng Bowen and
+                        Liu Xiaohong and
+                        Wu Tao and
+                        Ju Jinxiu and
+                        Wang Shijie and
+                        Lian Yufan and
+                        Zhang Hongjun and
+                        Liang Tong and
+                        Sang Ye and
+                        Jiang Rui and
+                        Wang Guangyu and
+                        Ren Jie and
+                        Chen Ting},
+        title        = {Annotated Ultrasound Liver images},
+        month        = nov,
+        year         = 2022,
+        publisher    = {Zenodo},
+        doi          = {10.5281/zenodo.7272660},
+        url          = {https://doi.org/10.5281/zenodo.7272660},
+    }
+    """,
+    homepage="https://zenodo.org/records/7272660",
+    license="cc-by-4.0",
+    features=Features(
+        {
+            "filename": Value("string"),
+            "image": Image(),
+            "scan_mask": Image(),
+            "liver_mask": Image(),
+            "mass_mask": Image(),
+            "label": ClassLabel(names=["normal", "benign", "malignant"]),
+        }
+    ),
+)
 
 
 def collect_examples(dataset_dir: str) -> list[dict[str, Any]]:
@@ -98,21 +162,15 @@ def collect_examples(dataset_dir: str) -> list[dict[str, Any]]:
                 "mass_polygon_path": mass_polygon_path,
                 "pathology": class_name,
                 "label": CLASS_TO_LABEL[class_name],
-                "image": f"images/{new_filename}.png",
-                "scan_mask": f"masks/scan/{new_filename}.png",
-                "liver_mask": f"masks/liver/{new_filename}.png"
-                if has_liver_polygon
-                else None,
-                "mass_mask": f"masks/mass/{new_filename}.png"
-                if (has_mass_polygon or CLASS_TO_LABEL[class_name] == 0)
-                else None,
+                "has_liver_mask": has_liver_polygon,
+                "has_mass_mask": has_mass_polygon or CLASS_TO_LABEL[class_name] == 0,
             }
 
             # Correct the scan/liver annotations for images 229.jpg and 306.jpg
             if filename in ["229", "306"]:
                 example["liver_polygon_path"] = example["scan_polygon_path"]
-                example["liver_mask"] = f"masks/liver/{new_filename}.png"
                 example["scan_polygon_path"] = None
+                example["has_liver_mask"] = True
 
             examples.append(example)
 
@@ -120,7 +178,8 @@ def collect_examples(dataset_dir: str) -> list[dict[str, Any]]:
 
 
 def generate_scan_mask(image_path: str) -> np.ndarray:
-    """Generate a scan mask for the given image using morphological operations.
+    """Generate a scan mask for the given image using morphological
+    operations.
 
     Args:
         image_path: The path to the image file.
@@ -165,102 +224,63 @@ def generate_mask(image_shape: tuple[int, int], polygon_file: str) -> np.ndarray
     return mask
 
 
-def copy_images(split_dir: str, df: pd.DataFrame, size: int | None = None) -> None:
-    """Save the images as 3-channel PNG files in the split directory.
+def _process_example(row: pd.Series, size: int | None = None) -> dict:
+    """Process a single DataFrame row into a record dict.
+
+    Loads the raw image and generates all masks as numpy arrays. If size
+    is provided, the image and masks are resized and padded to size x
+    size.
 
     Args:
-        split_dir: The path to the split directory (train/ or test_{size}/).
-        df: The DataFrame containing the examples.
-        size: If provided, resize and pad images to size x size pixels.
-    """
-    image_dir = os.path.join(split_dir, "images")
-    os.makedirs(image_dir, exist_ok=True)
-    for _, example in df.iterrows():
-        dest_filename = f"{example['filename']}.png"
+        row: A row from the examples DataFrame.
+        size: If provided, resize and pad all arrays to size x size
+            pixels.
 
-        image = io.imread(example["image_path"])
-        image = to_3_channel(image)
+    Returns:
+        A dict with keys filename, image, scan_mask, liver_mask,
+        mass_mask, and label. Image values are numpy arrays (or None if
+        a mask is absent for this example).
+    """
+    # Preprocess image
+    image = io.imread(row["image_path"])
+    original_shape = image.shape[:2]
+    image = to_3_channel(image)
+    if size is not None:
+        image = resize_and_pad(image, size, order=1)
+
+    # Generate scan mask
+    if not pd.isna(row["scan_polygon_path"]):
+        scan_mask = generate_mask(original_shape, row["scan_polygon_path"])
+    else:
+        scan_mask = generate_scan_mask(row["image_path"])
+    if size is not None:
+        scan_mask = resize_and_pad(scan_mask, size, order=0)
+
+    # Generate liver (if it exists)
+    liver_mask = None
+    if row["has_liver_mask"]:
+        liver_mask = generate_mask(original_shape, row["liver_polygon_path"])
         if size is not None:
-            image = resize_and_pad(image, size, order=1)
+            liver_mask = resize_and_pad(liver_mask, size, order=0)
 
-        io.imsave(os.path.join(image_dir, dest_filename), image, check_contrast=False)
-
-
-def generate_masks(split_dir: str, df: pd.DataFrame, size: int | None = None) -> None:
-    """Generate and save the scan, liver, and mass masks for the examples.
-
-    Args:
-        split_dir: The path to the split directory (train/ or test_{size}/).
-        df: The DataFrame containing the examples.
-        size: If provided, resize and pad masks to size×size pixels using
-            nearest-neighbor interpolation.
-    """
-    scan_mask_dir = os.path.join(split_dir, "masks", "scan")
-    liver_mask_dir = os.path.join(split_dir, "masks", "liver")
-    mass_mask_dir = os.path.join(split_dir, "masks", "mass")
-    os.makedirs(scan_mask_dir, exist_ok=True)
-    os.makedirs(liver_mask_dir, exist_ok=True)
-    os.makedirs(mass_mask_dir, exist_ok=True)
-
-    for _, example in df.iterrows():
-        image = io.imread(example["image_path"])
-
-        if not pd.isna(example["scan_polygon_path"]):
-            scan_mask = generate_mask(image.shape[:2], example["scan_polygon_path"])
+    # Generate mass (if it exists)
+    mass_mask = None
+    if row["has_mass_mask"]:
+        if os.path.exists(row["mass_polygon_path"]):
+            mass_mask = generate_mask(original_shape, row["mass_polygon_path"])
         else:
-            scan_mask = generate_scan_mask(example["image_path"])
+            mass_mask = np.zeros(original_shape, dtype="uint8")
         if size is not None:
-            scan_mask = resize_and_pad(scan_mask, size, order=0)
-        io.imsave(
-            os.path.join(scan_mask_dir, f"{example['filename']}.png"),
-            scan_mask,
-            check_contrast=False,
-        )
+            mass_mask = resize_and_pad(mass_mask, size, order=0)
 
-        if not pd.isna(example["liver_mask"]):
-            liver_mask = generate_mask(image.shape[:2], example["liver_polygon_path"])
-            if size is not None:
-                liver_mask = resize_and_pad(liver_mask, size, order=0)
-            io.imsave(
-                os.path.join(liver_mask_dir, f"{example['filename']}.png"),
-                liver_mask,
-                check_contrast=False,
-            )
-
-        if not pd.isna(example["mass_mask"]):
-            if os.path.exists(example["mass_polygon_path"]):
-                mass_mask = generate_mask(image.shape[:2], example["mass_polygon_path"])
-            else:
-                # Create an empty mask for images with no mass
-                mass_mask = np.zeros(image.shape[:2], dtype="uint8")
-            if size is not None:
-                mass_mask = resize_and_pad(mass_mask, size, order=0)
-            io.imsave(
-                os.path.join(mass_mask_dir, f"{example['filename']}.png"),
-                mass_mask,
-                check_contrast=False,
-            )
-
-
-def save_examples(split_dir: str, df: pd.DataFrame, split: str) -> None:
-    """Save the examples to a JSON file inside the split directory.
-
-    Args:
-        split_dir: The path to the split directory (train/ or test_{size}/).
-        df: The DataFrame containing the examples.
-        split: The dataset split (train_val, or test).
-    """
-    columns_to_drop = [
-        "filename",
-        "image_path",
-        "scan_polygon_path",
-        "liver_polygon_path",
-        "mass_polygon_path",
-    ]
-    df = df.drop(columns=columns_to_drop)
-    examples = df.to_dict(orient="records")
-    with open(os.path.join(split_dir, f"{split}.json"), "w") as f:
-        json.dump(examples, f, indent=4)
+    return {
+        "filename": row["filename"],
+        "image": image,
+        "scan_mask": scan_mask,
+        "liver_mask": liver_mask,
+        "mass_mask": mass_mask,
+        "label": row["label"],
+    }
 
 
 def verify_args(raw_data_dir: str, output_dir: str) -> None:
@@ -272,117 +292,127 @@ def verify_args(raw_data_dir: str, output_dir: str) -> None:
     """
     assert os.path.isdir(raw_data_dir), "raw_data_dir must be an existing directory"
     assert os.path.isdir(output_dir), "output_dir must be an existing directory"
-    assert not os.path.exists(
-        os.path.join(output_dir, OUTPUT_NAME_MASS.format(__version__))
-    ), "A matching version of the AUL Mass dataset already exists"
-    assert not os.path.exists(
-        os.path.join(output_dir, OUTPUT_NAME_LIVER.format(__version__))
-    ), "A matching version of the AUL Liver dataset already exists"
+    assert not os.path.exists(os.path.join(output_dir, OUTPUT_NAME)), (
+        "A version of the AUL dataset already exists"
+    )
 
 
 def process_aul(
     raw_data_dir: Annotated[str, typer.Argument(help="The path to the raw data")],
     output_dir: Annotated[
-        str, typer.Argument(help="The output directory for the processed datasets")
+        str, typer.Argument(help="The output directory for the processed dataset")
     ],
     size: Annotated[
         int, typer.Option(help="Test image size (height and width in pixels)")
     ] = 256,
+    publish: Annotated[
+        bool,
+        typer.Option(help="Whether to publish the dataset to the Hugging Face Hub"),
+    ] = False,
 ) -> None:
-    """Prepare the training and test sets for the mass classification,
-    mass segmentation and liver segmentation tasks.
+    """Prepare the AUL dataset as a Hugging Face DatasetDict and save to
+    disk.
 
     Args:
         raw_data_dir: The path to the raw data directory.
         output_dir: The path to the output directory.
-        size: The height and width of the test images in pixels.
+        size: The height and width of the resized test images in pixels.
     """
-    # Verify arguments
     verify_args(raw_data_dir, output_dir)
 
-    # Collect examples
     examples = collect_examples(raw_data_dir)
     df = pd.DataFrame.from_records(examples)
 
-    print(f"Total number of examples: {len(df)}")
-
-    # Separate the test set
     train_val_df, test_df = train_test_split(
         df, test_size=0.2, random_state=42, shuffle=True, stratify=df["label"]
     )
 
-    test_dir_name = f"test_{size}"
+    train_records = [
+        _process_example(row)
+        for _, row in tqdm(
+            train_val_df.iterrows(),
+            total=len(train_val_df),
+            desc="Processing train split",
+        )
+    ]
+    test_records = [
+        _process_example(row)
+        for _, row in tqdm(
+            test_df.iterrows(), total=len(test_df), desc="Processing test split"
+        )
+    ]
+    test_resized_records = [
+        _process_example(row, size=size)
+        for _, row in tqdm(
+            test_df.iterrows(),
+            total=len(test_df),
+            desc=f"Processing test.{size} split",
+        )
+    ]
 
-    # Create mass classification/segmentation dataset
-    mass_dataset_dir = os.path.join(output_dir, OUTPUT_NAME_MASS.format(__version__))
-    mass_train_dir = os.path.join(mass_dataset_dir, "train_val")
-    mass_test_dir = os.path.join(mass_dataset_dir, test_dir_name)
-
-    copy_images(mass_train_dir, train_val_df)
-    generate_masks(mass_train_dir, train_val_df)
-    save_examples(mass_train_dir, train_val_df, "train_val")
-
-    copy_images(mass_test_dir, test_df, size=size)
-    generate_masks(mass_test_dir, test_df, size=size)
-    save_examples(mass_test_dir, test_df, "test")
-
-    mass_test_examples = test_df.drop(
-        columns=[
-            "filename",
-            "image_path",
-            "scan_polygon_path",
-            "liver_polygon_path",
-            "mass_polygon_path",
-        ]
-    ).to_dict(orient="records")
-    generate_classification_ground_truth(
-        mass_test_examples, Path(mass_test_dir) / "ground_truth_classification.csv"
+    dataset = DatasetDict(
+        {
+            "train": Dataset.from_list(train_records, info=DATASET_INFO),
+            "test": Dataset.from_list(test_records, info=DATASET_INFO),
+            f"test.{size}": Dataset.from_list(test_resized_records, info=DATASET_INFO),
+        }
     )
-    generate_segmentation_ground_truth(
-        mass_test_examples,
+
+    output_path = Path(output_dir) / OUTPUT_NAME
+    dataset.save_to_disk(str(output_path))
+
+    generate_classification_ground_truth_from_records(
+        test_records, output_path / f"test.{size}" / "ground_truth_classification.csv"
+    )
+    generate_segmentation_ground_truth_from_records(
+        test_records,
         mask_key="mass_mask",
         classes=[1],
-        output_path=Path(mass_test_dir) / "ground_truth_segmentation.csv",
+        output_path=output_path / f"test.{size}" / "ground_truth_segmentation_mass.csv",
     )
-
-    save_version_info(mass_dataset_dir, __version__)
-
-    print(f"Mass dataset - Number of train_val examples: {len(train_val_df)}")
-    print(f"Mass dataset - Number of test examples: {len(test_df)}")
-
-    # Create liver segmentation dataset
-    liver_train_val_df = train_val_df.dropna(subset=["liver_mask"])
-    liver_test_df = test_df.dropna(subset=["liver_mask"])
-
-    liver_dataset_dir = os.path.join(output_dir, OUTPUT_NAME_LIVER.format(__version__))
-    liver_train_dir = os.path.join(liver_dataset_dir, "train_val")
-    liver_test_dir = os.path.join(liver_dataset_dir, test_dir_name)
-
-    copy_images(liver_train_dir, liver_train_val_df)
-    generate_masks(liver_train_dir, liver_train_val_df)
-    save_examples(liver_train_dir, liver_train_val_df, "train_val")
-
-    copy_images(liver_test_dir, liver_test_df, size=size)
-    generate_masks(liver_test_dir, liver_test_df, size=size)
-    save_examples(liver_test_dir, liver_test_df, "test")
-
-    liver_test_examples = liver_test_df.drop(
-        columns=[
-            "filename",
-            "image_path",
-            "scan_polygon_path",
-            "liver_polygon_path",
-            "mass_polygon_path",
-        ]
-    ).to_dict(orient="records")
-    generate_segmentation_ground_truth(
-        liver_test_examples,
+    liver_test_records = [r for r in test_records if r["liver_mask"] is not None]
+    generate_segmentation_ground_truth_from_records(
+        liver_test_records,
         mask_key="liver_mask",
         classes=[1],
-        output_path=Path(liver_test_dir) / "ground_truth_segmentation.csv",
+        output_path=output_path
+        / f"test.{size}"
+        / "ground_truth_segmentation_liver.csv",
     )
 
-    save_version_info(liver_dataset_dir, __version__)
+    save_version_info(str(output_path), __version__)
 
-    print(f"Liver dataset - Number of train_val examples: {len(liver_train_val_df)}")
-    print(f"Liver dataset - Number of test examples: {len(liver_test_df)}")
+    if publish:
+        dataset.push_to_hub(
+            OUTPUT_NAME,
+            commit_message=f"Update the dataset to Version {__version__}.",
+            private=True,
+        )
+
+        api = HfApi()
+        operations = [
+            CommitOperationAdd(
+                path_in_repo="test-ground-truth-classification.csv",
+                path_or_fileobj=output_path
+                / f"test.{size}"
+                / "ground_truth_classification.csv",
+            ),
+            CommitOperationAdd(
+                path_in_repo=f"test.{size}-ground-truth-segmentation-liver.csv",
+                path_or_fileobj=output_path
+                / f"test.{size}"
+                / "ground_truth_segmentation_liver.csv",
+            ),
+            CommitOperationAdd(
+                path_in_repo=f"test.{size}-ground-truth-segmentation-mass.csv",
+                path_or_fileobj=output_path
+                / f"test.{size}"
+                / "ground_truth_segmentation_mass.csv",
+            ),
+        ]
+        api.create_commit(
+            repo_id=OUTPUT_NAME,
+            repo_type="dataset",
+            operations=operations,
+            commit_message=f"Update ground truth CSV files for Version {__version__}.",
+        )

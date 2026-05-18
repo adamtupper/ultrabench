@@ -1,36 +1,45 @@
-"""Divide the Open Kidney dataset into training and test splits using an 8:2
-split. For the annotations, use those created by Sonographer 1. Each image is
-associated with a distinct patient so we do not need to worry about patient
-overlap between the splits. However, we do need to remove 20 duplicate images.
-The splits are stratified based on the view label (longitudinal, transverse,
-other) to mitigate distribution shifts between the splits.
+"""Prepare the Open Kidney dataset as a Hugging Face DatasetDict.
+Images are divided into training and test splits using an 8:2 split.
+For the annotations, use those created by Sonographer 1. Each image is
+associated with a distinct patient so we do not need to worry about
+patient overlap between the splits. However, we do need to remove 20
+duplicate images. The splits are stratified based on the view label
+(longitudinal, transverse, other) to mitigate distribution shifts.
 
-From inspecting the original code, the labels of the regions mask are as
-follows:
+From inspecting the original code, the labels of the regions mask are:
     - 0: Background
     - 1: Central Echo Complex
     - 2: Medulla
     - 3: Cortex
 
-Each example (a single image) is represented as an object in one of two JSON
-array files (`train_val.json` or `test.json`). Each object has the following
-key/value pairs:
+The resulting dataset has three splits:
 
-    - image:        The path to the image file.
-    - scan_mask:    The path to the scan mask file.
-    - capsule_mask: The path to the capsule mask file.
-    - regions_mask:  The path to the region mask file.
-    - transplant:   True if the kidney is transplanted, False otherwise.
-    - view:         The view of the kidney (longitudinal, transverse, other).
-    - quality:      The quality of the image (unsatisfactory, poor, fair,
-                    good).
+    - train: original-size images.
+    - test: original-size images.
+    - test.{size}: same examples as test, resized so the longest edge
+      measures {size} px and then zero-padded to {size} x {size} px.
+
+Each example has the following features:
+
+    - filename: Original image filename (without the file extension).
+    - transplant: Whether the kidney is transplanted.
+    - view: ClassLabel encoding the kidney view.
+    - quality: Image quality rating string.
+    - image: 3-channel ultrasound image.
+    - capsule_mask: Single-channel binary kidney capsule mask.
+    - regions_mask: Single-channel multi-class kidney regions mask.
+    - scan_mask: Single-channel binary scan mask.
+
+Two ground-truth CSV files are also created for the test split:
+
+    - ground_truth_segmentation_capsule.csv
+    - ground_truth_segmentation_regions.csv
 
 Usage:
     ultrabench open_kidney RAW_DATA_DIR OUTPUT_DIR
 """
 
 import ast
-import json
 import os
 from importlib.metadata import version
 from pathlib import Path
@@ -40,11 +49,22 @@ import pandas as pd
 import skimage
 import skimage.io as io
 import typer
+from datasets import (
+    ClassLabel,
+    Dataset,
+    DatasetDict,
+    DatasetInfo,
+    Features,
+    Image,
+    Value,
+)
+from huggingface_hub import CommitOperationAdd, HfApi
 from sklearn.model_selection import train_test_split
+from tqdm.auto import tqdm
 from typing_extensions import Annotated
 
 from .utils import (
-    generate_segmentation_ground_truth,
+    generate_segmentation_ground_truth_from_records,
     resize_and_pad,
     save_version_info,
     to_3_channel,
@@ -52,9 +72,40 @@ from .utils import (
 
 __version__ = version("ultrabench")
 
-OUTPUT_NAME = "open_kidney_v{}"
+OUTPUT_NAME = "UltraBench/OpenKidney"
 SONOGRAPHER = 1
 CLINICAL_METADATA_FILE = f"labels/reviewed_labels_{SONOGRAPHER}.csv"
+VIEW_TO_LABEL = {"longitudinal": 0, "transverse": 1, "other": 2}
+DATASET_INFO = DatasetInfo(
+    description=(
+        "B-mode kidney ultrasound images for kidney capsule and region segmentation."
+    ),
+    citation="""
+    @inproceedings{singla2023openkidney,
+        author    = {Singla, R. and others},
+        title     = {The Open Kidney Ultrasound Data Set},
+        booktitle = {Simplifying Medical Ultrasound. ASMUS 2023.
+                     Lecture Notes in Computer Science, vol 14337},
+        publisher = {Springer, Cham},
+        year      = {2023},
+        doi       = {10.1007/978-3-031-44521-7_15},
+    }
+    """,
+    homepage="https://doi.org/10.1007/978-3-031-44521-7_15",
+    features=Features(
+        {
+            "filename": Value("string"),
+            "transplant": Value("bool"),
+            "view": ClassLabel(names=["longitudinal", "transverse", "other"]),
+            "quality": Value("string"),
+            "image": Image(),
+            "capsule_mask": Image(),
+            "regions_mask": Image(),
+            "scan_mask": Image(),
+        }
+    ),
+    license="other",
+)
 
 
 def generate_scan_mask(image: np.ndarray) -> np.ndarray:
@@ -67,9 +118,9 @@ def generate_scan_mask(image: np.ndarray) -> np.ndarray:
         A binary mask of the scan region.
     """
     mask = image > 0
-    for i in range(5):
+    for _ in range(5):
         mask = skimage.morphology.binary_erosion(mask)
-    for i in range(5):
+    for _ in range(5):
         mask = skimage.morphology.binary_dilation(mask)
     mask = skimage.morphology.remove_small_holes(mask, area_threshold=1000)
 
@@ -93,6 +144,70 @@ def generate_scan_mask(image: np.ndarray) -> np.ndarray:
     return mask.astype(np.uint8)
 
 
+def _process_open_kidney_example(
+    row: pd.Series, raw_data_dir: str, size: int | None = None
+) -> dict:
+    """Process a single DataFrame row into a record dict.
+
+    Loads the raw image and all masks as numpy arrays. If size is
+    provided, the image and masks are resized and padded to size x size.
+
+    Args:
+        row: A row from the metadata DataFrame.
+        raw_data_dir: Path to the raw data directory.
+        size: If provided, resize and pad arrays to size x size pixels.
+
+    Returns:
+        A dict with keys filename, transplant, view, quality, image,
+        capsule_mask, regions_mask, and scan_mask. Image values are
+        numpy arrays.
+    """
+    raw_image = io.imread(os.path.join(raw_data_dir, "images", row["filename"]))
+    gray = (
+        np.mean(raw_image, axis=-1).astype(np.uint8)
+        if raw_image.ndim == 3
+        else raw_image
+    )
+    scan_mask = generate_scan_mask(gray)
+
+    capsule_mask = io.imread(
+        os.path.join(
+            raw_data_dir,
+            "labels",
+            f"reviewed_masks_{SONOGRAPHER}",
+            "capsule",
+            row["filename"],
+        )
+    )
+    regions_mask = io.imread(
+        os.path.join(
+            raw_data_dir,
+            "labels",
+            f"reviewed_masks_{SONOGRAPHER}",
+            "regions",
+            row["filename"],
+        )
+    )
+
+    image = to_3_channel(raw_image)
+    if size is not None:
+        image = resize_and_pad(image, size, order=1)
+        scan_mask = resize_and_pad(scan_mask, size, order=0)
+        capsule_mask = resize_and_pad(capsule_mask, size, order=0)
+        regions_mask = resize_and_pad(regions_mask, size, order=0)
+
+    return {
+        "filename": Path(row["filename"]).stem,
+        "transplant": bool(row["transplant"]),
+        "view": VIEW_TO_LABEL[row["view"].lower()],
+        "quality": str(row["quality"]),
+        "image": image,
+        "capsule_mask": capsule_mask,
+        "regions_mask": regions_mask,
+        "scan_mask": scan_mask,
+    }
+
+
 def verify_args(raw_data_dir: str, output_dir: str) -> None:
     """Verify the command line arguments.
 
@@ -102,9 +217,9 @@ def verify_args(raw_data_dir: str, output_dir: str) -> None:
     """
     assert os.path.isdir(raw_data_dir), "raw_data_dir must be an existing directory"
     assert os.path.isdir(output_dir), "output_dir must be an existing directory"
-    assert not os.path.exists(
-        os.path.join(output_dir, OUTPUT_NAME.format(__version__))
-    ), "A matching version of the Open Kidney dataset already exists"
+    assert not os.path.exists(os.path.join(output_dir, OUTPUT_NAME)), (
+        "A matching version of the Open Kidney dataset already exists"
+    )
 
 
 def process_open_kidney(
@@ -115,6 +230,10 @@ def process_open_kidney(
     size: Annotated[
         int, typer.Option(help="Test image size (height and width in pixels)")
     ] = 256,
+    publish: Annotated[
+        bool,
+        typer.Option(help="Whether to publish the dataset to the Hugging Face Hub"),
+    ] = False,
 ) -> None:
     """Prepare the Open Kidney dataset.
 
@@ -122,13 +241,13 @@ def process_open_kidney(
         raw_data_dir: The path to the raw data directory.
         output_dir: The path to the output directory.
         size: The height and width of the test images in pixels.
+        publish: Whether to publish the dataset to the HF Hub.
     """
     verify_args(raw_data_dir, output_dir)
 
-    dataset_dir = os.path.join(output_dir, OUTPUT_NAME.format(__version__))
-    test_dir_name = f"test_{size}"
+    output_path = Path(output_dir) / OUTPUT_NAME
 
-    # Load metadata from CSV (no image I/O)
+    # Load metadata from CSV
     metadata = pd.read_csv(os.path.join(raw_data_dir, CLINICAL_METADATA_FILE))
     metadata["quality"] = metadata["file_attributes"].apply(
         lambda x: ast.literal_eval(str(x)).get("Quality", None)
@@ -151,8 +270,7 @@ def process_open_kidney(
 
     print(f"Total # of images: {len(metadata)}")
 
-    # Determine the train/test split from the view label before any file I/O
-    train_val_examples, test_examples = train_test_split(
+    train_val_df, test_df = train_test_split(
         metadata,
         test_size=0.2,
         random_state=42,
@@ -160,110 +278,81 @@ def process_open_kidney(
         stratify=metadata["view"],
     )
 
-    test_filenames = set(test_examples["filename"])
+    train_records = [
+        _process_open_kidney_example(row, raw_data_dir)
+        for _, row in tqdm(
+            train_val_df.iterrows(),
+            total=len(train_val_df),
+            desc="Processing train split",
+        )
+    ]
+    test_records = [
+        _process_open_kidney_example(row, raw_data_dir)
+        for _, row in tqdm(
+            test_df.iterrows(),
+            total=len(test_df),
+            desc="Processing test split",
+        )
+    ]
+    test_resized_records = [
+        _process_open_kidney_example(row, raw_data_dir, size=size)
+        for _, row in tqdm(
+            test_df.iterrows(),
+            total=len(test_df),
+            desc=f"Processing test.{size} split",
+        )
+    ]
 
-    # Add relative path columns
-    metadata["image"] = metadata["filename"].map(lambda x: os.path.join("images", x))
-    metadata["scan_mask"] = metadata["filename"].map(
-        lambda x: os.path.join("masks", "scan", x)
+    dataset = DatasetDict(
+        {
+            "train": Dataset.from_list(train_records, info=DATASET_INFO),
+            "test": Dataset.from_list(test_records, info=DATASET_INFO),
+            f"test.{size}": Dataset.from_list(test_resized_records, info=DATASET_INFO),
+        }
     )
-    metadata["capsule_mask"] = metadata["filename"].map(
-        lambda x: os.path.join("masks", "capsule", x)
-    )
-    metadata["regions_mask"] = metadata["filename"].map(
-        lambda x: os.path.join("masks", "regions", x)
-    )
-    train_val_examples = metadata.loc[train_val_examples.index]
-    test_examples = metadata.loc[test_examples.index]
 
-    # Create output directories
-    for split_dir_name in ["train_val", test_dir_name]:
-        split_dir = os.path.join(dataset_dir, split_dir_name)
-        os.makedirs(os.path.join(split_dir, "images"), exist_ok=True)
-        os.makedirs(os.path.join(split_dir, "masks", "scan"), exist_ok=True)
-        os.makedirs(os.path.join(split_dir, "masks", "capsule"), exist_ok=True)
-        os.makedirs(os.path.join(split_dir, "masks", "regions"), exist_ok=True)
+    dataset.save_to_disk(str(output_path))
 
-    # Process and save images and masks to the correct split directory
-    for _, row in metadata.iterrows():
-        is_test = row["filename"] in test_filenames
-        split_dir = os.path.join(dataset_dir, test_dir_name if is_test else "train_val")
-
-        raw_image = io.imread(os.path.join(raw_data_dir, "images", row["filename"]))
-        gray = (
-            np.mean(raw_image, axis=-1).astype(np.uint8)
-            if raw_image.ndim == 3
-            else raw_image
-        )
-        scan_mask = generate_scan_mask(gray)
-
-        capsule_mask = io.imread(
-            os.path.join(
-                raw_data_dir,
-                "labels",
-                f"reviewed_masks_{SONOGRAPHER}",
-                "capsule",
-                row["filename"],
-            )
-        )
-        regions_mask = io.imread(
-            os.path.join(
-                raw_data_dir,
-                "labels",
-                f"reviewed_masks_{SONOGRAPHER}",
-                "regions",
-                row["filename"],
-            )
-        )
-
-        image = to_3_channel(raw_image)
-        if is_test:
-            image = resize_and_pad(image, size, order=1)
-            scan_mask = resize_and_pad(scan_mask, size, order=0)
-            capsule_mask = resize_and_pad(capsule_mask, size, order=0)
-            regions_mask = resize_and_pad(regions_mask, size, order=0)
-
-        io.imsave(os.path.join(split_dir, "images", row["filename"]), image)
-        io.imsave(
-            os.path.join(split_dir, "masks", "scan", row["filename"]),
-            scan_mask,
-            check_contrast=False,
-        )
-        io.imsave(
-            os.path.join(split_dir, "masks", "capsule", row["filename"]),
-            capsule_mask,
-            check_contrast=False,
-        )
-        io.imsave(
-            os.path.join(split_dir, "masks", "regions", row["filename"]),
-            regions_mask,
-            check_contrast=False,
-        )
-
-    print(f"# of training examples: {len(train_val_examples)}")
-    print(f"# of test examples: {len(test_examples)}")
-
-    # Save the metadata JSON files inside their split directories
-    for split, subset, split_dir in [
-        ("train_val", train_val_examples, os.path.join(dataset_dir, "train_val")),
-        ("test", test_examples, os.path.join(dataset_dir, test_dir_name)),
-    ]:
-        with open(os.path.join(split_dir, f"{split}.json"), "w") as f:
-            json.dump(subset.to_dict(orient="records"), f, indent=4)
-
-    test_records = test_examples.to_dict(orient="records")
-    test_dir = Path(dataset_dir) / test_dir_name
-    generate_segmentation_ground_truth(
+    test_size_dir = output_path / f"test.{size}"
+    generate_segmentation_ground_truth_from_records(
         test_records,
         mask_key="capsule_mask",
         classes=[1],
-        output_path=test_dir / "ground_truth_segmentation_capsule.csv",
+        output_path=test_size_dir / "ground_truth_segmentation_capsule.csv",
     )
-    generate_segmentation_ground_truth(
+    generate_segmentation_ground_truth_from_records(
         test_records,
         mask_key="regions_mask",
         classes=[1, 2, 3],
-        output_path=test_dir / "ground_truth_segmentation_regions.csv",
+        output_path=test_size_dir / "ground_truth_segmentation_regions.csv",
     )
 
-    save_version_info(dataset_dir, __version__)
+    print(f"# of training examples: {len(train_records)}")
+    print(f"# of test examples: {len(test_records)}")
+
+    save_version_info(str(output_path), __version__)
+
+    if publish:
+        dataset.push_to_hub(
+            OUTPUT_NAME,
+            commit_message=f"Update the dataset to Version {__version__}.",
+            private=True,
+        )
+
+        api = HfApi()
+        operations = [
+            CommitOperationAdd(
+                path_in_repo=f"test.{size}-ground-truth-segmentation-capsule.csv",
+                path_or_fileobj=test_size_dir / "ground_truth_segmentation_capsule.csv",
+            ),
+            CommitOperationAdd(
+                path_in_repo=f"test.{size}-ground-truth-segmentation-regions.csv",
+                path_or_fileobj=test_size_dir / "ground_truth_segmentation_regions.csv",
+            ),
+        ]
+        api.create_commit(
+            repo_id=OUTPUT_NAME,
+            repo_type="dataset",
+            operations=operations,
+            commit_message=f"Update ground truth CSV files for Version {__version__}.",
+        )
