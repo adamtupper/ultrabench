@@ -38,10 +38,14 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "ipykernel>=7.2.0",
+    "matplotlib>=3.10.9",
     "nbstripout>=0.8.2",
+    "openpyxl>=3.1.5",
     "pre-commit>=4.5.0",
     "pytest>=9.0.2",
     "ruff>=0.14.7",
+    "seaborn>=0.13.2",
 ]
 examples = [
     "albumentations>=1.4.18",

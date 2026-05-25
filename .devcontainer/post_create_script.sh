@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Install non-Python dependencies
-sudo apt-get update
+sudo apt-get update && sudo apt-get install -y unrar
 
 # Install uv
 curl -LsSf https://astral.sh/uv/install.sh | sh

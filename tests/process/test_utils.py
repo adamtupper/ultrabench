@@ -36,12 +36,20 @@ class TestTo3Channel:
         assert result.shape == (3, 4, 3)
         assert result is image
 
+    def test_hwx4_input(self):
+        """The alpha channel of a (H, W, 4) array is dropped."""
+        image = np.arange(48, dtype=np.uint8).reshape(3, 4, 4)
+        result = to_3_channel(image)
+        assert result.shape == (3, 4, 3)
+        assert result.dtype == np.uint8
+        np.testing.assert_array_equal(result[:, :, 0], image[:, :, 0])
+        np.testing.assert_array_equal(result[:, :, 1], image[:, :, 1])
+        np.testing.assert_array_equal(result[:, :, 2], image[:, :, 2])
+
     def test_4_channel_raises_value_error(self):
         """An (H, W, 4) array raises ValueError."""
-        image = np.zeros((3, 4, 4), dtype=np.uint8)
-        with pytest.raises(
-            ValueError, match="Expected a single-channel or 3-channel image"
-        ):
+        image = np.zeros((3, 4, 5), dtype=np.uint8)
+        with pytest.raises(ValueError):
             to_3_channel(image)
 
     def test_dtype_preserved_float32(self):

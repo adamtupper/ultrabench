@@ -1,0 +1,87 @@
+# Fetal Planes Dataset
+
+Fetal Planes is a dataset of 12,400 routinely acquired maternal-fetal screening ultrasound images from 1,792 patients. The images are divided into 6 classes: four of the most widely used fetal anatomical planes (Abdomen, Brain, Femur and Thorax), the mother’s cervix (widely used for prematurity screening) and a general category to include any other less common image planes. The fetal brain images are further categorized into the 3 most common fetal brain planes (Trans-thalamic, Trans-cerebellum, Trans-ventricular and Other to judge fine grain categorization performance. This version of the dataset was created for UltraBench 2 to support the evaluation of ultrasound models for maternal-fetal screening tasks.
+
+> [!IMPORTANT]
+> When using this dataset, please ensure that you cite the original source:
+>
+> Burgos-Artizzu, X.P., Coronado-Gutiérrez, D., Valenzuela-Alcaraz, B. et al. Evaluation of deep convolutional neural networks for automatic classification of common maternal fetal ultrasound planes. Sci Rep 10, 10200 (2020). https://doi.org/10.1038/s41598-020-67076-5
+
+Following the original dataset, there are two subsets for the dataset: `fetal` and `fetal_brain`. These subsets contain all images and the subset of fetal brain images, respectively. 
+
+## Splits
+
+The dataset is split according to the original `train` and `test` splits.
+
+### `fetal` Subset
+
+- `train`: 7,129 images from 896 patients in their original sizes.
+- `test`: 5,271 images from 896 patients in their original sizes.
+- `test.256`: The same images and masks as the `test` split, but resized such that the longest edge measures 256 px and zero-padded (if needed) so that the final image measures 256 x 256 px.
+
+### `fetal_brain` Subset
+
+- `train`: 1,620 images from 536 patients in their original sizes.
+- `test`: 1,472 images from 546 patients in their original sizes.
+- `test.256`: The same images and masks as the `test` split, but resized such that the longest edge measures 256 px and zero-padded (if needed) so that the final image measures 256 x 256 px.
+
+## Features
+
+### `fetal` Subset
+
+All splits have the following features:
+
+| Feature       | Feature Type      | Description                                                                                                          |
+| ------------- | ----------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `filename`    | `Value("string")` | Original image filename (without the file extension).                                                                |
+| `patient`     | `Value("int32")`  | Patient ID.                                                                                                          |
+| `plane`       | `ClassLabel`      | Fetal plane (Fetal abdomen = 0, Fetal brain = 1, Fetal femur = 2, Fetal thorax = 3, Maternal cervix = 4, Other = 5). |
+| `brain_plane` | `Value("string")` | Fetal brain plane ("Not A Brain", "Trans-thalamic", "Trans-cerebellum", "Trans-ventricular", "Other").               |
+| `operator`    | `Value("string")` | Operator ID ("Op. 1", "Op. 3", "Op. 2", "Other").                                                                    |
+| `machine`     | `Value("string")` | Ultrasound machine ("Aloka", "Voluson E6", "Voluson S10", "Other").                                                  | 
+| `image`       | `Image`           | 3-channel ultrasound image.                                                                                          |
+| `scan_mask`   | `Image`           | Single-channel, binary ultrasound scan mask generated using morphological operations.                                |
+
+
+### `fetal_brain` Subset
+
+All splits have the following features:
+
+| Feature       | Feature Type      | Description                                                                                     |
+| ------------- | ----------------- | ----------------------------------------------------------------------------------------------- |
+| `filename`    | `Value("string")` | Original image filename (without the file extension).                                           |
+| `patient`     | `Value("int32")`  | Patient ID.                                                                                     |
+| `brain_plane` | `ClassLabel     ` | Fetal brain plane (Trans-thalamic = 0, Trans-cerebellum = 1, Trans-ventricular = 2, Other = 3). |
+| `operator`    | `Value("string")` | Operator ID ("Op. 1", "Op. 3", "Op. 2", "Other").                                               |
+| `machine`     | `Value("string")` | Ultrasound machine ("Aloka", "Voluson E6", "Voluson S10", "Other").                             | 
+| `image`       | `Image`           | 3-channel ultrasound image.                                                                     |
+| `scan_mask`   | `Image`           | Single-channel, binary ultrasound scan mask generated using morphological operations.           |
+
+## Tasks
+
+The Fetal Planes dataset supports two tasks:
+
+- Fetal plane classification
+- Fine-grained fetal brain plane classification.
+
+## Usage
+
+The easiest way to use this dataset is with [Hugging Face Datasets library](https://huggingface.co/docs/datasets/index):
+
+```python
+from datasets import load_dataset
+
+# Fetal plane classification
+train_data = datasets.load_dataset(
+    "UltraBench/FetalPlanes", name="fetal", split="train"
+)
+test_data = datasets.load_dataset("UltraBench/FetalPlanes", name="fetal", split="test")
+
+# Fetal brain plane classification
+train_data = datasets.load_dataset(
+    "UltraBench/FetalPlanes", name="fetal_brain", split="train"
+)
+test_data = datasets.load_dataset(
+    "UltraBench/FetalPlanes", name="fetal_brain", split="test"
+)
+```

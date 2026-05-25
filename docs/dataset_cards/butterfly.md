@@ -1,7 +1,7 @@
 # Butterfly Dataset
 
 > [!CAUTION]
-> This dataset must not be made public because officially it may only be used may be used for the MIT GrandHack 2018. See the [GitHub repository](https://github.com/ButterflyNetwork/MITGrandHack2018) for more details..
+> This dataset must not be made public because officially it may only be used may be used for the MIT GrandHack 2018. See the [GitHub repository](https://github.com/ButterflyNetwork/MITGrandHack2018) for more details.
 
 The Butterfly dataset is a multi-region ultrasound image dataset with 34,325 training and validation images, and 6,751 test images. The images are labeled according to the organ in the image (one of nine classes):
 

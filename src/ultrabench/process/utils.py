@@ -48,9 +48,7 @@ def to_3_channel(image: np.ndarray) -> np.ndarray:
         return image
     if image.ndim == 3 and image.shape[-1] == 4:
         return image[:, :, :3]
-    raise ValueError(
-        f"Expected a single-channel or 3-channel image, got shape {image.shape}."
-    )
+    raise ValueError(f"Expected a (1, 3, 4)-channel image, got shape {image.shape}.")
 
 
 def generate_classification_ground_truth(
