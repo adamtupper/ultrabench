@@ -114,6 +114,7 @@ DATASET_INFO = DatasetInfo(
             "device": Value("string"),
             "image": Image(),
             "tumor_mask": Image(),
+            "scan_mask": Image(),
         }
     ),
 )
@@ -190,10 +191,12 @@ def process_examples(
         raw_image = io.imread(image_path)
         image = to_3_channel(raw_image)
         tumor_mask = io.imread(mask_path).astype(np.uint8)
+        scan_mask = np.ones(tumor_mask.shape, dtype=np.uint8)
 
         if size is not None:
             image = resize_and_pad(image, size, order=1)
             tumor_mask = resize_and_pad(tumor_mask, size, order=0)
+            scan_mask = np.ones((size, size), dtype=np.uint8)
 
         records.append(
             {
@@ -207,6 +210,7 @@ def process_examples(
                 "device": row["device"],
                 "image": image,
                 "tumor_mask": tumor_mask,
+                "scan_mask": scan_mask,
             }
         )
 

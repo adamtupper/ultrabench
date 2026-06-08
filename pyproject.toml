@@ -25,7 +25,6 @@ dependencies = [
     "imageio[ffmpeg] >=0.5.1",
     "nibabel >=5.2.1",
     "numpy >=1.26.4",
-    "opencv-python-headless >=4.10.0.84",
     "pandas >=2.2.1",
     "pyyaml >=6.0.0",
     "scikit-image >=0.24.0",
@@ -33,7 +32,6 @@ dependencies = [
     "simpleitk >=2.3.1",
     "typer >=0.15.1",
     "requests >=2.32.0",
-    "zenodo-get >=3.0.0",
 ]
 
 [dependency-groups]
@@ -46,10 +44,29 @@ dev = [
     "pytest>=9.0.2",
     "ruff>=0.14.7",
     "seaborn>=0.13.2",
+    "tbparse>=0.0.9,<0.0.10",
+    "ty>=0.0.39,<0.0.40",
+    "zenodo-get >=3.0.0",
+    "opencv-python-headless >=4.10.0.84",
 ]
-examples = [
-    "albumentations>=1.4.18",
-    "torch>=2.3.0",
+training = [
+    "albumentations==2.0.0",
+    "datasets==4.8.4",
+    "einops==0.8.2",
+    "hydra-core==1.3.2",
+    "matplotlib==3.10.8",
+    "pandas==3.0.0",
+    "lightning==2.6.1",
+    "scikit-image==0.26.0",
+    "setuptools==81.0.0",
+    "scikit-learn==1.8.0",
+    "tensorboard==2.20.0",
+    "timm==1.0.24",
+    "torch==2.10.0",
+    "torchmetrics==1.9.0",
+    "torchvision==0.25.0",
+    "tqdm==4.67.3",
+    "usaugment==1.0.1",
 ]
 
 [project.urls]
@@ -67,18 +84,8 @@ ultrabench = "ultrabench.cli:app"
 path = "src/ultrabench/__about__.py"
 
 [tool.uv]
+add-bounds = "major"
 default-groups = ["dev"]
-
-[tool.ruff]
-line-length = 88
-
-[tool.ruff.lint]
-select = [
-    "E", # pycodestyle errors
-    "W", # pycodestyle warnings
-    "F", # pyflakes. "E" + "W" + "F" + "C90" (mccabe complexity) is equivalent to flake8
-    "I", # isort
-]
 
 [tool.ruff.lint.isort]
 known-first-party = ["ultrabench"]

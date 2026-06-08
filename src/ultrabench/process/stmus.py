@@ -100,6 +100,7 @@ DATASET_INFO = DatasetInfo(
             "echogenicity": Value("string"),
             "image": Image(),
             "mask": Image(),
+            "scan_mask": Image(),
         }
     ),
 )
@@ -162,10 +163,12 @@ def _process_row(row: pd.Series, size: int | None = None) -> dict:
     raw_image = io.imread(row["image_path"])
     image = to_3_channel(raw_image)
     mask = (io.imread(row["mask_path"]) >= 128).astype(np.uint8)
+    scan_mask = np.ones(mask.shape, dtype=np.uint8)
 
     if size is not None:
         image = resize_and_pad(image, size, order=1)
         mask = resize_and_pad(mask, size, order=0)
+        scan_mask = np.ones((size, size), dtype=np.uint8)
 
     return {
         "filename": row["filename"],
@@ -174,6 +177,7 @@ def _process_row(row: pd.Series, size: int | None = None) -> dict:
         "echogenicity": row["echogenicity"],
         "image": image,
         "mask": mask,
+        "scan_mask": scan_mask,
     }
 
 

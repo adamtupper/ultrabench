@@ -1,0 +1,11 @@
+dataset: UltraBench/COVID-BLUES
+subset: null
+
+type: classification
+input: image
+target: covid19
+num_classes: 2
+
+stratify_by: null
+group_by: patient
+filter_by: null

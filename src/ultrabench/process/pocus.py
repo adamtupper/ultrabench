@@ -163,7 +163,7 @@ def extract_frames_ffmpeg(video_path: str) -> tuple[np.ndarray, float]:
     Returns:
         A tuple containing the frames array and the frame rate.
     """
-    video = imageio.get_reader(video_path, "ffmpeg")
+    video = imageio.get_reader(video_path, "ffmpeg")  # ty:ignore[invalid-argument-type]
     frame_rate = video.get_meta_data()["fps"]
 
     frames = []

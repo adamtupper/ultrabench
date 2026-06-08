@@ -21,7 +21,7 @@ def save_version_info(output_dir: str, version: str) -> None:
     """
     with open(os.path.join(output_dir, "version.txt"), "w") as f:
         f.write(f"UltraBench Version: {version}\n")
-        f.write(f"Created: {os.popen('date').read().strip()}\n")
+        f.write(f"Created: {os.popen('date').read().strip()}\n")  # ty:ignore[deprecated]
 
 
 def to_3_channel(image: np.ndarray) -> np.ndarray:

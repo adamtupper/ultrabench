@@ -28,6 +28,7 @@ All splits have the following features:
 | `echogenicity` | `Value("string")` | The echogenicity level (healthy or pathological)                                          |
 | `image`        | `Image`           | 3-channel ultrasound images                                                               |
 | `mask`         | `Image`           | Single-channel, binary muscle segmentation mask (background = 0, muscle = 1)              |
+| `scan_mask`    | `Image`           | Single-channel, binary ultrasound scan mask (all ones; the scan fills the entire image for linear-probe acquisitions) |
 
 The original dataset contains additional characteristic information per patient (age, height, weight, and sex) that are not included here.
 

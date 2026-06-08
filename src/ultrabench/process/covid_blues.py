@@ -139,7 +139,7 @@ def load_clinical_data(raw_data_dir: str) -> pd.DataFrame:
         ``cov_test`` (int, 0 or 1).
     """
     csv_path = os.path.join(raw_data_dir, "clinical_variables.csv")
-    df = pd.read_csv(csv_path, usecols=["patient_id", "cov_test"])
+    df = pd.read_csv(csv_path, usecols=["patient_id", "cov_test"])  # ty:ignore[no-matching-overload]
     df["patient_id"] = df["patient_id"].astype(int)
     df["cov_test"] = df["cov_test"].astype(int)
     return df
@@ -155,7 +155,7 @@ def extract_frames(video_path: str) -> np.ndarray:
         An array of shape ``(N, H, W, 3)`` containing all N frames.
     """
     reader = imageio.get_reader(video_path)
-    frames = [frame for frame in reader]  # type: ignore[union-attr]
+    frames = [frame for frame in reader]  # type: ignore[union-attr]  # ty:ignore[not-iterable]
     return np.array(frames)
 
 

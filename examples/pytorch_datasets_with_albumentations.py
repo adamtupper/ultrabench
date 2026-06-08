@@ -34,7 +34,7 @@ class JSON_Dataset(Dataset):
     def __len__(self) -> int:
         return len(self.metadata)
 
-    def __getitem__(self, idx):
+    def __getitem__(self, idx):  # ty:ignore[invalid-method-override]
         raise NotImplementedError("Subclasses must implement this method.")
 
 
@@ -65,7 +65,7 @@ class ClassificationDataset(JSON_Dataset):
 
     def __getitem__(self, idx: int) -> tuple[np.ndarray | dict, int]:
         if torch.is_tensor(idx):
-            idx = idx.tolist()
+            idx = idx.tolist()  # ty:ignore[invalid-assignment]
 
         image_path = os.path.join(self.root_dir, self.metadata[idx][self.image_key])
         image = io.imread(image_path)
@@ -111,7 +111,7 @@ class SegmentationDataset(JSON_Dataset):
 
     def __getitem__(self, idx: int) -> tuple[np.ndarray, np.ndarray]:
         if torch.is_tensor(idx):
-            idx = idx.tolist()
+            idx = idx.tolist()  # ty:ignore[invalid-assignment]
 
         image_path = os.path.join(self.root_dir, self.metadata[idx][self.image_key])
         image = io.imread(image_path)

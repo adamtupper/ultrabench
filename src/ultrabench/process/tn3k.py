@@ -90,6 +90,7 @@ DATASET_INFO = DatasetInfo(
             "filename": Value("string"),
             "image": Image(),
             "nodule_mask": Image(),
+            "scan_mask": Image(),
             "label": ClassLabel(names=["benign", "malignant"]),
         }
     ),
@@ -153,16 +154,19 @@ def process_examples(
         raw_image = io.imread(image_path)
         image = to_3_channel(raw_image)
         nodule_mask = (io.imread(mask_path) >= 128).astype(np.uint8)
+        scan_mask = np.ones(nodule_mask.shape, dtype=np.uint8)
 
         if size is not None:
             image = resize_and_pad(image, size, order=1)
             nodule_mask = resize_and_pad(nodule_mask, size, order=0)
+            scan_mask = np.ones((size, size), dtype=np.uint8)
 
         records.append(
             {
                 "filename": filename,
                 "image": image,
                 "nodule_mask": nodule_mask,
+                "scan_mask": scan_mask,
                 "label": int(row["label"]),
             }
         )

@@ -1,0 +1,11 @@
+dataset: UltraBench/AUL
+subset: null
+
+type: classification
+input: image
+target: label
+num_classes: 3
+
+stratify_by: label
+group_by: null
+filter_by: null

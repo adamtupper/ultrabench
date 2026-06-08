@@ -1,0 +1,11 @@
+dataset: UltraBench/FetalPlanes
+subset: fetal
+
+type: classification
+input: image
+target: plane
+num_classes: 6
+
+stratify_by: null
+group_by: patient
+filter_by: null

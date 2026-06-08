@@ -1,0 +1,11 @@
+dataset: UltraBench/StanfordThyroid
+subset: null
+
+type: segmentation
+input: image
+target: tumor_mask
+num_classes: 2
+
+stratify_by: null
+group_by: patient
+filter_by: null

@@ -1,0 +1,11 @@
+dataset: UltraBench/FetalPlanes
+subset: fetal_brain
+
+type: classification
+input: image
+target: brain_plane
+num_classes: 4
+
+stratify_by: null
+group_by: patient
+filter_by: null

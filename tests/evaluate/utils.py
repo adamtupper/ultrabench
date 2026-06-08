@@ -17,4 +17,4 @@ def _write_csv(path: Path, rows: list[dict], columns: list[str] | None = None) -
         columns: Optional list of column names to use as the header of
             the CSV file.
     """
-    pd.DataFrame(rows, columns=columns).to_csv(path, index=False)
+    pd.DataFrame(rows, columns=columns).to_csv(path, index=False)  # ty:ignore[invalid-argument-type]

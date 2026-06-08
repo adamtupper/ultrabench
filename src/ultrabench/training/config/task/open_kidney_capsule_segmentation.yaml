@@ -1,0 +1,11 @@
+dataset: UltraBench/OpenKidney
+subset: null
+
+type: segmentation
+input: image
+target: capsule_mask
+num_classes: 2
+
+stratify_by: view
+group_by: null
+filter_by: null

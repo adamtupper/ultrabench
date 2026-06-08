@@ -1,0 +1,11 @@
+dataset: UltraBench/MMOTU-2D
+subset: null
+
+type: classification
+input: image
+target: tumor_type
+num_classes: 8
+
+stratify_by: tumor_type
+group_by: null
+filter_by: null

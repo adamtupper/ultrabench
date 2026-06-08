@@ -1,0 +1,11 @@
+dataset: UltraBench/POCUS
+subset: null
+
+type: classification
+input: image
+target: label
+num_classes: 3
+
+stratify_by: null
+group_by: source
+filter_by: null

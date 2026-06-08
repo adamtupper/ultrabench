@@ -169,7 +169,7 @@ def collect_examples(dataset_dir: str) -> list[dict[str, Any]]:
             # Correct the scan/liver annotations for images 229.jpg and 306.jpg
             if filename in ["229", "306"]:
                 example["liver_polygon_path"] = example["scan_polygon_path"]
-                example["scan_polygon_path"] = None
+                example["scan_polygon_path"] = None  # ty:ignore[invalid-assignment]
                 example["has_liver_mask"] = True
 
             examples.append(example)

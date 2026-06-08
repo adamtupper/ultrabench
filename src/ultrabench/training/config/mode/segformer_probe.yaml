@@ -1,0 +1,16 @@
+name: "segformer_probe"
+# For hierarchical multi-scale encoders (e.g. EchoCare).
+# scale_dims is read from encoder_metadata automatically; no extra config needed here.
+wrapper:
+  _target_: ultrabench.training.methods.SegmentationWrapper
+  decoder_type: "segformer"
+
+optimizer:
+  _target_: torch.optim.AdamW
+  lr: 1.0e-3
+  weight_decay: 1.0e-2
+
+criterion:
+  _target_: ultrabench.training.losses.DiceCELoss
+  ce_weight: 0.5
+  dice_weight: 0.5

@@ -1,0 +1,10 @@
+baseline: "usfm"
+output_type: "patch_tokens"
+has_cls_token: true
+variant: "usfm"
+checkpoint_path: ${system.checkpoint_dir}/usfm/USFM_latest.pth
+checkpoint_config: ""
+checkpoint_name: "usfm"
+pretrained: true
+loader:
+  _target_: ultrabench.training.heads.load_encoders.load_usfm

@@ -30,7 +30,8 @@ All splits have the following features:
 | `birads`          | `Value("int32)`   | BI-RADS scores.                                                       |
 | `device`          | `Value("string")` | The device used.                                                      |
 | `image`           | `Image`           | 3-channel ultrasound images.                                          |
-| `tumor_mask`      | `Image`           | Single-channel, binary tumor masks (background = 0, tumor = 1) masks. |
+| `tumor_mask`      | `Image`           | Single-channel, binary tumor masks (background = 0, tumor = 1).      |
+| `scan_mask`       | `Image`           | Single-channel, binary ultrasound scan mask (all ones; the scan fills the entire image for linear-probe acquisitions). |
 
 ## Tasks
 

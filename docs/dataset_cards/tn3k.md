@@ -27,6 +27,7 @@ All splits have the following features:
 | `filename`    | `Value("string")` | The original filenames for the image (without the file extension).    |
 | `image`       | `Image`           | The 3-channel ultrasound images.                                      |
 | `nodule_mask` | `Image`           | The single-channel, binary nodule masks (background = 0, nodule = 1). |
+| `scan_mask`   | `Image`           | Single-channel, binary ultrasound scan mask (all ones; the scan fills the entire image for linear-probe acquisitions). |
 | `label`       | `ClassLabel`      | The pathology of the nodule(s) (benign = 0, malignant =  1).          |
 
 ## Tasks

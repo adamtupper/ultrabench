@@ -1,0 +1,44 @@
+defaults:
+  - model: ijepa
+  - mode@cls_mode: linear_probe
+  - mode@seg_mode: none
+  - task: aul_mass_classification
+  - _self_
+
+data:
+  setup: "ultrabench"
+  version: "v2.0.0"
+  image_size: 224  # Target image size for transforms
+  preprocessing_fn: null  # Optional: ultrasound_preprocessing, custom_preprocessing (from user_preprocessing.py)
+  shot_pct: 1.0  # Single value - sweep with -m data.shot_pct=0.1,0.5,1.0
+  train_val_split: 0.8  # Train/validation split ratio
+
+optimization:
+  batch_size: 2
+  accum_grad: 1
+  num_epochs: 150
+  patience: 15
+  seed: 42  # Single value - sweep with -m optimization.seed=42,43,44,45,46
+
+system:
+  data_loader_workers: 0
+  max_parallel: 1
+  data_dir: "/radraid/aradhachandran/foundation/ultrabench_data_v2"
+  output_dir: "/raid/aradhachandran/thyroid/code/UltraBench2o/logs"
+  checkpoint_dir: baselines
+  log_every_n_steps: 50
+  enable_progress_bar: true
+
+hydra:
+  run:
+    dir: ${system.output_dir}/runs/${model.baseline}/${hydra.runtime.choices.task}/shot_${data.shot_pct}/seed_${optimization.seed}/${now:%Y-%m-%d_%H-%M-%S}
+  sweep:
+    dir: ${system.output_dir}/sweeps/${model.baseline}/${hydra.runtime.choices.task}
+    subdir: shot_${data.shot_pct}/seed_${optimization.seed}/${now:%Y-%m-%d_%H-%M-%S}
+  job:
+    config:
+      override_dirname:
+        exclude_keys:
+          - system.output_dir
+          - model.baseline
+          - data.shot_pct

@@ -1,0 +1,39 @@
+name: "full_finetune_seg"
+
+augmentation: "general"
+
+wrapper:
+  _target_: ultrabench.training.methods.FullFinetuningWrapper
+  seg_decoder_type: "upsampler"
+  # block_indices: null #[2, 5, 8, 11]  # only needed for setr_mla; null uses auto (evenly-spaced last 4 blocks)
+  # upsampler_use_residual: true
+
+probe_warmup_epochs: 10
+phase2_warmup_epochs: 5
+
+optimizer:
+  _target_: torch.optim.AdamW
+  lr: 1.0e-3
+  weight_decay: 1.0e-2
+
+optimizer_phase2:
+  encoder_lr_scale: 0.1
+
+# Ramps lr from start_factor*lr → lr over phase2_warmup_epochs steps.
+# total_iters injected from phase2_warmup_epochs. Remove block to skip warmup.
+warmup_scheduler:
+  _target_: torch.optim.lr_scheduler.LinearLR
+  start_factor: 1.0e-3
+  end_factor: 1.0
+
+# T_max injected as (num_epochs - probe_warmup_epochs - phase2_warmup_epochs).
+# Remove block to use constant LR after warmup.
+scheduler:
+  _target_: torch.optim.lr_scheduler.CosineAnnealingLR
+
+criterion:
+  _target_: ultrabench.training.losses.DiceCELoss
+  ce_weight: 0.5
+  dice_weight: 0.5
+
+max_grad_norm: 1.0

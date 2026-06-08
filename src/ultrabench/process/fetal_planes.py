@@ -274,7 +274,7 @@ def to_fetal_brain_record(record: dict) -> dict:
 def _make_generator(
     df: pd.DataFrame,
     raw_data_dir: str,
-    to_record_fn: callable,
+    to_record_fn: callable,  # ty:ignore[invalid-type-form]
     size: int | None = None,
     desc: str = "Processing",
 ):

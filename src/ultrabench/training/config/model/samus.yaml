@@ -1,0 +1,10 @@
+baseline: "samus"
+output_type: "spatial_map"
+has_cls_token: false
+variant: "samus"
+checkpoint_path: ${system.checkpoint_dir}/samus/SAMUS.pth
+checkpoint_config: ""
+checkpoint_name: "samus"
+pretrained: true
+loader:
+  _target_: ultrabench.training.heads.load_encoders.load_samus
