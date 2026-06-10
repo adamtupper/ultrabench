@@ -102,7 +102,7 @@ def get_splits(
         stratify_by=stratify_by,
         group_by=group_by,
     )
-    test_data = datasets.load_dataset(path, name=subset, split="test")
+    test_data = datasets.load_dataset(path, name=subset, split="test.256")
 
     train_data = train_data.rename_columns(
         {

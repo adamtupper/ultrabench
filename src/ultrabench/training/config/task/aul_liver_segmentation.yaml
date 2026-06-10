@@ -9,3 +9,8 @@ num_classes: 2
 stratify_by: null
 group_by: null
 filter_by: liver_mask
+
+criterion:
+  _target_: ultrabench.training.losses.DiceCELoss
+  ce_weight: 0.5
+  dice_weight: 0.5

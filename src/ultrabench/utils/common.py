@@ -15,15 +15,6 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-# Config loading
-def load_yaml_config(yaml_path: str) -> Dict:
-    """Load configuration from YAML file."""
-    with open(yaml_path, "r") as f:
-        config = yaml.load(f, Loader=yaml.FullLoader)
-    logger.info(f"Configuration loaded from: {yaml_path}")
-    return config
-
-
 def get_model_label(cfg: DictConfig) -> str:
     baseline = cfg.model.get("baseline") if "baseline" in cfg.model else None
     variant = cfg.model.get("variant") if "variant" in cfg.model else None

@@ -1,0 +1,12 @@
+unfreeze_backbone_at_step: -1 # -1 to keep frozen (train only the head)
+augmentation_strategy: null # Options: null, general, mmotu, usaugment
+
+optimizer:
+  _target_: torch.optim.AdamW
+  lr: 1.0e-3
+  weight_decay: 1.0e-2
+
+scheduler:
+  _target_: torch.optim.lr_scheduler.CosineAnnealingLR
+  T_max: ${optimization.max_steps}
+  eta_min: 0.0

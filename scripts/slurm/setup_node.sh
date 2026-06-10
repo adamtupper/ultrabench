@@ -17,6 +17,7 @@ export TMPDIR=$SLURM_TMPDIR/tmp
 export HF_HUB_OFFLINE=1
 export HF_HOME=$project/data/hf
 export TQDM_DISABLE=1
+export NO_ALBUMENTATIONS_UPDATE=1
 
 # Copy code to compute node
 rsync -a $project/ultrabench2 $SLURM_TMPDIR --exclude-from=$project/ultrabench2/.gitignore

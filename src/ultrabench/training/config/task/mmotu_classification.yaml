@@ -9,3 +9,6 @@ num_classes: 8
 stratify_by: tumor_type
 group_by: null
 filter_by: null
+
+criterion:
+  _target_: torch.nn.CrossEntropyLoss

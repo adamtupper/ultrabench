@@ -181,3 +181,6 @@ cython_debug/
 
 # Artifacts
 outputs/
+
+# Agentic coding
+.claude/settings.local.json

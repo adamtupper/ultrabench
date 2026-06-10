@@ -17,11 +17,13 @@ A common limitation of studies on ultrasound image analysis using machine learni
 
 ## Installation
 
-Install UltraBench using:
+Install the latest version of UltraBench from PyPI using:
 
 ```bash
 pip install ultrabench
 ```
+
+See [Contributing](#contributing) for instructions on setting up a development environment.
 
 ## Getting Started
 
@@ -56,8 +58,7 @@ We would love for this benchmark to grow and flourish into a resource that anyon
 UltraBench is built using [uv](https://docs.astral.sh/uv/). For the best experience, you can use the development container configuration (see [DEVCONTAINER.md](/.devcontainer/DEVCONTAINER.md)) to setup an isolated development environment with uv and all the necessary dependencies already installed. Otherwise, you can [install uv](https://docs.astral.sh/uv/getting-started/installation/) and then following the commands below. To ensure that your code meets the style guidelines etc., this also installs and initializes the optional development dependencies.
 
 ```bash
-uv sync
-uv sync --group examples  # Install the dependencies for the examples, if required
+uv sync --group dev --group training  # Install optional dependencies, if required
 source .venv/bin/activate
 nbstripout --install
 pre-commit install

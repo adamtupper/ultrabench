@@ -1,10 +1,4 @@
-baseline: "urfm"
-output_type: "patch_tokens"
-has_cls_token: true
-variant: "urfm_mae_vit_base_patch16"
+_target_: ultrabench.models.urfm.urfm_backbone.URFMBackbone
+model_variant: urfm_mae_vit_base_patch16
 checkpoint_path: ${system.checkpoint_dir}/urfm/mae_vit_base_patch16_dec768d8b_all_biomedclip_1199.pth
-checkpoint_config: ""
-checkpoint_name: "urfm_mae_vit_base_patch16"
-pretrained: true
-loader:
-  _target_: ultrabench.training.heads.load_encoders.load_urfm
+output_intermediate_features: true

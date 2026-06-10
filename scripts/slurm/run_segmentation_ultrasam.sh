@@ -4,7 +4,7 @@
 #SBATCH --mem=15G
 #SBATCH --cpus-per-task=4
 #SBATCH --gpus=h100_2g.20gb:1
-#SBATCH --time=5:00:00
+#SBATCH --time=3:00:00
 #SBATCH --array=0-53%1
 #
 # Run downstream segmentation evaluation for UltraSAM. Launches
@@ -15,7 +15,7 @@
 set -e
 
 SEEDS=(42 43 44)
-METHODS=(upsampler_probe full_finetune_seg)
+METHODS=(head_only full_finetuning)
 TASKS=(
     aul_liver_segmentation
     aul_mass_segmentation
@@ -45,12 +45,9 @@ read -r SEED METHOD TASK <<< "${combos[$SLURM_ARRAY_TASK_ID]}"
 CHECKPOINT_DIR="$project/models/ultrabench"
 OUTPUT_DIR="$scratch/results/ultrabench"
 MODEL="ultrasam"
-PREPROCESSING_FN="ultrasound_preprocessing"
-IMAGE_SIZE=256
+HEAD="upsampler"
 BATCH_SIZE=32
 ACCUM_GRAD=1
-EPOCHS=100
-PATIENCE=null
 
 python ultrabench2/src/ultrabench/training/main_launch.py \
     system.output_dir=${OUTPUT_DIR} \
@@ -58,13 +55,9 @@ python ultrabench2/src/ultrabench/training/main_launch.py \
     system.data_loader_workers=${SLURM_CPUS_PER_TASK} \
     system.enable_progress_bar=false \
     model=${MODEL} \
+    head=${HEAD} \
     task=${TASK} \
-    "mode@cls_mode=none" \
-    "mode@seg_mode=${METHOD}" \
-    data.preprocessing_fn=${PREPROCESSING_FN} \
-    data.image_size=${IMAGE_SIZE} \
+    mode=${METHOD} \
     optimization.seed=${SEED} \
-    optimization.num_epochs=${EPOCHS} \
-    optimization.patience=${PATIENCE} \
     optimization.batch_size=${BATCH_SIZE} \
     optimization.accum_grad=${ACCUM_GRAD}

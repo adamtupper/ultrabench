@@ -6,16 +6,16 @@ set -e
 export HF_HOME=/raid/aradhachandran/thyroid/code/UltraBench2o/hf_data
 export CUDA_VISIBLE_DEVICES=3
 
-# Model checkpoint configuration.
-MODEL="urfm"
+# Model configuration.
+MODEL="urfm"  # echocare, samus, ultrasam, urfm, usfm, usfmae
+HEAD="linear_classifier"  # linear_classifier, segformer, setr_mla, upsampler
 # CHECKPOINT_DIR="${REPO_ROOT}/baselines"
 
 # Set directories.
 OUTPUT_DIR="/raid/aradhachandran/thyroid/code/UltraBench2o/logs/hf_ptl_runs_fullft"
 
-# Downstream method configuration.
-CLS_MODE="full_finetune_cls"
-SEG_MODE="full_finetune_seg"
+# Training mode
+MODE="head_only"  # head_only, full_finetuning
 
 # Dataset task sweep.
 TASKS=(
@@ -36,12 +36,12 @@ TASKS=(
 SEEDS=(42 43 44)
 
 # Optional data settings.
-PREPROCESSING_FN="ultrasound_preprocessing"
 IMAGE_SIZE=256
 
 BATCH_SIZE=32
 ACCUM_GRAD=1
-EPOCHS=100
+MAX_STEPS=10000
+VAL_CHECK_INTERVAL=100
 PATIENCE=null
 DATA_LOADER_WORKERS=8
 
@@ -59,13 +59,13 @@ for combo in "${combos[@]}"; do
 		system.output_dir=${OUTPUT_DIR} \
 		system.data_loader_workers=${DATA_LOADER_WORKERS} \
 		model=${MODEL} \
+		head=${HEAD} \
 		task=${TASK} \
-		"mode@cls_mode=${CLS_MODE}" \
-		"mode@seg_mode=${SEG_MODE}" \
-		data.preprocessing_fn=${PREPROCESSING_FN} \
+		mode=${MODE} \
 		data.image_size=${IMAGE_SIZE} \
 		optimization.seed=${SEED} \
-		optimization.num_epochs=${EPOCHS} \
+		optimization.max_steps=${MAX_STEPS} \
+  		optimization.val_check_interval=${VAL_CHECK_INTERVAL} \
 		optimization.patience=${PATIENCE} \
 		optimization.batch_size=${BATCH_SIZE} \
 		optimization.accum_grad=${ACCUM_GRAD}

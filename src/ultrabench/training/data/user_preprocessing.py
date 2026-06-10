@@ -23,41 +23,13 @@ from ultrabench.training.data.preprocessing_helpers import (
 )
 
 
-def no_preprocessing(image: np.ndarray, cfg: Optional[Any] = None) -> np.ndarray:
-    """
-    No transformation is applied on-the-fly during data loading.
-
-    Usage:
-        In config: data.preprocessing_fn = "no_preprocessing"
-        Via CLI: python main_launch.py data.preprocessing_fn=no_preprocessing
-    """
-
-    return image
-
-
-def ultrasound_preprocessing(
-    image: np.ndarray, cfg: Optional[Any] = None
-) -> np.ndarray:
-    """
-    This is applied on-the-fly during data loading.
-
-    Usage:
-        In config: data.preprocessing_fn = "ultrasound_preprocessing"
-        Via CLI: python main_launch.py data.preprocessing_fn=ultrasound_preprocessing
-    """
-
-    # Normalize to 0 to 1 as UltraBench loads images as [0,255]
-    image = image / np.max(image)
-
-    return image.astype(np.float32)
-
-
 def custom_preprocessing(image: np.ndarray, cfg: Optional[Any] = None) -> np.ndarray:
     """
     Template for custom preprocessing
 
     Args:
-        image: Input image as numpy array [H, W, C] or [H, W], typically uint8 [0, 255]
+        image: Input image as numpy array [H, W, C] or [H, W], typically uint8
+            [0, 255]
         cfg: Optional Hydra config for accessing parameters
 
     Returns:
@@ -159,8 +131,7 @@ def custom_preprocessing(image: np.ndarray, cfg: Optional[Any] = None) -> np.nda
 
 # Registry of available preprocessing functions
 PREPROCESSING_FUNCTIONS = {
-    "no_preprocessing": no_preprocessing,
-    "ultrasound_preprocessing": ultrasound_preprocessing,
+    "no_preprocessing": lambda x: x,
     "custom_preprocessing": custom_preprocessing,
 }
 

@@ -6,12 +6,12 @@ import logging
 import os
 
 import hydra
+import lightning.pytorch as pl
 import pandas as pd
 from hydra.core.hydra_config import HydraConfig
 from omegaconf import DictConfig, OmegaConf
 
 # Import your config
-from ultrabench.training.config.config import register_configs
 from ultrabench.training.setup_ptl import DownstreamPipeline
 from ultrabench.utils.common import get_model_label, set_global_seed
 
@@ -41,33 +41,22 @@ def main(cfg: DictConfig) -> None:
     # Initialize pipeline
     pipeline = DownstreamPipeline(data_dir=cfg.system.data_dir)
 
-    task = HydraConfig.get().runtime.choices.task  # ty:ignore[unresolved-attribute]
-    task_type = cfg.task.type
-
-    # Guard: catch mismatched task type / mode before anything runs
-    def _mode_is_none(mc):
-        return mc is None or getattr(mc, "name", "none").lower() == "none"
-
-    if task_type == "classification" and _mode_is_none(cfg.cls_mode):
+    if cfg.task.type != cfg.head.type:
         raise ValueError(
-            f"'{task}' is a classification task but cls_mode is the 'none' sentinel. "
-            "Override with: 'mode@cls_mode=linear_probe' on the CLI."
-        )
-    if task_type == "segmentation" and _mode_is_none(cfg.seg_mode):
-        raise ValueError(
-            f"'{task}' is a segmentation task but seg_mode is the 'none' sentinel. "
-            "Override with: 'mode@seg_mode=upsampler_probe' on the CLI."
+            f"Mismatch between task type '{cfg.task.type}' and head type "
+            f"'{cfg.head.type}'. Select an appropriate head for the task."
         )
 
-    mode_name = (
-        cfg.cls_mode.name if task_type == "classification" else cfg.seg_mode.name
+    mode_name = "{}_{}".format(
+        HydraConfig.get().runtime.choices.head,  # ty:ignore[unresolved-attribute]
+        HydraConfig.get().runtime.choices.mode,  # ty:ignore[unresolved-attribute]
     )
 
     logger.info("=" * 80)
     logger.info(
         "Running: %s | dataset_task=%s | mode=%s | seed=%s | shot=%s",
-        get_model_label(cfg),
-        task,
+        HydraConfig.get().runtime.choices.model,  # ty:ignore[unresolved-attribute]
+        HydraConfig.get().runtime.choices.task,  # ty:ignore[unresolved-attribute]
         mode_name,
         cfg.optimization.seed,
         cfg.data.shot_pct,
@@ -79,7 +68,7 @@ def main(cfg: DictConfig) -> None:
 
     result = pipeline.run_downstream(cfg=cfg, output_dir=mode_output_dir)
     test_metrics = result["test_metrics"]
-    pd.DataFrame(test_metrics, index=[0]).to_csv(  # ty:ignore[invalid-argument-type]
+    pd.DataFrame(test_metrics, index=[0]).to_csv(
         os.path.join(mode_output_dir, "test_metrics.csv"), index=False
     )
 
@@ -88,6 +77,4 @@ def main(cfg: DictConfig) -> None:
 
 
 if __name__ == "__main__":
-    # Register configs
-    register_configs()
     main()

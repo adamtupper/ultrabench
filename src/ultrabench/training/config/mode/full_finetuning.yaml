@@ -1,0 +1,12 @@
+unfreeze_backbone_at_step: 1000 # Unfreeze backbone after this many steps (train head only until then)
+augmentation_strategy: general # Options: null, general, mmotu, usaugment
+
+optimizer:
+  _target_: torch.optim.AdamW
+  lr: 1.0e-3
+  weight_decay: 1.0e-2
+
+scheduler:
+  _target_: torch.optim.lr_scheduler.CosineAnnealingLR
+  T_max: ${optimization.max_steps}
+  eta_min: 0.0

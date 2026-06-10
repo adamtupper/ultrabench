@@ -10,7 +10,7 @@ authors = [
 ]
 description = "A standardized benchmark of ultrasound image analysis tasks."
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
@@ -37,7 +37,7 @@ dependencies = [
 [dependency-groups]
 dev = [
     "ipykernel>=7.2.0",
-    "matplotlib>=3.10.9",
+    "matplotlib>=3.10.8",
     "nbstripout>=0.8.2",
     "openpyxl>=3.1.5",
     "pre-commit>=4.5.0",
@@ -87,5 +87,14 @@ path = "src/ultrabench/__about__.py"
 add-bounds = "major"
 default-groups = ["dev"]
 
+[tool.ruff.lint]
+select = ["E", "W"]
+
+[tool.ruff]
+line-length = 88
+
 [tool.ruff.lint.isort]
 known-first-party = ["ultrabench"]
+
+[tool.ruff.lint.pycodestyle]
+max-doc-length = 79

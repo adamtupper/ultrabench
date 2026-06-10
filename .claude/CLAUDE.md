@@ -15,6 +15,7 @@ UltraBench 2 a standardized evaluation framework for assessing how well ultrasou
 ## Trusted Sources
 - [Python Documentation](https://docs.python.org/3/)
 - [PyTorch Documentation](https://pytorch.org/docs/stable/)
+- [PyTorch Lightning Documentation](https://lightning.ai/docs/pytorch/stable/)
 - [Torchvision Documentation](https://pytorch.org/vision/stable/)
 - [Hydra Documentation](https://hydra.cc/docs/intro/)
 

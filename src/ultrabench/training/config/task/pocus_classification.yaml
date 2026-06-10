@@ -9,3 +9,6 @@ num_classes: 3
 stratify_by: null
 group_by: source
 filter_by: null
+
+criterion:
+  _target_: torch.nn.CrossEntropyLoss
