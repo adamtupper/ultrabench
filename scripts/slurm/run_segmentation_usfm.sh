@@ -5,7 +5,7 @@
 #SBATCH --cpus-per-task=4
 #SBATCH --gpus=h100_2g.20gb:1
 #SBATCH --time=2:00:00
-#SBATCH --array=0-53%1
+#SBATCH --array=0-59%1
 #
 # Run downstream segmentation evaluation for USFM. Launches
 # individual jobs for each task, evaluation method, and seed combo.
@@ -19,6 +19,7 @@ METHODS=(head_only full_finetuning)
 TASKS=(
     aul_liver_segmentation
     aul_mass_segmentation
+    busbra_segmentation
     camus_segmentation
     mmotu_segmentation
     open_kidney_capsule_segmentation
