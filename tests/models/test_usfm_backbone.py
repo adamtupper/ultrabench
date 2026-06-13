@@ -64,3 +64,9 @@ class TestUSFMBackboneForward:
         x = torch.randint(0, 256, (_BATCH, 3, 128, 192), dtype=torch.uint8)
         out = model(x)
         assert out.features.shape == (_BATCH, _NUM_PATCHES, _FEATURE_DIM)
+
+    def test_forward_pool_shape(self) -> None:
+        model = _make_backbone()
+        x = torch.randint(0, 256, (_BATCH, 3, _IMG_SIZE, _IMG_SIZE), dtype=torch.uint8)
+        out = model(x, pool=True)
+        assert out.features.shape == (_BATCH, _FEATURE_DIM)

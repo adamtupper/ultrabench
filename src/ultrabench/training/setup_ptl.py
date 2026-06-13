@@ -220,23 +220,16 @@ class UltraBenchModule(pl.LightningModule):
             Logits [B, num_classes] for classification or
             [B, num_classes, H, W] for segmentation.
         """
-        out = self.backbone(x)
+        if self.task_type == "classification":
+            out = self.backbone(x, pool=True)
+        else:
+            out = self.backbone(x)
 
         if self.use_intermediate:
             # setr_mla / segformer: pass list of intermediate tensors to head
             return self.head(out.intermediate_features)
 
-        features = out.features  # [B, N, D] or [B, C, H, W]
-
-        if self.is_seg:
-            return self.head(features)
-
-        # Classification: global average pool then head
-        if features.dim() == 3:
-            features = features.mean(dim=1)  # patch_tokens → [B, D]
-        elif features.dim() == 4:
-            features = features.mean(dim=(2, 3))  # spatial/multiscale → [B, C]
-        return self.head(features)
+        return self.head(out.features)
 
     def train(self, mode: bool = True) -> "UltraBenchModule":
         """Keep the backbone in eval mode when all its parameters are frozen.

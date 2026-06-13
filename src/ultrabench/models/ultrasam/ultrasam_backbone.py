@@ -54,7 +54,15 @@ class UltraSAMBackbone(Backbone):
         """
         super().__init__(checkpoint_path, output_intermediate_features)
 
-        self._encoder = ViTSAM(img_size=256)
+        if output_intermediate_features:
+            self._encoder = ViTSAM(
+                img_size=self.input_size,
+                out_indices=self.block_indices,
+            )
+        else:
+            self._encoder = ViTSAM(img_size=self.input_size, out_indices=-1)
+
+        # Disable channel reduction bottleneck
         self._encoder.channel_reduction = nn.Identity()  # ty:ignore[invalid-assignment]
 
         self._load_checkpoint()
@@ -69,10 +77,6 @@ class UltraSAMBackbone(Backbone):
                 transforms.Normalize(mean=self.input_mean, std=self.input_std),
             ]
         )
-
-        self._intermediate_features: list[torch.Tensor] | None = None
-        if output_intermediate_features:
-            self._register_forward_hooks()
 
     def _load_checkpoint(self) -> None:
         """Load encoder weights from checkpoint.
@@ -109,23 +113,7 @@ class UltraSAMBackbone(Backbone):
         """
         return self._transform(x)
 
-    def _register_forward_hooks(self) -> None:
-        """Register forward hooks to capture intermediate features.
-
-        Populates BackboneOutput.intermediate_features with patch tokens from
-        the encoder layers listed in self.block_indices. Each layer outputs a
-        [B, H, W, C] tensor (no CLS token), which is flattened to [B, H*W, C].
-        """
-        buf: list[torch.Tensor] = []
-        self._intermediate_features = buf
-
-        def hook(_module, _input, output):
-            buf.append(output.flatten(1, 2))  # [B, H, W, C] -> [B, H*W, C]
-
-        for idx in self.block_indices:
-            self._encoder.layers[idx].register_forward_hook(hook)
-
-    def forward(self, x: torch.Tensor) -> BackboneOutput:
+    def forward(self, x: torch.Tensor, pool: bool = False) -> BackboneOutput:
         """Extract patch token features from pre-processed images.
 
         The spatial output (B, 768, H, W) is flattened to (B, H*W, 768)
@@ -134,21 +122,25 @@ class UltraSAMBackbone(Backbone):
         Args:
             x: uint8 input image tensor [B, C, H, W]. Resized to
                 ``self.input_size`` and normalised before encoding.
+            pool: If True, mean-pool over patch tokens to return [B, 768].
+                If False, return the full sequence [B, 256, 768].
 
         Returns:
-            BackboneOutput with features [B, 256, 768] and optionally
-            intermediate features (list of 4 tensors of the same shape).
+            BackboneOutput with features [B, 256, 768] when pool=False or
+            [B, 768] when pool=True, and optionally intermediate features
+            (list of 4 tensors of shape [B, 256, 768]).
         """
-        if self._intermediate_features is not None:
-            self._intermediate_features.clear()
 
         x = self._resize_and_normalize(x)
-        outs = self._encoder(x)
-        spatial: torch.Tensor = outs[0]
-        # (B, C, H, W) -> (B, H*W, C)
-        features = spatial.flatten(2).transpose(1, 2)
+        block_outputs = [out.flatten(2).permute(0, 2, 1) for out in self._encoder(x)]
 
-        return BackboneOutput(
-            features=features,
-            intermediate_features=self._intermediate_features,
-        )
+        features = block_outputs[-1]
+        if pool:
+            features = features.mean(dim=1)
+
+        if self._output_intermediate_features:
+            return BackboneOutput(
+                features=features, intermediate_features=block_outputs
+            )
+        else:
+            return BackboneOutput(features=features)

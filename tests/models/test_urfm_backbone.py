@@ -80,3 +80,9 @@ class TestURFMBackboneForward:
         assert len(out.intermediate_features) == 4
         for tensor in out.intermediate_features:
             assert tensor.shape == (_BATCH, _NUM_PATCHES, 768)
+
+    def test_forward_pool_shape(self) -> None:
+        model = _make_backbone()
+        x = torch.randn(_BATCH, 3, _IMG_SIZE, _IMG_SIZE)
+        out = model(x, pool=True)
+        assert out.features.shape == (_BATCH, model.feature_dim)

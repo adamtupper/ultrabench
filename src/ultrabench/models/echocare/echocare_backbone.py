@@ -3,6 +3,7 @@
 from pathlib import Path
 
 import torch
+import torch.nn.functional as F
 import torchvision.transforms.v2 as transforms
 
 from ultrabench.models.backbone import Backbone, BackboneOutput
@@ -106,21 +107,26 @@ class EchoCareBackbone(Backbone):
         """
         return self._transform(x)
 
-    def forward(self, x: torch.Tensor) -> BackboneOutput:
+    def forward(self, x: torch.Tensor, pool: bool = False) -> BackboneOutput:
         """Extract multi-scale features from pre-processed images.
 
         Args:
             x: uint8 input image tensor [B, C, H, W]. The images are resized to
                 ``self.input_size`` and converted to float32 before being
                 passed to the encoder.
+            pool: If True, apply adaptive average pooling then flatten to
+                [B, 2048]. If False, return the spatial map [B, 2048, H, W].
 
         Returns:
-            BackboneOutput with features [B, 2048, H, W] (last stage) and
-            optionally intermediate features (all 5 Swin stage outputs, channel
-            dims [128, 256, 512, 1024, 2048], fine→coarse).
+            BackboneOutput with features [B, 2048, H, W] when pool=False or
+            [B, 2048] when pool=True, and optionally intermediate features
+            (all 5 Swin stage outputs, channel dims [128, 256, 512, 1024,
+            2048]).
         """
         x = self._resize_and_normalize(x)
         stage_outputs: list[torch.Tensor] = self._encoder(x)
         features = stage_outputs[-1]
+        if pool:
+            features = F.adaptive_avg_pool2d(features, 1).flatten(start_dim=1)
         intermediate = stage_outputs if self._output_intermediate_features else None
         return BackboneOutput(features=features, intermediate_features=intermediate)

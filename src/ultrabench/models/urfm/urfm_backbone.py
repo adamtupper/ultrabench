@@ -170,25 +170,31 @@ class URFMBackbone(Backbone):
         for idx in self.block_indices:
             self._encoder.blocks[idx].register_forward_hook(hook)
 
-    def forward(self, x: torch.Tensor) -> BackboneOutput:
+    def forward(self, x: torch.Tensor, pool: bool = False) -> BackboneOutput:
         """Extract patch token features from pre-processed images.
 
         Args:
             x: uint8 input image tensor [B, C, H, W]. The images are resized to
                 ``self.input_size`` and normalized using ImageNet
                 normalization before being passed to the encoder.
+            pool: If True, mean-pool over patch tokens to return [B, D].
+                If False, return the full sequence [B, N, D].
 
         Returns:
-            BackboneOutput with features [B, N, D] and optional intermediate
-            features [B, 4, N, D].
+            BackboneOutput with features [B, N, D] when pool=False or [B, D]
+            when pool=True, and optionally intermediate features (list of 4
+            tensors of shape [B, N, D]).
         """
         if self._intermediate_features is not None:
             self._intermediate_features.clear()
 
         x = self._resize_and_normalize(x)
         out = self._encoder.forward_encoder(x, mask=None)
+        features = out[:, 1:, :]
+        if pool:
+            features = features.mean(dim=1)
 
         return BackboneOutput(
-            features=out[:, 1:, :],
+            features=features,
             intermediate_features=self._intermediate_features,
         )

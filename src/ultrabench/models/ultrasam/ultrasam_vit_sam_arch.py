@@ -7,12 +7,15 @@ source so that checkpoints saved under that framework load without any key
 remapping.
 
 Key naming conventions that must match the checkpoint:
-  patch_embed.projection.*         (mmcv PatchEmbed uses 'projection', not 'proj')
-  layers.{i}.*                     (mmpretrain uses 'layers', SAM-original uses 'blocks')
-  layers.{i}.ln1 / .ln2           (mmpretrain uses 'ln1/ln2', SAM-original uses 'norm1/norm2')
-  layers.{i}.ffn.layers.0.0.*     (mmcv FFN nested Sequential structure, see _FFN below)
-  layers.{i}.ffn.layers.1.*
-  channel_reduction.*              (replaced with nn.Identity() in ultrasam.py)
+    - `patch_embed.projection.* `: mmcv PatchEmbed uses 'projection', not
+      'proj'
+    - `layers.{i}.*`: mmpretrain uses 'layers', SAM-original uses 'blocks'
+    - `layers.{i}.ln1/.ln2 `: mmpretrain uses 'ln1/ln2', SAM-original uses
+      'norm1/norm2'
+    - `layers.{i}.ffn.layers.0.0.*`: mmcv FFN nested Sequential structure, see
+      _FFN below
+    - `layers.{i}.ffn.layers.1.*`:
+    - `channel_reduction.*`: replaced with nn.Identity() in ultrasam.py
 
 Reference: https://github.com/open-mmlab/mmpretrain/blob/main/mmpretrain/models/backbones/vit_sam.py
 """
@@ -25,7 +28,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.checkpoint import checkpoint
 
-# ── tiny utilities ────────────────────────────────────────────────────────────
+# ── tiny utilities ───────────────────────────────────────────────────────────
 
 
 def _to_2tuple(x):
@@ -162,7 +165,7 @@ def add_decomposed_rel_pos(attn, q, rel_pos_h, rel_pos_w, q_size, k_size):
     return attn
 
 
-# ── sub-modules ───────────────────────────────────────────────────────────────
+# ── sub-modules ──────────────────────────────────────────────────────────────
 
 
 class _PatchEmbed(nn.Module):
@@ -240,7 +243,7 @@ class _FFN(nn.Module):
     Feed-forward network whose internal structure mirrors mmcv's FFN exactly:
 
         self.layers = Sequential(
-            Sequential(Linear(embed, ff), GELU, Dropout),   # layers.0.0 / .1 / .2
+            Sequential(Linear(embed, ff), GELU, Dropout),   # layers.0.0/.1/.2
             Linear(ff, embed),                               # layers.1
             Dropout,                                         # layers.2
         )
@@ -310,7 +313,8 @@ class TransformerEncoderLayer(nn.Module):
         self.ln2 = nn.LayerNorm(embed_dims, eps=eps)
         self.ffn = _FFN(embed_dims, feedforward_channels, drop_rate, drop_path_rate)
 
-    # mmpretrain exposes these as norm1/norm2 properties — kept for compatibility
+    # mmpretrain exposes these as norm1/norm2 properties
+    # Kept for compatibility
     @property
     def norm1(self):
         return self.ln1
@@ -333,7 +337,7 @@ class TransformerEncoderLayer(nn.Module):
         return x
 
 
-# ── main backbone ─────────────────────────────────────────────────────────────
+# ── main backbone ────────────────────────────────────────────────────────────
 
 
 class ViTSAM(nn.Module):
@@ -387,7 +391,7 @@ class ViTSAM(nn.Module):
         patch_size: int = 16,
         in_channels: int = 3,
         out_channels: int = 256,
-        out_indices: int = -1,
+        out_indices: list | int = -1,
         out_type: str = "raw",
         drop_rate: float = 0.0,
         drop_path_rate: float = 0.0,
@@ -443,8 +447,8 @@ class ViTSAM(nn.Module):
 
         # out_indices normalisation
         if isinstance(out_indices, int):
-            out_indices = [out_indices]  # ty:ignore[invalid-assignment]
-        self.out_indices = [i if i >= 0 else self.num_layers + i for i in out_indices]  # ty:ignore[not-iterable]
+            out_indices = [out_indices]
+        self.out_indices = [i if i >= 0 else self.num_layers + i for i in out_indices]
 
         # Transformer layers
         dpr = np.linspace(0, drop_path_rate, self.num_layers).tolist()  # ty:ignore[no-matching-overload]
@@ -488,7 +492,10 @@ class ViTSAM(nn.Module):
     # ── weight loading with automatic pos/rel-pos resizing ───────────────────
 
     def load_state_dict(self, state_dict, strict: bool = True):  # ty:ignore[invalid-method-override]
-        """Override to resize pos_embed and rel_pos tensors when shapes differ."""
+        """Load module state dict.
+
+        Overridden to resize pos_embed and rel_pos tensors when shapes differ.
+        """
         # Resize pos_embed if needed
         if self.use_abs_pos and "pos_embed" in state_dict:
             ckpt_pe = state_dict["pos_embed"]  # (1, H', W', C)
@@ -557,7 +564,7 @@ class ViTSAM(nn.Module):
         # avg_featmap: (B, C, H, W) -> (B, C)
         return x.flatten(2).mean(dim=2)
 
-    # ── helpers ───────────────────────────────────────────────────────────────
+    # ── helpers ──────────────────────────────────────────────────────────────
 
     def _freeze_stages(self):
         if self.use_abs_pos:
