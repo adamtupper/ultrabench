@@ -476,10 +476,14 @@ class DownstreamPipeline:
         block_indices = (
             getattr(head_cfg, "block_indices", None) or backbone.block_indices
         )
+        if hasattr(backbone, "seg_feature_dim"):
+            feature_dim = backbone.seg_feature_dim
+        else:
+            feature_dim = backbone.feature_dim
         head = get_seg_head(
             decoder_type=decoder_type,
             output_type=backbone.output_type,
-            feature_dim=backbone.feature_dim,
+            feature_dim=feature_dim,
             scale_dims=getattr(backbone, "intermediate_feature_dims", None),
             num_classes=num_classes,
             image_size=image_size,

@@ -35,6 +35,7 @@ class SAMUSBackbone(Backbone):
         input_size: 256.
     """
 
+    seg_feature_dim: int = 256
     feature_dim: int = 1024
     output_type: str = "spatial_map"
     has_cls_token: bool = False
