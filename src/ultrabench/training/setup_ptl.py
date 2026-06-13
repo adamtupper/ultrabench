@@ -590,7 +590,7 @@ class DownstreamPipeline:
                 filename=f"{mode_name}_best",
                 monitor="val_loss",
                 save_top_k=1,
-                save_last=True,
+                save_last=cfg.system.save_last_checkpoint,  # ty:ignore[unresolved-attribute]
                 mode="min",
             ),
             BackboneFinetuningSteps(

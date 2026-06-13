@@ -55,6 +55,7 @@ ACCUM_GRAD=1
 python ultrabench2/src/ultrabench/training/main_launch.py \
     system.output_dir=${OUTPUT_DIR} \
     system.checkpoint_dir=${CHECKPOINT_DIR} \
+    system.save_last_checkpoint=false \
     system.data_loader_workers=${SLURM_CPUS_PER_TASK} \
     system.enable_progress_bar=false \
     model=${MODEL} \
