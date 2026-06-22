@@ -220,23 +220,16 @@ class UltraBenchModule(pl.LightningModule):
             Logits [B, num_classes] for classification or
             [B, num_classes, H, W] for segmentation.
         """
-        out = self.backbone(x)
+        if self.task_type == "classification":
+            out = self.backbone(x, pool=True)
+        else:
+            out = self.backbone(x)
 
         if self.use_intermediate:
             # setr_mla / segformer: pass list of intermediate tensors to head
             return self.head(out.intermediate_features)
 
-        features = out.features  # [B, N, D] or [B, C, H, W]
-
-        if self.is_seg:
-            return self.head(features)
-
-        # Classification: global average pool then head
-        if features.dim() == 3:
-            features = features.mean(dim=1)  # patch_tokens → [B, D]
-        elif features.dim() == 4:
-            features = features.mean(dim=(2, 3))  # spatial/multiscale → [B, C]
-        return self.head(features)
+        return self.head(out.features)
 
     def train(self, mode: bool = True) -> "UltraBenchModule":
         """Keep the backbone in eval mode when all its parameters are frozen.
@@ -483,10 +476,14 @@ class DownstreamPipeline:
         block_indices = (
             getattr(head_cfg, "block_indices", None) or backbone.block_indices
         )
+        if hasattr(backbone, "seg_feature_dim"):
+            feature_dim = backbone.seg_feature_dim
+        else:
+            feature_dim = backbone.feature_dim
         head = get_seg_head(
             decoder_type=decoder_type,
             output_type=backbone.output_type,
-            feature_dim=backbone.feature_dim,
+            feature_dim=feature_dim,
             scale_dims=getattr(backbone, "intermediate_feature_dims", None),
             num_classes=num_classes,
             image_size=image_size,
@@ -597,7 +594,7 @@ class DownstreamPipeline:
                 filename=f"{mode_name}_best",
                 monitor="val_loss",
                 save_top_k=1,
-                save_last=True,
+                save_last=cfg.system.save_last_checkpoint,  # ty:ignore[unresolved-attribute]
                 mode="min",
             ),
             BackboneFinetuningSteps(

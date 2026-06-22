@@ -31,6 +31,7 @@ system:
   checkpoint_dir: baselines
   log_every_n_steps: 50
   enable_progress_bar: true
+  save_last_checkpoint: true
 
 hydra:
   run:

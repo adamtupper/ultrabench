@@ -134,24 +134,30 @@ class USFMAEBackbone(Backbone):
         for idx in self.block_indices:
             self._encoder.blocks[idx].register_forward_hook(hook)
 
-    def forward(self, x: torch.Tensor) -> BackboneOutput:
+    def forward(self, x: torch.Tensor, pool: bool = False) -> BackboneOutput:
         """Extract patch token features from pre-processed images.
 
         Args:
             x: uint8 input image tensor [B, C, H, W]. Resized to
                 ``self.input_size`` and normalised before encoding.
+            pool: If True, mean-pool over patch tokens to return [B, 768].
+                If False, return the full sequence [B, N, 768].
 
         Returns:
-            BackboneOutput with features [B, N, 768] and optionally
-            intermediate features (list of 4 tensors of the same shape).
+            BackboneOutput with features [B, N, 768] when pool=False or
+            [B, 768] when pool=True, and optionally intermediate features
+            (list of 4 tensors of shape [B, N, 768]).
         """
         if self._intermediate_features is not None:
             self._intermediate_features.clear()
 
         x = self._resize_and_normalize(x)
         latent, _, _ = self._encoder.forward_encoder(x, mask_ratio=0.0)
+        features = latent[:, 1:, :]
+        if pool:
+            features = features.mean(dim=1)
 
         return BackboneOutput(
-            features=latent[:, 1:, :],
+            features=features,
             intermediate_features=self._intermediate_features,
         )

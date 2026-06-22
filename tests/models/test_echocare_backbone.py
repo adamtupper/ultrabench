@@ -71,3 +71,9 @@ class TestEchoCareBackboneForward:
         out = model(x)
         assert out.intermediate_features is not None
         assert torch.equal(out.features, out.intermediate_features[-1])
+
+    def test_forward_pool_shape(self) -> None:
+        model = _make_backbone()
+        x = torch.randn(_BATCH, 3, _IMG_SIZE, _IMG_SIZE)
+        out = model(x, pool=True)
+        assert out.features.shape == (_BATCH, model.feature_dim)

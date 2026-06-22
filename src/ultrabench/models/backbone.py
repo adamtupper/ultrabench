@@ -92,11 +92,14 @@ class Backbone(ABC, nn.Module):
         ...
 
     @abstractmethod
-    def forward(self, x: torch.Tensor) -> BackboneOutput:
+    def forward(self, x: torch.Tensor, pool: bool = False) -> BackboneOutput:
         """Extract features from pre-processed input images.
 
         Args:
             x: Raw uint8 input tensor with shape [B, C, H, W].
+            pool: If True, reduce features to [B, feature_dim] for
+                classification. If False, return the full spatial or
+                sequence representation.
 
         Returns:
             A BackboneOutput with features and optionally intermediate outputs.

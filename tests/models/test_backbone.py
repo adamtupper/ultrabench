@@ -44,7 +44,7 @@ class TestBackboneABC:
             def _resize_and_normalize(self, x: torch.Tensor) -> torch.Tensor:
                 return x
 
-            def forward(self, x: torch.Tensor) -> BackboneOutput:
+            def forward(self, x: torch.Tensor, pool: bool = False) -> BackboneOutput:
                 return BackboneOutput(features=x)
 
         model = ConcreteBackbone(checkpoint_path="", output_intermediate_features=False)
