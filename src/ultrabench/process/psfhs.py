@@ -4,10 +4,12 @@ Unfortunately, there is no metadata to provide additional information
 about the patients or the images. Therefore, we cannot ensure that there
 is no patient overlap between the splits.
 
-The resulting dataset has two splits:
+The resulting dataset has three splits:
 
     - train: images in their original 256 x 256 px resolution.
     - test: images in their original 256 x 256 px resolution.
+    - test.{size}: same examples as test, resized so the longest edge measures
+        {size} px and then zero-padded to {size} x {size} px.
 
 Each example has the following features:
 
@@ -51,6 +53,7 @@ from tqdm.auto import tqdm
 
 from .utils import (
     generate_segmentation_ground_truth_from_records,
+    resize_and_pad,
     save_version_info,
     to_3_channel,
 )
@@ -126,11 +129,12 @@ def generate_scan_mask(image: np.ndarray) -> np.ndarray:
     return mask.astype(np.uint8)
 
 
-def _process_psfhs_example(image_path: str) -> dict:
+def _process_psfhs_example(image_path: str, size: int | None = None) -> dict:
     """Process a single image into a record dict.
 
     Args:
         image_path: The path to the .mha image file.
+        size: If provided, resize and pad all arrays to size x size pixels.
 
     Returns:
         A dict with keys filename, image, scan_mask, and psfh_mask,
@@ -145,6 +149,11 @@ def _process_psfhs_example(image_path: str) -> dict:
 
     mask_path = image_path.replace("image_mha", "label_mha")
     psfh_mask = sitk.GetArrayFromImage(sitk.ReadImage(mask_path))
+
+    if size is not None:
+        image = resize_and_pad(image, size, order=1)
+        scan_mask = resize_and_pad(scan_mask, size, order=0)
+        psfh_mask = resize_and_pad(psfh_mask, size, order=0)
 
     return {
         "filename": filename,
@@ -173,6 +182,9 @@ def process_psfhs(
     output_dir: Annotated[
         str, typer.Argument(help="The output directory for the processed dataset")
     ],
+    size: Annotated[
+        int, typer.Option(help="Test image size (height and width in pixels)")
+    ] = 256,
     publish: Annotated[
         bool,
         typer.Option(help="Whether to publish the dataset to the Hugging Face Hub"),
@@ -183,6 +195,7 @@ def process_psfhs(
     Args:
         raw_data_dir: The path to the raw data directory.
         output_dir: The path to the output directory.
+        size: The height and width of the resized test images in pixels.
         publish: Whether to publish the dataset to the Hugging Face Hub.
     """
     verify_args(raw_data_dir, output_dir)
@@ -213,11 +226,20 @@ def process_psfhs(
             desc="Processing test split",
         )
     ]
+    test_resized_records = [
+        _process_psfhs_example(row["image_path"], size=size)
+        for _, row in tqdm(
+            test_examples.iterrows(),
+            total=len(test_examples),
+            desc=f"Processing test.{size} split",
+        )
+    ]
 
     dataset = DatasetDict(
         {
             "train": Dataset.from_list(train_records, info=DATASET_INFO),
             "test": Dataset.from_list(test_records, info=DATASET_INFO),
+            f"test.{size}": Dataset.from_list(test_resized_records, info=DATASET_INFO),
         }
     )
 
@@ -228,7 +250,7 @@ def process_psfhs(
         test_records,
         mask_key="psfh_mask",
         classes=[1, 2],
-        output_path=output_path / "test" / "ground_truth_segmentation.csv",
+        output_path=output_path / f"test.{size}" / "ground_truth_segmentation.csv",
     )
 
     save_version_info(str(output_path), __version__)
@@ -243,8 +265,10 @@ def process_psfhs(
         api = HfApi()
         operations = [
             CommitOperationAdd(
-                path_in_repo="test-ground-truth-segmentation.csv",
-                path_or_fileobj=output_path / "test" / "ground_truth_segmentation.csv",
+                path_in_repo=f"test.{size}-ground-truth-segmentation.csv",
+                path_or_fileobj=output_path
+                / f"test.{size}"
+                / "ground_truth_segmentation.csv",
             ),
         ]
         api.create_commit(

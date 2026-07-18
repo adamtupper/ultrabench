@@ -15,6 +15,7 @@ The original dataset has been divided into `train` and `test` splits using a str
 
 - `train`: 80% of the images in their original 256 x 256 px resolution.
 - `test`: The remaining 20% of images in their original 256 x 256 px resolution.
+- `test.256`: The remaining 20% of images in their original 256 x 256 px resolution.
 
 Due to the lack of patient identifiers, there may be some patient overlap between the `train` and `test` splits.
 
