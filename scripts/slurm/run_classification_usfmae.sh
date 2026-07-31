@@ -4,7 +4,7 @@
 #SBATCH --mem=15G
 #SBATCH --cpus-per-task=4
 #SBATCH --gpus=h100_2g.20gb:1
-#SBATCH --time=2:00:00
+#SBATCH --time=3:00:00
 #SBATCH --array=0-71%1
 #
 # Run downstream classification evaluation for USF-MAE. Launches

@@ -1,5 +1,5 @@
 defaults:
-  - model: urfm
+  - model: urfm_base
   - head: linear_classifier
   - mode: head_only
   - task: aul_mass_classification

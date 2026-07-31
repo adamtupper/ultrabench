@@ -1,0 +1,5 @@
+_target_: ultrabench.models.dinov3.dinov3_backbone.DINOv3ViTBackbone
+model_variant: dinov3_vitl16
+repo_dir: ${system.checkpoint_dir}/dinov3-repo
+checkpoint_path: ${system.checkpoint_dir}/dinov3/dinov3_vitl16_pretrain_lvd1689m-8aa4cbdd.pth
+output_intermediate_features: true

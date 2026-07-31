@@ -18,7 +18,8 @@
     "containerEnv": {
         "TERM": "xterm-256color",
         "NO_ALBUMENTATIONS_UPDATE": "1",
-        "UV_ENV_FILE": ".env"
+        "UV_ENV_FILE": ".env",
+        "ANTHROPIC_API_KEY": "${localEnv:ANTHROPIC_API_KEY}"
     },
     "customizations": {
         "vscode": {
