@@ -1,10 +1,5 @@
 {
   "features": {
-    "ghcr.io/devcontainers/features/nvidia-cuda:2.0.0": {
-      "version": "2.0.0",
-      "resolved": "ghcr.io/devcontainers/features/nvidia-cuda@sha256:666f60e5df6b6d90402a983f7829fc26b621f0113e1f1c6647928528831bb8d5",
-      "integrity": "sha256:666f60e5df6b6d90402a983f7829fc26b621f0113e1f1c6647928528831bb8d5"
-    },
     "ghcr.io/hwaien/devcontainer-features/match-host-time-zone": {
       "version": "0.0.13",
       "resolved": "ghcr.io/hwaien/devcontainer-features/match-host-time-zone@sha256:8fc253d728d0f94418ba863c7cd4ffe6c4fa95fc8356e781dea7d1554624bef6",

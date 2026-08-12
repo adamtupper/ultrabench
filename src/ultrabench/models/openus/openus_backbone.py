@@ -7,7 +7,12 @@ import torch.nn.functional as F
 import torchvision.transforms.v2 as transforms
 
 from ultrabench.models.backbone import Backbone, BackboneOutput
-from ultrabench.models.openus.openus_vmamba import Backbone_DINOv2_VSSM_2
+from ultrabench.models.openus.openus_vmamba import (
+    DEFAULT_KERNEL_REPO_ID,
+    DEFAULT_KERNEL_VERSION,
+    Backbone_DINOv2_VSSM_2,
+    load_selective_scan_kernel,
+)
 
 
 class OpenUSBackbone(Backbone):
@@ -44,14 +49,31 @@ class OpenUSBackbone(Backbone):
     input_std: list[float] = [0.229, 0.224, 0.225]
 
     def __init__(
-        self, checkpoint_path: str, output_intermediate_features: bool
+        self,
+        checkpoint_path: str,
+        output_intermediate_features: bool,
+        selective_scan_kernel_path: str | None = None,
+        selective_scan_kernel_repo_id: str = DEFAULT_KERNEL_REPO_ID,
+        selective_scan_kernel_version: int | None = DEFAULT_KERNEL_VERSION,
     ) -> None:
         """Initialise OpenUSBackbone.
+
+        The selective scan kernel is resolved once per process from a local
+        HF Kernels build, then from the Hugging Face Hub, then from the
+        pure-PyTorch implementation. Resolution never raises: a kernel that
+        cannot be loaded is logged and the next option is tried.
 
         Args:
             checkpoint_path: Path to the OpenUS DINO checkpoint (.pth).
             output_intermediate_features: Whether to include all 4 VMamba
                 stage outputs in BackboneOutput.intermediate_features.
+            selective_scan_kernel_path: Directory holding a pre-compiled
+                selective scan kernel build, tried before the Hub. None
+                skips straight to the Hub.
+            selective_scan_kernel_repo_id: Hugging Face Hub repository to
+                load the selective scan kernel from.
+            selective_scan_kernel_version: Kernel version to load from the
+                Hub. None loads the latest revision.
 
         Raises:
             FileNotFoundError: If the checkpoint file cannot be found.
@@ -60,6 +82,12 @@ class OpenUSBackbone(Backbone):
             RuntimeError: If core encoder keys are missing after loading.
         """
         super().__init__(checkpoint_path, output_intermediate_features)
+
+        load_selective_scan_kernel(
+            local_kernel_path=selective_scan_kernel_path,
+            repo_id=selective_scan_kernel_repo_id,
+            version=selective_scan_kernel_version,
+        )
 
         self._encoder = Backbone_DINOv2_VSSM_2(
             depths=[2, 2, 15, 2],
@@ -145,11 +173,7 @@ class OpenUSBackbone(Backbone):
 
         msg = self._encoder.load_state_dict(state_dict, strict=False)
 
-        bad = [
-            k
-            for k in msg.missing_keys
-            if k.startswith(("patch_embed.", "layers."))
-        ]
+        bad = [k for k in msg.missing_keys if k.startswith(("patch_embed.", "layers."))]
         if bad:
             raise RuntimeError(
                 f"Core encoder keys missing after loading OpenUS checkpoint — "

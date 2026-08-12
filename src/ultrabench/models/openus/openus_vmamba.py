@@ -1,7 +1,11 @@
 """Standalone OpenUS model — no repo imports required.
 
 All architecture code (VMamba backbone, scan ops) is inlined here.
-External pip dependencies: torch, numpy, timm==0.4.12
+External pip dependencies: torch, numpy, timm==0.4.12, kernels
+
+The selective scan is provided by the pre-compiled `mamba-ssm` HF Kernels
+build when one can be resolved, and by a pure-PyTorch implementation
+otherwise. See `load_selective_scan_kernel`.
 
 Usage:
     model = build_openus_model("openus_cpt0150.pth")
@@ -11,23 +15,31 @@ Usage:
 """
 
 import contextlib
+import logging
 import math
 import warnings
-import numpy as np
 from collections import OrderedDict
 from functools import partial
+from pathlib import Path
 from typing import Any, Callable, Optional
 
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.utils.checkpoint as checkpoint
-from timm.models.layers import DropPath, trunc_normal_, to_2tuple
+from kernels import get_kernel, get_local_kernel
+from timm.models.layers import DropPath, to_2tuple, trunc_normal_
+
+logger = logging.getLogger(__name__)
 
 DropPath.__repr__ = lambda self: f"timm.DropPath({self.drop_prob})"
 
+DEFAULT_KERNEL_REPO_ID = "kernels-community/mamba-ssm"
+DEFAULT_KERNEL_VERSION = 1
+
 # ============================================================
-# Optional triton / CUDA extensions
+# Optional triton extension
 # ============================================================
 _WITH_TRITON = True
 try:
@@ -36,22 +48,6 @@ try:
 except Exception:
     _WITH_TRITON = False
     warnings.warn("triton not installed — falling back to pure-PyTorch scan ops.")
-
-_WITH_SS_OFLEX = True
-_WITH_SS_CORE = False
-_WITH_SS_MAMBA = True
-try:
-    import selective_scan_cuda_oflex
-except ImportError:
-    _WITH_SS_OFLEX = False
-try:
-    import selective_scan_cuda_core
-except ImportError:
-    _WITH_SS_CORE = False
-try:
-    import selective_scan_cuda
-except ImportError:
-    _WITH_SS_MAMBA = False
 
 try:
     from analyze.attnmap import AttnMamba as _AttnMamba
@@ -524,75 +520,91 @@ def _selective_scan_torch(
     return out if oflex else out.to(dtype=dtype_in)
 
 
-class _SelectiveScanCuda(torch.autograd.Function):
-    @staticmethod
-    @torch.cuda.amp.custom_fwd
-    def forward(
-        ctx,
-        u,
-        delta,
-        A,
-        B,
-        C,
-        D=None,
-        delta_bias=None,
-        delta_softplus=False,
-        oflex=True,
-        backend=None,
-    ):
-        ctx.delta_softplus = delta_softplus
-        backend = "oflex" if _WITH_SS_OFLEX and backend is None else backend
-        backend = "core" if _WITH_SS_CORE and backend is None else backend
-        backend = "mamba" if _WITH_SS_MAMBA and backend is None else backend
-        ctx.backend = backend
-        if backend == "oflex":
-            out, x, *_ = selective_scan_cuda_oflex.fwd(
-                u, delta, A, B, C, D, delta_bias, delta_softplus, 1, oflex
-            )
-        elif backend == "core":
-            out, x, *_ = selective_scan_cuda_core.fwd(
-                u, delta, A, B, C, D, delta_bias, delta_softplus, 1
-            )
-        elif backend == "mamba":
-            out, x, *_ = selective_scan_cuda.fwd(
-                u, delta, A, B, C, D, None, delta_bias, delta_softplus
-            )
-        ctx.save_for_backward(u, delta, A, B, C, D, delta_bias, x)
-        return out
+_selective_scan_kernel: Callable | None = None
+_selective_scan_kernel_key: tuple[str | None, str, int | None] | None = None
 
-    @staticmethod
-    @torch.cuda.amp.custom_bwd
-    def backward(ctx, dout, *args):
-        u, delta, A, B, C, D, delta_bias, x = ctx.saved_tensors
-        backend = ctx.backend
-        if dout.stride(-1) != 1:
-            dout = dout.contiguous()
-        if backend == "oflex":
-            du, ddelta, dA, dB, dC, dD, ddb, *_ = selective_scan_cuda_oflex.bwd(
-                u, delta, A, B, C, D, delta_bias, dout, x, ctx.delta_softplus, 1
+
+def load_selective_scan_kernel(
+    local_kernel_path: str | Path | None = None,
+    repo_id: str = DEFAULT_KERNEL_REPO_ID,
+    version: int | None = DEFAULT_KERNEL_VERSION,
+) -> Callable | None:
+    """Resolve the selective scan kernel and cache it for the module.
+
+    Backends are tried in order of preference:
+
+    1. A pre-compiled HF Kernels build in a local directory, loaded with
+       ``kernels.get_local_kernel``. Skipped when no path is given.
+    2. The ``repo_id`` kernel from the Hugging Face Hub, loaded with
+       ``kernels.get_kernel``. This resolves against the local Hugging
+       Face cache when ``HF_HUB_OFFLINE=1`` is set.
+    3. The pure-PyTorch scan, which is much slower but runs anywhere.
+
+    Nothing is raised when a backend cannot be loaded: the failure is
+    logged and the next backend is tried. Resolution is cached per
+    argument combination, so repeated calls with the same arguments are
+    free.
+
+    Args:
+        local_kernel_path: Directory holding a pre-compiled kernel build.
+            May be a kernel repository root, its "build" subdirectory, or
+            a single build variant directory. None skips this backend.
+        repo_id: Hugging Face Hub repository holding the kernel.
+        version: Kernel version to load from the Hub. None loads the
+            latest revision.
+
+    Returns:
+        The ``selective_scan_fn`` of the resolved kernel, or None when no
+        kernel could be loaded and the pure-PyTorch scan should be used.
+    """
+    global _selective_scan_kernel, _selective_scan_kernel_key
+
+    key = (
+        str(local_kernel_path) if local_kernel_path is not None else None,
+        repo_id,
+        version,
+    )
+    if key == _selective_scan_kernel_key:
+        return _selective_scan_kernel
+
+    kernel_fn = None
+    # FileNotFoundError is an OSError; AttributeError covers a kernel
+    # build that does not expose selective_scan_fn.
+    if local_kernel_path is None:
+        logger.debug("No local selective scan kernel path configured.")
+    else:
+        try:
+            kernel_fn = get_local_kernel(Path(local_kernel_path)).selective_scan_fn
+            logger.info(
+                "Loaded the local selective scan kernel from %s.", local_kernel_path
             )
-        elif backend == "core":
-            du, ddelta, dA, dB, dC, dD, ddb, *_ = selective_scan_cuda_core.bwd(
-                u, delta, A, B, C, D, delta_bias, dout, x, ctx.delta_softplus, 1
+        except (OSError, ImportError, ValueError, AttributeError) as error:
+            logger.warning(
+                "Could not load the local selective scan kernel from %s (%s). "
+                "Falling back to the %s kernel from the Hugging Face Hub.",
+                local_kernel_path,
+                error,
+                repo_id,
             )
-        elif backend == "mamba":
-            du, ddelta, dA, dB, dC, dD, ddb, *_ = selective_scan_cuda.bwd(
-                u,
-                delta,
-                A,
-                B,
-                C,
-                D,
-                None,
-                delta_bias,
-                dout,
-                x,
-                None,
-                None,
-                ctx.delta_softplus,
-                False,
+
+    if kernel_fn is None:
+        try:
+            kernel_fn = get_kernel(repo_id, version=version).selective_scan_fn
+            logger.info(
+                "Loaded the %s selective scan kernel (version %s).", repo_id, version
             )
-        return du, ddelta, dA, dB, dC, dD, ddb, None, None, None
+        except (OSError, ImportError, ValueError, AttributeError) as error:
+            logger.warning(
+                "Could not load the %s selective scan kernel from the Hugging "
+                "Face Hub (%s). Falling back to the pure-PyTorch selective "
+                "scan, which is substantially slower.",
+                repo_id,
+                error,
+            )
+
+    _selective_scan_kernel = kernel_fn
+    _selective_scan_kernel_key = key
+    return kernel_fn
 
 
 def selective_scan_fn(
@@ -605,15 +617,51 @@ def selective_scan_fn(
     delta_bias=None,
     delta_softplus=True,
     oflex=True,
-    backend=None,
 ):
-    WITH_CUDA = _WITH_SS_OFLEX or _WITH_SS_CORE or _WITH_SS_MAMBA
-    fn = (
-        _selective_scan_torch
-        if (backend == "torch" or not WITH_CUDA)
-        else _SelectiveScanCuda.apply
+    """Run the selective scan on the best available backend.
+
+    The kernel resolved by `load_selective_scan_kernel` is used for CUDA
+    inputs. CPU inputs always use the pure-PyTorch scan, because the
+    pre-compiled kernels are CUDA-only. When the kernel has not been
+    configured yet it is resolved here with the default arguments.
+
+    Args:
+        u: Input sequence [B, K * D, L].
+        delta: Timestep tensor [B, K * D, L].
+        A: State transition matrix [K * D, N].
+        B: Input projection [B, K, N, L].
+        C: Output projection [B, K, N, L].
+        D: Optional skip connection weights [K * D].
+        delta_bias: Optional bias added to delta [K * D].
+        delta_softplus: Whether to apply softplus to delta.
+        oflex: Whether the pure-PyTorch scan may return float32 output
+            instead of casting back to the input dtype. Ignored by the
+            pre-compiled kernels.
+
+    Returns:
+        The scan output [B, K * D, L].
+    """
+    if _selective_scan_kernel_key is None:
+        load_selective_scan_kernel()
+
+    if _selective_scan_kernel is None or not u.is_cuda:
+        return _selective_scan_torch(
+            u, delta, A, B, C, D, delta_bias, delta_softplus, oflex
+        )
+
+    # The kernel takes a gating tensor `z` between `D` and `delta_bias`,
+    # so the trailing arguments must be passed by keyword.
+    return _selective_scan_kernel(
+        u,
+        delta,
+        A,
+        B,
+        C,
+        D,
+        z=None,
+        delta_bias=delta_bias,
+        delta_softplus=delta_softplus,
     )
-    return fn(u, delta, A, B, C, D, delta_bias, delta_softplus, oflex, backend)
 
 
 # ============================================================
@@ -943,18 +991,15 @@ class SS2Dv2(nn.Module):
             v01=partial(
                 self.forward_corev2,
                 force_fp32=(not self.disable_force32),
-                selective_scan_backend="mamba",
                 scan_force_torch=True,
             ),
             v02=partial(
                 self.forward_corev2,
                 force_fp32=(not self.disable_force32),
-                selective_scan_backend="mamba",
             ),
             v03=partial(
                 self.forward_corev2,
                 force_fp32=(not self.disable_force32),
-                selective_scan_backend="oflex",
             ),
             v04=partial(self.forward_corev2, force_fp32=False),
             v05=partial(self.forward_corev2, force_fp32=False, no_einsum=True),
@@ -973,11 +1018,8 @@ class SS2Dv2(nn.Module):
             v2=partial(
                 self.forward_corev2,
                 force_fp32=(not self.disable_force32),
-                selective_scan_backend="core",
             ),
-            v3=partial(
-                self.forward_corev2, force_fp32=False, selective_scan_backend="oflex"
-            ),
+            v3=partial(self.forward_corev2, force_fp32=False),
         )
         self.forward_core = FORWARD_TYPES.get(forward_type, None)
 
@@ -1052,12 +1094,10 @@ class SS2Dv2(nn.Module):
         force_fp32=False,
         ssoflex=True,
         no_einsum=False,
-        selective_scan_backend=None,
         scan_mode="cross2d",
         scan_force_torch=False,
         **kwargs,
     ):
-        assert selective_scan_backend in [None, "oflex", "mamba", "torch"]
         _scan_mode = (
             dict(cross2d=0, unidi=1, bidi=2, cascade2d=-1).get(scan_mode, None)
             if isinstance(scan_mode, str)
@@ -1080,16 +1120,7 @@ class SS2Dv2(nn.Module):
             u, delta, A, B, C, D=None, delta_bias=None, delta_softplus=True
         ):
             return selective_scan_fn(
-                u,
-                delta,
-                A,
-                B,
-                C,
-                D,
-                delta_bias,
-                delta_softplus,
-                ssoflex,
-                backend=selective_scan_backend,
+                u, delta, A, B, C, D, delta_bias, delta_softplus, ssoflex
             )
 
         if _scan_mode == -1:

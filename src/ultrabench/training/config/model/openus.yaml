@@ -1,3 +1,11 @@
 _target_: ultrabench.models.openus.openus_backbone.OpenUSBackbone
 checkpoint_path: ${system.checkpoint_dir}/openus/openus_cpt0150.pth
 output_intermediate_features: true
+# Local HF Kernels build of the selective scan kernel, tried first. May be a
+# kernel repository root, its build/ subdirectory, or a single build variant
+# directory. Falls back to the Hub, then to a pure-PyTorch scan. Override per
+# machine, e.g.
+# model.selective_scan_kernel_path=/project/hf-kernels/kernels--kernels-community--mamba-ssm/snapshots/<sha>
+selective_scan_kernel_path: null
+selective_scan_kernel_repo_id: kernels-community/mamba-ssm
+selective_scan_kernel_version: 1

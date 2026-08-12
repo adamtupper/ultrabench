@@ -11,7 +11,7 @@ sudo apt-get update && sudo apt-get install -y unrar nvtop
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # Install the package
-uv sync
+uv sync --all-groups
 
 # Setup pre-commit hooks
 source .venv/bin/activate

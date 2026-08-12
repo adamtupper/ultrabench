@@ -46,6 +46,7 @@ read -r SEED METHOD TASK <<< "${combos[$SLURM_ARRAY_TASK_ID]}"
 CHECKPOINT_DIR="$project/models/ultrabench"
 OUTPUT_DIR="$scratch/results/ultrabench"
 MODEL="openus"
+KERNEL_PATH="$project/hf-kernels/kernels--kernels-community--mamba-ssm/snapshots/a39ff24c08103278583f168091409653ada4c292/build/torch210-cxx11-cu126-x86_64-linux"
 HEAD="segformer"
 BATCH_SIZE=16
 ACCUM_GRAD=2
@@ -57,6 +58,7 @@ python ultrabench2/src/ultrabench/training/main_launch.py \
     system.data_loader_workers=${SLURM_CPUS_PER_TASK} \
     system.enable_progress_bar=false \
     model=${MODEL} \
+    model.selective_scan_kernel_path=${KERNEL_PATH} \
     head=${HEAD} \
     task=${TASK} \
     mode=${METHOD} \
