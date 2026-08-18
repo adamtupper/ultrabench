@@ -11,13 +11,20 @@ The PSFHS dataset is a dataset for fetal head and pubic symphysis segmentation w
 
 ## Splits
 
-The original dataset has been divided into `train` and `test` splits using a stratified 80:20 split:
+The original dataset has been divided into `train` and `test` splits:
 
-- `train`: 80% of the images in their original 256 x 256 px resolution.
-- `test`: The remaining 20% of images in their original 256 x 256 px resolution.
-- `test.256`: The remaining 20% of images in their original 256 x 256 px resolution.
+- `train`: 1,000 images in their original 256 x 256 px resolution.
+- `test`: The remaining 358 images in their original 256 x 256 px resolution.
+- `test.256`: The same 358 images in their original 256 x 256 px resolution.
 
 Due to the lack of patient identifiers, there may be some patient overlap between the `train` and `test` splits.
+
+## Revisions
+
+The dataset is versioned with Git tags on the Hugging Face Hub. Pin a revision to keep an experiment reproducible:
+
+- `0.2`: The `train` split is capped at 1,000 images. The 86 images that no longer fit are assigned to the `test` split, which grows from 272 to 358 images.
+- `0.1`: The original 80:20 split of 1,086 training and 272 test images.
 
 ## Features
 
@@ -43,6 +50,6 @@ The easiest way to use this dataset is with [Hugging Face Datasets library](http
 ```python
 from datasets import load_dataset
 
-train_data = datasets.load_dataset("UltraBench/PSFHS", split="train")
-test_data = datasets.load_dataset("UltraBench/PSFHS", split="test")
+train_data = datasets.load_dataset("UltraBench/PSFHS", revision="0.2", split="train")
+test_data = datasets.load_dataset("UltraBench/PSFHS", revision="0.2", split="test.256")
 ```

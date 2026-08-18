@@ -1,11 +1,17 @@
 """Prepare the training and test sets for the TN3K dataset.
 
 The dataset uses the original train and test splits provided with the
-dataset (2,879 training and 614 test images).
+dataset (2,879 training and 614 test images). The training split is then
+subsampled to a maximum of 1000 images. The images are removed from the
+largest classes first, which makes the class distribution more uniform
+and preserves the rarer malignant nodules. The removed images are
+discarded rather than moved to the test split, since the images lack
+patient identifiers and moving them could introduce patient overlap
+between the splits.
 
 The resulting dataset has three splits:
 
-    - train: 2,879 images in their original sizes.
+    - train: up to 1000 images in their original sizes.
     - test: 614 images in their original sizes.
     - test.{size}: same examples as test, resized so the longest edge
       measures {size} px and then zero-padded to {size} x {size} px.
@@ -50,11 +56,14 @@ from tqdm.auto import tqdm
 from typing_extensions import Annotated
 
 from .utils import (
+    DATASET_REVISION,
     generate_classification_ground_truth_from_records,
     generate_segmentation_ground_truth_from_records,
     resize_and_pad,
     save_version_info,
+    subsample_balanced_by_class,
     to_3_channel,
+    verify_revision_unpublished,
 )
 
 __version__ = version("ultrabench")
@@ -174,12 +183,13 @@ def process_examples(
     return records
 
 
-def verify_args(raw_data_dir: str, output_dir: str) -> None:
+def verify_args(raw_data_dir: str, output_dir: str, publish: bool = False) -> None:
     """Verify the command line arguments.
 
     Args:
         raw_data_dir: The path to the raw data directory.
         output_dir: The path to the output directory.
+        publish: Whether the dataset will be published to the Hugging Face Hub.
 
     Raises:
         AssertionError: If any argument is invalid.
@@ -189,6 +199,9 @@ def verify_args(raw_data_dir: str, output_dir: str) -> None:
     assert not os.path.exists(os.path.join(output_dir, OUTPUT_NAME)), (
         "A version of the TN3K dataset already exists in output_dir"
     )
+
+    if publish:
+        verify_revision_unpublished(OUTPUT_NAME)
 
 
 def process_tn3k(
@@ -212,13 +225,16 @@ def process_tn3k(
         size: The height and width of the resized test images in pixels.
         publish: Whether to publish the dataset to the Hugging Face Hub.
     """
-    verify_args(raw_data_dir, output_dir)
+    verify_args(raw_data_dir, output_dir, publish)
     dataset_dir = os.path.join(raw_data_dir, "tn3k")
 
     trainval_df = collect_examples(dataset_dir, "trainval")
     test_df = collect_examples(dataset_dir, "test")
 
+    trainval_df = subsample_balanced_by_class(trainval_df, label_col="label")
+
     print(f"Train examples: {len(trainval_df)}, Test examples: {len(test_df)}")
+    print(f"Train labels: {trainval_df['label'].value_counts().to_dict()}")
 
     train_records = process_examples(dataset_dir, "trainval", trainval_df)
     test_records = process_examples(dataset_dir, "test", test_df)
@@ -253,7 +269,7 @@ def process_tn3k(
     if publish:
         dataset.push_to_hub(
             OUTPUT_NAME,
-            commit_message=f"Update the dataset to Version {__version__}.",
+            commit_message=f"Update the dataset to revision {DATASET_REVISION}.",
             private=True,
         )
 
@@ -272,5 +288,7 @@ def process_tn3k(
             repo_id=OUTPUT_NAME,
             repo_type="dataset",
             operations=operations,
-            commit_message=f"Update ground truth CSV files for Version {__version__}.",
+            commit_message=(
+                f"Update ground truth CSV files for revision {DATASET_REVISION}."
+            ),
         )

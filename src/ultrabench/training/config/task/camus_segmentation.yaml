@@ -1,5 +1,6 @@
 dataset: UltraBench/CAMUS
-subset: null
+subset: segmentation
+revision: "0.2"
 
 type: segmentation
 input: image

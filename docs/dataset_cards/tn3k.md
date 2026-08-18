@@ -10,13 +10,22 @@ TN3K ([GitHub](https://github.com/haifangong/TRFE-Net-for-thyroid-nodule-segment
 
 ## Splits
 
-The dataset is split according to the original `train` and `test` splits:
+The dataset is split according to the original `train` and `test` splits, with the `train` split subsampled to a maximum of 1,000 images:
 
-- `train`: 2,879 images in their original sizes.
+- `train`: 1,000 of the original 2,879 images, in their original sizes.
 - `test`: 614 images in their original sizes.
 - `test.256`: The same images and masks as the `test` split, but resized such that the longest edge measures 256 px and zero-padded (if needed) so that the final image measured 256 x 256 px.
 
+Images are removed from the largest classes first, which makes the class distribution more uniform and keeps the rarer malignant nodules. The original training split holds 1,905 benign and 974 malignant nodules; the capped split holds 500 of each. The removed images are discarded rather than moved to the `test` split, because the images lack patient identifiers and moving them could introduce patient overlap between the splits. The `test` split is therefore unchanged from the original.
+
 There is no patient overlap between the train and test sets. However, since the images lack patient identifiers, any further splits (e.g., training into train/validation) cannot guarantee that there is no overlap.
+
+## Revisions
+
+The dataset is versioned with Git tags on the Hugging Face Hub. Pin a revision to keep an experiment reproducible:
+
+- `0.2`: The `train` split is subsampled to 1,000 images (500 benign and 500 malignant). The `test` split is unchanged.
+- `0.1`: The original 2,879 training images (1,905 benign and 974 malignant).
 
 ## Features
 
@@ -44,6 +53,6 @@ The easiest way to use this dataset is with [Hugging Face Datasets library](http
 ```python
 from datasets import load_dataset
 
-train_data = datasets.load_dataset("UltraBench/TN3K", split="train")
-test_data = datasets.load_dataset("UltraBench/TN3K", split="test.256")
+train_data = datasets.load_dataset("UltraBench/TN3K", revision="0.2", split="train")
+test_data = datasets.load_dataset("UltraBench/TN3K", revision="0.2", split="test.256")
 ```

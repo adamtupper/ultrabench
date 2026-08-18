@@ -48,10 +48,12 @@ class UltraBenchDataModule(pl.LightningDataModule):
         filter_by: str | None,
         batch_size: int,
         num_workers: int,
+        revision: str | None = None,
     ):
         super().__init__()
         self.path = path
         self.subset = subset
+        self.revision = revision
         self.input_key = input_key
         self.target_key = target_key
         self.train_val_split = train_val_split
@@ -69,6 +71,7 @@ class UltraBenchDataModule(pl.LightningDataModule):
         self.train_dataset, self.val_dataset, self.test_dataset = get_splits(
             path=self.path,
             subset=self.subset,
+            revision=self.revision,
             input_key=self.input_key,
             target_key=self.target_key,
             train_transform=self.train_transform,
@@ -563,6 +566,7 @@ class DownstreamPipeline:
         datamodule = UltraBenchDataModule(
             path=cfg.task.dataset,  # ty:ignore[unresolved-attribute]
             subset=cfg.task.subset,  # ty:ignore[unresolved-attribute]
+            revision=cfg.task.revision,  # ty:ignore[unresolved-attribute]
             input_key=cfg.task.input,  # ty:ignore[unresolved-attribute]
             target_key=cfg.task.target,  # ty:ignore[unresolved-attribute]
             image_size=image_size,

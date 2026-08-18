@@ -63,6 +63,7 @@ def get_splits(
     group_by: str | None = None,
     filter_by: str | None = None,
     subset: str | None = None,
+    revision: str | None = None,
 ) -> tuple[Dataset, Dataset, Dataset]:
     """Get the train, val and test splits for a Hugging Face dataset.
 
@@ -87,11 +88,15 @@ def get_splits(
         group_by: Optional column to to group by for train/val
             splitting.
         subset: Optional subset/configuration of the dataset to load.
+        revision: Optional Git revision (branch, tag or commit) of the
+            dataset to load. Defaults to the latest revision.
 
     Returns:
         The train, val and test splits.
     """
-    train_val_data = datasets.load_dataset(path, name=subset, split="train")
+    train_val_data = datasets.load_dataset(
+        path, name=subset, split="train", revision=revision
+    )
 
     if filter_by is not None:
         train_val_data = train_val_data.filter(lambda x: x[filter_by] is not None)
@@ -102,7 +107,9 @@ def get_splits(
         stratify_by=stratify_by,
         group_by=group_by,
     )
-    test_data = datasets.load_dataset(path, name=subset, split="test.256")
+    test_data = datasets.load_dataset(
+        path, name=subset, split="test.256", revision=revision
+    )
 
     train_data = train_data.rename_columns(
         {

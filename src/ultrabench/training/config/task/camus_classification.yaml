@@ -1,5 +1,6 @@
 dataset: UltraBench/CAMUS
-subset: null
+subset: classification
+revision: "0.2"
 
 type: classification
 input: image

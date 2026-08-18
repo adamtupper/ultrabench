@@ -9,11 +9,20 @@ The BUS-BRA dataset ([Zenodo](https://zenodo.org/records/8231412)) consists 1,87
 
 ## Splits
 
-The original dataset has been divided by patient into `train` and `test` splits using a 80:20 split:
+The original dataset has been divided by patient into `train` and `test` splits:
 
-- `train`: 80% of the patients and their images in their original sizes.
-- `test`: The remaining 20% of patients and their images in their original sizes.
+- `train`: 1,000 images from 574 patients, in their original sizes.
+- `test`: The remaining 875 images from 490 patients, in their original sizes.
 - `test.256`: The same images and masks as the `test` split, but resized such that the longest edge measures 256 px and zero-padded (if needed) so that the final image measured 256 x 256 px.
+
+There is no patient overlap between the `train` and `test` splits.
+
+## Revisions
+
+The dataset is versioned with Git tags on the Hugging Face Hub. Pin a revision to keep an experiment reproducible:
+
+- `0.2`: The `train` split is capped at 1,000 images from 574 patients. Whole patients are moved into the `test` split until the cap is met, so the `test` split grows from 375 to 875 images.
+- `0.1`: The original 80:20 split by patient, with 1,500 training and 375 test images.
 
 ## Features
 
@@ -48,6 +57,6 @@ The easiest way to use this dataset is with [Hugging Face Datasets library](http
 ```python
 from datasets import load_dataset
 
-train_data = datasets.load_dataset("UltraBench/BUS-BRA", split="train")
-test_data = datasets.load_dataset("UltraBench/BUS-BRA", split="test.256")
+train_data = datasets.load_dataset("UltraBench/BUS-BRA", revision="0.2", split="train")
+test_data = datasets.load_dataset("UltraBench/BUS-BRA", revision="0.2", split="test.256")
 ```

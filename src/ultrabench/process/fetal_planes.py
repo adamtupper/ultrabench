@@ -6,12 +6,17 @@ into two subsets:
     - fetal: all images, labelled by fetal plane (6 classes).
     - fetal_brain: brain images only, labelled by brain plane (4 classes).
 
-The original train/test split is preserved for both subsets.
+The original train/test split is preserved for both subsets. Each
+training split is then capped at a maximum of 1000 examples by moving
+whole patients into the corresponding test split. The two subsets are
+capped independently, so a patient may be in the training split of one
+subset and the test split of the other. Each subset remains split by
+patient internally.
 
 Each subset produces three splits:
 
-    - train: original-size images.
-    - test: original-size images.
+    - train: 1000 original-size images.
+    - test: the remaining patients, original-size images.
     - test.{size}: same examples as test, resized so the longest edge measures
       {size} px and then zero-padded to {size} x {size} px.
 
@@ -68,10 +73,13 @@ from tqdm.auto import tqdm
 from typing_extensions import Annotated
 
 from .utils import (
+    DATASET_REVISION,
+    cap_train_split_by_patient,
     generate_classification_ground_truth_from_records,
     resize_and_pad,
     save_version_info,
     to_3_channel,
+    verify_revision_unpublished,
 )
 
 __version__ = version("ultrabench")
@@ -298,12 +306,14 @@ def _make_generator(
     return generator
 
 
-def verify_args(raw_data_dir: str, output_dir: str) -> None:
+def verify_args(raw_data_dir: str, output_dir: str, publish: bool = False) -> None:
     """Verify command-line arguments before processing begins.
 
     Args:
         raw_data_dir: Path to the raw dataset directory.
         output_dir: Path to the output directory.
+        publish: Whether the dataset will be published to the Hugging
+            Face Hub.
 
     Raises:
         AssertionError: If any argument is invalid or outputs already exist.
@@ -316,6 +326,9 @@ def verify_args(raw_data_dir: str, output_dir: str) -> None:
     assert not os.path.exists(os.path.join(output_dir, OUTPUT_NAME, "fetal_brain")), (
         "A fetal_brain subset already exists in output_dir"
     )
+
+    if publish:
+        verify_revision_unpublished(OUTPUT_NAME)
 
 
 def process_fetal_planes(
@@ -339,7 +352,7 @@ def process_fetal_planes(
         size: Height and width of resized test images in pixels.
         publish: Whether to publish the dataset to the HF Hub.
     """
-    verify_args(raw_data_dir, output_dir)
+    verify_args(raw_data_dir, output_dir, publish)
 
     output_path = Path(output_dir) / OUTPUT_NAME
     output_path.mkdir(parents=True, exist_ok=True)
@@ -349,6 +362,26 @@ def process_fetal_planes(
     test_df = df[df["train"] == 0].reset_index(drop=True)
     brain_train_df = train_df[train_df["Plane"] == "Fetal brain"].reset_index(drop=True)
     brain_test_df = test_df[test_df["Plane"] == "Fetal brain"].reset_index(drop=True)
+
+    # The two subsets are capped independently so that each gets the full
+    # training budget. Both remain split by patient internally.
+    train_df, test_df = cap_train_split_by_patient(
+        train_df, test_df, patient_col="Patient_num"
+    )
+    brain_train_df, brain_test_df = cap_train_split_by_patient(
+        brain_train_df, brain_test_df, patient_col="Patient_num"
+    )
+
+    for name, split_df in [
+        ("fetal train", train_df),
+        ("fetal test", test_df),
+        ("fetal_brain train", brain_train_df),
+        ("fetal_brain test", brain_test_df),
+    ]:
+        print(
+            f"{name}: {len(split_df)} examples from "
+            f"{split_df['Patient_num'].nunique()} patients"
+        )
 
     fetal_dataset = DatasetDict(
         {
@@ -437,22 +470,21 @@ def process_fetal_planes(
         fetal_brain_gt_path,
     )
 
-    print(f"fetal train: {len(train_df)}, test: {len(test_df)}")
-    print(f"fetal_brain train: {len(brain_train_df)}, test: {len(brain_test_df)}")
-
     save_version_info(str(output_path), __version__)
 
     if publish:
         fetal_dataset.push_to_hub(
             OUTPUT_NAME,
             config_name="fetal",
-            commit_message=f"Update the fetal subset to Version {__version__}.",
+            commit_message=(f"Update the fetal subset to revision {DATASET_REVISION}."),
             private=True,
         )
         fetal_brain_dataset.push_to_hub(
             OUTPUT_NAME,
             config_name="fetal_brain",
-            commit_message=f"Update the fetal brain subset to Version {__version__}.",
+            commit_message=(
+                f"Update the fetal brain subset to revision {DATASET_REVISION}."
+            ),
             private=True,
         )
 
@@ -471,5 +503,7 @@ def process_fetal_planes(
             repo_id=OUTPUT_NAME,
             repo_type="dataset",
             operations=operations,
-            commit_message=f"Update ground truth CSV files for Version {__version__}.",
+            commit_message=(
+                f"Update ground truth CSV files for revision {DATASET_REVISION}."
+            ),
         )

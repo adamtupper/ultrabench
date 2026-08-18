@@ -74,7 +74,7 @@ from .utils import (
 
 __version__ = version("ultrabench")
 
-OUTPUT_NAME = "UltraBench/AUL-test"
+OUTPUT_NAME = "UltraBench/AUL"
 CLASS_TO_LABEL = {
     "Normal": 0,
     "Benign": 1,

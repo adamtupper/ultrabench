@@ -1,12 +1,19 @@
 """Prepare the training and test sets for the STMUS dataset.
 
 The dataset is split by patient into training and test data (80:20)
-to ensure there is no patient overlap between the splits.
+to ensure there is no patient overlap between the splits. The training
+split is then capped at a maximum of 1000 examples by moving whole
+patients into the test split.
+
+The subject IDs in the filenames are globally unique across the muscle
+and echogenicity directories, so grouping by subject ID keeps every
+image of a patient in the same split, even when the patient was scanned
+for more than one muscle.
 
 The resulting dataset has three splits:
 
-    - train: 80% of patients, original-size images.
-    - test: 20% of patients, original-size images.
+    - train: up to 1000 examples, original-size images.
+    - test: the remaining patients, original-size images.
     - test.{size}: same examples as test, resized so the longest edge
       measures {size} px and then zero-padded to {size} x {size} px.
 
@@ -54,10 +61,13 @@ from tqdm.auto import tqdm
 from typing_extensions import Annotated
 
 from .utils import (
+    DATASET_REVISION,
+    cap_train_split_by_patient,
     generate_segmentation_ground_truth_from_records,
     resize_and_pad,
     save_version_info,
     to_3_channel,
+    verify_revision_unpublished,
 )
 
 __version__ = version("ultrabench")
@@ -205,12 +215,14 @@ def _make_generator(
     return generator
 
 
-def verify_args(raw_data_dir: str, output_dir: str) -> None:
+def verify_args(raw_data_dir: str, output_dir: str, publish: bool = False) -> None:
     """Verify command-line arguments before processing begins.
 
     Args:
         raw_data_dir: Path to the raw STMUS download directory.
         output_dir: Path to the output directory.
+        publish: Whether the dataset will be published to the Hugging
+            Face Hub.
 
     Raises:
         AssertionError: If any argument is invalid or the output
@@ -221,6 +233,9 @@ def verify_args(raw_data_dir: str, output_dir: str) -> None:
     assert not os.path.exists(os.path.join(output_dir, OUTPUT_NAME)), (
         "A version of the STMUS dataset already exists in output_dir"
     )
+
+    if publish:
+        verify_revision_unpublished(OUTPUT_NAME)
 
 
 def process_stmus(
@@ -248,7 +263,7 @@ def process_stmus(
         size: Height and width of resized test images in pixels.
         publish: Whether to publish the dataset to the HF Hub.
     """
-    verify_args(raw_data_dir, output_dir)
+    verify_args(raw_data_dir, output_dir, publish)
 
     dataset_dir = os.path.join(raw_data_dir, "Polito-Radboud-DeepLearningUS")
     df = collect_examples(dataset_dir)
@@ -258,7 +273,13 @@ def process_stmus(
     train_df = df.iloc[train_idx].reset_index(drop=True)
     test_df = df.iloc[test_idx].reset_index(drop=True)
 
-    print(f"Train examples: {len(train_df)}, Test examples: {len(test_df)}")
+    train_df, test_df = cap_train_split_by_patient(train_df, test_df)
+
+    print(
+        f"Train examples: {len(train_df)} from {train_df['patient'].nunique()} "
+        f"patients, Test examples: {len(test_df)} from "
+        f"{test_df['patient'].nunique()} patients"
+    )
 
     dataset = DatasetDict(
         {
@@ -305,7 +326,7 @@ def process_stmus(
     if publish:
         dataset.push_to_hub(
             OUTPUT_NAME,
-            commit_message=f"Update the dataset to Version {__version__}.",
+            commit_message=f"Update the dataset to revision {DATASET_REVISION}.",
             private=True,
         )
 
@@ -321,6 +342,6 @@ def process_stmus(
             repo_type="dataset",
             operations=operations,
             commit_message=(
-                f"Update ground truth CSV files for Version {__version__}."
+                f"Update ground truth CSV files for revision {DATASET_REVISION}."
             ),
         )

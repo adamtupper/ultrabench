@@ -5,7 +5,7 @@
 #SBATCH --cpus-per-task=4
 #SBATCH --gpus=h100_2g.20gb:1
 #SBATCH --time=3:00:00
-#SBATCH --array=0-71%1
+#SBATCH --array=0-65%1
 #
 # Run downstream classification evaluation for USF-MAE. Launches
 # individual jobs for each task, evaluation method, and seed combo.
@@ -20,7 +20,6 @@ TASKS=(
     aul_mass_classification
     busbra_histology_classification
     busbra_pathology_classification
-    butterfly_classification
     camus_classification
     covid_blues_classification
     fetal_planes_brain_plane_classification

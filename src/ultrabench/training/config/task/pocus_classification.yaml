@@ -1,5 +1,6 @@
 dataset: UltraBench/POCUS
 subset: null
+revision: "0.1"
 
 type: classification
 input: image

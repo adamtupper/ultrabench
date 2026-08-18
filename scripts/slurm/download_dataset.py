@@ -3,6 +3,7 @@
 Usage:
     python download_dataset.py
         --name <dataset_name>
+        --revision <revision>
         --cache_dir <cache_dir>
 """
 
@@ -28,6 +29,13 @@ def parse_args() -> argparse.Namespace:
         help="The configuration of the dataset to download. Defaults to None.",
     )
     parser.add_argument(
+        "--revision",
+        type=str,
+        default=None,
+        help="The revision (branch, tag or commit) of the dataset to "
+        "download. Defaults to the latest revision.",
+    )
+    parser.add_argument(
         "--cache_dir",
         type=str,
         default=None,
@@ -39,7 +47,12 @@ def parse_args() -> argparse.Namespace:
 
 def main():
     args = parse_args()
-    _ = datasets.load_dataset(args.name, name=args.config, cache_dir=args.cache_dir)
+    _ = datasets.load_dataset(
+        args.name,
+        name=args.config,
+        revision=args.revision,
+        cache_dir=args.cache_dir,
+    )
 
 
 if __name__ == "__main__":

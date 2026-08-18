@@ -1,5 +1,6 @@
 dataset: UltraBench/STMUS
 subset: null
+revision: "0.2"
 
 type: segmentation
 input: image

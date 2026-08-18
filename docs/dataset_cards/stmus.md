@@ -12,9 +12,18 @@ STMUS ([Mendeley Data](https://data.mendeley.com/datasets/3jykz7wz8d/1)) is a da
 
 The original dataset has been divided into `train` and `test` splits by patient:
 
-- `train`: 80% of the patients with the images in their original resolution.
-- `test`: The remaining 20% of patients with the images in their original resolution.
+- `train`: 1,000 images from 322 patients, in their original resolution.
+- `test`: The remaining 7,169 images from 2,331 patients, in their original resolution.
 - `test.256`: The same images and masks as the `test` split, but resized such that the longest edge measures 256 px and zero-padded (if needed) so that the final image measures 256 x 256 px.
+
+There is no patient overlap between the `train` and `test` splits.
+
+## Revisions
+
+The dataset is versioned with Git tags on the Hugging Face Hub. Pin a revision to keep an experiment reproducible:
+
+- `0.2`: The `train` split is capped at 1,000 images (322 of the 2,122 training patients). Whole patients are moved into the `test` split until the cap is met, so the `test` split grows from 1,636 to 7,169 images.
+- `0.1`: The original 80:20 split by patient, with 6,533 training and 1,636 test images.
 
 ## Features
 
@@ -45,6 +54,6 @@ The easiest way to use this dataset is with [Hugging Face Datasets library](http
 ```python
 from datasets import load_dataset
 
-train_data = datasets.load_dataset("UltraBench/STMUS", split="train")
-test_data = datasets.load_dataset("UltraBench/STMUS", split="test")
+train_data = datasets.load_dataset("UltraBench/STMUS", revision="0.2", split="train")
+test_data = datasets.load_dataset("UltraBench/STMUS", revision="0.2", split="test.256")
 ```

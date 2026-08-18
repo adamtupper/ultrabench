@@ -1,8 +1,9 @@
-"""Split the PSFHS dataset into training and test sets using an 8:2
-split. The dataset consists of 1358 images from 1124 patients.
-Unfortunately, there is no metadata to provide additional information
-about the patients or the images. Therefore, we cannot ensure that there
-is no patient overlap between the splits.
+"""Split the PSFHS dataset into training and test sets with 1000 training
+examples. The remaining examples are assigned to the test set. The dataset
+consists of 1358 images from 1124 patients. Unfortunately, there is no metadata
+to provide additional information about the patients or the images.
+Therefore, we cannot ensure that there is no patient overlap between the
+splits.
 
 The resulting dataset has three splits:
 
@@ -52,10 +53,13 @@ from sklearn.model_selection import train_test_split
 from tqdm.auto import tqdm
 
 from .utils import (
+    DATASET_REVISION,
+    MAX_TRAIN_SAMPLES,
     generate_segmentation_ground_truth_from_records,
     resize_and_pad,
     save_version_info,
     to_3_channel,
+    verify_revision_unpublished,
 )
 
 __version__ = version("ultrabench")
@@ -163,18 +167,22 @@ def _process_psfhs_example(image_path: str, size: int | None = None) -> dict:
     }
 
 
-def verify_args(raw_data_dir: str, output_dir: str) -> None:
+def verify_args(raw_data_dir: str, output_dir: str, publish: bool = False) -> None:
     """Verify the command line arguments.
 
     Args:
         raw_data_dir: The path to the raw data directory.
         output_dir: The path to the output directory.
+        publish: Whether the dataset will be published to the Hugging Face Hub.
     """
     assert os.path.isdir(raw_data_dir), "raw_data_dir must be an existing directory"
     assert os.path.isdir(output_dir), "output_dir must be an existing directory"
     assert not os.path.exists(os.path.join(output_dir, OUTPUT_NAME)), (
         "A version of the PSFHS dataset already exists"
     )
+
+    if publish:
+        verify_revision_unpublished(OUTPUT_NAME)
 
 
 def process_psfhs(
@@ -198,7 +206,7 @@ def process_psfhs(
         size: The height and width of the resized test images in pixels.
         publish: Whether to publish the dataset to the Hugging Face Hub.
     """
-    verify_args(raw_data_dir, output_dir)
+    verify_args(raw_data_dir, output_dir, publish)
 
     psfhs_dir = os.path.join(raw_data_dir, "PSFHS")
     image_paths = glob.glob(os.path.join(psfhs_dir, "image_mha", "*.mha"))
@@ -207,7 +215,10 @@ def process_psfhs(
     examples = pd.DataFrame({"image_path": image_paths, "filename": filenames})
 
     train_val_examples, test_examples = train_test_split(
-        examples, test_size=0.2, random_state=42, shuffle=True
+        examples,
+        train_size=min(MAX_TRAIN_SAMPLES, int(0.8 * len(examples))),
+        random_state=42,
+        shuffle=True,
     )
 
     train_records = [
@@ -258,7 +269,7 @@ def process_psfhs(
     if publish:
         dataset.push_to_hub(
             OUTPUT_NAME,
-            commit_message=f"Update the dataset to Version {__version__}.",
+            commit_message=f"Update the dataset to revision {DATASET_REVISION}.",
             private=True,
         )
 
@@ -275,5 +286,7 @@ def process_psfhs(
             repo_id=OUTPUT_NAME,
             repo_type="dataset",
             operations=operations,
-            commit_message=f"Update ground truth CSV files for Version {__version__}.",
+            commit_message=(
+                f"Update ground truth CSV files for revision {DATASET_REVISION}."
+            ),
         )

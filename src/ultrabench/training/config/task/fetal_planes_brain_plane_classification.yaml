@@ -1,5 +1,6 @@
 dataset: UltraBench/FetalPlanes
 subset: fetal_brain
+revision: "0.2"
 
 type: classification
 input: image

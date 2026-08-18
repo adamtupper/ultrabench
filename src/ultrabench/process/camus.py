@@ -4,7 +4,18 @@ test splits provided with the dataset.
 The images and masks are extracted from the NIfTI files. The
 corresponding metadata for each sequence is in the ".cfg" files.
 
-The resulting dataset has three splits:
+The dataset is organized into two subsets:
+
+    - classification: all frames. Image quality is a sequence-level
+      label and the training split holds fewer than 1000 sequences, so
+      the frames are not subsampled.
+    - segmentation: the training split is subsampled to a maximum of
+      1000 frames, drawn uniformly at random from within each (patient,
+      view) sequence. Every training patient and both views are
+      retained, and the discarded frames are not moved to the test
+      split.
+
+Both subsets share the same test splits. Each subset has three splits:
 
     - train: original-size images (original train + validation patients).
     - test: original-size images (original test patients).
@@ -29,11 +40,11 @@ Each example has the following features:
     - mask: Single-channel multi-class cardiac structure mask.
     - scan_mask: Single-channel binary scan mask.
 
-Two ground-truth CSV files are also created for the test split for
-use by the evaluation layer:
+A ground-truth CSV file is also created for each subset's test split
+for use by the evaluation layer:
 
-    - ground_truth_classification.csv
-    - ground_truth_segmentation.csv
+    - classification/test.{size}/ground_truth_classification.csv
+    - segmentation/test.{size}/ground_truth_segmentation.csv
 
 Usage:
     ultrabench process camus RAW_DATA_DIR OUTPUT_DIR
@@ -64,11 +75,14 @@ from tqdm.auto import tqdm
 from typing_extensions import Annotated
 
 from .utils import (
+    DATASET_REVISION,
     generate_classification_ground_truth_from_records,
     generate_segmentation_ground_truth_from_records,
     resize_and_pad,
     save_version_info,
+    subsample_by_group,
     to_3_channel,
+    verify_revision_unpublished,
 )
 
 __version__ = version("ultrabench")
@@ -295,18 +309,22 @@ def _make_train_generator(train_df: pd.DataFrame, raw_data_dir: str):
     return generator
 
 
-def verify_args(raw_data_dir: str, output_dir: str) -> None:
+def verify_args(raw_data_dir: str, output_dir: str, publish: bool = False) -> None:
     """Verify the command line arguments.
 
     Args:
         raw_data_dir: The path to the raw data directory.
         output_dir: The path to the output directory.
+        publish: Whether the dataset will be published to the Hugging Face Hub.
     """
     assert os.path.isdir(raw_data_dir), "raw_data_dir must be an existing directory"
     assert os.path.isdir(output_dir), "output_dir must be an existing directory"
     assert not os.path.exists(os.path.join(output_dir, OUTPUT_NAME)), (
         "A version of the CAMUS dataset already exists"
     )
+
+    if publish:
+        verify_revision_unpublished(OUTPUT_NAME)
 
 
 def process_camus(
@@ -330,7 +348,7 @@ def process_camus(
         size: The height and width of the resized test images in pixels.
         publish: Whether to publish the dataset to the Hugging Face Hub.
     """
-    verify_args(raw_data_dir, output_dir)
+    verify_args(raw_data_dir, output_dir, publish)
     raw_data_dir = os.path.join(raw_data_dir, "CAMUS_public")
 
     metadata = extract_metadata(raw_data_dir)
@@ -343,6 +361,20 @@ def process_camus(
     train_df = metadata[metadata["patient"].isin(train_patients)]
     test_df = metadata[metadata["patient"].isin(test_patients)]
 
+    # Image quality is a sequence-level label and there are fewer than 1000
+    # training sequences, so only the segmentation subset is subsampled.
+    segmentation_train_df = subsample_by_group(train_df, group_cols=["patient", "view"])
+
+    print(
+        f"classification train: {len(train_df)} frames from "
+        f"{train_df['patient'].nunique()} patients"
+    )
+    print(
+        f"segmentation train: {len(segmentation_train_df)} frames from "
+        f"{segmentation_train_df['patient'].nunique()} patients"
+    )
+    print(f"test: {len(test_df)} frames from {test_df['patient'].nunique()} patients")
+
     # Process test splits into lists (≈20% of data, fits in memory)
     test_records = []
     test_resized_records = []
@@ -353,61 +385,95 @@ def process_camus(
             _records_from_nifti(patient_id, view, group, raw_data_dir, size=size)
         )
 
-    dataset = DatasetDict(
+    # The two subsets share the same test splits.
+    test_dataset = Dataset.from_list(test_records, info=DATASET_INFO)
+    test_resized_dataset = Dataset.from_list(test_resized_records, info=DATASET_INFO)
+
+    classification_dataset = DatasetDict(
         {
             "train": Dataset.from_generator(
                 _make_train_generator(train_df, raw_data_dir),
                 features=DATASET_INFO.features,
             ),
-            "test": Dataset.from_list(test_records, info=DATASET_INFO),
-            f"test.{size}": Dataset.from_list(test_resized_records, info=DATASET_INFO),
+            "test": test_dataset,
+            f"test.{size}": test_resized_dataset,
+        }
+    )
+    segmentation_dataset = DatasetDict(
+        {
+            "train": Dataset.from_generator(
+                _make_train_generator(segmentation_train_df, raw_data_dir),
+                features=DATASET_INFO.features,
+            ),
+            "test": test_dataset,
+            f"test.{size}": test_resized_dataset,
         }
     )
 
     output_path = Path(output_dir) / OUTPUT_NAME
-    dataset.save_to_disk(str(output_path))
+    output_path.mkdir(parents=True, exist_ok=True)
+    classification_dataset.save_to_disk(str(output_path / "classification"))
+    segmentation_dataset.save_to_disk(str(output_path / "segmentation"))
 
+    classification_gt_path = (
+        output_path
+        / "classification"
+        / f"test.{size}"
+        / "ground_truth_classification.csv"
+    )
+    segmentation_gt_path = (
+        output_path / "segmentation" / f"test.{size}" / "ground_truth_segmentation.csv"
+    )
     generate_classification_ground_truth_from_records(
         [
             {"filename": r["filename"], "label": r["image_quality"]}
             for r in test_records
         ],
-        output_path / f"test.{size}" / "ground_truth_classification.csv",
+        classification_gt_path,
     )
     generate_segmentation_ground_truth_from_records(
         test_records,
         mask_key="mask",
         classes=[1, 2, 3],
-        output_path=output_path / f"test.{size}" / "ground_truth_segmentation.csv",
+        output_path=segmentation_gt_path,
     )
 
     save_version_info(str(output_path), __version__)
 
     if publish:
-        dataset.push_to_hub(
+        classification_dataset.push_to_hub(
             OUTPUT_NAME,
-            commit_message=f"Update the dataset to Version {__version__}.",
+            config_name="classification",
+            commit_message=(
+                f"Update the classification subset to revision {DATASET_REVISION}."
+            ),
+            private=True,
+        )
+        segmentation_dataset.push_to_hub(
+            OUTPUT_NAME,
+            config_name="segmentation",
+            commit_message=(
+                f"Update the segmentation subset to revision {DATASET_REVISION}."
+            ),
             private=True,
         )
 
         api = HfApi()
         operations = [
             CommitOperationAdd(
-                path_in_repo="test-ground-truth-classification.csv",
-                path_or_fileobj=output_path
-                / f"test.{size}"
-                / "ground_truth_classification.csv",
+                path_in_repo="classification-test-ground-truth-classification.csv",
+                path_or_fileobj=classification_gt_path,
             ),
             CommitOperationAdd(
-                path_in_repo=f"test.{size}-ground-truth-segmentation.csv",
-                path_or_fileobj=output_path
-                / f"test.{size}"
-                / "ground_truth_segmentation.csv",
+                path_in_repo=f"segmentation-test.{size}-ground-truth-segmentation.csv",
+                path_or_fileobj=segmentation_gt_path,
             ),
         ]
         api.create_commit(
             repo_id=OUTPUT_NAME,
             repo_type="dataset",
             operations=operations,
-            commit_message=f"Update ground truth CSV files for Version {__version__}.",
+            commit_message=(
+                f"Update ground truth CSV files for revision {DATASET_REVISION}."
+            ),
         )

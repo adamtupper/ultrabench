@@ -1,5 +1,6 @@
 dataset: UltraBench/GBCU
 subset: null
+revision: "0.2"
 
 type: classification
 input: image

@@ -11,19 +11,28 @@ Following the original dataset, there are two subsets for the dataset: `fetal` a
 
 ## Splits
 
-The dataset is split according to the original `train` and `test` splits.
+The dataset is split according to the original `train` and `test` splits, with each subset's `train` split capped at a maximum of 1,000 examples. Whole patients are moved from `train` into `test` until the cap is met, so each subset remains split by patient.
+
+The two subsets are capped independently, so each gets the full training budget. A patient may therefore be in the `train` split of one subset and the `test` split of the other.
 
 ### `fetal` Subset
 
-- `train`: 7,129 images from 896 patients in their original sizes.
-- `test`: 5,271 images from 896 patients in their original sizes.
+- `train`: 1,000 images from 115 patients in their original sizes.
+- `test`: 11,400 images from 1,677 patients in their original sizes.
 - `test.256`: The same images and masks as the `test` split, but resized such that the longest edge measures 256 px and zero-padded (if needed) so that the final image measures 256 x 256 px.
 
 ### `fetal_brain` Subset
 
-- `train`: 1,620 images from 536 patients in their original sizes.
-- `test`: 1,472 images from 546 patients in their original sizes.
+- `train`: 1,000 images from 341 patients in their original sizes.
+- `test`: 2,092 images from 741 patients in their original sizes.
 - `test.256`: The same images and masks as the `test` split, but resized such that the longest edge measures 256 px and zero-padded (if needed) so that the final image measures 256 x 256 px.
+
+## Revisions
+
+The dataset is versioned with Git tags on the Hugging Face Hub. Pin a revision to keep an experiment reproducible:
+
+- `0.2`: Each subset's `train` split is capped at 1,000 images, with the overflow patients moved into the corresponding `test` split.
+- `0.1`: The original splits (`fetal`: 7,129 train and 5,271 test images; `fetal_brain`: 1,620 train and 1,472 test images).
 
 ## Features
 
@@ -73,15 +82,17 @@ from datasets import load_dataset
 
 # Fetal plane classification
 train_data = datasets.load_dataset(
-    "UltraBench/FetalPlanes", name="fetal", split="train"
+    "UltraBench/FetalPlanes", name="fetal", revision="0.2", split="train"
 )
-test_data = datasets.load_dataset("UltraBench/FetalPlanes", name="fetal", split="test")
+test_data = datasets.load_dataset(
+    "UltraBench/FetalPlanes", name="fetal", revision="0.2", split="test.256"
+)
 
 # Fetal brain plane classification
 train_data = datasets.load_dataset(
-    "UltraBench/FetalPlanes", name="fetal_brain", split="train"
+    "UltraBench/FetalPlanes", name="fetal_brain", revision="0.2", split="train"
 )
 test_data = datasets.load_dataset(
-    "UltraBench/FetalPlanes", name="fetal_brain", split="test"
+    "UltraBench/FetalPlanes", name="fetal_brain", revision="0.2", split="test.256"
 )
 ```

@@ -1,5 +1,6 @@
 dataset: UltraBench/StanfordThyroid
 subset: null
+revision: "0.1"
 
 type: segmentation
 input: image

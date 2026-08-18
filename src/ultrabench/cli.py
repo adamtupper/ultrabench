@@ -1,3 +1,5 @@
+import warnings
+
 import typer
 
 from .download import (
@@ -28,6 +30,13 @@ from .process import (
     process_stanford_thyroid,
     process_stmus,
     process_tn3k,
+)
+
+# Filter scikit-image deprecation warnings. Must be migrated before 0.28.
+warnings.filterwarnings(
+    "ignore",
+    category=FutureWarning,
+    message=r".*(`min_size`|`area_threshold`|`binary_erosion`|`binary_dilation`).*",
 )
 
 app = typer.Typer(no_args_is_help=True)

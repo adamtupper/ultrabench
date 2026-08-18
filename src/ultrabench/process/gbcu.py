@@ -2,11 +2,16 @@
 predefined training and test data split.
 
 While patient information is not publicly available, there is no patient
-overlap between the training and test splits.
+overlap between the training and test splits. The training split is
+subsampled to 1000 images, removing images from the largest
+classes first so that the class distribution becomes more uniform. The
+removed images are discarded rather than moved to the test split, since
+the images lack patient identifiers and moving them could introduce
+patient overlap between the splits.
 
 The resulting dataset has three splits:
 
-    - train: original-size images.
+    - train: up to 1000 original-size images.
     - test: original-size images.
     - test.{size}: same examples as test, resized so the longest edge
       measures {size} px and then zero-padded to {size} x {size} px.
@@ -32,6 +37,7 @@ from importlib.metadata import version
 from pathlib import Path
 
 import numpy as np
+import pandas as pd
 import skimage
 import skimage.io as io
 import typer
@@ -49,10 +55,13 @@ from tqdm.auto import tqdm
 from typing_extensions import Annotated
 
 from .utils import (
+    DATASET_REVISION,
     generate_classification_ground_truth_from_records,
     resize_and_pad,
     save_version_info,
+    subsample_balanced_by_class,
     to_3_channel,
+    verify_revision_unpublished,
 )
 
 __version__ = version("ultrabench")
@@ -146,18 +155,22 @@ def _process_gbcu_example(
     }
 
 
-def verify_args(raw_data_dir: str, output_dir: str) -> None:
+def verify_args(raw_data_dir: str, output_dir: str, publish: bool = False) -> None:
     """Verify the command line arguments.
 
     Args:
         raw_data_dir: The path to the raw data directory.
         output_dir: The path to the output directory.
+        publish: Whether the dataset will be published to the Hugging Face Hub.
     """
     assert os.path.isdir(raw_data_dir), "raw_data_dir must be an existing directory"
     assert os.path.isdir(output_dir), "output_dir must be an existing directory"
     assert not os.path.exists(os.path.join(output_dir, OUTPUT_NAME)), (
         "A matching version of the GBCU dataset already exists"
     )
+
+    if publish:
+        verify_revision_unpublished(OUTPUT_NAME)
 
 
 def process_gbcu(
@@ -181,21 +194,31 @@ def process_gbcu(
         size: The height and width of the test images in pixels.
         publish: Whether to publish the dataset to the HF Hub.
     """
-    verify_args(raw_data_dir, output_dir)
+    verify_args(raw_data_dir, output_dir, publish)
 
     output_path = Path(output_dir) / OUTPUT_NAME
 
     with open(os.path.join(raw_data_dir, TRAIN_FILE), "r") as f:
         csv_reader = csv.reader(f, delimiter=",")
-        train_val_data = [(image, int(label)) for image, label in csv_reader]
+        train_val_df = pd.DataFrame(
+            [(image, int(label)) for image, label in csv_reader],
+            columns=["raw_filename", "label"],
+        )
 
     with open(os.path.join(raw_data_dir, TEST_FILE), "r") as f:
         csv_reader = csv.reader(f, delimiter=",")
         test_data = [(image, int(label)) for image, label in csv_reader]
 
+    train_val_df = subsample_balanced_by_class(train_val_df, label_col="label")
+    print(f"Train labels: {train_val_df['label'].value_counts().to_dict()}")
+
     train_records = [
-        _process_gbcu_example(filename, label, raw_data_dir)
-        for filename, label in tqdm(train_val_data, desc="Processing train split")
+        _process_gbcu_example(row["raw_filename"], int(row["label"]), raw_data_dir)
+        for _, row in tqdm(
+            train_val_df.iterrows(),
+            total=len(train_val_df),
+            desc="Processing train split",
+        )
     ]
     test_records = [
         _process_gbcu_example(filename, label, raw_data_dir)
@@ -229,7 +252,7 @@ def process_gbcu(
     if publish:
         dataset.push_to_hub(
             OUTPUT_NAME,
-            commit_message=f"Update the dataset to Version {__version__}.",
+            commit_message=f"Update the dataset to revision {DATASET_REVISION}.",
             private=True,
         )
 
@@ -246,5 +269,7 @@ def process_gbcu(
             repo_id=OUTPUT_NAME,
             repo_type="dataset",
             operations=operations,
-            commit_message=f"Update ground truth CSV files for Version {__version__}.",
+            commit_message=(
+                f"Update ground truth CSV files for revision {DATASET_REVISION}."
+            ),
         )

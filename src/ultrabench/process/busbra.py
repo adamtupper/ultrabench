@@ -1,12 +1,12 @@
 """Prepare the training and test sets for the BUS-BRA dataset.
 
-The dataset is split by patient into training and test data (80:20)
-to ensure there is no patient overlap between the splits.
+The dataset is split by patient into training and test data to ensure there is
+no patient overlap between the splits.
 
 The resulting dataset has three splits:
 
-    - train: 80% of patients, original-size images.
-    - test: 20% of patients, original-size images.
+    - train: 1000 examples, original-size images.
+    - test: the remaining patients, original-size images.
     - test.{size}: same examples as test, resized so the longest edge measures
       {size} px and then zero-padded to {size} x {size} px.
 
@@ -59,11 +59,14 @@ from tqdm.auto import tqdm
 from typing_extensions import Annotated
 
 from .utils import (
+    DATASET_REVISION,
+    cap_train_split_by_patient,
     generate_classification_ground_truth_from_records,
     generate_segmentation_ground_truth_from_records,
     resize_and_pad,
     save_version_info,
     to_3_channel,
+    verify_revision_unpublished,
 )
 
 __version__ = version("ultrabench")
@@ -217,12 +220,13 @@ def process_examples(
     return records
 
 
-def verify_args(raw_data_dir: str, output_dir: str) -> None:
+def verify_args(raw_data_dir: str, output_dir: str, publish: bool = False) -> None:
     """Verify the command line arguments.
 
     Args:
         raw_data_dir: The path to the raw data directory.
         output_dir: The path to the output directory.
+        publish: Whether the dataset will be published to the Hugging Face Hub.
 
     Raises:
         AssertionError: If any argument is invalid.
@@ -232,6 +236,9 @@ def verify_args(raw_data_dir: str, output_dir: str) -> None:
     assert not os.path.exists(os.path.join(output_dir, OUTPUT_NAME)), (
         "A version of the BUS-BRA dataset already exists in output_dir"
     )
+
+    if publish:
+        verify_revision_unpublished(OUTPUT_NAME)
 
 
 def process_busbra(
@@ -255,7 +262,7 @@ def process_busbra(
         size: The height and width of the resized test images in pixels.
         publish: Whether to publish the dataset to the Hugging Face Hub.
     """
-    verify_args(raw_data_dir, output_dir)
+    verify_args(raw_data_dir, output_dir, publish)
     raw_data_dir = os.path.join(raw_data_dir, "BUSBRA")
 
     df = collect_metadata(raw_data_dir)
@@ -265,7 +272,13 @@ def process_busbra(
     train_df = df.iloc[train_idx].reset_index(drop=True)
     test_df = df.iloc[test_idx].reset_index(drop=True)
 
-    print(f"Train examples: {len(train_df)}, Test examples: {len(test_df)}")
+    train_df, test_df = cap_train_split_by_patient(train_df, test_df)
+
+    print(
+        f"Train examples: {len(train_df)} from {train_df['patient'].nunique()} "
+        f"patients, Test examples: {len(test_df)} from "
+        f"{test_df['patient'].nunique()} patients"
+    )
 
     train_records = process_examples(raw_data_dir, train_df)
     test_records = process_examples(raw_data_dir, test_df)
@@ -307,7 +320,7 @@ def process_busbra(
     if publish:
         dataset.push_to_hub(
             OUTPUT_NAME,
-            commit_message=f"Update the dataset to Version {__version__}.",
+            commit_message=f"Update the dataset to revision {DATASET_REVISION}.",
             private=True,
         )
 
@@ -330,5 +343,7 @@ def process_busbra(
             repo_id=OUTPUT_NAME,
             repo_type="dataset",
             operations=operations,
-            commit_message=f"Update ground truth CSV files for Version {__version__}.",
+            commit_message=(
+                f"Update ground truth CSV files for revision {DATASET_REVISION}."
+            ),
         )

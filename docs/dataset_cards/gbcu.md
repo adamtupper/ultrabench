@@ -12,11 +12,20 @@ The GBCU dataset contains a total of 1,255 annotated abdominal ultrasound images
 
 ## Splits
 
-The dataset is split according to the original `train` and `test` splits:
+The dataset is split according to the original `train` and `test` splits, with the `train` split subsampled to a maximum of 1,000 images:
 
-- `train`: The original 1,133 training images in their original sizes.
+- `train`: 1,000 of the original 1,133 training images, in their original sizes.
 - `test`: The original 122 test images in their original sizes.
 - `test.256`: The same images and masks as the `test` split, but resized such that the longest edge measures 256 px and zero-padded (if needed) so that the final image measures 256 x 256 px.
+
+Images are removed from the largest classes first, which makes the class distribution more uniform and keeps the rarer malignant cases. The original training split holds 401 normal, 509 benign and 223 malignant images; the capped split holds 388 normal, 389 benign and all 223 malignant images. The removed images are discarded rather than moved to the `test` split, because the images lack patient identifiers and moving them could introduce patient overlap between the splits. The `test` split is therefore unchanged from the original.
+
+## Revisions
+
+The dataset is versioned with Git tags on the Hugging Face Hub. Pin a revision to keep an experiment reproducible:
+
+- `0.2`: The `train` split is subsampled to 1,000 images (388 normal, 389 benign and 223 malignant). The `test` split is unchanged.
+- `0.1`: The original 1,133 training images (401 normal, 509 benign and 223 malignant).
 
 ## Features
 
@@ -42,6 +51,6 @@ The easiest way to use this dataset is with [Hugging Face Datasets library](http
 ```python
 from datasets import load_dataset
 
-train_data = datasets.load_dataset("UltraBench/GBCU", split="train")
-test_data = datasets.load_dataset("UltraBench/GBCU", split="test")
+train_data = datasets.load_dataset("UltraBench/GBCU", revision="0.2", split="train")
+test_data = datasets.load_dataset("UltraBench/GBCU", revision="0.2", split="test.256")
 ```

@@ -1,5 +1,6 @@
 dataset: UltraBench/BUS-BRA
 subset: null
+revision: "0.2"
 
 type: classification
 input: image
