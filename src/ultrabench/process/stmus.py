@@ -5,10 +5,17 @@ to ensure there is no patient overlap between the splits. The training
 split is then capped at a maximum of 1000 examples by moving whole
 patients into the test split.
 
-The subject IDs in the filenames are globally unique across the muscle
-and echogenicity directories, so grouping by subject ID keeps every
-image of a patient in the same split, even when the patient was scanned
-for more than one muscle.
+The subject numbers in the filenames are local to each muscle and
+echogenicity directory. The same number denotes different people in
+different directories, and one person is numbered differently in each
+directory they appear in, so the numbers cannot be used to group images
+by patient. Patients are instead recovered by joining every image to the
+per-muscle ``characteristics.xlsx`` spreadsheets on (muscle,
+echogenicity, number) and grouping on the demographics recorded there,
+which are identical for a patient across directories. Two patients share
+demographics and are treated as one, so that their images cannot be
+split across the training and test data. This yields 1223 patients for
+the 8169 images.
 
 The resulting dataset has three splits:
 
@@ -25,9 +32,14 @@ Each example has the following features:
     - muscle: Muscle name (biceps brachii, gastrocnemius medialis, or
       tibialis anterior).
     - echogenicity: Echogenicity level (healthy or pathological).
+    - age: Patient age in years.
+    - height: Patient height in cm.
+    - weight: Patient weight in kg.
+    - sex: Patient sex (M or F).
     - image: 3-channel ultrasound image.
     - mask: Single-channel binary muscle segmentation mask
       (background=0, muscle=1).
+    - scan_mask: Single-channel binary ultrasound scan mask (all ones).
 
 A segmentation ground-truth CSV is also created for the test split
 for use by the evaluation layer:
@@ -61,7 +73,6 @@ from tqdm.auto import tqdm
 from typing_extensions import Annotated
 
 from .utils import (
-    DATASET_REVISION,
     cap_train_split_by_patient,
     generate_segmentation_ground_truth_from_records,
     resize_and_pad,
@@ -73,6 +84,14 @@ from .utils import (
 __version__ = version("ultrabench")
 
 OUTPUT_NAME = "UltraBench/STMUS"
+
+# STMUS is versioned independently of the shared process.utils revision
+# because its patient IDs changed after the other datasets were published.
+DATASET_REVISION = "0.3"
+
+CHARACTERISTICS_FILENAME = "characteristics.xlsx"
+
+DEMOGRAPHICS = ["age", "height", "weight", "sex"]
 
 MUSCLE_NAMES = {
     "BB": "biceps brachii",
@@ -108,6 +127,10 @@ DATASET_INFO = DatasetInfo(
             "patient": Value("string"),
             "muscle": Value("string"),
             "echogenicity": Value("string"),
+            "age": Value("float32"),
+            "height": Value("float32"),
+            "weight": Value("float32"),
+            "sex": Value("string"),
             "image": Image(),
             "mask": Image(),
             "scan_mask": Image(),
@@ -116,11 +139,93 @@ DATASET_INFO = DatasetInfo(
 )
 
 
+def load_characteristics(dataset_dir: str) -> pd.DataFrame:
+    """Load the subject characteristics recorded for each muscle.
+
+    Every muscle directory holds a spreadsheet with two side-by-side
+    blocks, healthy subjects in the first five columns and pathological
+    subjects in columns seven to eleven, each laid out as (Number, Age,
+    Length, Weight, Sex) beneath a two-row header. The blocks have
+    different lengths, so the shorter one is padded, and both are
+    followed by summary rows holding means, standard deviations and
+    totals. Rows whose subject number is not numeric are discarded,
+    which removes the padding and the summary rows alike.
+
+    Args:
+        dataset_dir: Path to the Polito-Radboud-DeepLearningUS
+            directory inside the raw download.
+
+    Returns:
+        A DataFrame with one row per subject entry containing the
+        columns ``muscle_code``, ``echogenicity``, ``number``, ``age``,
+        ``height``, ``weight``, and ``sex``.
+
+    Raises:
+        FileNotFoundError: If a muscle is missing its spreadsheet.
+    """
+    blocks = []
+    for muscle_code in MUSCLE_NAMES:
+        path = Path(dataset_dir) / muscle_code / CHARACTERISTICS_FILENAME
+        if not path.is_file():
+            raise FileNotFoundError(f"Missing subject characteristics: {path}")
+
+        sheet = pd.read_excel(path, header=None)
+        for echogenicity, first_column in [("healthy", 0), ("pathological", 6)]:
+            block = sheet.iloc[2:, first_column : first_column + 5].copy()
+            block.columns = ["number", *DEMOGRAPHICS]
+            block = block[pd.to_numeric(block["number"], errors="coerce").notna()]
+            blocks.append(
+                block.assign(muscle_code=muscle_code, echogenicity=echogenicity)
+            )
+
+    characteristics = pd.concat(blocks, ignore_index=True)
+
+    return characteristics.astype(
+        {"number": int, "age": float, "height": float, "weight": float, "sex": str}
+    )
+
+
+def assign_patient_ids(characteristics: pd.DataFrame) -> pd.DataFrame:
+    """Assign a patient ID to every subject entry.
+
+    The subject numbers are local to each muscle and echogenicity
+    directory, so patients are identified by their demographics, which
+    are recorded identically wherever a patient appears. Two patients
+    share demographics and are therefore treated as a single patient,
+    which errs towards keeping images together rather than risking a
+    patient being split across the training and test data.
+
+    Args:
+        characteristics: The subject entries to label, as returned by
+            ``load_characteristics``.
+
+    Returns:
+        ``characteristics`` with an added ``patient`` column.
+
+    Raises:
+        ValueError: If any entry could not be assigned a patient ID.
+    """
+    patients = (
+        characteristics[DEMOGRAPHICS]
+        .drop_duplicates()
+        .sort_values(DEMOGRAPHICS)
+        .reset_index(drop=True)
+    )
+    patients["patient"] = [f"p{i:04d}" for i in range(1, len(patients) + 1)]
+
+    labelled = characteristics.merge(patients, on=DEMOGRAPHICS, how="left")
+    if labelled["patient"].isna().any():
+        raise ValueError("Failed to assign a patient ID to every subject entry")
+
+    return labelled
+
+
 def collect_examples(dataset_dir: str) -> pd.DataFrame:
     """Collect metadata for all images in the STMUS dataset.
 
-    Scans the raw dataset directory for image files and parses their
-    paths to extract per-example metadata.
+    Scans the raw dataset directory for image files, parses their paths
+    to extract per-example metadata, and joins the subject
+    characteristics to recover the patient each image belongs to.
 
     Args:
         dataset_dir: Path to the Polito-Radboud-DeepLearningUS
@@ -129,7 +234,11 @@ def collect_examples(dataset_dir: str) -> pd.DataFrame:
     Returns:
         A DataFrame with one row per image containing the columns
         ``filename``, ``patient``, ``muscle``, ``echogenicity``,
-        ``image_path``, and ``mask_path``.
+        ``age``, ``height``, ``weight``, ``sex``, ``image_path``, and
+        ``mask_path``.
+
+    Raises:
+        ValueError: If an image has no matching subject entry.
     """
     image_paths = sorted(Path(dataset_dir).glob("**/Images/*.png"))
 
@@ -137,23 +246,51 @@ def collect_examples(dataset_dir: str) -> pd.DataFrame:
     for path in image_paths:
         parts = path.parts
         muscle_code = parts[-4]
-        echogenicity = parts[-3]
+        echogenicity = parts[-3].lower()
         stem = path.stem
-
-        subject_id = int(stem.split("_")[1])
 
         rows.append(
             {
-                "filename": (f"{muscle_code.lower()}_{echogenicity.lower()}_{stem}"),
-                "patient": str(subject_id),
-                "muscle": MUSCLE_NAMES[muscle_code],
-                "echogenicity": echogenicity.lower(),
+                "filename": f"{muscle_code.lower()}_{echogenicity}_{stem}",
+                "muscle_code": muscle_code,
+                "echogenicity": echogenicity,
+                "number": int(stem.split("_")[1]),
                 "image_path": str(path),
                 "mask_path": str(path.parent.parent / "Masks" / path.name),
             }
         )
 
-    return pd.DataFrame(rows)
+    df = pd.DataFrame(rows)
+
+    patients = assign_patient_ids(load_characteristics(dataset_dir))
+    examples = df.merge(
+        patients[["muscle_code", "echogenicity", "number", "patient", *DEMOGRAPHICS]],
+        on=["muscle_code", "echogenicity", "number"],
+        how="left",
+        validate="many_to_one",
+    )
+
+    unmatched = examples[examples["patient"].isna()]
+    if not unmatched.empty:
+        missing = unmatched[["muscle_code", "echogenicity", "number"]]
+        raise ValueError(
+            "No subject characteristics for: "
+            f"{missing.drop_duplicates().to_dict('records')}"
+        )
+
+    examples["muscle"] = examples["muscle_code"].map(MUSCLE_NAMES)
+
+    return examples[
+        [
+            "filename",
+            "patient",
+            "muscle",
+            "echogenicity",
+            *DEMOGRAPHICS,
+            "image_path",
+            "mask_path",
+        ]
+    ]
 
 
 def _process_row(row: pd.Series, size: int | None = None) -> dict:
@@ -167,8 +304,9 @@ def _process_row(row: pd.Series, size: int | None = None) -> dict:
 
     Returns:
         A dict with keys ``filename``, ``patient``, ``muscle``,
-        ``echogenicity``, ``image`` (numpy array, uint8, HxWx3),
-        and ``mask`` (numpy array, uint8, HxW, values in {0, 1}).
+        ``echogenicity``, ``age``, ``height``, ``weight``, ``sex``,
+        ``image`` (numpy array, uint8, HxWx3), ``mask`` (numpy array,
+        uint8, HxW, values in {0, 1}), and ``scan_mask``.
     """
     raw_image = io.imread(row["image_path"])
     image = to_3_channel(raw_image)
@@ -185,6 +323,10 @@ def _process_row(row: pd.Series, size: int | None = None) -> dict:
         "patient": row["patient"],
         "muscle": row["muscle"],
         "echogenicity": row["echogenicity"],
+        "age": float(row["age"]),
+        "height": float(row["height"]),
+        "weight": float(row["weight"]),
+        "sex": str(row["sex"]),
         "image": image,
         "mask": mask,
         "scan_mask": scan_mask,
@@ -235,7 +377,7 @@ def verify_args(raw_data_dir: str, output_dir: str, publish: bool = False) -> No
     )
 
     if publish:
-        verify_revision_unpublished(OUTPUT_NAME)
+        verify_revision_unpublished(OUTPUT_NAME, DATASET_REVISION)
 
 
 def process_stmus(
@@ -321,7 +463,7 @@ def process_stmus(
         output_path=gt_dir / "ground_truth_segmentation.csv",
     )
 
-    save_version_info(str(output_path), __version__)
+    save_version_info(str(output_path), __version__, revision=DATASET_REVISION)
 
     if publish:
         dataset.push_to_hub(

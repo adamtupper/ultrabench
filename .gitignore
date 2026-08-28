@@ -182,6 +182,10 @@ cython_debug/
 # Artifacts
 outputs/
 
+# Slurm job logs
+slurm_logs/*
+!slurm_logs/.gitkeep
+
 # Agentic coding
 .claude/settings.local.json
 .serena/

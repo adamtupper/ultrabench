@@ -70,3 +70,18 @@ class TestUSFMAEBackboneForward:
         x = torch.randint(0, 256, (_BATCH, 3, _IMG_SIZE, _IMG_SIZE), dtype=torch.uint8)
         out = model(x, pool=True)
         assert out.features.shape == (_BATCH, _FEATURE_DIM)
+
+    def test_pool_returns_cls_token(self) -> None:
+        """Pooled features are the CLS token, not the patch token mean."""
+        model = _make_backbone()
+        model.eval()
+        x = torch.randint(0, 256, (_BATCH, 3, _IMG_SIZE, _IMG_SIZE), dtype=torch.uint8)
+        with torch.no_grad():
+            latent, _, _ = model._encoder.forward_encoder(
+                model._resize_and_normalize(x), mask_ratio=0.0
+            )
+            tokens = model(x).features
+            pooled = model(x, pool=True).features
+
+        torch.testing.assert_close(pooled, latent[:, 0, :])
+        assert not torch.allclose(pooled, tokens.mean(dim=1))

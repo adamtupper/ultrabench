@@ -1,21 +1,17 @@
 """Step-based backbone finetuning callback."""
 
 import logging
-from typing import Any, Callable
+from typing import Any, cast
 
 import lightning.pytorch as pl
+from lightning.fabric.utilities.exceptions import MisconfigurationException
 from lightning.pytorch.callbacks import BaseFinetuning
-from lightning.pytorch.utilities.exceptions import MisconfigurationException
-from torch.nn import Module
+from torch.nn import Module, Parameter
+from torch.nn.modules.batchnorm import _BatchNorm
 from torch.optim import Optimizer
 from typing_extensions import override
 
 log = logging.getLogger(__name__)
-
-
-def multiplicative(_step: int) -> float:
-    """Default multiplicative factor for backbone LR scheduling."""
-    return 1.001
 
 
 class BackboneFinetuningSteps(BaseFinetuning):
@@ -23,28 +19,44 @@ class BackboneFinetuningSteps(BaseFinetuning):
 
     Step-based equivalent of
     :class:`lightning.pytorch.callbacks.BackboneFinetuning`. Unfreezes the
-    backbone at a specific global step instead of an epoch boundary, then
-    applies per-step LR scaling via ``lambda_func`` on every subsequent
-    training step. ``finetune_function`` is a no-op; all LR scaling occurs
-    in ``on_train_batch_start``.
+    backbone at a specific global step instead of an epoch boundary. Once
+    unfrozen, the backbone is split into ``backbone_num_layer_groups``
+    contiguous groups (by parameter registration order, shallowest first)
+    and each group's LR is computed every step as a fixed ratio of the
+    head's current LR, scaled by a per-group layer-decay factor and a
+    linear warmup — with no backbone-specific customization required.
+
+    This callback also owns the backbone's train/eval mode. Lightning does
+    not call ``LightningModule.train()`` during ``fit`` (its evaluation loop
+    captures and restores submodule modes directly), so the mode is
+    re-asserted at every training batch: the backbone stays in eval mode
+    while frozen and switches to train mode once unfrozen. Batch
+    Normalization layers follow ``train_bn`` instead of the frozen state.
 
     Args:
         unfreeze_backbone_at_step: Global step at which the backbone will be
             unfrozen.
-        lambda_func: Multiplicative scheduling function applied each step to
-            increase the backbone learning rate.
-        backbone_initial_ratio_lr: Used to scale down the backbone LR compared
-            to the rest of the model.
-        backbone_initial_lr: Optional initial learning rate for the backbone.
-            By default, ``current_learning_rate * backbone_initial_ratio_lr``
-            is used.
-        should_align: Whether to align backbone LR with the current LR when the
-            backbone LR reaches it.
-        initial_denom_lr: When unfreezing the backbone, the initial LR will be
-            ``current_learning_rate / initial_denom_lr`` (only used when
-            ``backbone_initial_lr`` and ``backbone_initial_ratio_lr`` are not
-            set).
-        train_bn: Whether to make Batch Normalization trainable.
+        backbone_max_lr_ratio: Ceiling on the backbone LR, expressed as a
+            ratio of the head's current LR. The deepest layer group's LR
+            approaches (but never exceeds) ``head_lr * backbone_max_lr_ratio``.
+        backbone_warmup_steps: Number of steps after unfreezing over which
+            the backbone LR ramps up linearly from 0 to its target ratio.
+        backbone_layer_decay: Multiplicative LR decay applied per layer
+            group, shallowest first. The deepest group always gets a scale
+            of 1.0 (i.e. the full ``backbone_max_lr_ratio``); shallower
+            groups get progressively smaller scales. Set to 1.0 to disable
+            per-layer decay (all groups share the same LR).
+        backbone_num_layer_groups: Number of contiguous parameter groups to
+            split the backbone into, ordered shallowest to deepest. Grouping
+            is based purely on parameter registration order, so it applies
+            to any backbone architecture without customization.
+        train_bn: Whether to train Batch Normalization layers. When False
+            (the default) BN layers are fully frozen for the whole run —
+            kept in eval mode, with their affine parameters and running
+            statistics never updated, even after the backbone unfreezes.
+            When True they stay in train mode while the backbone is frozen
+            (so their statistics track the data) and are trained as part of
+            their layer group once it unfreezes.
         verbose: Display current learning rate for model and backbone.
         rounding: Precision for displaying learning rate.
     """
@@ -52,57 +64,59 @@ class BackboneFinetuningSteps(BaseFinetuning):
     def __init__(
         self,
         unfreeze_backbone_at_step: int = 1000,
-        lambda_func: Callable = multiplicative,
-        backbone_initial_ratio_lr: float = 10e-2,
-        backbone_initial_lr: float | None = None,
-        should_align: bool = True,
-        initial_denom_lr: float = 10.0,
-        train_bn: bool = True,
+        backbone_max_lr_ratio: float = 0.1,
+        backbone_warmup_steps: int = 500,
+        backbone_layer_decay: float = 0.75,
+        backbone_num_layer_groups: int = 4,
+        train_bn: bool = False,
         verbose: bool = False,
         rounding: int = 12,
     ) -> None:
         super().__init__()
         self.unfreeze_step = unfreeze_backbone_at_step
-        self.lambda_func = lambda_func
-        self.backbone_initial_ratio_lr = backbone_initial_ratio_lr
-        self.backbone_initial_lr = backbone_initial_lr
-        self.should_align = should_align
-        self.initial_denom_lr = initial_denom_lr
+        self.backbone_max_lr_ratio = backbone_max_lr_ratio
+        self.backbone_warmup_steps = backbone_warmup_steps
+        self.backbone_layer_decay = backbone_layer_decay
+        self.backbone_num_layer_groups = backbone_num_layer_groups
         self.train_bn = train_bn
         self.verbose = verbose
         self.rounding = rounding
-        self.previous_backbone_lr: float | None = None
+        self._unfrozen = False
+        self._backbone_group_start: int = 0
+        self._layer_scales: list[float] = []
 
     @override
     def state_dict(self) -> dict[str, Any]:
         return {
             "internal_optimizer_metadata": self._internal_optimizer_metadata,
-            "previous_backbone_lr": self.previous_backbone_lr,
+            "unfrozen": self._unfrozen,
         }
 
     @override
     def load_state_dict(self, state_dict: dict[str, Any]) -> None:
-        self.previous_backbone_lr = state_dict["previous_backbone_lr"]
+        self._unfrozen = state_dict["unfrozen"]
         super().load_state_dict(state_dict)
 
     @override
     def on_fit_start(
         self, trainer: "pl.Trainer", pl_module: "pl.LightningModule"
     ) -> None:
-        """Validate backbone attribute; restore gradient state on resume.
+        """Validate backbone attribute; restore param groups on resume.
 
         Raises:
             MisconfigurationException: If LightningModule has no nn.Module
                 ``backbone`` attribute.
         """
-        if hasattr(pl_module, "backbone") and isinstance(pl_module.backbone, Module):
+        backbone = getattr(pl_module, "backbone", None)
+        if isinstance(backbone, Module):
             super().on_fit_start(trainer, pl_module)
-            if self.previous_backbone_lr is not None:
-                # Step-based deviation: backbone may have been
-                # unfrozen mid-epoch before checkpoint.
-                # freeze_before_training() in setup() re-froze it,
-                # so re-enable gradients now past the unfreeze step.
-                self.make_trainable(pl_module.backbone)
+            if self._unfrozen:
+                # Step-based deviation: backbone may have been unfrozen
+                # mid-epoch before checkpoint. freeze_before_training() in
+                # setup() re-froze it and gave it a fresh optimizer with
+                # only the head's param group, so rebuild the backbone's
+                # layer groups now.
+                self._add_backbone_param_groups(trainer.optimizers[0], backbone)
             return
         raise MisconfigurationException(
             "The LightningModule should have a nn.Module `backbone` attribute"
@@ -110,7 +124,21 @@ class BackboneFinetuningSteps(BaseFinetuning):
 
     @override
     def freeze_before_training(self, pl_module: "pl.LightningModule") -> None:
-        self.freeze(pl_module.backbone)
+        backbone = cast(Module, pl_module.backbone)
+        self.freeze(backbone, train_bn=self.train_bn)
+        self._set_backbone_mode(backbone)
+
+    def _set_backbone_mode(self, backbone: Module) -> None:
+        """Match the backbone's train/eval mode to its frozen state.
+
+        Args:
+            backbone: The backbone module to set the mode on.
+        """
+        backbone.train(self._unfrozen)
+        # Module.train() recurses, so BN layers are re-set afterwards.
+        for module in backbone.modules():
+            if isinstance(module, _BatchNorm):
+                module.train(self.train_bn)
 
     @override
     def finetune_function(
@@ -121,6 +149,82 @@ class BackboneFinetuningSteps(BaseFinetuning):
     ) -> None:
         """No-op. LR scaling is applied per-step in on_train_batch_start."""
         return
+
+    @staticmethod
+    def _split_into_buckets(
+        params: list[Parameter], num_groups: int
+    ) -> list[list[Parameter]]:
+        """Split params into num_groups contiguous, near-equal-size chunks.
+
+        Args:
+            params: Parameters in shallow-to-deep registration order.
+            num_groups: Desired number of chunks.
+
+        Returns:
+            List of parameter chunks, shallowest first.
+        """
+        num_groups = max(1, min(num_groups, len(params)))
+        size, remainder = divmod(len(params), num_groups)
+        buckets = []
+        start = 0
+        for i in range(num_groups):
+            end = start + size + (1 if i < remainder else 0)
+            buckets.append(params[start:end])
+            start = end
+        return buckets
+
+    def _add_backbone_param_groups(
+        self, optimizer: Optimizer, backbone: Module
+    ) -> None:
+        """Unfreeze the backbone and add one param group per layer bucket.
+
+        Args:
+            optimizer: The optimizer to add the new param groups to.
+            backbone: The backbone module to unfreeze.
+        """
+        self.make_trainable(backbone)
+        if not self.train_bn:
+            # make_trainable() re-enables requires_grad and
+            # track_running_stats on BN layers; filter_params() then skips
+            # them, which would leave them accumulating unused gradients.
+            for module in backbone.modules():
+                if isinstance(module, _BatchNorm):
+                    self.freeze_module(module)
+        params = list(
+            self.filter_params(backbone, train_bn=self.train_bn, requires_grad=True)
+        )
+        buckets = [
+            bucket
+            for bucket in self._split_into_buckets(
+                params, self.backbone_num_layer_groups
+            )
+            if bucket
+        ]
+        self._backbone_group_start = len(optimizer.param_groups)
+        self._layer_scales = [
+            self.backbone_layer_decay ** (len(buckets) - 1 - j)
+            for j in range(len(buckets))
+        ]
+        for bucket in buckets:
+            optimizer.add_param_group({"params": bucket, "lr": 0.0})
+
+    def _update_backbone_lrs(self, trainer: "pl.Trainer", optimizer: Optimizer) -> None:
+        """Set each backbone layer group's LR from the head's current LR.
+
+        Args:
+            trainer: The Lightning Trainer.
+            optimizer: The optimizer holding the head and backbone groups.
+        """
+        head_lr = optimizer.param_groups[0]["lr"]
+        steps_since_unfreeze = trainer.global_step - self.unfreeze_step
+        warmup_factor = (
+            min(1.0, steps_since_unfreeze / self.backbone_warmup_steps)
+            if self.backbone_warmup_steps > 0
+            else 1.0
+        )
+        backbone_groups = optimizer.param_groups[self._backbone_group_start :]
+        for group, scale in zip(backbone_groups, self._layer_scales):
+            group["lr"] = head_lr * self.backbone_max_lr_ratio * scale * warmup_factor
 
     def on_train_batch_start(
         self,
@@ -138,53 +242,38 @@ class BackboneFinetuningSteps(BaseFinetuning):
             batch_idx: The index of the current batch.
         """
         optimizer = trainer.optimizers[0]
+        # on_fit_start() already validated that this is a nn.Module.
+        backbone = pl_module.backbone
+        assert isinstance(backbone, Module)
 
-        if self.previous_backbone_lr is None:
-            if trainer.global_step < self.unfreeze_step:
-                return
-
+        if not self._unfrozen and trainer.global_step >= self.unfreeze_step:
             num_param_groups = len(optimizer.param_groups)
-            current_lr = optimizer.param_groups[0]["lr"]
-            initial_backbone_lr = (
-                self.backbone_initial_lr
-                if self.backbone_initial_lr is not None
-                else current_lr * self.backbone_initial_ratio_lr
-            )
-            self.previous_backbone_lr = initial_backbone_lr
-            self.unfreeze_and_add_param_group(
-                pl_module.backbone,
-                optimizer,
-                initial_backbone_lr,
-                train_bn=self.train_bn,
-                initial_denom_lr=self.initial_denom_lr,
-            )
+            self._add_backbone_param_groups(optimizer, backbone)
+            self._unfrozen = True
             # Must call _store() here. BaseFinetuning.on_train_epoch_start()
             # already ran for this epoch and captured num_param_groups before
             # unfreeze. At the next epoch start it will see
             # num_param_groups == len(current) and be a no-op — the backbone
-            # group would never be recorded without this.
+            # groups would never be recorded without this.
             self._store(pl_module, 0, num_param_groups, optimizer.param_groups)
-            if self.verbose:
-                log.info(
-                    "Current lr: %s, Backbone lr: %s",
-                    round(current_lr, self.rounding),
-                    round(initial_backbone_lr, self.rounding),
-                )
-        else:
-            current_lr = optimizer.param_groups[0]["lr"]
-            next_backbone_lr = (
-                self.lambda_func(trainer.global_step) * self.previous_backbone_lr
+
+        # Re-assert every batch: Lightning's evaluation loop restores
+        # submodule modes after each validation run, and
+        # freeze_before_training() only runs once at setup.
+        self._set_backbone_mode(backbone)
+
+        if not self._unfrozen:
+            return
+
+        self._update_backbone_lrs(trainer, optimizer)
+
+        if self.verbose:
+            backbone_lrs = [
+                round(group["lr"], self.rounding)
+                for group in optimizer.param_groups[self._backbone_group_start :]
+            ]
+            log.info(
+                "Head lr: %s, Backbone lrs: %s",
+                round(optimizer.param_groups[0]["lr"], self.rounding),
+                backbone_lrs,
             )
-            next_backbone_lr = (
-                current_lr
-                if (self.should_align and next_backbone_lr > current_lr)
-                else next_backbone_lr
-            )
-            optimizer.param_groups[-1]["lr"] = next_backbone_lr
-            self.previous_backbone_lr = next_backbone_lr
-            if self.verbose:
-                log.info(
-                    "Current lr: %s, Backbone lr: %s",
-                    round(current_lr, self.rounding),
-                    round(next_backbone_lr, self.rounding),
-                )

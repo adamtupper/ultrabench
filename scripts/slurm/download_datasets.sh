@@ -28,7 +28,7 @@ python scripts/slurm/download_dataset.py --name UltraBench/MASLD --revision 0.1 
 python scripts/slurm/download_dataset.py --name UltraBench/MMOTU-2D --revision 0.1 --cache_dir $project/data/hf/datasets
 python scripts/slurm/download_dataset.py --name UltraBench/OpenKidney --revision 0.1 --cache_dir $project/data/hf/datasets
 python scripts/slurm/download_dataset.py --name UltraBench/PSFHS --revision 0.2 --cache_dir $project/data/hf/datasets
-python scripts/slurm/download_dataset.py --name UltraBench/STMUS --revision 0.2 --cache_dir $project/data/hf/datasets
+python scripts/slurm/download_dataset.py --name UltraBench/STMUS --revision 0.3 --cache_dir $project/data/hf/datasets
 python scripts/slurm/download_dataset.py --name UltraBench/TN3K --revision 0.2 --cache_dir $project/data/hf/datasets
 
 # Deprecated datasets:

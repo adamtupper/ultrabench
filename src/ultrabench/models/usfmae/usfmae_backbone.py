@@ -22,10 +22,16 @@ class USFMAEBackbone(Backbone):
     usage. Inference uses mask_ratio=0.0 so all patches are retained in their
     original raster order.
 
+    Unlike the other patch token backbones in this package, which mean-pool
+    the patch tokens, pooled classification features are taken from the CLS
+    token. This is deliberate: The original authors of USF-MAE use the CLS
+    token in their evaluations.
+
     Attributes:
         feature_dim: 768 (embed_dim of ViT-Base).
         output_type: Always "patch_tokens".
-        has_cls_token: Always True (CLS stripped before returning features).
+        has_cls_token: Always True (CLS returned as the pooled feature and
+            stripped from the patch token sequence).
         block_indices: [2, 5, 8, 11] (four evenly-spaced depths in 12 blocks).
         input_size: 224.
         input_mean: ImageNet per-channel mean.
@@ -135,13 +141,13 @@ class USFMAEBackbone(Backbone):
             self._encoder.blocks[idx].register_forward_hook(hook)
 
     def forward(self, x: torch.Tensor, pool: bool = False) -> BackboneOutput:
-        """Extract patch token features from pre-processed images.
+        """Extract features from pre-processed images.
 
         Args:
             x: uint8 input image tensor [B, C, H, W]. Resized to
                 ``self.input_size`` and normalised before encoding.
-            pool: If True, mean-pool over patch tokens to return [B, 768].
-                If False, return the full sequence [B, N, 768].
+            pool: If True, return the CLS token [B, 768]. If False,
+                return the full patch token sequence [B, N, 768].
 
         Returns:
             BackboneOutput with features [B, N, 768] when pool=False or
@@ -153,9 +159,9 @@ class USFMAEBackbone(Backbone):
 
         x = self._resize_and_normalize(x)
         latent, _, _ = self._encoder.forward_encoder(x, mask_ratio=0.0)
-        features = latent[:, 1:, :]
-        if pool:
-            features = features.mean(dim=1)
+        # latent[:, 0] is the CLS token, already normalised by the encoder's
+        # final LayerNorm; latent[:, 1:] are the patch tokens.
+        features = latent[:, 0, :] if pool else latent[:, 1:, :]
 
         return BackboneOutput(
             features=features,

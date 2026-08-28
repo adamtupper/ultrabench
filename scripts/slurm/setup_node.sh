@@ -10,7 +10,7 @@ set -e
 module purge
 
 # Load modules
-module load gcc arrow/21.0.0 git-lfs python/3.12 cuda/12.6 cudnn/9.10.0.56 rust httpproxy opencv/4.11.0
+module load gcc arrow/21.0.0 git-lfs python/3.12 cuda/12.6 cudnn/9.10.0.56 rust opencv/4.11.0
 
 # Set environment variables
 export TMPDIR=$SLURM_TMPDIR/tmp

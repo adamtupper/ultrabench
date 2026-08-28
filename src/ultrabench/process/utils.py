@@ -17,7 +17,11 @@ MAX_TRAIN_SAMPLES = 1000
 """The maximum number of examples in a published training split."""
 
 DATASET_REVISION = "0.2"
-"""The revision of the published datasets that this code produces."""
+"""The default revision of the published datasets that this code produces.
+
+Individual dataset modules may define their own revision when they are
+republished independently of the rest of the collection.
+"""
 
 
 def save_version_info(
