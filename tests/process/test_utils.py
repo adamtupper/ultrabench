@@ -8,6 +8,7 @@ from huggingface_hub.errors import RepositoryNotFoundError
 
 from ultrabench.process.utils import (
     cap_train_split_by_patient,
+    generate_classification_ground_truth_from_records,
     resize_and_pad,
     subsample_balanced_by_class,
     subsample_by_group,
@@ -366,3 +367,40 @@ class TestVerifyRevisionUnpublished:
         """A repository that does not exist yet is accepted."""
         self.patch_tags(monkeypatch, None)
         verify_revision_unpublished("UltraBench/TN3K", "0.2")
+
+
+class TestGenerateClassificationGroundTruth:
+    """Tests for generate_classification_ground_truth_from_records."""
+
+    records = [
+        {"filename": "p1_0", "label": 0, "patient": 1, "view": "2CH"},
+        {"filename": "p1_1", "label": 0, "patient": 1, "view": "2CH"},
+        {"filename": "p2_0", "label": 1, "patient": 2, "view": "4CH"},
+    ]
+
+    def test_image_level_csv_has_no_sequence_column(self, tmp_path):
+        """Without sequence keys, only image_id and label are written."""
+        output_path = tmp_path / "gt.csv"
+        generate_classification_ground_truth_from_records(self.records, output_path)
+
+        written = pd.read_csv(output_path)
+        assert list(written.columns) == ["image_id", "label"]
+        assert written["image_id"].tolist() == ["p1_0", "p1_1", "p2_0"]
+
+    def test_sequence_keys_add_sequence_id(self, tmp_path):
+        """Sequence keys are joined with underscores into sequence_id."""
+        output_path = tmp_path / "gt.csv"
+        generate_classification_ground_truth_from_records(
+            self.records, output_path, sequence_keys=["patient", "view"]
+        )
+
+        written = pd.read_csv(output_path)
+        assert list(written.columns) == ["image_id", "label", "sequence_id"]
+        assert written["sequence_id"].tolist() == ["1_2CH", "1_2CH", "2_4CH"]
+
+    def test_missing_sequence_key_raises(self, tmp_path):
+        """A record missing a sequence key is rejected."""
+        with pytest.raises(KeyError, match="video"):
+            generate_classification_ground_truth_from_records(
+                self.records, tmp_path / "gt.csv", sequence_keys=["video"]
+            )

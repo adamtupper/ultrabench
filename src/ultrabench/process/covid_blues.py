@@ -59,11 +59,13 @@ from .utils import (
     generate_classification_ground_truth_from_records,
     resize_and_pad,
     save_version_info,
+    verify_revision_unpublished,
 )
 
 __version__ = version("ultrabench")
 
 OUTPUT_NAME = "UltraBench/COVID-BLUES"
+DATASET_REVISION = "0.3"
 DATASET_INFO = DatasetInfo(
     description=(
         "Lung ultrasound videos from suspected COVID-19 patients "
@@ -259,18 +261,22 @@ def _make_train_generator(train_df: pd.DataFrame, raw_data_dir: str):
     return generator
 
 
-def verify_args(raw_data_dir: str, output_dir: str) -> None:
+def verify_args(raw_data_dir: str, output_dir: str, publish: bool = False) -> None:
     """Verify the command-line arguments before processing begins.
 
     Args:
         raw_data_dir: The path to the raw data directory.
         output_dir: The path to the output directory.
+        publish: Whether the dataset will be published to the Hugging Face Hub.
     """
     assert os.path.isdir(raw_data_dir), "raw_data_dir must be an existing directory"
     assert os.path.isdir(output_dir), "output_dir must be an existing directory"
     assert not os.path.exists(os.path.join(output_dir, OUTPUT_NAME)), (
         "A version of the COVID-BLUES dataset already exists"
     )
+
+    if publish:
+        verify_revision_unpublished(OUTPUT_NAME, DATASET_REVISION)
 
 
 def process_covid_blues(
@@ -298,7 +304,7 @@ def process_covid_blues(
         size: Height and width in pixels for resized test images.
         publish: Whether to push the dataset to the Hugging Face Hub.
     """
-    verify_args(raw_data_dir, output_dir)
+    verify_args(raw_data_dir, output_dir, publish)
 
     raw_data_dir = os.path.join(raw_data_dir, "covid_blues")
     output_path = Path(output_dir) / OUTPUT_NAME
@@ -371,18 +377,26 @@ def process_covid_blues(
     dataset.save_to_disk(str(output_path))
 
     generate_classification_ground_truth_from_records(
-        [{"filename": r["filename"], "label": r["covid19"]} for r in test_records],
+        [
+            {
+                "filename": r["filename"],
+                "label": r["covid19"],
+                "patient": r["patient"],
+            }
+            for r in test_records
+        ],
         output_path / f"test.{size}" / "ground_truth_classification.csv",
+        sequence_keys=["patient"],
     )
 
-    save_version_info(str(output_path), __version__)
+    save_version_info(str(output_path), __version__, revision=DATASET_REVISION)
 
     typer.echo(f"Dataset saved to {output_path}.")
 
     if publish:
         dataset.push_to_hub(
             OUTPUT_NAME,
-            commit_message=f"Update the dataset to Version {__version__}.",
+            commit_message=f"Update the dataset to revision {DATASET_REVISION}.",
             private=True,
         )
 
@@ -400,6 +414,6 @@ def process_covid_blues(
             repo_type="dataset",
             operations=operations,
             commit_message=(
-                f"Update ground truth CSV files for Version {__version__}."
+                f"Update ground truth CSV files for revision {DATASET_REVISION}."
             ),
         )

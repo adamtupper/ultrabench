@@ -2,3 +2,4 @@ _target_: ultrabench.evaluate.classification.ClassificationEvaluator
 ground_truth_path: ${ground_truth}
 predictions_path: ${predictions}
 output_dir: ${hydra:runtime.output_dir}
+aggregate_by: ${aggregate_by}

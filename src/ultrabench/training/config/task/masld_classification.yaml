@@ -1,6 +1,6 @@
 dataset: UltraBench/MASLD
 subset: null
-revision: "0.1"
+revision: "0.3"
 
 type: classification
 input: image
@@ -10,6 +10,7 @@ num_classes: 2
 stratify_by: null
 group_by: patient
 filter_by: null
+sequence_by: [patient]
 
 criterion:
   _target_: torch.nn.CrossEntropyLoss

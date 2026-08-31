@@ -10,6 +10,7 @@ num_classes: 2
 stratify_by: null
 group_by: null
 filter_by: null
+sequence_by: null
 
 criterion:
   _target_: ultrabench.training.losses.DiceCELoss

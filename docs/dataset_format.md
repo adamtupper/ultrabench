@@ -28,12 +28,13 @@ For datasets not listed above, refer to their respective sources and download th
 Once the raw data is available, preprocess it into the standardized format using the `ultrabench process` command:
 
 ```bash
-ultrabench process <dataset> <raw_dir> <output_dir> [--size 256]
+ultrabench process <dataset> <raw_dir> <output_dir> [--size 256] [--publish]
 ```
 
 - `<raw_dir>`: Path to the downloaded raw dataset directory.
 - `<output_dir>`: Path where the preprocessed dataset will be saved.
 - `--size`: Target height and width (in pixels) for test images (default: `256`).
+- `--publish`: Push the processed dataset to the Hugging Face Hub.
 
 All 10 datasets are supported:
 
@@ -49,6 +50,44 @@ All 10 datasets are supported:
 | POCUS | `ultrabench process pocus <raw_dir> <output_dir>` |
 | PSFHS | `ultrabench process psfhs <raw_dir> <output_dir>` |
 | Stanford Thyroid | `ultrabench process stanford-thyroid <raw_dir> <output_dir>` |
+
+## Training Split Size
+
+Every published `train` split holds a maximum of 1,000 examples, so that results are comparable across datasets rather than confounded by training-set size. Datasets that already hold fewer than 1,000 training examples are left unchanged. Validation data is carved out of the `train` split at training time, so the effective number of examples used to fit a model is smaller again (800 at the default 80:20 train/validation ratio).
+
+Datasets over the cap are reduced in one of three ways:
+
+| Rule | Datasets | Behaviour |
+|------|----------|-----------|
+| Move whole patients to `test` | BUS-BRA, FetalPlanes, STMUS | Patients are kept whole and moved from `train` into `test` until the cap is met, so the `test` split grows and no patient appears in both splits. |
+| Move images to `test` | PSFHS | Images are moved individually, because the dataset publishes no patient identifiers and UltraBench defines its split itself. |
+| Discard the surplus | CAMUS, GBCU, TN3K | The surplus examples are dropped and the `test` split is unchanged. This applies where the original `test` split is patient-disjoint but no patient identifiers are published (GBCU, TN3K), and where frames are subsampled within each sequence to preserve patient diversity (CAMUS). |
+
+Where examples are discarded from a labelled dataset, they are taken from the largest classes first, which makes the class distribution more uniform and keeps the rarer (often more clinically important) classes intact.
+
+## Dataset Revisions
+
+Published datasets are versioned with Git tags on the Hugging Face Hub. Pin a revision so that an experiment stays reproducible when a dataset changes:
+
+```python
+from datasets import load_dataset
+
+train_data = load_dataset("UltraBench/TN3K", revision="0.2", split="train")
+```
+
+| Revision | Description |
+|----------|-------------|
+| `0.1` | The initial UltraBench 2 splits. |
+| `0.2` | The `train` splits are capped at 1,000 examples. CAMUS is also split into `classification` and `segmentation` subsets. |
+| `0.3` | The ground-truth CSVs of the sequence-level classification tasks (CAMUS image quality, COVID-BLUES, MASLD) gain a `sequence_id` column. The images are unchanged. |
+
+Set `revision` in a task configuration (`src/ultrabench/training/config/task/*.yaml`) to pin the revision a training run uses, and pass `--revision` to `scripts/slurm/download_dataset.py` to pre-cache the matching revision.
+
+The processing code refuses to publish a revision that is already tagged, so re-running `--publish` cannot overwrite a released revision. Create the tag once the datasets are pushed:
+
+```bash
+hf repos tag create UltraBench/TN3K 0.2 --type dataset -m "Cap training splits at 1,000 samples."
+```
 
 ## Output Directory Structure
 
@@ -70,6 +109,8 @@ Each preprocessed dataset is saved under `<output_dir>/<dataset>_v{version}/` wi
 ```
 
 All file paths stored in the JSON metadata are relative to their split directory (e.g., `"images/foo.png"` resolves to `train_val/images/foo.png`).
+
+Processing also writes a ground-truth CSV for the test split of each task, which is published alongside the images on the Hugging Face Hub and read by the evaluation layer. See [the evaluation documentation](evaluation.md) for its columns.
 
 ## Images and Masks
 

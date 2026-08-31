@@ -18,13 +18,13 @@ cd $project/ultrabench2
 
 python scripts/slurm/download_dataset.py --name UltraBench/AUL --revision 0.1 --cache_dir $project/data/hf/datasets
 python scripts/slurm/download_dataset.py --name UltraBench/BUS-BRA --revision 0.2 --cache_dir $project/data/hf/datasets
-python scripts/slurm/download_dataset.py --name UltraBench/CAMUS --config classification --revision 0.2 --cache_dir $project/data/hf/datasets
-python scripts/slurm/download_dataset.py --name UltraBench/CAMUS --config segmentation --revision 0.2 --cache_dir $project/data/hf/datasets
-python scripts/slurm/download_dataset.py --name UltraBench/COVID-BLUES --revision 0.1 --cache_dir $project/data/hf/datasets
+python scripts/slurm/download_dataset.py --name UltraBench/CAMUS --config classification --revision 0.3 --cache_dir $project/data/hf/datasets
+python scripts/slurm/download_dataset.py --name UltraBench/CAMUS --config segmentation --revision 0.3 --cache_dir $project/data/hf/datasets
+python scripts/slurm/download_dataset.py --name UltraBench/COVID-BLUES --revision 0.3 --cache_dir $project/data/hf/datasets
 python scripts/slurm/download_dataset.py --name UltraBench/FetalPlanes --config fetal --revision 0.2 --cache_dir $project/data/hf/datasets
 python scripts/slurm/download_dataset.py --name UltraBench/FetalPlanes --config fetal_brain --revision 0.2 --cache_dir $project/data/hf/datasets
 python scripts/slurm/download_dataset.py --name UltraBench/GBCU --revision 0.2 --cache_dir $project/data/hf/datasets
-python scripts/slurm/download_dataset.py --name UltraBench/MASLD --revision 0.1 --cache_dir $project/data/hf/datasets
+python scripts/slurm/download_dataset.py --name UltraBench/MASLD --revision 0.3 --cache_dir $project/data/hf/datasets
 python scripts/slurm/download_dataset.py --name UltraBench/MMOTU-2D --revision 0.1 --cache_dir $project/data/hf/datasets
 python scripts/slurm/download_dataset.py --name UltraBench/OpenKidney --revision 0.1 --cache_dir $project/data/hf/datasets
 python scripts/slurm/download_dataset.py --name UltraBench/PSFHS --revision 0.2 --cache_dir $project/data/hf/datasets

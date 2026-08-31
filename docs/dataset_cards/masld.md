@@ -15,6 +15,13 @@ The patients of original dataset have been divided into `train` and `test` split
 - `test`: The remaining 20% of patients with the images in their original sizes.
 - `test.256`: The same images and masks as the `test` split, but resized such that the longest edge measures 256 px and zero-padded (if needed) so that the final image measured 256 x 256 px.
 
+## Revisions
+
+The dataset is versioned with Git tags on the Hugging Face Hub. Pin a revision to keep an experiment reproducible:
+
+- `0.3`: The ground-truth CSV gains a `sequence_id` column so that MASLD classification is evaluated per patient. The images and splits are unchanged.
+- `0.1`: The initial UltraBench 2 splits.
+
 ## Features
 
 All splits have the following features:
@@ -34,6 +41,22 @@ The MASLD dataset supports one task:
 
 - MASLD classification
 
+## Evaluation
+
+The MASLD diagnosis describes the patient, not an individual image, so the task is evaluated per **patient**. All 10 images of a patient average into one prediction, leaving 11 predictions on the `test` split.
+
+Generate one prediction per patient by averaging the predicted probabilities over the patient's images, then taking the argmax. The ground-truth CSV carries a `sequence_id` column (the patient ID) that identifies which images belong together, so the predictions CSV stays per image:
+
+```bash
+python -m ultrabench.evaluate task=classification aggregate_by=sequence_id \
+  ground_truth=test-ground-truth-classification.csv \
+  predictions=predictions.csv
+```
+
+The `test` split holds only 11 patients, so the balanced accuracy moves in coarse steps. Average over several seeds before comparing models.
+
+See [the evaluation documentation](../evaluation.md) for the CSV format.
+
 ## Usage
 
 The easiest way to use this dataset is with [Hugging Face Datasets library](https://huggingface.co/docs/datasets/index):
@@ -41,6 +64,6 @@ The easiest way to use this dataset is with [Hugging Face Datasets library](http
 ```python
 from datasets import load_dataset
 
-train_data = datasets.load_dataset("UltraBench/MASLD", split="train")
-test_data = datasets.load_dataset("UltraBench/MASLD", split="test.256")
+train_data = datasets.load_dataset("UltraBench/MASLD", revision="0.3", split="train")
+test_data = datasets.load_dataset("UltraBench/MASLD", revision="0.3", split="test.256")
 ```

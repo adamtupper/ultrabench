@@ -19,6 +19,7 @@ from lightning.pytorch.loggers import TensorBoardLogger
 from torch.utils.data import DataLoader
 from torchmetrics.segmentation import DiceScore, MeanIoU
 
+from ultrabench.core.aggregation import aggregate_sequence_probabilities
 from ultrabench.core.rle import mask_to_rle
 from ultrabench.models.backbone import Backbone
 from ultrabench.training.callbacks import BackboneFinetuningSteps
@@ -48,6 +49,7 @@ class UltraBenchDataModule(pl.LightningDataModule):
         filter_by: str | None,
         batch_size: int,
         num_workers: int,
+        sequence_by: list[str] | None = None,
         revision: str | None = None,
     ):
         super().__init__()
@@ -60,6 +62,7 @@ class UltraBenchDataModule(pl.LightningDataModule):
         self.stratify_by = stratify_by
         self.group_by = group_by
         self.filter_by = filter_by
+        self.sequence_by = sequence_by
         self.batch_size = batch_size
         self.num_workers = num_workers
 
@@ -80,6 +83,7 @@ class UltraBenchDataModule(pl.LightningDataModule):
             stratify_by=self.stratify_by,
             group_by=self.group_by,
             filter_by=self.filter_by,
+            sequence_by=self.sequence_by,
         )
         logger.info(
             "Dataset sizes — Train: %d, Val: %d, Test: %d",
@@ -150,6 +154,7 @@ class UltraBenchModule(pl.LightningModule):
         output_dir: str,
         num_classes: int,
         use_intermediate: bool = False,
+        aggregate_sequences: bool = False,
     ):
         """Initialise UltraBenchModule.
 
@@ -164,6 +169,10 @@ class UltraBenchModule(pl.LightningModule):
             num_classes: Number of output classes.
             use_intermediate: Pass backbone intermediate outputs to head
                 instead of final features. True for setr_mla / segformer.
+            aggregate_sequences: Also report sequence-level test metrics,
+                obtained by averaging the predicted probabilities over the
+                images of each sequence. Requires a "sequence_id" key in the
+                test batches. Classification only.
         """
         super().__init__()
         self.backbone = backbone
@@ -177,6 +186,7 @@ class UltraBenchModule(pl.LightningModule):
         self.num_classes = num_classes
         self.use_intermediate = use_intermediate
         self.is_seg = task_type == "segmentation"
+        self.aggregate_sequences = aggregate_sequences and not self.is_seg
 
         if self.is_seg:
             self.train_metric = DiceScore(num_classes=num_classes, input_format="mixed")
@@ -212,6 +222,9 @@ class UltraBenchModule(pl.LightningModule):
             )
 
         self._test_rows: List[Dict] = []
+        self._test_sequence_ids: List[str] = []
+        self._test_probabilities: List[np.ndarray] = []
+        self._test_targets: List[int] = []
         self.test_results: Dict[str, float] = {}
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -292,12 +305,16 @@ class UltraBenchModule(pl.LightningModule):
     # TEST
     def on_test_epoch_start(self) -> None:
         self._test_rows = []
+        self._test_sequence_ids = []
+        self._test_probabilities = []
+        self._test_targets = []
 
     def test_step(self, batch: Dict, batch_idx: int) -> None:
         """Accumulate test predictions and metrics.
 
         Args:
-            batch: Dict with "image", "target", and "filename" keys.
+            batch: Dict with "image", "target", and "filename" keys, plus
+                "sequence_id" when sequence-level metrics are enabled.
             batch_idx: Index of the current batch.
         """
         images = batch["image"]
@@ -325,14 +342,84 @@ class UltraBenchModule(pl.LightningModule):
                         }
                     )
         else:
+            probabilities = outputs.softmax(dim=1)
             preds = outputs.argmax(dim=1)
             self.test_accuracy(preds, targets)
             self.test_bal_accuracy(preds, targets)
             self.test_f1_macro(preds, targets)
             self.test_f1_weighted(preds, targets)
             self.test_mcc(preds, targets)
-            for key, label in zip(keys, preds.cpu().tolist()):
-                self._test_rows.append({"image_id": key, "label": label})
+
+            probabilities = probabilities.float().cpu().numpy()
+            for key, label, probs in zip(keys, preds.cpu().tolist(), probabilities):
+                row = {"image_id": key, "label": label}
+                row.update({f"prob_{i}": float(p) for i, p in enumerate(probs)})
+                self._test_rows.append(row)
+
+            if self.aggregate_sequences:
+                self._test_sequence_ids.extend(batch["sequence_id"])
+                self._test_probabilities.append(probabilities)
+                self._test_targets.extend(targets.cpu().tolist())
+
+    def _compute_sequence_metrics(self) -> Dict[str, float]:
+        """Compute test metrics on one prediction per sequence.
+
+        Average the predicted probabilities over the images of each
+        sequence and take the argmax, then score those predictions
+        against the sequence labels.
+
+        Returns:
+            A dict of sequence-level metrics, prefixed with "seq_". Empty
+            if no test predictions were accumulated.
+        """
+        if not self._test_sequence_ids:
+            logger.warning("No sequence IDs accumulated; skipping sequence metrics.")
+            return {}
+
+        _, probabilities, labels = aggregate_sequence_probabilities(
+            self._test_sequence_ids,
+            np.concatenate(self._test_probabilities),
+            self._test_targets,
+        )
+        preds = torch.from_numpy(probabilities.argmax(axis=1))
+        targets = torch.tensor(labels)
+
+        metrics = {
+            "seq_accuracy": torchmetrics.functional.accuracy(
+                preds, targets, task="multiclass", num_classes=self.num_classes
+            ),
+            "seq_balanced_accuracy": torchmetrics.functional.accuracy(
+                preds,
+                targets,
+                task="multiclass",
+                num_classes=self.num_classes,
+                average="macro",
+            ),
+            "seq_f1_macro": torchmetrics.functional.f1_score(
+                preds,
+                targets,
+                task="multiclass",
+                num_classes=self.num_classes,
+                average="macro",
+            ),
+            "seq_f1_weighted": torchmetrics.functional.f1_score(
+                preds,
+                targets,
+                task="multiclass",
+                num_classes=self.num_classes,
+                average="weighted",
+            ),
+            "seq_mcc": torchmetrics.functional.matthews_corrcoef(
+                preds, targets, task="multiclass", num_classes=self.num_classes
+            ),
+        }
+        logger.info(
+            "Aggregated %d images into %d sequences.",
+            len(self._test_sequence_ids),
+            len(preds),
+        )
+
+        return {name: round(value.item(), 3) for name, value in metrics.items()}
 
     def on_test_epoch_end(self) -> None:
         os.makedirs(self.output_dir, exist_ok=True)
@@ -346,7 +433,9 @@ class UltraBenchModule(pl.LightningModule):
                 "iou": round(self.test_iou.compute().item(), 4),  # ty:ignore[missing-argument]
             }
         else:
-            fieldnames = ["image_id", "label"]
+            fieldnames = ["image_id", "label"] + [
+                f"prob_{i}" for i in range(self.num_classes)
+            ]
             metrics = {
                 "accuracy": round(self.test_accuracy.compute().item(), 3),  # ty:ignore[missing-argument]
                 "balanced_accuracy": round(self.test_bal_accuracy.compute().item(), 3),  # ty:ignore[missing-argument]
@@ -354,6 +443,8 @@ class UltraBenchModule(pl.LightningModule):
                 "f1_weighted": round(self.test_f1_weighted.compute().item(), 3),  # ty:ignore[missing-argument]
                 "mcc": round(self.test_mcc.compute().item(), 3),  # ty:ignore[missing-argument]
             }
+            if self.aggregate_sequences:
+                metrics.update(self._compute_sequence_metrics())
 
         with open(csv_path, "w", newline="") as f:
             writer = csv.DictWriter(f, fieldnames=fieldnames)
@@ -545,6 +636,9 @@ class DownstreamPipeline:
             mode_name,
         )
 
+        sequence_by = cfg.task.get("sequence_by")  # ty:ignore[unresolved-attribute]
+        sequence_by = list(sequence_by) if sequence_by else None
+
         module = UltraBenchModule(
             backbone=backbone,
             head=head,
@@ -555,6 +649,7 @@ class DownstreamPipeline:
             output_dir=output_dir,
             num_classes=num_classes,
             use_intermediate=use_intermediate,
+            aggregate_sequences=sequence_by is not None,
         )
 
         datamodule = UltraBenchDataModule(
@@ -569,6 +664,7 @@ class DownstreamPipeline:
             stratify_by=cfg.task.stratify_by,  # ty:ignore[unresolved-attribute]
             group_by=cfg.task.group_by,  # ty:ignore[unresolved-attribute]
             filter_by=cfg.task.filter_by,  # ty:ignore[unresolved-attribute]
+            sequence_by=sequence_by,
             batch_size=cfg.optimization.batch_size,  # ty:ignore[unresolved-attribute]
             num_workers=cfg.system.data_loader_workers,  # ty:ignore[unresolved-attribute]
         )

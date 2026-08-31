@@ -28,6 +28,7 @@ The dataset is split according to the original `train` and `test` splits with 45
 
 The dataset is versioned with Git tags on the Hugging Face Hub. Pin a revision to keep an experiment reproducible:
 
+- `0.3`: The classification ground-truth CSV gains a `sequence_id` column so that image quality is evaluated per sequence. The images, masks, and splits are unchanged.
 - `0.2`: Split into the `classification` and `segmentation` subsets described above. The `segmentation` training split is subsampled to 1,000 frames and the surplus frames are discarded rather than moved to the `test` split.
 - `0.1`: A single unnamed configuration holding all 17,264 training frames.
 
@@ -58,6 +59,20 @@ The CAMUS dataset supports two tasks, one per subset:
 - Left ventricle (LV) endocardium, left ventricle (LV) myocardium, and left atrium (LA) segmentation (`segmentation` subset).
 - Image quality assessment (`classification` subset).
 
+## Evaluation
+
+Segmentation is evaluated per image. Image quality assessment is evaluated per **sequence**, since the quality grade describes the whole acquisition rather than an individual frame. A sequence is one `(patient, view)` pair, so the `test` split holds 100 sequences (50 patients x 2 views) across its 1,968 frames.
+
+Generate one prediction per sequence by averaging the predicted probabilities over every frame in the sequence, then taking the argmax. The ground-truth CSV carries a `sequence_id` column (`{patient}_{view}`, for example `313_2CH`) that identifies which frames belong together, so the predictions CSV stays per image:
+
+```bash
+python -m ultrabench.evaluate task=classification aggregate_by=sequence_id \
+  ground_truth=classification-test-ground-truth-classification.csv \
+  predictions=predictions.csv
+```
+
+See [the evaluation documentation](../evaluation.md) for the CSV format.
+
 ## Usage
 
 The easiest way to use this dataset is with [Hugging Face Datasets library](https://huggingface.co/docs/datasets/index). You must name a subset, since the dataset has no default configuration:
@@ -67,17 +82,17 @@ from datasets import load_dataset
 
 # Cardiac structure segmentation
 train_data = datasets.load_dataset(
-    "UltraBench/CAMUS", name="segmentation", revision="0.2", split="train"
+    "UltraBench/CAMUS", name="segmentation", revision="0.3", split="train"
 )
 test_data = datasets.load_dataset(
-    "UltraBench/CAMUS", name="segmentation", revision="0.2", split="test.256"
+    "UltraBench/CAMUS", name="segmentation", revision="0.3", split="test.256"
 )
 
 # Image quality assessment
 train_data = datasets.load_dataset(
-    "UltraBench/CAMUS", name="classification", revision="0.2", split="train"
+    "UltraBench/CAMUS", name="classification", revision="0.3", split="train"
 )
 test_data = datasets.load_dataset(
-    "UltraBench/CAMUS", name="classification", revision="0.2", split="test.256"
+    "UltraBench/CAMUS", name="classification", revision="0.3", split="test.256"
 )
 ```

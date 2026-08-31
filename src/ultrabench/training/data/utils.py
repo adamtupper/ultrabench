@@ -8,6 +8,7 @@ import numpy as np
 from datasets import Dataset
 from sklearn.model_selection import GroupShuffleSplit
 
+from ultrabench.core.aggregation import join_sequence_values
 from ultrabench.training.data.transforms import albumentations_transforms
 
 
@@ -52,6 +53,36 @@ def train_test_split(
         return splits["train"], splits["test"]
 
 
+def add_sequence_id(data: Dataset, sequence_by: list[str]) -> Dataset:
+    """Add a "sequence_id" column built from the given columns.
+
+    Reads only the grouping columns rather than mapping over the whole
+    dataset, so image columns are not decoded and re-encoded.
+
+    Args:
+        data: The dataset to add the column to.
+        sequence_by: The columns that jointly identify a sequence, for
+            example ["patient", "view"].
+
+    Returns:
+        The dataset with an added "sequence_id" column.
+
+    Raises:
+        ValueError: If the dataset is missing one of the given columns.
+    """
+    missing = [column for column in sequence_by if column not in data.column_names]
+    if missing:
+        raise ValueError(
+            f"Cannot build sequence IDs: dataset has no column(s) {missing}. "
+            f"Available columns: {data.column_names}."
+        )
+
+    values = [data[column] for column in sequence_by]
+    sequence_ids = [join_sequence_values(row) for row in zip(*values)]
+
+    return data.add_column("sequence_id", sequence_ids)
+
+
 def get_splits(
     path: str,
     input_key: str,
@@ -62,6 +93,7 @@ def get_splits(
     stratify_by: str | None = None,
     group_by: str | None = None,
     filter_by: str | None = None,
+    sequence_by: list[str] | None = None,
     subset: str | None = None,
     revision: str | None = None,
 ) -> tuple[Dataset, Dataset, Dataset]:
@@ -87,6 +119,10 @@ def get_splits(
             included.
         group_by: Optional column to to group by for train/val
             splitting.
+        sequence_by: Optional columns that jointly identify the sequence
+            an image belongs to. If given, a "sequence_id" column is
+            added to every split so that test predictions can be pooled
+            per sequence.
         subset: Optional subset/configuration of the dataset to load.
         revision: Optional Git revision (branch, tag or commit) of the
             dataset to load. Defaults to the latest revision.
@@ -131,6 +167,12 @@ def get_splits(
     )
 
     columns = ["image", "target", "scan_mask", "filename"]
+    if sequence_by is not None:
+        train_data = add_sequence_id(train_data, sequence_by)
+        val_data = add_sequence_id(val_data, sequence_by)
+        test_data = add_sequence_id(test_data, sequence_by)
+        columns.append("sequence_id")
+
     train_data = train_data.with_transform(
         partial(albumentations_transforms, transform=train_transform), columns=columns
     )

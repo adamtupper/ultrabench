@@ -1,8 +1,17 @@
 """Entry point for the evaluation layer.
 
-Usage:
+Usage::
 
-    python -m ultrabench.evaluate task=segmentation ground_truth=... predictions=...
+    python -m ultrabench.evaluate task=segmentation \\
+        ground_truth=... predictions=...
+
+Tasks with sequence-level labels (CAMUS image quality, COVID-BLUES,
+MASLD) are scored on one prediction per sequence. Pass
+``aggregate_by=sequence_id`` to average the predicted probabilities over
+the images of each sequence before computing the metrics::
+
+    python -m ultrabench.evaluate task=classification \\
+        aggregate_by=sequence_id ground_truth=... predictions=...
 """
 
 import hydra

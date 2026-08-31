@@ -11,6 +11,7 @@ from huggingface_hub import HfApi
 from huggingface_hub.errors import RepositoryNotFoundError
 from tqdm.auto import tqdm
 
+from ultrabench.core.aggregation import format_sequence_id
 from ultrabench.core.rle import mask_to_rle
 
 MAX_TRAIN_SAMPLES = 1000
@@ -307,23 +308,37 @@ def generate_segmentation_ground_truth(
 
 
 def generate_classification_ground_truth_from_records(
-    records: list[dict], output_path: Path
+    records: list[dict],
+    output_path: Path,
+    sequence_keys: list[str] | None = None,
 ) -> None:
     """Create a classification ground-truth CSV from a list of records.
 
-    Generate a CSV with columns "filename" and "label", where each row
-    corresponds to one example.
+    Generate a CSV with columns "image_id" and "label", where each row
+    corresponds to one example. Datasets whose labels apply to a whole
+    sequence rather than a single image also get a "sequence_id" column,
+    which the evaluation layer uses to pool per-image predictions.
 
     Args:
         records: List of record dicts, each containing "filename" and
-            "label" keys.
+            "label" keys, plus every key in sequence_keys.
         output_path: Destination path for the CSV file (including
             filename).
+        sequence_keys: Optional record keys that jointly identify the
+            sequence an image belongs to, for example
+            ["patient", "view"]. If None, no "sequence_id" column is
+            written and the task is evaluated per image.
+
+    Raises:
+        KeyError: If a record is missing one of the sequence keys.
     """
-    rows = [
-        {"image_id": r["filename"], "label": r["label"]}
-        for r in tqdm(records, desc="Generating classification ground truth CSV")
-    ]
+    rows = []
+    for r in tqdm(records, desc="Generating classification ground truth CSV"):
+        row = {"image_id": r["filename"], "label": r["label"]}
+        if sequence_keys is not None:
+            row["sequence_id"] = format_sequence_id(r, sequence_keys)
+        rows.append(row)
+
     pd.DataFrame(rows).to_csv(output_path, index=False)
 
 

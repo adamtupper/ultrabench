@@ -75,7 +75,6 @@ from tqdm.auto import tqdm
 from typing_extensions import Annotated
 
 from .utils import (
-    DATASET_REVISION,
     generate_classification_ground_truth_from_records,
     generate_segmentation_ground_truth_from_records,
     resize_and_pad,
@@ -88,6 +87,7 @@ from .utils import (
 __version__ = version("ultrabench")
 
 OUTPUT_NAME = "UltraBench/CAMUS"
+DATASET_REVISION = "0.3"
 CLASS_TO_LABEL = {
     "Poor": 0,
     "Medium": 1,
@@ -324,7 +324,7 @@ def verify_args(raw_data_dir: str, output_dir: str, publish: bool = False) -> No
     )
 
     if publish:
-        verify_revision_unpublished(OUTPUT_NAME)
+        verify_revision_unpublished(OUTPUT_NAME, DATASET_REVISION)
 
 
 def process_camus(
@@ -426,10 +426,16 @@ def process_camus(
     )
     generate_classification_ground_truth_from_records(
         [
-            {"filename": r["filename"], "label": r["image_quality"]}
+            {
+                "filename": r["filename"],
+                "label": r["image_quality"],
+                "patient": r["patient"],
+                "view": r["view"],
+            }
             for r in test_records
         ],
         classification_gt_path,
+        sequence_keys=["patient", "view"],
     )
     generate_segmentation_ground_truth_from_records(
         test_records,
@@ -438,7 +444,7 @@ def process_camus(
         output_path=segmentation_gt_path,
     )
 
-    save_version_info(str(output_path), __version__)
+    save_version_info(str(output_path), __version__, revision=DATASET_REVISION)
 
     if publish:
         classification_dataset.push_to_hub(
