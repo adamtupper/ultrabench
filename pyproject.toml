@@ -26,6 +26,7 @@ dependencies = [
     "kernels>=0.16.0,<0.17.0",
     "nibabel >=5.2.1",
     "numpy >=1.26.4",
+    "opencv-python-headless >=4.10.0.84",
     "openpyxl >=3.1.5",
     "pandas >=2.2.1",
     "pyyaml >=6.0.0",
@@ -49,7 +50,6 @@ dev = [
     "tbparse>=0.0.9,<0.0.10",
     "ty>=0.0.39,<0.0.40",
     "zenodo-get >=3.0.0",
-    "opencv-python-headless >=4.10.0.84",
     "adjusttext>=1.4.0,<2.0.0",
 ]
 training = [

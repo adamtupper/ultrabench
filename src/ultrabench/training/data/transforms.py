@@ -10,7 +10,9 @@ import logging
 from typing import Any, Callable, Optional
 
 import albumentations as A
+import cv2
 import numpy as np
+from albumentations.augmentations.geometric import functional as fgeometric
 from albumentations.pytorch import ToTensorV2
 from PIL import Image
 from usaugment.albumentations import DepthAttenuation, GaussianShadow, HazeArtifact
@@ -33,6 +35,43 @@ class PreprocessingTransform:
     def __call__(self, image, **kwargs):
         """Apply preprocessing to image."""
         return self.preprocessing_fn(image, self.cfg)
+
+
+class AdaptiveLongestMaxSize(A.LongestMaxSize):
+    """LongestMaxSize that adapts the image kernel to the resize direction.
+
+    cv2.INTER_AREA is the right kernel for shrinking, but above 1x OpenCV
+    collapses it towards nearest-neighbour sampling, so enlargements use
+    cv2.INTER_CUBIC instead. This mirrors the rule that
+    ultrabench.process.utils.resize_and_pad applies when it builds the
+    test.256 splits offline, so a training image and its published
+    test.256 counterpart are resized identically.
+
+    Masks are untouched: the inherited apply_to_mask uses
+    mask_interpolation, which stays cv2.INTER_NEAREST in both directions.
+
+    Albumentations gained an equivalent area_for_downscale parameter in
+    2.0.7; this class can be dropped if the pin is ever raised.
+    """
+
+    def apply(self, img: np.ndarray, scale: float, **params: Any) -> np.ndarray:
+        """Resize an image, choosing the kernel from the resize direction.
+
+        Args:
+            img: The image to resize, of shape (H, W) or (H, W, C).
+            scale: The factor by which both edges are scaled.
+            **params: The remaining transform parameters, unused.
+
+        Returns:
+            The resized image.
+        """
+        interpolation = self.interpolation
+        if interpolation == cv2.INTER_AREA and scale >= 1:
+            interpolation = cv2.INTER_CUBIC
+        height, width = img.shape[:2]
+        new_shape = (max(1, round(height * scale)), max(1, round(width * scale)))
+
+        return fgeometric.resize(img, new_shape, interpolation=interpolation)
 
 
 def get_mmotu_ub_transforms(img_size: int = 224) -> list:
@@ -163,7 +202,11 @@ def get_train_test_transforms(
 
     transform_train = A.Compose(
         [
-            A.LongestMaxSize(max_size=image_size),
+            AdaptiveLongestMaxSize(
+                max_size=image_size,
+                interpolation=cv2.INTER_AREA,
+                mask_interpolation=cv2.INTER_NEAREST,
+            ),
             A.PadIfNeeded(
                 min_height=image_size,
                 min_width=image_size,
@@ -178,7 +221,11 @@ def get_train_test_transforms(
 
     transform_test = A.Compose(
         [
-            A.LongestMaxSize(max_size=image_size),
+            AdaptiveLongestMaxSize(
+                max_size=image_size,
+                interpolation=cv2.INTER_AREA,
+                mask_interpolation=cv2.INTER_NEAREST,
+            ),
             A.PadIfNeeded(
                 min_height=image_size,
                 min_width=image_size,

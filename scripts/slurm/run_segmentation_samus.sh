@@ -4,7 +4,7 @@
 #SBATCH --mem=15G
 #SBATCH --cpus-per-task=3
 #SBATCH --gpus=h100_2g.20gb:1
-#SBATCH --time=7:00:00
+#SBATCH --time=3:00:00
 #SBATCH --array=0-3
 #SBATCH --signal=B:TERM@120
 #SBATCH --output=slurm_logs/%x-%A_%a.out

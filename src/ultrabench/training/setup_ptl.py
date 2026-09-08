@@ -190,7 +190,12 @@ class UltraBenchModule(pl.LightningModule):
 
         if self.is_seg:
             self.train_metric = DiceScore(num_classes=num_classes, input_format="mixed")
-            self.val_metric = DiceScore(num_classes=num_classes, input_format="mixed")
+            self.val_dice = DiceScore(num_classes=num_classes, input_format="mixed")
+            self.val_positive_dice = DiceScore(
+                num_classes=num_classes,
+                include_background=False,
+                input_format="mixed",
+            )
             self.test_dice = DiceScore(num_classes=num_classes, input_format="mixed")
             self.test_positive_dice = DiceScore(
                 num_classes=num_classes,
@@ -202,7 +207,19 @@ class UltraBenchModule(pl.LightningModule):
             self.train_metric = torchmetrics.Accuracy(
                 task="multiclass", num_classes=num_classes
             )
-            self.val_metric = torchmetrics.Accuracy(
+            self.val_acc = torchmetrics.Accuracy(
+                task="multiclass", num_classes=num_classes
+            )
+            self.val_bal_accuracy = torchmetrics.Accuracy(
+                task="multiclass", num_classes=num_classes, average="macro"
+            )
+            self.val_f1_macro = torchmetrics.F1Score(
+                task="multiclass", num_classes=num_classes, average="macro"
+            )
+            self.val_f1_weighted = torchmetrics.F1Score(
+                task="multiclass", num_classes=num_classes, average="weighted"
+            )
+            self.val_mcc = torchmetrics.MatthewsCorrCoef(
                 task="multiclass", num_classes=num_classes
             )
             self.test_accuracy = torchmetrics.Accuracy(
@@ -294,11 +311,22 @@ class UltraBenchModule(pl.LightningModule):
         loss = self.criterion(outputs, targets)
 
         if self.is_seg:
-            self.val_metric(outputs, targets)
-            self.log("val_dice", self.val_metric, prog_bar=True)
+            self.val_dice(outputs, targets)
+            self.log("val_dice", self.val_dice, prog_bar=True)
+            self.val_positive_dice(outputs, targets)
+            self.log("val_positive_dice", self.val_positive_dice, prog_bar=False)
         else:
-            self.val_metric(outputs.argmax(dim=1), targets)
-            self.log("val_acc", self.val_metric, prog_bar=True)
+            preds = outputs.argmax(dim=1)
+            self.val_acc(preds, targets)
+            self.log("val_acc", self.val_acc, prog_bar=True)
+            self.val_bal_accuracy(preds, targets)
+            self.log("val_balanced_accuracy", self.val_bal_accuracy, prog_bar=False)
+            self.val_f1_macro(preds, targets)
+            self.log("val_f1_macro", self.val_f1_macro, prog_bar=False)
+            self.val_f1_weighted(preds, targets)
+            self.log("val_f1_weighted", self.val_f1_weighted, prog_bar=False)
+            self.val_mcc(preds, targets)
+            self.log("val_mcc", self.val_mcc, prog_bar=False)
 
         self.log("val_loss", loss, prog_bar=True)
 
