@@ -4,7 +4,6 @@ import pytest
 
 from ultrabench.evaluate.tasks import (
     CATEGORIES,
-    EXCLUDED_TASKS,
     TASKS,
     get_task,
     included_tasks,
@@ -58,15 +57,13 @@ NOTEBOOK_CATEGORIES = {
 
 def test_registry_covers_every_task_config():
     """Check that every training task config is registered."""
-    assert len(TASKS) == 24
+    assert len(TASKS) == 21
     assert all(spec.name == name for name, spec in TASKS.items())
 
 
-def test_excluding_tasks_leaves_the_reported_benchmark():
-    """Check that the excluded tasks are dropped from the benchmark."""
-    assert EXCLUDED_TASKS <= set(TASKS)
-    assert len(included_tasks()) == 21
-    assert not EXCLUDED_TASKS & set(included_tasks())
+def test_included_tasks_covers_every_registered_task():
+    """Check that every registered task is part of the reported benchmark."""
+    assert set(included_tasks()) == set(TASKS)
 
 
 def test_categories_match_the_notebook_lists():

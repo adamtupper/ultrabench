@@ -20,7 +20,6 @@ MODE="head_only"  # head_only, full_finetuning
 # Dataset task sweep.
 TASKS=(
 	aul_mass_classification
-    # butterfly_classification
     masld_classification
     gbcu_classification
     mmotu_classification
