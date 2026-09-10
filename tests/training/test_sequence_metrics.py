@@ -9,7 +9,7 @@ import pytest
 import torch
 
 from ultrabench.evaluate.classification import ClassificationEvaluator
-from ultrabench.training.setup_ptl import UltraBenchModule
+from ultrabench.training.lightning import UltraBenchModule
 
 
 def make_module(

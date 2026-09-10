@@ -630,7 +630,7 @@ class TestBackboneProperty:
 
     def _make_ultrabench_module(self):
         """Return a minimal UltraBenchModule with a real backbone and head."""
-        from ultrabench.training.setup_ptl import UltraBenchModule
+        from ultrabench.training.lightning import UltraBenchModule
 
         backbone = nn.Linear(4, 4)
         head = nn.Linear(4, 2)
@@ -669,7 +669,7 @@ class TestConfigureOptimizersExcludesBackbone:
         """configure_optimizers builds the optimizer over head params only."""
         from omegaconf import OmegaConf
 
-        from ultrabench.training.setup_ptl import UltraBenchModule
+        from ultrabench.training.lightning import UltraBenchModule
 
         backbone = nn.Linear(4, 4)
         head = nn.Linear(4, 2)

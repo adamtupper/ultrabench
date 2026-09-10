@@ -15,9 +15,6 @@ import numpy as np
 from albumentations.augmentations.geometric import functional as fgeometric
 from albumentations.pytorch import ToTensorV2
 from PIL import Image
-from usaugment.albumentations import DepthAttenuation, GaussianShadow, HazeArtifact
-
-from ultrabench.training.data.user_preprocessing import get_preprocessing_fn
 
 logger = logging.getLogger(__name__)
 
@@ -74,42 +71,6 @@ class AdaptiveLongestMaxSize(A.LongestMaxSize):
         return fgeometric.resize(img, new_shape, interpolation=interpolation)
 
 
-def get_mmotu_ub_transforms(img_size: int = 224) -> list:
-    """TrivialAugment-style strategy specific to the MMOTU dataset tasks.
-
-    Includes a subset of augmentations found to be effective for MMOTU tasks in
-    Revisiting Data Augmentation for Ultrasound Images.
-
-    Returns:
-        List of Albumentations transforms.
-    """
-    return [
-        A.OneOf(
-            [
-                A.Rotate(limit=30, border_mode=0, fill=0, p=1.0),
-                A.ShiftScaleRotate(
-                    shift_limit=0.0625,
-                    scale_limit=0,
-                    rotate_limit=0,
-                    interpolation=1,
-                    border_mode=0,
-                    fill=0,
-                    p=1.0,
-                ),
-                A.RandomResizedCrop(size=(img_size, img_size), scale=(0.6, 1.0), p=1.0),
-                A.GaussNoise(
-                    (0, 0.0225),
-                    mean_range=(0.0, 0.0),
-                    per_channel=False,
-                    noise_scale_factor=1,
-                    p=1.0,
-                ),
-            ],
-            p=1.0,
-        ),
-    ]
-
-
 def get_general_ub_transforms(img_size: int = 224) -> list:
     """TrivialAugment-style strategy with domain-agnostic augmentations.
 
@@ -151,22 +112,6 @@ def get_general_ub_transforms(img_size: int = 224) -> list:
     ]
 
 
-def get_usaugment_transforms() -> list:
-    """Ultrasound-specific augmentations from USAugment.
-
-    Returns:
-        List of Albumentations transforms.
-    """
-
-    return [
-        A.HorizontalFlip(p=0.5),
-        DepthAttenuation(p=0.5),
-        GaussianShadow(p=0.5),
-        HazeArtifact(p=0.5),
-        # SpeckleReduction(p=0.5),  # TODO: Should this be reenabled?
-    ]
-
-
 def get_train_test_transforms(
     image_size: int, augmentation_strategy: str | None = None
 ) -> tuple[A.Compose, A.Compose]:
@@ -179,8 +124,8 @@ def get_train_test_transforms(
     Args:
         image_size: Target spatial size in pixels for images and masks.
         augmentation_strategy: Optional string to specify which augmentation
-            strategy to use during training. One of 'general', 'mmotu',
-            'usaugment', or None. Default is None (no augmentation).
+            strategy to use during training. Either 'general' or None. Default
+            is None (no augmentation).
 
     Returns:
         Tuple of (train_transforms, test_transforms) as Albumentations Compose
@@ -189,10 +134,6 @@ def get_train_test_transforms(
     match augmentation_strategy:
         case "general":
             train_augmentations = get_general_ub_transforms(img_size=image_size)
-        case "mmotu":
-            train_augmentations = get_mmotu_ub_transforms(img_size=image_size)
-        case "usaugment":
-            train_augmentations = get_usaugment_transforms()
         case None:
             train_augmentations = []
         case _:
@@ -277,47 +218,3 @@ def albumentations_transforms(
         examples["target"] = [input["mask"] for input in inputs]
 
     return examples
-
-
-# =============================================================================
-# CUSTOMIZATION GUIDE
-# =============================================================================
-#
-# To customize augmentations for your use case:
-#
-# 1. Modify the get_classification_transforms() or
-#    get_segmentation_transforms() functions above to add/remove/modify
-#    augmentations
-#
-# 2. Available Albumentations augmentations include:
-#    - Geometric: HorizontalFlip, VerticalFlip, Rotate, ShiftScaleRotate, etc.
-#    - Color: RandomBrightnessContrast, HueSaturationValue, ColorJitter, etc.
-#    - Noise: GaussNoise, ISONoise, MultiplicativeNoise, etc.
-#    - Blur: GaussianBlur, MotionBlur, MedianBlur, etc.
-#    - Advanced: ElasticTransform, GridDistortion, OpticalDistortion, etc.
-#
-# 3. For ultrasound-specific augmentations, consider:
-#    - Speckle noise simulation
-#    - Acoustic shadowing effects
-#    - Custom scan region masking
-#
-# 4. Example custom augmentation function:
-#
-#    def get_custom_transforms(split: str) -> A.Compose:
-#        if split == 'train':
-#            return A.Compose([
-#                A.Resize(256, 256),
-#                A.RandomCrop(224, 224),
-#                A.OneOf([
-#                    A.ElasticTransform(p=1),
-#                    A.GridDistortion(p=1),
-#                    A.OpticalDistortion(p=1),
-#                ], p=0.3),
-#                A.Normalize(),
-#                ToTensorV2()
-#            ])
-#        ...
-#
-# 5. Then modify get_transforms() to use your custom function
-#
-# =============================================================================
