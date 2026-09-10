@@ -23,8 +23,9 @@ Each example has the following features:
     - nodule_mask: Single-channel binary nodule mask (background=0, nodule=1).
     - label: ClassLabel for the pathology (benign=0, malignant=1).
 
-Two ground-truth CSV files are also created for the test split
-for use by the evaluation layer:
+Two ground-truth CSV files are also created in each test split
+directory for use by the evaluation layer, with the segmentation masks
+encoded at the resolution of that split:
 
     - ground_truth_classification.csv
     - ground_truth_segmentation.csv
@@ -51,7 +52,7 @@ from datasets import (
     Image,
     Value,
 )
-from huggingface_hub import CommitOperationAdd, HfApi
+from huggingface_hub import HfApi
 from tqdm.auto import tqdm
 from typing_extensions import Annotated
 
@@ -59,6 +60,7 @@ from .utils import (
     DATASET_REVISION,
     generate_classification_ground_truth_from_records,
     generate_segmentation_ground_truth_from_records,
+    ground_truth_commit_operations,
     resize_and_pad,
     save_version_info,
     subsample_balanced_by_class,
@@ -204,6 +206,30 @@ def verify_args(raw_data_dir: str, output_dir: str, publish: bool = False) -> No
         verify_revision_unpublished(OUTPUT_NAME)
 
 
+def write_ground_truth(
+    records: list[dict], gt_dir: Path, image_size: int | None
+) -> None:
+    """Write the ground-truth CSVs of one test split.
+
+    Args:
+        records: The records of the split.
+        gt_dir: The split directory to write the CSVs into.
+        image_size: The height and width of the split's images, or None
+            for the original-resolution split.
+    """
+    generate_classification_ground_truth_from_records(
+        [{"filename": r["filename"], "label": r["label"]} for r in records],
+        gt_dir / "ground_truth_classification.csv",
+    )
+    generate_segmentation_ground_truth_from_records(
+        records,
+        mask_key="nodule_mask",
+        classes=[1],
+        output_path=gt_dir / "ground_truth_segmentation.csv",
+        image_size=image_size,
+    )
+
+
 def process_tn3k(
     raw_data_dir: Annotated[str, typer.Argument(help="The path to the raw data")],
     output_dir: Annotated[
@@ -251,18 +277,8 @@ def process_tn3k(
     output_path = Path(output_dir) / OUTPUT_NAME
     dataset.save_to_disk(str(output_path))
 
-    gt_dir = output_path / f"test.{size}"
-
-    generate_classification_ground_truth_from_records(
-        [{"filename": r["filename"], "label": r["label"]} for r in test_records],
-        gt_dir / "ground_truth_classification.csv",
-    )
-    generate_segmentation_ground_truth_from_records(
-        test_records,
-        mask_key="nodule_mask",
-        classes=[1],
-        output_path=gt_dir / "ground_truth_segmentation.csv",
-    )
+    write_ground_truth(test_records, output_path / "test", None)
+    write_ground_truth(test_resized_records, output_path / f"test.{size}", size)
 
     save_version_info(str(output_path), __version__)
 
@@ -274,16 +290,14 @@ def process_tn3k(
         )
 
         api = HfApi()
-        operations = [
-            CommitOperationAdd(
-                path_in_repo=f"test.{size}-ground-truth-classification.csv",
-                path_or_fileobj=gt_dir / "ground_truth_classification.csv",
-            ),
-            CommitOperationAdd(
-                path_in_repo=f"test.{size}-ground-truth-segmentation.csv",
-                path_or_fileobj=gt_dir / "ground_truth_segmentation.csv",
-            ),
-        ]
+        operations = ground_truth_commit_operations(
+            output_path,
+            {
+                "classification": "ground_truth_classification.csv",
+                "segmentation": "ground_truth_segmentation.csv",
+            },
+            size,
+        )
         api.create_commit(
             repo_id=OUTPUT_NAME,
             repo_type="dataset",

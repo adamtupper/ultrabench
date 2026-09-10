@@ -24,7 +24,7 @@ Each example has the following features:
     - scan_mask: Single-channel binary ultrasound scan mask generated
       from per-pixel variance across all frames of the video.
 
-A ground-truth CSV file is also created for the test split:
+A ground-truth CSV file is also created in each test split directory:
 
     - ground_truth_classification.csv
 
@@ -51,12 +51,14 @@ from datasets import (
     Image,
     Value,
 )
-from huggingface_hub import CommitOperationAdd, HfApi
+from huggingface_hub import HfApi
 from sklearn.model_selection import GroupShuffleSplit
 from tqdm.auto import tqdm
 
 from .utils import (
+    DATASET_REVISION,
     generate_classification_ground_truth_from_records,
+    ground_truth_commit_operations,
     resize_and_pad,
     save_version_info,
     verify_revision_unpublished,
@@ -65,7 +67,6 @@ from .utils import (
 __version__ = version("ultrabench")
 
 OUTPUT_NAME = "UltraBench/COVID-BLUES"
-DATASET_REVISION = "0.3"
 DATASET_INFO = DatasetInfo(
     description=(
         "Lung ultrasound videos from suspected COVID-19 patients "
@@ -276,7 +277,7 @@ def verify_args(raw_data_dir: str, output_dir: str, publish: bool = False) -> No
     )
 
     if publish:
-        verify_revision_unpublished(OUTPUT_NAME, DATASET_REVISION)
+        verify_revision_unpublished(OUTPUT_NAME)
 
 
 def process_covid_blues(
@@ -376,20 +377,24 @@ def process_covid_blues(
 
     dataset.save_to_disk(str(output_path))
 
-    generate_classification_ground_truth_from_records(
-        [
-            {
-                "filename": r["filename"],
-                "label": r["covid19"],
-                "patient": r["patient"],
-            }
-            for r in test_records
-        ],
-        output_path / f"test.{size}" / "ground_truth_classification.csv",
-        sequence_keys=["patient"],
-    )
+    for records, gt_dir in (
+        (test_records, output_path / "test"),
+        (test_resized_records, output_path / f"test.{size}"),
+    ):
+        generate_classification_ground_truth_from_records(
+            [
+                {
+                    "filename": r["filename"],
+                    "label": r["covid19"],
+                    "patient": r["patient"],
+                }
+                for r in records
+            ],
+            gt_dir / "ground_truth_classification.csv",
+            sequence_keys=["patient"],
+        )
 
-    save_version_info(str(output_path), __version__, revision=DATASET_REVISION)
+    save_version_info(str(output_path), __version__)
 
     typer.echo(f"Dataset saved to {output_path}.")
 
@@ -401,14 +406,9 @@ def process_covid_blues(
         )
 
         api = HfApi()
-        operations = [
-            CommitOperationAdd(
-                path_in_repo=f"test.{size}-ground-truth-classification.csv",
-                path_or_fileobj=(
-                    output_path / f"test.{size}" / "ground_truth_classification.csv"
-                ),
-            ),
-        ]
+        operations = ground_truth_commit_operations(
+            output_path, {"classification": "ground_truth_classification.csv"}, size
+        )
         api.create_commit(
             repo_id=OUTPUT_NAME,
             repo_type="dataset",

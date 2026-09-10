@@ -41,9 +41,12 @@ Features for the ``fetal_brain`` subset:
     - image: 3-channel ultrasound image.
     - scan_mask: Single-channel binary ultrasound scan mask.
 
-A classification ground-truth CSV is generated for each subset:
+A classification ground-truth CSV is generated for each test split of
+each subset:
 
+    - fetal/test/ground_truth_classification.csv
     - fetal/test.{size}/ground_truth_classification.csv
+    - fetal_brain/test/ground_truth_classification.csv
     - fetal_brain/test.{size}/ground_truth_classification.csv
 
 Usage:
@@ -68,7 +71,7 @@ from datasets import (
     Image,
     Value,
 )
-from huggingface_hub import CommitOperationAdd, HfApi
+from huggingface_hub import HfApi
 from tqdm.auto import tqdm
 from typing_extensions import Annotated
 
@@ -76,6 +79,7 @@ from .utils import (
     DATASET_REVISION,
     cap_train_split_by_patient,
     generate_classification_ground_truth_from_records,
+    ground_truth_commit_operations,
     resize_and_pad,
     save_version_info,
     to_3_channel,
@@ -445,30 +449,28 @@ def process_fetal_planes(
     fetal_dataset.save_to_disk(str(output_path / "fetal"))
     fetal_brain_dataset.save_to_disk(str(output_path / "fetal_brain"))
 
-    fetal_gt_path = (
-        output_path / "fetal" / f"test.{size}" / "ground_truth_classification.csv"
-    )
-    fetal_brain_gt_path = (
-        output_path / "fetal_brain" / f"test.{size}" / "ground_truth_classification.csv"
-    )
-
-    generate_classification_ground_truth_from_records(
-        [
-            {"filename": row["Image_name"], "label": PLANE_NAMES.index(row["Plane"])}
-            for _, row in test_df.iterrows()
-        ],
-        fetal_gt_path,
-    )
-    generate_classification_ground_truth_from_records(
-        [
-            {
-                "filename": row["Image_name"],
-                "label": BRAIN_PLANE_NAMES.index(row["Brain_plane"]),
-            }
-            for _, row in brain_test_df.iterrows()
-        ],
-        fetal_brain_gt_path,
-    )
+    # Both subsets are classification only, so the ground truth does not
+    # depend on the image size and the two test splits share a CSV.
+    fetal_rows = [
+        {"filename": row["Image_name"], "label": PLANE_NAMES.index(row["Plane"])}
+        for _, row in test_df.iterrows()
+    ]
+    fetal_brain_rows = [
+        {
+            "filename": row["Image_name"],
+            "label": BRAIN_PLANE_NAMES.index(row["Brain_plane"]),
+        }
+        for _, row in brain_test_df.iterrows()
+    ]
+    for split in ("test", f"test.{size}"):
+        generate_classification_ground_truth_from_records(
+            fetal_rows,
+            output_path / "fetal" / split / "ground_truth_classification.csv",
+        )
+        generate_classification_ground_truth_from_records(
+            fetal_brain_rows,
+            output_path / "fetal_brain" / split / "ground_truth_classification.csv",
+        )
 
     save_version_info(str(output_path), __version__)
 
@@ -490,13 +492,17 @@ def process_fetal_planes(
 
         api = HfApi()
         operations = [
-            CommitOperationAdd(
-                path_in_repo="fetal-test-ground-truth-classification.csv",
-                path_or_fileobj=fetal_gt_path,
+            *ground_truth_commit_operations(
+                output_path / "fetal",
+                {"classification": "ground_truth_classification.csv"},
+                size,
+                prefix="fetal",
             ),
-            CommitOperationAdd(
-                path_in_repo="fetal-brain-test-ground-truth-classification.csv",
-                path_or_fileobj=fetal_brain_gt_path,
+            *ground_truth_commit_operations(
+                output_path / "fetal_brain",
+                {"classification": "ground_truth_classification.csv"},
+                size,
+                prefix="fetal-brain",
             ),
         ]
         api.create_commit(

@@ -20,8 +20,8 @@ Each example has the following features:
     - percentage: Percentage of hepatocytes with steatosis.
     - label: ClassLabel encoding the diagnosis (negative=0, positive=1).
 
-One ground-truth CSV file is also created for the test split for use
-by the evaluation layer:
+One ground-truth CSV file is also created in each test split directory
+for use by the evaluation layer:
 
     - ground_truth_classification.csv
 
@@ -47,13 +47,15 @@ from datasets import (
     Image,
     Value,
 )
-from huggingface_hub import CommitOperationAdd, HfApi
+from huggingface_hub import HfApi
 from sklearn.model_selection import GroupShuffleSplit
 from tqdm.auto import tqdm
 from typing_extensions import Annotated
 
 from .utils import (
+    DATASET_REVISION,
     generate_classification_ground_truth_from_records,
+    ground_truth_commit_operations,
     resize_and_pad,
     save_version_info,
     to_3_channel,
@@ -63,7 +65,6 @@ from .utils import (
 __version__ = version("ultrabench")
 
 OUTPUT_NAME = "UltraBench/MASLD"
-DATASET_REVISION = "0.3"
 DATASET_INFO = DatasetInfo(
     description=(
         "A dataset of liver ultrasound images labeled for "
@@ -178,7 +179,7 @@ def verify_args(raw_data_path: str, output_dir: str, publish: bool = False) -> N
     )
 
     if publish:
-        verify_revision_unpublished(OUTPUT_NAME, DATASET_REVISION)
+        verify_revision_unpublished(OUTPUT_NAME)
 
 
 def process_masld(
@@ -270,11 +271,16 @@ def process_masld(
 
     generate_classification_ground_truth_from_records(
         test_records,
+        output_path / "test" / "ground_truth_classification.csv",
+        sequence_keys=["patient"],
+    )
+    generate_classification_ground_truth_from_records(
+        test_resized_records,
         output_path / f"test.{size}" / "ground_truth_classification.csv",
         sequence_keys=["patient"],
     )
 
-    save_version_info(str(output_path), __version__, revision=DATASET_REVISION)
+    save_version_info(str(output_path), __version__)
 
     if publish:
         dataset.push_to_hub(
@@ -284,14 +290,9 @@ def process_masld(
         )
 
         api = HfApi()
-        operations = [
-            CommitOperationAdd(
-                path_in_repo="test-ground-truth-classification.csv",
-                path_or_fileobj=output_path
-                / f"test.{size}"
-                / "ground_truth_classification.csv",
-            ),
-        ]
+        operations = ground_truth_commit_operations(
+            output_path, {"classification": "ground_truth_classification.csv"}, size
+        )
         api.create_commit(
             repo_id=OUTPUT_NAME,
             repo_type="dataset",

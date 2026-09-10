@@ -1,13 +1,14 @@
 """Utility functions for dataset processing."""
 
+import csv
 import os
+from collections.abc import Iterable, Mapping, Sequence
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
-import skimage.io
 import skimage.transform
-from huggingface_hub import HfApi
+from huggingface_hub import CommitOperationAdd, HfApi
 from huggingface_hub.errors import RepositoryNotFoundError
 from tqdm.auto import tqdm
 
@@ -17,12 +18,7 @@ from ultrabench.core.rle import mask_to_rle
 MAX_TRAIN_SAMPLES = 1000
 """The maximum number of examples in a published training split."""
 
-DATASET_REVISION = "0.2"
-"""The default revision of the published datasets that this code produces.
-
-Individual dataset modules may define their own revision when they are
-republished independently of the rest of the collection.
-"""
+DATASET_REVISION = "0.4"
 
 
 def save_version_info(
@@ -245,66 +241,71 @@ def to_3_channel(image: np.ndarray) -> np.ndarray:
     raise ValueError(f"Expected a (1, 3, 4)-channel image, got shape {image.shape}.")
 
 
-def generate_classification_ground_truth(
-    examples: list[dict], output_path: Path
-) -> None:
-    """Create a CSV file with the ground-truth labels.
+def ground_truth_path_in_repo(
+    task: str, *, size: int | None = None, prefix: str | None = None
+) -> str:
+    """Build the name a ground-truth CSV is published under on the Hub.
 
-    Generate a CSV with columns "image_id" and "label", where each row
-    corresponds to one example. The "image_id" column contains the image
-    identifier (e.g., relative filepath) and the "label" column contains
-    the class label.
+    A Hugging Face dataset repository holds every ground-truth CSV in its
+    root, so the name has to carry the split, and the subset for a
+    dataset that has more than one. Building the names here keeps them
+    consistent across datasets.
 
     Args:
-        examples: List of example dicts, each containing `image` and
-            `label` keys.
-        output_path: Destination path for the CSV file (including
-            filename).
+        task: The task the CSV covers, for example "segmentation" or
+            "classification-pathology".
+        size: The height and width of the resized test images, or None
+            for the original-resolution test split.
+        prefix: The dataset subset the CSV belongs to, or None for a
+            dataset with a single subset.
+
+    Returns:
+        The path to publish the CSV under, relative to the repository
+        root.
     """
-    rows = [{"image_id": x["image"], "label": x["label"]} for x in examples]
-    pd.DataFrame(rows).to_csv(output_path, index=False)
+    split = "test" if size is None else f"test.{size}"
+    name = f"{split}-ground-truth-{task}.csv"
+
+    return f"{prefix}-{name}" if prefix else name
 
 
-def generate_segmentation_ground_truth(
-    examples: list[dict],
-    mask_key: str,
-    classes: list[int],
+def ground_truth_commit_operations(
     output_path: Path,
-) -> None:
-    """Create a segmentation ground truth CSV with RLE-encoded masks.
+    tasks: Mapping[str, str],
+    size: int,
+    *,
+    prefix: str | None = None,
+) -> list[CommitOperationAdd]:
+    """Build the operations that publish a dataset's ground-truth CSVs.
 
-    Generate a CSV with columns "image_id", "class_id", and
-    "encoded_pixels", where each row corresponds to one (image, class)
-    pair. The "encoded_pixels" column contains the RLE-encoded binary
-    mask for that class, or an empty string if the mask is all zeros.
-
-    Rows are ordered by image: all classes for image 1, then image 2,
-    etc.
+    Both test splits carry a ground-truth CSV per task, so every task
+    yields two operations: one for the original-resolution `test` split
+    and one for the resized `test.{size}` split.
 
     Args:
-        examples: List of example dicts, each containing `image` and
-            [mask_key] keys
-        mask_key: The key in the example dicts that contains the path to
-            the segmentation mask.
-        classes: The list of foreground class IDs.
-        output_path: Destination path for the CSV file (including
-            the filename).
-    """
-    rows = []
-    for example in examples:
-        mask = skimage.io.imread(str(output_path.parent / example[mask_key]))
-        for cls in classes:
-            binary_mask = (mask == cls).astype(np.uint8)
-            encoded = mask_to_rle(binary_mask)
-            rows.append(
-                {
-                    "image_id": example["image"],
-                    "class_id": cls,
-                    "encoded_pixels": encoded,
-                }
-            )
+        output_path: The directory the processed dataset was saved to,
+            or the subset directory for a dataset with more than one
+            subset.
+        tasks: A mapping from the task name, as it appears in the
+            published filename, to the name of the CSV within each split
+            directory.
+        size: The height and width of the resized test images.
+        prefix: The dataset subset the CSVs belong to, or None for a
+            dataset with a single subset.
 
-    pd.DataFrame(rows).to_csv(output_path, index=False)
+    Returns:
+        One operation per (test split, task) pair.
+    """
+    return [
+        CommitOperationAdd(
+            path_in_repo=ground_truth_path_in_repo(
+                task, size=split_size, prefix=prefix
+            ),
+            path_or_fileobj=output_path / split / filename,
+        )
+        for split, split_size in (("test", None), (f"test.{size}", size))
+        for task, filename in tasks.items()
+    ]
 
 
 def generate_classification_ground_truth_from_records(
@@ -318,6 +319,9 @@ def generate_classification_ground_truth_from_records(
     corresponds to one example. Datasets whose labels apply to a whole
     sequence rather than a single image also get a "sequence_id" column,
     which the evaluation layer uses to pool per-image predictions.
+
+    Labels do not depend on the image resolution, so the same CSV is
+    written into both test split directories.
 
     Args:
         records: List of record dicts, each containing "filename" and
@@ -343,42 +347,69 @@ def generate_classification_ground_truth_from_records(
 
 
 def generate_segmentation_ground_truth_from_records(
-    records: list[dict],
+    records: Iterable[dict],
     mask_key: str,
-    classes: list[int],
+    classes: Sequence[int],
     output_path: Path,
+    *,
+    image_size: int | None,
 ) -> None:
-    """Create a segmentation ground-truth CSV from a list of records.
+    """Create a segmentation ground-truth CSV from a set of records.
 
     Generate a CSV with columns "image_id", "class_id", and
     "encoded_pixels", where each row corresponds to one (image, class)
     pair. "encoded_pixels" is a run-length encoded (RLE) string. Records
     where record[mask_key] is None are skipped.
 
+    Rows are written as the records are consumed, so the records may be
+    an iterator that generates its masks lazily.
+
     Args:
-        records: List of record dicts, each containing "filename" and
-            a key matching mask_key whose value is a numpy uint8 array
-            or None.
+        records: Records, each containing "filename" and a key matching
+            mask_key whose value is a numpy uint8 array or None.
         mask_key: The key in each record that contains the mask array.
         classes: The list of foreground class IDs.
         output_path: Destination path for the CSV file (including
             filename).
+        image_size: The height and width the masks must have, or None
+            for the original-resolution test split, whose masks vary in
+            size. A mask encoded at the wrong resolution scores near
+            zero against predictions rather than failing, so the
+            resolution a CSV claims is checked rather than assumed.
+
+    Raises:
+        ValueError: If a mask is not square at image_size.
     """
-    rows = []
-    for r in tqdm(records, desc="Generating segmentation ground truth CSV"):
-        mask = r[mask_key]
-        if mask is None:
-            continue
-        for cls in classes:
-            binary_mask = (mask == cls).astype(np.uint8)
-            rows.append(
-                {
-                    "filename": r["filename"],
-                    "class_id": cls,
-                    "encoded_pixels": mask_to_rle(binary_mask),
-                }
-            )
-    pd.DataFrame(rows).to_csv(output_path, index=False)
+    expected_shape = None if image_size is None else (image_size, image_size)
+
+    with output_path.open("w", newline="") as file:
+        writer = csv.DictWriter(
+            file,
+            fieldnames=["image_id", "class_id", "encoded_pixels"],
+            lineterminator="\n",
+        )
+        writer.writeheader()
+
+        for r in tqdm(records, desc="Generating segmentation ground truth CSV"):
+            if r[mask_key] is None:
+                continue
+
+            mask = np.asarray(r[mask_key])
+            if expected_shape is not None and mask.shape != expected_shape:
+                raise ValueError(
+                    f"Mask for '{r['filename']}' has shape {mask.shape}, expected "
+                    f"{expected_shape}. The records of the wrong split may have "
+                    f"been passed."
+                )
+
+            for cls in classes:
+                writer.writerow(
+                    {
+                        "image_id": r["filename"],
+                        "class_id": cls,
+                        "encoded_pixels": mask_to_rle((mask == cls).astype(np.uint8)),
+                    }
+                )
 
 
 def resize_and_pad(image: np.ndarray, size: int, order: int = 1) -> np.ndarray:

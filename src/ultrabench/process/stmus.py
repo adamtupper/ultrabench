@@ -41,8 +41,9 @@ Each example has the following features:
       (background=0, muscle=1).
     - scan_mask: Single-channel binary ultrasound scan mask (all ones).
 
-A segmentation ground-truth CSV is also created for the test split
-for use by the evaluation layer:
+A segmentation ground-truth CSV is also created in each test split
+directory for use by the evaluation layer, with the masks encoded at
+the resolution of that split:
 
     - ground_truth_segmentation.csv
 
@@ -52,6 +53,7 @@ Usage:
 """
 
 import os
+from collections.abc import Iterator
 from importlib.metadata import version
 from pathlib import Path
 
@@ -67,14 +69,16 @@ from datasets import (
     Image,
     Value,
 )
-from huggingface_hub import CommitOperationAdd, HfApi
+from huggingface_hub import HfApi
 from sklearn.model_selection import GroupShuffleSplit
 from tqdm.auto import tqdm
 from typing_extensions import Annotated
 
 from .utils import (
+    DATASET_REVISION,
     cap_train_split_by_patient,
     generate_segmentation_ground_truth_from_records,
+    ground_truth_commit_operations,
     resize_and_pad,
     save_version_info,
     to_3_channel,
@@ -84,10 +88,6 @@ from .utils import (
 __version__ = version("ultrabench")
 
 OUTPUT_NAME = "UltraBench/STMUS"
-
-# STMUS is versioned independently of the shared process.utils revision
-# because its patient IDs changed after the other datasets were published.
-DATASET_REVISION = "0.3"
 
 CHARACTERISTICS_FILENAME = "characteristics.xlsx"
 
@@ -357,6 +357,32 @@ def _make_generator(
     return generator
 
 
+def _mask_records(
+    df: pd.DataFrame, size: int | None
+) -> Iterator[dict[str, str | np.ndarray]]:
+    """Generate the records the ground-truth CSV of one split is built from.
+
+    The splits are streamed rather than held in memory, so the masks are
+    read again here. They go through the same resize as ``_process_row``
+    does, which keeps them identical to the masks of the split they are
+    published with.
+
+    Args:
+        df: Metadata DataFrame for the split.
+        size: The height and width to resize and pad the masks to, or
+            None to keep their original size.
+
+    Yields:
+        A dict with the ``filename`` and ``mask`` of one example.
+    """
+    for _, row in tqdm(df.iterrows(), total=len(df), desc="Generating ground truth"):
+        mask = (io.imread(row["mask_path"]) >= 128).astype(np.uint8)
+        if size is not None:
+            mask = resize_and_pad(mask, size, order=0)
+
+        yield {"filename": row["filename"], "mask": mask}
+
+
 def verify_args(raw_data_dir: str, output_dir: str, publish: bool = False) -> None:
     """Verify command-line arguments before processing begins.
 
@@ -377,7 +403,7 @@ def verify_args(raw_data_dir: str, output_dir: str, publish: bool = False) -> No
     )
 
     if publish:
-        verify_revision_unpublished(OUTPUT_NAME, DATASET_REVISION)
+        verify_revision_unpublished(OUTPUT_NAME)
 
 
 def process_stmus(
@@ -443,27 +469,16 @@ def process_stmus(
     output_path = Path(output_dir) / OUTPUT_NAME
     dataset.save_to_disk(str(output_path))
 
-    gt_dir = output_path / f"test.{size}"
-
-    gt_records = [
-        {
-            "filename": row["filename"],
-            "mask": (io.imread(row["mask_path"]) >= 128).astype(np.uint8),
-        }
-        for _, row in tqdm(
-            test_df.iterrows(),
-            total=len(test_df),
-            desc="Generating ground truth",
+    for split, image_size in (("test", None), (f"test.{size}", size)):
+        generate_segmentation_ground_truth_from_records(
+            _mask_records(test_df, image_size),
+            mask_key="mask",
+            classes=[1],
+            output_path=output_path / split / "ground_truth_segmentation.csv",
+            image_size=image_size,
         )
-    ]
-    generate_segmentation_ground_truth_from_records(
-        gt_records,
-        mask_key="mask",
-        classes=[1],
-        output_path=gt_dir / "ground_truth_segmentation.csv",
-    )
 
-    save_version_info(str(output_path), __version__, revision=DATASET_REVISION)
+    save_version_info(str(output_path), __version__)
 
     if publish:
         dataset.push_to_hub(
@@ -473,12 +488,9 @@ def process_stmus(
         )
 
         api = HfApi()
-        operations = [
-            CommitOperationAdd(
-                path_in_repo=f"test.{size}-ground-truth-segmentation.csv",
-                path_or_fileobj=gt_dir / "ground_truth_segmentation.csv",
-            ),
-        ]
+        operations = ground_truth_commit_operations(
+            output_path, {"segmentation": "ground_truth_segmentation.csv"}, size
+        )
         api.create_commit(
             repo_id=OUTPUT_NAME,
             repo_type="dataset",

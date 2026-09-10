@@ -30,7 +30,8 @@ Each example has the following features:
     - regions_mask: Single-channel multi-class kidney regions mask.
     - scan_mask: Single-channel binary scan mask.
 
-Two ground-truth CSV files are also created for the test split:
+Two ground-truth CSV files are also created in each test split
+directory, with the masks encoded at the resolution of that split:
 
     - ground_truth_segmentation_capsule.csv
     - ground_truth_segmentation_regions.csv
@@ -58,16 +59,19 @@ from datasets import (
     Image,
     Value,
 )
-from huggingface_hub import CommitOperationAdd, HfApi
+from huggingface_hub import HfApi
 from sklearn.model_selection import train_test_split
 from tqdm.auto import tqdm
 from typing_extensions import Annotated
 
 from .utils import (
+    DATASET_REVISION,
     generate_segmentation_ground_truth_from_records,
+    ground_truth_commit_operations,
     resize_and_pad,
     save_version_info,
     to_3_channel,
+    verify_revision_unpublished,
 )
 
 __version__ = version("ultrabench")
@@ -208,18 +212,50 @@ def _process_open_kidney_example(
     }
 
 
-def verify_args(raw_data_dir: str, output_dir: str) -> None:
+def write_ground_truth(
+    records: list[dict], gt_dir: Path, image_size: int | None
+) -> None:
+    """Write the ground-truth CSVs of one test split.
+
+    Args:
+        records: The records of the split.
+        gt_dir: The split directory to write the CSVs into.
+        image_size: The height and width of the split's images, or None
+            for the original-resolution split.
+    """
+    generate_segmentation_ground_truth_from_records(
+        records,
+        mask_key="capsule_mask",
+        classes=[1],
+        output_path=gt_dir / "ground_truth_segmentation_capsule.csv",
+        image_size=image_size,
+    )
+    generate_segmentation_ground_truth_from_records(
+        records,
+        mask_key="regions_mask",
+        classes=[1, 2, 3],
+        output_path=gt_dir / "ground_truth_segmentation_regions.csv",
+        image_size=image_size,
+    )
+
+
+def verify_args(raw_data_dir: str, output_dir: str, publish: bool = False) -> None:
     """Verify the command line arguments.
 
     Args:
         raw_data_dir: The path to the raw data directory.
         output_dir: The path to the output directory.
+        publish: Whether the dataset will be published to the Hugging
+            Face Hub.
     """
     assert os.path.isdir(raw_data_dir), "raw_data_dir must be an existing directory"
     assert os.path.isdir(output_dir), "output_dir must be an existing directory"
     assert not os.path.exists(os.path.join(output_dir, OUTPUT_NAME)), (
         "A matching version of the Open Kidney dataset already exists"
     )
+
+    if publish:
+        verify_revision_unpublished(OUTPUT_NAME)
 
 
 def process_open_kidney(
@@ -243,7 +279,7 @@ def process_open_kidney(
         size: The height and width of the test images in pixels.
         publish: Whether to publish the dataset to the HF Hub.
     """
-    verify_args(raw_data_dir, output_dir)
+    verify_args(raw_data_dir, output_dir, publish)
 
     output_path = Path(output_dir) / OUTPUT_NAME
 
@@ -313,19 +349,8 @@ def process_open_kidney(
 
     dataset.save_to_disk(str(output_path))
 
-    test_size_dir = output_path / f"test.{size}"
-    generate_segmentation_ground_truth_from_records(
-        test_records,
-        mask_key="capsule_mask",
-        classes=[1],
-        output_path=test_size_dir / "ground_truth_segmentation_capsule.csv",
-    )
-    generate_segmentation_ground_truth_from_records(
-        test_records,
-        mask_key="regions_mask",
-        classes=[1, 2, 3],
-        output_path=test_size_dir / "ground_truth_segmentation_regions.csv",
-    )
+    write_ground_truth(test_records, output_path / "test", None)
+    write_ground_truth(test_resized_records, output_path / f"test.{size}", size)
 
     print(f"# of training examples: {len(train_records)}")
     print(f"# of test examples: {len(test_records)}")
@@ -335,24 +360,24 @@ def process_open_kidney(
     if publish:
         dataset.push_to_hub(
             OUTPUT_NAME,
-            commit_message=f"Update the dataset to Version {__version__}.",
+            commit_message=f"Update the dataset to revision {DATASET_REVISION}.",
             private=True,
         )
 
         api = HfApi()
-        operations = [
-            CommitOperationAdd(
-                path_in_repo=f"test.{size}-ground-truth-segmentation-capsule.csv",
-                path_or_fileobj=test_size_dir / "ground_truth_segmentation_capsule.csv",
-            ),
-            CommitOperationAdd(
-                path_in_repo=f"test.{size}-ground-truth-segmentation-regions.csv",
-                path_or_fileobj=test_size_dir / "ground_truth_segmentation_regions.csv",
-            ),
-        ]
+        operations = ground_truth_commit_operations(
+            output_path,
+            {
+                "segmentation-capsule": "ground_truth_segmentation_capsule.csv",
+                "segmentation-regions": "ground_truth_segmentation_regions.csv",
+            },
+            size,
+        )
         api.create_commit(
             repo_id=OUTPUT_NAME,
             repo_type="dataset",
             operations=operations,
-            commit_message=f"Update ground truth CSV files for Version {__version__}.",
+            commit_message=(
+                f"Update ground truth CSV files for revision {DATASET_REVISION}."
+            ),
         )

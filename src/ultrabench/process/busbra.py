@@ -24,8 +24,9 @@ Each example has the following features:
     - image: 3-channel ultrasound image.
     - tumor_mask: Single-channel binary tumor mask.
 
-Three ground-truth CSV files are also created for the test split
-for use by the evaluation layer:
+Three ground-truth CSV files are also created in each test split
+directory for use by the evaluation layer, with the segmentation masks
+encoded at the resolution of that split:
 
     - ground_truth_classification_pathology.csv
     - ground_truth_classification_histology.csv
@@ -53,7 +54,7 @@ from datasets import (
     Image,
     Value,
 )
-from huggingface_hub import CommitOperationAdd, HfApi
+from huggingface_hub import HfApi
 from sklearn.model_selection import GroupShuffleSplit
 from tqdm.auto import tqdm
 from typing_extensions import Annotated
@@ -63,6 +64,7 @@ from .utils import (
     cap_train_split_by_patient,
     generate_classification_ground_truth_from_records,
     generate_segmentation_ground_truth_from_records,
+    ground_truth_commit_operations,
     resize_and_pad,
     save_version_info,
     to_3_channel,
@@ -220,6 +222,34 @@ def process_examples(
     return records
 
 
+def write_ground_truth(
+    records: list[dict], gt_dir: Path, image_size: int | None
+) -> None:
+    """Write the ground-truth CSVs of one test split.
+
+    Args:
+        records: The records of the split.
+        gt_dir: The split directory to write the CSVs into.
+        image_size: The height and width of the split's images, or None
+            for the original-resolution split.
+    """
+    generate_classification_ground_truth_from_records(
+        [{"filename": r["filename"], "label": r["pathology"]} for r in records],
+        gt_dir / "ground_truth_classification_pathology.csv",
+    )
+    generate_classification_ground_truth_from_records(
+        [{"filename": r["filename"], "label": r["histology_label"]} for r in records],
+        gt_dir / "ground_truth_classification_histology.csv",
+    )
+    generate_segmentation_ground_truth_from_records(
+        records,
+        mask_key="tumor_mask",
+        classes=[1],
+        output_path=gt_dir / "ground_truth_segmentation.csv",
+        image_size=image_size,
+    )
+
+
 def verify_args(raw_data_dir: str, output_dir: str, publish: bool = False) -> None:
     """Verify the command line arguments.
 
@@ -295,25 +325,8 @@ def process_busbra(
     output_path = Path(output_dir) / OUTPUT_NAME
     dataset.save_to_disk(str(output_path))
 
-    gt_dir = output_path / f"test.{size}"
-
-    generate_classification_ground_truth_from_records(
-        [{"filename": r["filename"], "label": r["pathology"]} for r in test_records],
-        gt_dir / "ground_truth_classification_pathology.csv",
-    )
-    generate_classification_ground_truth_from_records(
-        [
-            {"filename": r["filename"], "label": r["histology_label"]}
-            for r in test_records
-        ],
-        gt_dir / "ground_truth_classification_histology.csv",
-    )
-    generate_segmentation_ground_truth_from_records(
-        test_records,
-        mask_key="tumor_mask",
-        classes=[1],
-        output_path=gt_dir / "ground_truth_segmentation.csv",
-    )
+    write_ground_truth(test_records, output_path / "test", None)
+    write_ground_truth(test_resized_records, output_path / f"test.{size}", size)
 
     save_version_info(str(output_path), __version__)
 
@@ -325,20 +338,19 @@ def process_busbra(
         )
 
         api = HfApi()
-        operations = [
-            CommitOperationAdd(
-                path_in_repo="test-ground-truth-classification-pathology.csv",
-                path_or_fileobj=gt_dir / "ground_truth_classification_pathology.csv",
-            ),
-            CommitOperationAdd(
-                path_in_repo=f"test.{size}-ground-truth-classification-histology.csv",
-                path_or_fileobj=gt_dir / "ground_truth_classification_histology.csv",
-            ),
-            CommitOperationAdd(
-                path_in_repo=f"test.{size}-ground-truth-segmentation.csv",
-                path_or_fileobj=gt_dir / "ground_truth_segmentation.csv",
-            ),
-        ]
+        operations = ground_truth_commit_operations(
+            output_path,
+            {
+                "classification-pathology": (
+                    "ground_truth_classification_pathology.csv"
+                ),
+                "classification-histology": (
+                    "ground_truth_classification_histology.csv"
+                ),
+                "segmentation": "ground_truth_segmentation.csv",
+            },
+            size,
+        )
         api.create_commit(
             repo_id=OUTPUT_NAME,
             repo_type="dataset",

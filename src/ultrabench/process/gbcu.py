@@ -23,7 +23,7 @@ Each example has the following features:
     - image: 3-channel ultrasound image.
     - scan_mask: Single-channel binary scan mask.
 
-A ground-truth CSV file is also created for the test split:
+A ground-truth CSV file is also created in each test split directory:
 
     - ground_truth_classification.csv
 
@@ -50,13 +50,14 @@ from datasets import (
     Image,
     Value,
 )
-from huggingface_hub import CommitOperationAdd, HfApi
+from huggingface_hub import HfApi
 from tqdm.auto import tqdm
 from typing_extensions import Annotated
 
 from .utils import (
     DATASET_REVISION,
     generate_classification_ground_truth_from_records,
+    ground_truth_commit_operations,
     resize_and_pad,
     save_version_info,
     subsample_balanced_by_class,
@@ -240,7 +241,10 @@ def process_gbcu(
     dataset.save_to_disk(str(output_path))
 
     generate_classification_ground_truth_from_records(
-        test_records,
+        test_records, output_path / "test" / "ground_truth_classification.csv"
+    )
+    generate_classification_ground_truth_from_records(
+        test_resized_records,
         output_path / f"test.{size}" / "ground_truth_classification.csv",
     )
 
@@ -257,14 +261,9 @@ def process_gbcu(
         )
 
         api = HfApi()
-        operations = [
-            CommitOperationAdd(
-                path_in_repo="test-ground-truth-classification.csv",
-                path_or_fileobj=output_path
-                / f"test.{size}"
-                / "ground_truth_classification.csv",
-            ),
-        ]
+        operations = ground_truth_commit_operations(
+            output_path, {"classification": "ground_truth_classification.csv"}, size
+        )
         api.create_commit(
             repo_id=OUTPUT_NAME,
             repo_type="dataset",

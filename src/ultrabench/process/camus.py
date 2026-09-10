@@ -40,11 +40,18 @@ Each example has the following features:
     - mask: Single-channel multi-class cardiac structure mask.
     - scan_mask: Single-channel binary scan mask.
 
-A ground-truth CSV file is also created for each subset's test split
-for use by the evaluation layer:
+A ground-truth CSV file is also created for each test split of each
+subset for use by the evaluation layer, with the segmentation masks
+encoded at the resolution of that split:
 
+    - classification/test/ground_truth_classification.csv
     - classification/test.{size}/ground_truth_classification.csv
+    - segmentation/test/ground_truth_segmentation.csv
     - segmentation/test.{size}/ground_truth_segmentation.csv
+
+The classification CSVs carry a "sequence_id" column, since image
+quality is graded per (patient, view) acquisition rather than per
+frame.
 
 Usage:
     ultrabench process camus RAW_DATA_DIR OUTPUT_DIR
@@ -70,13 +77,16 @@ from datasets import (
     Image,
     Value,
 )
-from huggingface_hub import CommitOperationAdd, HfApi
+from huggingface_hub import CommitOperationDelete, HfApi
 from tqdm.auto import tqdm
 from typing_extensions import Annotated
 
 from .utils import (
+    DATASET_REVISION,
     generate_classification_ground_truth_from_records,
     generate_segmentation_ground_truth_from_records,
+    ground_truth_commit_operations,
+    ground_truth_path_in_repo,
     resize_and_pad,
     save_version_info,
     subsample_by_group,
@@ -87,7 +97,6 @@ from .utils import (
 __version__ = version("ultrabench")
 
 OUTPUT_NAME = "UltraBench/CAMUS"
-DATASET_REVISION = "0.3"
 CLASS_TO_LABEL = {
     "Poor": 0,
     "Medium": 1,
@@ -324,7 +333,41 @@ def verify_args(raw_data_dir: str, output_dir: str, publish: bool = False) -> No
     )
 
     if publish:
-        verify_revision_unpublished(OUTPUT_NAME, DATASET_REVISION)
+        verify_revision_unpublished(OUTPUT_NAME)
+
+
+def _superseded_ground_truth_deletions(
+    api: HfApi, size: int
+) -> list[CommitOperationDelete]:
+    """Build the operations that remove ground-truth CSVs of earlier revisions.
+
+    Both CAMUS subsets prefix their ground-truth CSVs with the subset
+    name, so the un-prefixed CSVs published before the dataset was split
+    into subsets are never overwritten. The classification one predates
+    the "sequence_id" column and scores image quality per frame instead
+    of per acquisition, so it is removed rather than left to be picked
+    up by mistake. Deleting a file on the main branch does not alter the
+    revisions that are already tagged.
+
+    Args:
+        api: The Hugging Face Hub API client.
+        size: The height and width of the resized test images.
+
+    Returns:
+        One delete operation per superseded CSV that is still published.
+    """
+    published = set(api.list_repo_files(OUTPUT_NAME, repo_type="dataset"))
+    superseded = [
+        ground_truth_path_in_repo(task, size=split_size)
+        for task in ("classification", "segmentation")
+        for split_size in (None, size)
+    ]
+
+    return [
+        CommitOperationDelete(path_in_repo=name)
+        for name in superseded
+        if name in published
+    ]
 
 
 def process_camus(
@@ -415,36 +458,34 @@ def process_camus(
     classification_dataset.save_to_disk(str(output_path / "classification"))
     segmentation_dataset.save_to_disk(str(output_path / "segmentation"))
 
-    classification_gt_path = (
-        output_path
-        / "classification"
-        / f"test.{size}"
-        / "ground_truth_classification.csv"
-    )
-    segmentation_gt_path = (
-        output_path / "segmentation" / f"test.{size}" / "ground_truth_segmentation.csv"
-    )
-    generate_classification_ground_truth_from_records(
-        [
-            {
-                "filename": r["filename"],
-                "label": r["image_quality"],
-                "patient": r["patient"],
-                "view": r["view"],
-            }
-            for r in test_records
-        ],
-        classification_gt_path,
-        sequence_keys=["patient", "view"],
-    )
-    generate_segmentation_ground_truth_from_records(
-        test_records,
-        mask_key="mask",
-        classes=[1, 2, 3],
-        output_path=segmentation_gt_path,
-    )
+    for records, split, image_size in (
+        (test_records, "test", None),
+        (test_resized_records, f"test.{size}", size),
+    ):
+        generate_classification_ground_truth_from_records(
+            [
+                {
+                    "filename": r["filename"],
+                    "label": r["image_quality"],
+                    "patient": r["patient"],
+                    "view": r["view"],
+                }
+                for r in records
+            ],
+            output_path / "classification" / split / "ground_truth_classification.csv",
+            sequence_keys=["patient", "view"],
+        )
+        generate_segmentation_ground_truth_from_records(
+            records,
+            mask_key="mask",
+            classes=[1, 2, 3],
+            output_path=(
+                output_path / "segmentation" / split / "ground_truth_segmentation.csv"
+            ),
+            image_size=image_size,
+        )
 
-    save_version_info(str(output_path), __version__, revision=DATASET_REVISION)
+    save_version_info(str(output_path), __version__)
 
     if publish:
         classification_dataset.push_to_hub(
@@ -466,14 +507,19 @@ def process_camus(
 
         api = HfApi()
         operations = [
-            CommitOperationAdd(
-                path_in_repo="classification-test-ground-truth-classification.csv",
-                path_or_fileobj=classification_gt_path,
+            *ground_truth_commit_operations(
+                output_path / "classification",
+                {"classification": "ground_truth_classification.csv"},
+                size,
+                prefix="classification",
             ),
-            CommitOperationAdd(
-                path_in_repo=f"segmentation-test.{size}-ground-truth-segmentation.csv",
-                path_or_fileobj=segmentation_gt_path,
+            *ground_truth_commit_operations(
+                output_path / "segmentation",
+                {"segmentation": "ground_truth_segmentation.csv"},
+                size,
+                prefix="segmentation",
             ),
+            *_superseded_ground_truth_deletions(api, size),
         ]
         api.create_commit(
             repo_id=OUTPUT_NAME,

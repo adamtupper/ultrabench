@@ -1,6 +1,6 @@
 dataset: UltraBench/AUL
 subset: null
-revision: "0.1"
+revision: "0.4"
 
 type: segmentation
 input: image

@@ -1,6 +1,6 @@
 dataset: UltraBench/MMOTU-2D
 subset: null
-revision: "0.1"
+revision: "0.4"
 
 type: classification
 input: image

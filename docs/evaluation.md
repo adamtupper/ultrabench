@@ -20,7 +20,9 @@ Results are written to the Hydra run directory:
 
 ## Ground-truth CSVs
 
-Each dataset publishes its ground truth alongside the images on the Hugging Face Hub. The files cover the `test` split only, since evaluation is test-only.
+Each dataset publishes its ground truth alongside the images on the Hugging Face Hub. Evaluation is test-only, so the files cover the two test splits: `test-ground-truth-<task>.csv` describes the original-resolution `test` split, and `test.256-ground-truth-<task>.csv` describes the `test.256` split. A dataset with subsets prefixes the subset name, as in `segmentation-test.256-ground-truth-segmentation.csv`.
+
+Score your predictions against the split you predicted on. A segmentation CSV encodes its masks at the resolution of its own split, so scoring `test.256` predictions against the full-resolution ground truth gives a near-zero Dice score rather than an error.
 
 | Column | Task | Description |
 | ------ | ---- | ----------- |
@@ -29,6 +31,15 @@ Each dataset publishes its ground truth alongside the images on the Hugging Face
 | `sequence_id` | Classification | The sequence the image belongs to. Present only for tasks with sequence-level labels. |
 | `class_id` | Segmentation | The foreground class index. Background (0) is omitted. |
 | `encoded_pixels` | Segmentation | The run-length encoded binary mask for that class, or an empty string. |
+
+### Downloading the ground truth
+
+Download the CSV of the split you predicted on, pinning the revision the task configuration pins:
+
+```bash
+hf download UltraBench/TN3K test.256-ground-truth-segmentation.csv \
+  --repo-type dataset --revision 0.4 --local-dir ground_truth
+```
 
 ## Prediction CSVs
 
@@ -85,4 +96,13 @@ The training layer reports the same metric inline. Set `sequence_by` in the task
 | Task | Metrics |
 | ---- | ------- |
 | Classification | Balanced accuracy. |
-| Segmentation | Macro Dice over the foreground classes, and the mean Dice of each class. |
+| Segmentation | Positive Dice over the foreground classes, and the mean Dice of each class. |
+
+### The positive Dice convention
+
+The positive Dice score excludes the background class, and follows two further conventions. Both match `torchmetrics.segmentation.DiceScore(include_background=False)`, which the training layer uses for the `positive_dice` column of `test_metrics.csv`, so the evaluator reproduces that column exactly.
+
+- A class that is empty in both the ground truth and the prediction is undefined, and drops out of the score. Scoring it 1.0 instead rewards a model for predicting nothing on an image the class is absent from, which inflates the score on tasks where many images hold no instance of a class. An image whose every foreground class is undefined drops out of the score entirely.
+- The score averages the defined foreground classes of an image first, and the images second. Averaging per class first gives a different number, since the undefined pairs leave the per-class groups unequal in size.
+
+The undefined pairs are still written to `per_image_metrics.csv`, with an empty `dice` field.

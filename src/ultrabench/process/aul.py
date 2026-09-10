@@ -27,8 +27,9 @@ Each example has the following features:
     - label: ClassLabel encoding the mass pathology (normal=0, benign=1,
       malignant=2).
 
-Three ground-truth CSV files are also created for each test split for
-use by the evaluation layer:
+Three ground-truth CSV files are also created in each test split
+directory for use by the evaluation layer, with the segmentation masks
+encoded at the resolution of that split:
 
     - ground_truth_classification.csv
     - ground_truth_segmentation_mass.csv
@@ -59,17 +60,20 @@ from datasets import (
     Image,
     Value,
 )
-from huggingface_hub import CommitOperationAdd, HfApi
+from huggingface_hub import HfApi
 from sklearn.model_selection import train_test_split
 from tqdm.auto import tqdm
 from typing_extensions import Annotated
 
 from .utils import (
+    DATASET_REVISION,
     generate_classification_ground_truth_from_records,
     generate_segmentation_ground_truth_from_records,
+    ground_truth_commit_operations,
     resize_and_pad,
     save_version_info,
     to_3_channel,
+    verify_revision_unpublished,
 )
 
 __version__ = version("ultrabench")
@@ -283,18 +287,53 @@ def _process_example(row: pd.Series, size: int | None = None) -> dict:
     }
 
 
-def verify_args(raw_data_dir: str, output_dir: str) -> None:
+def write_ground_truth(
+    records: list[dict], gt_dir: Path, image_size: int | None
+) -> None:
+    """Write the ground-truth CSVs of one test split.
+
+    Args:
+        records: The records of the split.
+        gt_dir: The split directory to write the CSVs into.
+        image_size: The height and width of the split's images, or None
+            for the original-resolution split.
+    """
+    generate_classification_ground_truth_from_records(
+        records, gt_dir / "ground_truth_classification.csv"
+    )
+    generate_segmentation_ground_truth_from_records(
+        records,
+        mask_key="mass_mask",
+        classes=[1],
+        output_path=gt_dir / "ground_truth_segmentation_mass.csv",
+        image_size=image_size,
+    )
+    generate_segmentation_ground_truth_from_records(
+        [r for r in records if r["liver_mask"] is not None],
+        mask_key="liver_mask",
+        classes=[1],
+        output_path=gt_dir / "ground_truth_segmentation_liver.csv",
+        image_size=image_size,
+    )
+
+
+def verify_args(raw_data_dir: str, output_dir: str, publish: bool = False) -> None:
     """Verify the command line arguments.
 
     Args:
         raw_data_dir: The path to the raw data directory.
         output_dir: The path to the output directory.
+        publish: Whether the dataset will be published to the Hugging
+            Face Hub.
     """
     assert os.path.isdir(raw_data_dir), "raw_data_dir must be an existing directory"
     assert os.path.isdir(output_dir), "output_dir must be an existing directory"
     assert not os.path.exists(os.path.join(output_dir, OUTPUT_NAME)), (
         "A version of the AUL dataset already exists"
     )
+
+    if publish:
+        verify_revision_unpublished(OUTPUT_NAME)
 
 
 def process_aul(
@@ -317,8 +356,9 @@ def process_aul(
         raw_data_dir: The path to the raw data directory.
         output_dir: The path to the output directory.
         size: The height and width of the resized test images in pixels.
+        publish: Whether to publish the dataset to the Hugging Face Hub.
     """
-    verify_args(raw_data_dir, output_dir)
+    verify_args(raw_data_dir, output_dir, publish)
 
     examples = collect_examples(raw_data_dir)
     df = pd.DataFrame.from_records(examples)
@@ -361,58 +401,33 @@ def process_aul(
     output_path = Path(output_dir) / OUTPUT_NAME
     dataset.save_to_disk(str(output_path))
 
-    generate_classification_ground_truth_from_records(
-        test_records, output_path / f"test.{size}" / "ground_truth_classification.csv"
-    )
-    generate_segmentation_ground_truth_from_records(
-        test_records,
-        mask_key="mass_mask",
-        classes=[1],
-        output_path=output_path / f"test.{size}" / "ground_truth_segmentation_mass.csv",
-    )
-    liver_test_records = [r for r in test_records if r["liver_mask"] is not None]
-    generate_segmentation_ground_truth_from_records(
-        liver_test_records,
-        mask_key="liver_mask",
-        classes=[1],
-        output_path=output_path
-        / f"test.{size}"
-        / "ground_truth_segmentation_liver.csv",
-    )
+    write_ground_truth(test_records, output_path / "test", None)
+    write_ground_truth(test_resized_records, output_path / f"test.{size}", size)
 
     save_version_info(str(output_path), __version__)
 
     if publish:
         dataset.push_to_hub(
             OUTPUT_NAME,
-            commit_message=f"Update the dataset to Version {__version__}.",
+            commit_message=f"Update the dataset to revision {DATASET_REVISION}.",
             private=True,
         )
 
         api = HfApi()
-        operations = [
-            CommitOperationAdd(
-                path_in_repo="test-ground-truth-classification.csv",
-                path_or_fileobj=output_path
-                / f"test.{size}"
-                / "ground_truth_classification.csv",
-            ),
-            CommitOperationAdd(
-                path_in_repo=f"test.{size}-ground-truth-segmentation-liver.csv",
-                path_or_fileobj=output_path
-                / f"test.{size}"
-                / "ground_truth_segmentation_liver.csv",
-            ),
-            CommitOperationAdd(
-                path_in_repo=f"test.{size}-ground-truth-segmentation-mass.csv",
-                path_or_fileobj=output_path
-                / f"test.{size}"
-                / "ground_truth_segmentation_mass.csv",
-            ),
-        ]
+        operations = ground_truth_commit_operations(
+            output_path,
+            {
+                "classification": "ground_truth_classification.csv",
+                "segmentation-liver": "ground_truth_segmentation_liver.csv",
+                "segmentation-mass": "ground_truth_segmentation_mass.csv",
+            },
+            size,
+        )
         api.create_commit(
             repo_id=OUTPUT_NAME,
             repo_type="dataset",
             operations=operations,
-            commit_message=f"Update ground truth CSV files for Version {__version__}.",
+            commit_message=(
+                f"Update ground truth CSV files for revision {DATASET_REVISION}."
+            ),
         )

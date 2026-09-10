@@ -1,6 +1,6 @@
 dataset: UltraBench/TN3K
 subset: null
-revision: "0.2"
+revision: "0.4"
 
 type: segmentation
 input: image

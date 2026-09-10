@@ -17,8 +17,9 @@ Each example has the following features:
     - tumor_mask: Single-channel binary tumor mask.
     - tumor_type: ClassLabel encoding the tumor type.
 
-Two ground-truth CSV files are also created for the test split for
-use by the evaluation layer:
+Two ground-truth CSV files are also created in each test split
+directory for use by the evaluation layer, with the segmentation masks
+encoded at the resolution of that split:
 
     - ground_truth_classification.csv
     - ground_truth_segmentation.csv
@@ -45,16 +46,19 @@ from datasets import (
     Image,
     Value,
 )
-from huggingface_hub import CommitOperationAdd, HfApi
+from huggingface_hub import HfApi
 from tqdm.auto import tqdm
 from typing_extensions import Annotated
 
 from .utils import (
+    DATASET_REVISION,
     generate_classification_ground_truth_from_records,
     generate_segmentation_ground_truth_from_records,
+    ground_truth_commit_operations,
     resize_and_pad,
     save_version_info,
     to_3_channel,
+    verify_revision_unpublished,
 )
 
 __version__ = version("ultrabench")
@@ -129,7 +133,7 @@ def generate_scan_mask(image: np.ndarray) -> np.ndarray:
         mask = skimage.morphology.binary_dilation(mask)
     mask = skimage.morphology.remove_small_holes(mask, area_threshold=1000)
 
-    # Reflect the smaller half to remove annotations and make the scan symmetric
+    # Reflect the smaller half to remove annotations and make scan symmetric
     _, width = mask.shape
     left_half = mask[:, : width // 2]
     right_half = mask[:, width // 2 :]
@@ -211,18 +215,47 @@ def process_examples(
     return examples
 
 
-def verify_args(raw_data_dir: str, output_dir: str) -> None:
+def write_ground_truth(
+    records: list[dict], gt_dir: Path, image_size: int | None
+) -> None:
+    """Write the ground-truth CSVs of one test split.
+
+    Args:
+        records: The records of the split.
+        gt_dir: The split directory to write the CSVs into.
+        image_size: The height and width of the split's images, or None
+            for the original-resolution split.
+    """
+    generate_classification_ground_truth_from_records(
+        [{"filename": r["filename"], "label": r["tumor_type"]} for r in records],
+        gt_dir / "ground_truth_classification.csv",
+    )
+    generate_segmentation_ground_truth_from_records(
+        records,
+        mask_key="tumor_mask",
+        classes=[1],
+        output_path=gt_dir / "ground_truth_segmentation.csv",
+        image_size=image_size,
+    )
+
+
+def verify_args(raw_data_dir: str, output_dir: str, publish: bool = False) -> None:
     """Verify the command line arguments.
 
     Args:
         raw_data_dir: The path to the raw data directory.
         output_dir: The path to the output directory.
+        publish: Whether the dataset will be published to the Hugging
+            Face Hub.
     """
     assert os.path.isdir(raw_data_dir), "raw_data_dir must be an existing directory"
     assert os.path.isdir(output_dir), "output_dir must be an existing directory"
     assert not os.path.exists(os.path.join(output_dir, OUTPUT_NAME)), (
         "A version of the MMOTU dataset already exists"
     )
+
+    if publish:
+        verify_revision_unpublished(OUTPUT_NAME)
 
 
 def process_mmotu(
@@ -246,7 +279,7 @@ def process_mmotu(
         size: The height and width of the resized test images in pixels.
         publish: Whether to publish the dataset to the Hugging Face Hub.
     """
-    verify_args(raw_data_dir, output_dir)
+    verify_args(raw_data_dir, output_dir, publish)
 
     train_records = process_examples(raw_data_dir, "train")
     test_records = process_examples(raw_data_dir, "test")
@@ -263,44 +296,32 @@ def process_mmotu(
     output_path = Path(output_dir) / OUTPUT_NAME
     dataset.save_to_disk(str(output_path))
 
-    generate_classification_ground_truth_from_records(
-        [{"filename": r["filename"], "label": r["tumor_type"]} for r in test_records],
-        output_path / f"test.{size}" / "ground_truth_classification.csv",
-    )
-    generate_segmentation_ground_truth_from_records(
-        test_records,
-        mask_key="tumor_mask",
-        classes=[1],
-        output_path=output_path / f"test.{size}" / "ground_truth_segmentation.csv",
-    )
+    write_ground_truth(test_records, output_path / "test", None)
+    write_ground_truth(test_resized_records, output_path / f"test.{size}", size)
 
     save_version_info(str(output_path), __version__)
 
     if publish:
         dataset.push_to_hub(
             OUTPUT_NAME,
-            commit_message=f"Update the dataset to Version {__version__}.",
+            commit_message=f"Update the dataset to revision {DATASET_REVISION}.",
             private=True,
         )
 
         api = HfApi()
-        operations = [
-            CommitOperationAdd(
-                path_in_repo="test-ground-truth-classification.csv",
-                path_or_fileobj=output_path
-                / f"test.{size}"
-                / "ground_truth_classification.csv",
-            ),
-            CommitOperationAdd(
-                path_in_repo=f"test.{size}-ground-truth-segmentation.csv",
-                path_or_fileobj=output_path
-                / f"test.{size}"
-                / "ground_truth_segmentation.csv",
-            ),
-        ]
+        operations = ground_truth_commit_operations(
+            output_path,
+            {
+                "classification": "ground_truth_classification.csv",
+                "segmentation": "ground_truth_segmentation.csv",
+            },
+            size,
+        )
         api.create_commit(
             repo_id=OUTPUT_NAME,
             repo_type="dataset",
             operations=operations,
-            commit_message=f"Update ground truth CSV files for Version {__version__}.",
+            commit_message=(
+                f"Update ground truth CSV files for revision {DATASET_REVISION}."
+            ),
         )

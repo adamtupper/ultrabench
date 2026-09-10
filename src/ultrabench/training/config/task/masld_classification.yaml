@@ -1,6 +1,6 @@
 dataset: UltraBench/MASLD
 subset: null
-revision: "0.3"
+revision: "0.4"
 
 type: classification
 input: image

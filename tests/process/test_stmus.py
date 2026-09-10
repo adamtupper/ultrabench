@@ -8,12 +8,17 @@ import pytest
 import skimage.io as io
 from sklearn.model_selection import GroupShuffleSplit
 
+from datasets import load_from_disk
+
+from ultrabench.core.rle import rle_to_mask
 from ultrabench.process.stmus import (
     CHARACTERISTICS_FILENAME,
     MUSCLE_NAMES,
+    OUTPUT_NAME,
     assign_patient_ids,
     collect_examples,
     load_characteristics,
+    process_stmus,
 )
 from ultrabench.process.utils import cap_train_split_by_patient
 
@@ -385,3 +390,82 @@ class TestSplitByPatient:
 
         assert examples["patient"].nunique() == 10
         assert not set(train_df["patient"]) & set(test_df["patient"])
+
+
+def flatten_masks_to_a_pattern(root):
+    """Replace the flat raw masks with an asymmetric pattern.
+
+    A uniform mask survives any resize, so the masks are given a
+    pattern that a wrong interpolation or a transposed axis would
+    distort.
+
+    Args:
+        root: The raw dataset root created by write_raw_tree.
+    """
+    mask = np.zeros((4, 4), dtype=np.uint8)
+    mask[:2, :3] = 255
+
+    for path in sorted(Path(root).glob("*/*/Masks/*.png")):
+        io.imsave(path, mask, check_contrast=False)
+
+
+class TestProcessStmus:
+    """Tests for the dataset and ground truth written by process_stmus."""
+
+    size = 8
+
+    @pytest.fixture
+    def dataset(self, tmp_path):
+        """Process a fake raw dataset and load the result from disk.
+
+        Args:
+            tmp_path: The pytest temporary directory fixture.
+
+        Returns:
+            A tuple of the loaded DatasetDict and its output directory.
+        """
+        subjects = [
+            make_subject(muscle, "healthy", number + offset, float(number), frames=2)
+            for number in range(1, 11)
+            for muscle, offset in [("BB", 0), ("GM", 100), ("TA", 200)]
+        ]
+        raw_data_dir = tmp_path / "raw"
+        root = write_raw_tree(raw_data_dir / "Polito-Radboud-DeepLearningUS", subjects)
+        flatten_masks_to_a_pattern(root)
+
+        output_dir = tmp_path / "out"
+        output_dir.mkdir()
+        process_stmus(str(raw_data_dir), str(output_dir), size=self.size)
+
+        output_path = output_dir / OUTPUT_NAME
+
+        return load_from_disk(str(output_path)), output_path
+
+    @pytest.mark.parametrize("split", ["test", f"test.{size}"])
+    def test_ground_truth_matches_its_split(self, dataset, split):
+        """Every ground-truth mask is the mask of the split it sits in.
+
+        This is the test that would have caught ground truth being
+        encoded at the original resolution while filed under the
+        resized split.
+        """
+        data, output_path = dataset
+        written = pd.read_csv(
+            output_path / split / "ground_truth_segmentation.csv",
+            converters={"encoded_pixels": str},
+        )
+
+        assert written["image_id"].tolist() == data[split]["filename"]
+
+        for row, record in zip(written.to_dict("records"), data[split]):
+            expected = np.asarray(record["mask"])
+            decoded = rle_to_mask(
+                row["encoded_pixels"], height=expected.shape[0], width=expected.shape[1]
+            )
+            np.testing.assert_array_equal(decoded, expected)
+
+    def test_resized_ground_truth_is_square(self, dataset):
+        """The resized split's masks are padded to the target size."""
+        data, _ = dataset
+        for record in data[f"test.{self.size}"]:
+            assert np.asarray(record["mask"]).shape == (self.size, self.size)

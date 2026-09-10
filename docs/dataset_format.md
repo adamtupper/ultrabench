@@ -75,6 +75,7 @@ train_data = load_dataset("UltraBench/TN3K", revision="0.2", split="train")
 | `0.1` | The initial UltraBench 2 splits. |
 | `0.2` | The `train` splits are capped at 1,000 examples. CAMUS is also split into `classification` and `segmentation` subsets. |
 | `0.3` | The ground-truth CSVs of the sequence-level classification tasks (CAMUS image quality, COVID-BLUES, MASLD) gain a `sequence_id` column. The images are unchanged. |
+| `0.4` | Each test split gets its own ground-truth CSVs, with the segmentation masks encoded at the resolution of that split. Earlier revisions publish full-resolution masks under the `test.256` name. The images are unchanged. From this revision every dataset in the collection shares one revision number. |
 
 Set `revision` in a task configuration (`src/ultrabench/training/config/task/*.yaml`) to pin the revision a training run uses, and pass `--revision` to `scripts/slurm/download_dataset.py` to pre-cache the matching revision.
 
@@ -105,7 +106,13 @@ Each preprocessed dataset is saved under `<output_dir>/<dataset>_v{version}/` wi
 
 All file paths stored in the JSON metadata are relative to their split directory (e.g., `"images/foo.png"` resolves to `train_val/images/foo.png`).
 
-Processing also writes a ground-truth CSV for the test split of each task, which is published alongside the images on the Hugging Face Hub and read by the evaluation layer. See [the evaluation documentation](evaluation.md) for its columns.
+Processing also writes a ground-truth CSV per task into each test split directory, so that a task's segmentation masks are encoded at the resolution of the split they describe. Both are published alongside the images on the Hugging Face Hub and read by the evaluation layer. A repository holds every CSV in its root, so the split, and the subset for a dataset that has more than one, are carried in the filename:
+
+```text
+[<subset>-]test[.<size>]-ground-truth-<task>.csv
+```
+
+For example, `test.256-ground-truth-segmentation.csv` and `segmentation-test-ground-truth-segmentation.csv`. See [the evaluation documentation](evaluation.md) for the columns.
 
 ## Images and Masks
 

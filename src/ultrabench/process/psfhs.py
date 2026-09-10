@@ -20,8 +20,9 @@ Each example has the following features:
     - psfh_mask: Single-channel multi-class PS-FH segmentation mask
       (background=0, pubic symphysis=1, fetal head=2).
 
-One ground-truth CSV file is also created for the test split for use
-by the evaluation layer:
+One ground-truth CSV file is also created in each test split directory
+for use by the evaluation layer, with the masks encoded at the
+resolution of that split:
 
     - ground_truth_segmentation.csv
 
@@ -48,7 +49,7 @@ from datasets import (
     Image,
     Value,
 )
-from huggingface_hub import CommitOperationAdd, HfApi
+from huggingface_hub import HfApi
 from sklearn.model_selection import train_test_split
 from tqdm.auto import tqdm
 
@@ -56,6 +57,7 @@ from .utils import (
     DATASET_REVISION,
     MAX_TRAIN_SAMPLES,
     generate_segmentation_ground_truth_from_records,
+    ground_truth_commit_operations,
     resize_and_pad,
     save_version_info,
     to_3_channel,
@@ -261,7 +263,15 @@ def process_psfhs(
         test_records,
         mask_key="psfh_mask",
         classes=[1, 2],
+        output_path=output_path / "test" / "ground_truth_segmentation.csv",
+        image_size=None,
+    )
+    generate_segmentation_ground_truth_from_records(
+        test_resized_records,
+        mask_key="psfh_mask",
+        classes=[1, 2],
         output_path=output_path / f"test.{size}" / "ground_truth_segmentation.csv",
+        image_size=size,
     )
 
     save_version_info(str(output_path), __version__)
@@ -274,14 +284,9 @@ def process_psfhs(
         )
 
         api = HfApi()
-        operations = [
-            CommitOperationAdd(
-                path_in_repo=f"test.{size}-ground-truth-segmentation.csv",
-                path_or_fileobj=output_path
-                / f"test.{size}"
-                / "ground_truth_segmentation.csv",
-            ),
-        ]
+        operations = ground_truth_commit_operations(
+            output_path, {"segmentation": "ground_truth_segmentation.csv"}, size
+        )
         api.create_commit(
             repo_id=OUTPUT_NAME,
             repo_type="dataset",

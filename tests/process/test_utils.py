@@ -6,9 +6,14 @@ import pandas as pd
 import pytest
 from huggingface_hub.errors import RepositoryNotFoundError
 
+from ultrabench.core.rle import mask_to_rle, rle_to_mask
+from ultrabench.evaluate.segmentation import SegmentationEvaluator
 from ultrabench.process.utils import (
     cap_train_split_by_patient,
     generate_classification_ground_truth_from_records,
+    generate_segmentation_ground_truth_from_records,
+    ground_truth_commit_operations,
+    ground_truth_path_in_repo,
     resize_and_pad,
     subsample_balanced_by_class,
     subsample_by_group,
@@ -404,3 +409,233 @@ class TestGenerateClassificationGroundTruth:
             generate_classification_ground_truth_from_records(
                 self.records, tmp_path / "gt.csv", sequence_keys=["video"]
             )
+
+
+def make_mask(size: int, value: int = 1) -> np.ndarray:
+    """Build a mask with a square of one class in its top-left corner.
+
+    Args:
+        size: The height and width of the mask.
+        value: The class ID to fill the square with.
+
+    Returns:
+        A uint8 array of shape (size, size).
+    """
+    mask = np.zeros((size, size), dtype=np.uint8)
+    mask[: size // 2, : size // 2] = value
+
+    return mask
+
+
+class TestGenerateSegmentationGroundTruth:
+    """Tests for generate_segmentation_ground_truth_from_records."""
+
+    records = [
+        {"filename": "a", "mask": make_mask(8, value=1)},
+        {"filename": "b", "mask": make_mask(8, value=2)},
+    ]
+
+    def test_csv_columns_and_row_order(self, tmp_path):
+        """One row per (image, class), images in order, classes within them."""
+        output_path = tmp_path / "gt.csv"
+        generate_segmentation_ground_truth_from_records(
+            self.records, "mask", [1, 2], output_path, image_size=8
+        )
+
+        written = pd.read_csv(output_path)
+        assert list(written.columns) == ["image_id", "class_id", "encoded_pixels"]
+        assert written["image_id"].tolist() == ["a", "a", "b", "b"]
+        assert written["class_id"].tolist() == [1, 2, 1, 2]
+
+    def test_masks_round_trip(self, tmp_path):
+        """Each encoded mask decodes back to that class of the record."""
+        output_path = tmp_path / "gt.csv"
+        generate_segmentation_ground_truth_from_records(
+            self.records, "mask", [1, 2], output_path, image_size=8
+        )
+
+        written = pd.read_csv(output_path, converters={"encoded_pixels": str})
+        for row in written.to_dict("records"):
+            record = next(r for r in self.records if r["filename"] == row["image_id"])
+            expected = np.asarray(record["mask"] == row["class_id"], dtype=np.uint8)
+            decoded = rle_to_mask(row["encoded_pixels"], height=8, width=8)
+            np.testing.assert_array_equal(decoded, expected)
+
+    def test_empty_class_is_an_empty_string(self, tmp_path):
+        """A class absent from an image encodes to an empty string."""
+        output_path = tmp_path / "gt.csv"
+        generate_segmentation_ground_truth_from_records(
+            self.records, "mask", [1], output_path, image_size=8
+        )
+
+        written = pd.read_csv(output_path, converters={"encoded_pixels": str})
+        assert written.loc[written["image_id"] == "b", "encoded_pixels"].item() == ""
+
+    def test_missing_mask_is_skipped(self, tmp_path):
+        """A record without a mask contributes no rows."""
+        output_path = tmp_path / "gt.csv"
+        records = [*self.records, {"filename": "c", "mask": None}]
+        generate_segmentation_ground_truth_from_records(
+            records, "mask", [1], output_path, image_size=8
+        )
+
+        written = pd.read_csv(output_path)
+        assert written["image_id"].tolist() == ["a", "b"]
+
+    def test_wrong_size_mask_raises(self, tmp_path):
+        """A mask that is not at the split's resolution is rejected."""
+        records = [{"filename": "a", "mask": make_mask(4)}]
+        with pytest.raises(ValueError, match=r"expected \(8, 8\)"):
+            generate_segmentation_ground_truth_from_records(
+                records, "mask", [1], tmp_path / "gt.csv", image_size=8
+            )
+
+    def test_non_square_mask_raises(self, tmp_path):
+        """A mask that was not padded to a square is rejected."""
+        records = [{"filename": "a", "mask": np.zeros((4, 8), dtype=np.uint8)}]
+        with pytest.raises(ValueError, match="has shape"):
+            generate_segmentation_ground_truth_from_records(
+                records, "mask", [1], tmp_path / "gt.csv", image_size=8
+            )
+
+    def test_none_image_size_accepts_mixed_shapes(self, tmp_path):
+        """The original-resolution split holds masks of differing sizes."""
+        output_path = tmp_path / "gt.csv"
+        records = [
+            {"filename": "a", "mask": make_mask(4)},
+            {"filename": "b", "mask": make_mask(6)},
+        ]
+        generate_segmentation_ground_truth_from_records(
+            records, "mask", [1], output_path, image_size=None
+        )
+
+        written = pd.read_csv(output_path)
+        assert written["image_id"].tolist() == ["a", "b"]
+
+    def test_accepts_an_iterator(self, tmp_path):
+        """Records may be generated lazily rather than held in memory."""
+        output_path = tmp_path / "gt.csv"
+        generate_segmentation_ground_truth_from_records(
+            (r for r in self.records), "mask", [1], output_path, image_size=8
+        )
+
+        written = pd.read_csv(output_path)
+        assert written["image_id"].tolist() == ["a", "b"]
+
+    def test_evaluator_scores_the_written_csv(self, tmp_path):
+        """The evaluation layer can score what the dataset layer writes.
+
+        The ground truth and the predictions are generated from the same
+        masks here, so a perfect score is the only correct answer. It
+        fails if the columns, the class IDs or the mask resolution of
+        the two layers disagree.
+        """
+        ground_truth_path = tmp_path / "gt.csv"
+        generate_segmentation_ground_truth_from_records(
+            self.records, "mask", [1, 2], ground_truth_path, image_size=8
+        )
+
+        predictions_path = tmp_path / "predictions.csv"
+        pd.DataFrame(
+            [
+                {
+                    "image_id": r["filename"],
+                    "class_id": class_id,
+                    "encoded_pixels": mask_to_rle(
+                        np.asarray(r["mask"] == class_id, dtype=np.uint8)
+                    ),
+                }
+                for r in self.records
+                for class_id in (1, 2)
+            ]
+        ).to_csv(predictions_path, index=False)
+
+        metrics = SegmentationEvaluator(
+            ground_truth_path,
+            predictions_path,
+            tmp_path / "results",
+            image_height=8,
+            image_width=8,
+        ).evaluate()
+
+        assert metrics["positive_dice"] == pytest.approx(1.0)
+
+    def test_evaluator_penalises_a_wrong_prediction(self, tmp_path):
+        """A prediction that misses the mask scores below a perfect one."""
+        ground_truth_path = tmp_path / "gt.csv"
+        generate_segmentation_ground_truth_from_records(
+            self.records, "mask", [1], ground_truth_path, image_size=8
+        )
+
+        predictions_path = tmp_path / "predictions.csv"
+        pd.DataFrame(
+            [
+                {
+                    "image_id": r["filename"],
+                    "class_id": 1,
+                    "encoded_pixels": mask_to_rle(np.zeros((8, 8), dtype=np.uint8)),
+                }
+                for r in self.records
+            ]
+        ).to_csv(predictions_path, index=False)
+
+        metrics = SegmentationEvaluator(
+            ground_truth_path,
+            predictions_path,
+            tmp_path / "results",
+            image_height=8,
+            image_width=8,
+        ).evaluate()
+
+        assert metrics["positive_dice"] < 1.0
+
+
+class TestGroundTruthPathInRepo:
+    """Tests for ground_truth_path_in_repo and the commit operations."""
+
+    def test_original_resolution_split_has_no_size(self):
+        """The full-resolution CSV is named after the test split."""
+        assert (
+            ground_truth_path_in_repo("segmentation")
+            == "test-ground-truth-segmentation.csv"
+        )
+
+    def test_resized_split_carries_its_size(self):
+        """The resized CSV names the split whose resolution it holds."""
+        assert (
+            ground_truth_path_in_repo("classification", size=256)
+            == "test.256-ground-truth-classification.csv"
+        )
+
+    def test_subset_is_prefixed(self):
+        """A dataset with subsets prefixes the subset the CSV covers."""
+        assert (
+            ground_truth_path_in_repo("classification", size=256, prefix="fetal")
+            == "fetal-test.256-ground-truth-classification.csv"
+        )
+
+    def test_every_task_is_published_for_both_splits(self, tmp_path):
+        """Each task yields one operation per test split."""
+        tasks = {
+            "classification": "ground_truth_classification.csv",
+            "segmentation": "ground_truth_segmentation.csv",
+        }
+        for split in ("test", "test.256"):
+            (tmp_path / split).mkdir()
+            for filename in tasks.values():
+                (tmp_path / split / filename).touch()
+
+        operations = ground_truth_commit_operations(tmp_path, tasks, 256)
+
+        assert [op.path_in_repo for op in operations] == [
+            "test-ground-truth-classification.csv",
+            "test-ground-truth-segmentation.csv",
+            "test.256-ground-truth-classification.csv",
+            "test.256-ground-truth-segmentation.csv",
+        ]
+        assert [op.path_or_fileobj for op in operations] == [
+            str(tmp_path / "test" / "ground_truth_classification.csv"),
+            str(tmp_path / "test" / "ground_truth_segmentation.csv"),
+            str(tmp_path / "test.256" / "ground_truth_classification.csv"),
+            str(tmp_path / "test.256" / "ground_truth_segmentation.csv"),
+        ]
