@@ -93,6 +93,16 @@ path = "src/ultrabench/__about__.py"
 add-bounds = "major"
 default-groups = ["dev"]
 
+[tool.ty.environment]
+# `notebooks/notebook_utils.py` is shared by the results notebooks and
+# the tests, but lives outside the package.
+extra-paths = ["notebooks"]
+
+[tool.pytest.ini_options]
+# `notebooks/notebook_utils.py` holds the run-discovery helpers the
+# results notebooks share, so it is importable from the tests.
+pythonpath = ["notebooks"]
+
 [tool.ruff.lint]
 select = ["E", "W"]
 
