@@ -61,7 +61,7 @@ ub_run_dir() {
 ub_run_one() {
     local run_dir="$1" method="$2" lr="$3" wd="$4" aug="$5"
 
-    python ultrabench2/src/ultrabench/training/main_launch.py \
+    python ultrabench2/src/ultrabench2/training/main_launch.py \
         system.output_dir=${OUTPUT_DIR} \
         system.checkpoint_dir=${CHECKPOINT_DIR} \
         hydra.run.dir="${run_dir}" \

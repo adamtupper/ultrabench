@@ -1,0 +1,23 @@
+# The root of the submission: one directory per task, each holding one
+# predictions CSV per training run.
+predictions: ???
+
+# Where the two tables of scores are written.
+output_dir: ${hydra:runtime.output_dir}
+
+# The tasks to score, or null for every task found under `predictions`.
+tasks: null
+
+# The number of runs each task must have. Set to null to score a task
+# with any number of runs; the protocol requires five.
+runs_per_task: 5
+
+# The number of bootstrap replications drawn per source dataset.
+n_resamples: 2000
+
+# The normal quantile the reported interval spans.
+confidence: 1.96
+
+# Where the per-dataset patient maps are cached. Defaults to
+# $ULTRABENCH_CACHE, then ~/.ultrabench.
+cache_dir: null

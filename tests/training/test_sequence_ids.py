@@ -14,8 +14,8 @@ import pytest
 from datasets import Dataset, Features, Image, Value
 from PIL import Image as PILImage
 
-from ultrabench.process.utils import generate_classification_ground_truth_from_records
-from ultrabench.training.data.utils import add_sequence_id
+from ultrabench2.process.utils import generate_classification_ground_truth_from_records
+from ultrabench2.training.data.utils import add_sequence_id
 
 CAMUS_RECORDS = [
     {"filename": "patient0313_2CH_half_sequence_1", "patient": 313, "view": "2CH"},

@@ -5,7 +5,7 @@ from unittest.mock import patch
 import pytest
 import torch
 
-from ultrabench.models.deblurmim.deblurmim_backbone import DeblurMIMBackbone
+from ultrabench2.models.deblurmim.deblurmim_backbone import DeblurMIMBackbone
 
 _BATCH = 2
 _IMG_SIZE = 224

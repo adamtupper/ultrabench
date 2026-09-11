@@ -1,0 +1,17 @@
+dataset: UltraBench/CAMUS
+name: CAMUS
+subset: classification
+revision: "0.4"
+
+type: classification
+input: image
+target: image_quality
+num_classes: 3
+
+stratify_by: null
+group_by: patient
+filter_by: null
+sequence_by: [patient, view]
+
+criterion:
+  _target_: torch.nn.CrossEntropyLoss

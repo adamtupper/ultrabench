@@ -1,54 +1,10 @@
-# UltraBench
+# UltraBench 2
 
-[![arXiv](https://img.shields.io/badge/arXiv-2501.13193-b31b1b.svg)](http://arxiv.org/abs/2501.13193)
-[![OpenReview](https://img.shields.io/badge/OpenReview-Reviews-blue.svg)](https://openreview.net/forum?id=iGcxlTLIL5)
-
-UltraBench is a standardized benchmark of 14 different convex ultrasound image classification and semantic segmentation tasks (7 classification and 7 segmentation tasks) drawn from the 10 different publicly available datasets covering 11 regions of the body. This repository contains the processing scripts to transform raw datasets from their original sources into a standardized format for training and evaluating machine learning models.
-
-This benchmark was published alongside the article [Revisiting Data Augmentation for Ultrasound Images](https://openreview.net/forum?id=iGcxlTLIL5). If you use this benchmark in your research please cite this article and the articles for each of the included datasets. Instructions for how to do so are provided at the end.
-
-## Motivation
-
-A common limitation of studies on ultrasound image analysis using machine learning is a lack of evaluations across multiple domains. However, this is made difficult by a lack of ultrasound image analysis tasks in existing medical image analysis benchmarks, such as [MedMNIST](https://www.nature.com/articles/s41597-022-01721-8), [MedSegBench](https://www.nature.com/articles/s41597-024-04159-2) and the [Medical Segmentation Decathlon](https://www.nature.com/articles/s41467-022-30695-9). To address this issue, we created UltraBench. Our aim is to make it easier for researchers by standardizing the preprocessing of many publicly available ultrasound datasets and providing tools (e.g., dataset implementations for common deep learning frameworks) that (a) reduce the effort required to use them and (b) make it easier for researchers to compare results between papers.
+UltraBench 2 is a standardized benchmark of 21 convex ultrasound image classification and semantic segmentation tasks drawn from 12 publicly available datasets covering 10 anatomical regions. This repository contains the datasets, the downstream training framework, and the evaluation layer used to train and score machine learning models on them.
 
 ## Installation
 
-Install the latest version of UltraBench from PyPI using:
-
-```bash
-pip install ultrabench
-```
-
-See [Contributing](#contributing) for instructions on setting up a development environment.
-
-## Getting Started
-
-UltraBench is packaged as a commandline application. After installing, run
-`ultrabench --help` to get started.
-
-For more information, checkout the [Documentation](https://github.com/adamtupper/ultrabench/wiki) on the wiki!
-
-## Current Datasets & Tasks
-
-The following table contains the list of supported datasets and tasks. Click on the links to checkout the appropriate sections of the documentation or on the article/repository links to visit the original publications. We do not have the rights to republish the datasets, but links to the original articles and datasets are included here and in the [Documentation](https://github.com/adamtupper/ultrabench/wiki).
-
-<!-- TODO: Add links to documentation -->
-
-| Dataset                                                   | Region       | Classification Tasks             | Segmentation Tasks                          |
-|-----------------------------------------------------------|--------------|----------------------------------|---------------------------------------------|
-| Annotated Ultrasound Liver ([article](https://doi.org/10.1093/bib/bbac569), [data](https://zenodo.org/records/7272660))                      | Liver        | Liver mass classification        | Liver segmentation, Liver mass segmentation |
-| CAMUS ([article](https://ieeexplore.ieee.org/document/8649738/), [data](https://www.creatis.insa-lyon.fr/Challenge/camus/index.html))                                           | Heart        | Image quality classification     | Cardiac region segmentation                 |
-| Dataset of B-mode fatty liver ultrasound images ([article](https://link.springer.com/article/10.1007/s11548-018-1843-2), [data](https://zenodo.org/records/1009146)) | Liver        | NFLD classification              |                                             |
-| Gallbladder Cancer Ultrasound (GBCU) ([article](https://ieeexplore.ieee.org/document/9879895), [data](https://gbc-iitd.github.io/data/gbcu))            | Gallbladder  | Gallbladder tumor classification |                                             |
-| Multi-Modality Ovarian Tumor Ultrasound (MMOTU) ([article](http://arxiv.org/abs/2207.06799), [data](https://github.com/cv516Buaa/MMOTU_DS2Net)) | Ovaries      | Ovarian tumor classifcation      | Ovarian tumor segmentation                  |
-| Open Kidney Ultrasound ([article](https://link.springer.com/chapter/10.1007/978-3-031-44521-7_15), [data](https://rsingla.ca/kidneyUS/))                          | Kidney       |                                  | Kidney capsule segmentation                 |
-| PSFHS ([article](https://www.nature.com/articles/s41597-024-03266-4), [data](https://zenodo.org/records/10969427))                                           | Fetus        |                                  | Fetal head and pubic symphysis segmentation |
-
-## Contributing
-
-We would love for this benchmark to grow and flourish into a resource that anyone with an interest in machine learning for ultrasound analysis can pick up and use quickly and easily. Any help addressing bugs, contributing new datasets or tasks, or any other improvements are welcome and appreciated! I only ask that you respect the community guidelines laid out in the `CODE_OF_CONDUCT.md`. For more information on how to contribute, checkout out the [Documentation](https://github.com/adamtupper/ultrabench/wiki).
-
-UltraBench is built using [uv](https://docs.astral.sh/uv/). For the best experience, you can use the development container configuration (see [DEVCONTAINER.md](/.devcontainer/DEVCONTAINER.md)) to setup an isolated development environment with uv and all the necessary dependencies already installed. Otherwise, you can [install uv](https://docs.astral.sh/uv/getting-started/installation/) and then following the commands below. To ensure that your code meets the style guidelines etc., this also installs and initializes the optional development dependencies.
+Install UltraBench 2 from source:
 
 ```bash
 uv sync --group dev --group training  # Install optional dependencies, if required
@@ -57,23 +13,87 @@ nbstripout --install
 pre-commit install
 ```
 
-## Questions
+## Getting Started
 
-If you have any questions, please open an issue or contact us via email.
+Load any dataset in the collection with one function:
 
-## How to Cite UltraBench
+```python
+import ultrabench2
 
-If you use UltraBench in your research, please cite our article [Revisiting Data Augmentation for Ultrasound Images](https://openreview.net/forum?id=iGcxlTLIL5) and the articles for each of the datasets. This ensures that the work of the authors of the original datasets is properly acknowledged, helps more people find the benchmark and encourages us to continue maintaining and improving it!
-
+train_data = ultrabench2.load_dataset(name="AUL", split="train", revision="0.4")
 ```
-@article{
-  tupper2025,
-  title={Revisiting Data Augmentation for Ultrasound Images},
-  author={Adam Tupper and Christian Gagn{\'e}},
-  journal={Transactions on Machine Learning Research},
-  issn={2835-8856},
-  year={2025},
-  url={https://openreview.net/forum?id=iGcxlTLIL5},
-  note={}
-}
+
+Most datasets are published preprocessed and download ready to use. A few cannot be republished in that form, so `load_dataset` preprocesses them on your machine the first time and caches the result. Two of those cannot be republished at all, so you download the raw data yourself and pass its directory:
+
+```python
+train_data = ultrabench2.load_dataset(name="GBCU", path="path/to/raw/data")
 ```
+
+See [the dataset documentation](docs/dataset_format.md) for the three kinds of dataset, where the cache lives, and how to pin a revision.
+
+UltraBench is also packaged as a commandline application, for preprocessing raw datasets and publishing them. After installing, run `ultrabench2 --help` to get started.
+
+## Leaderboard
+
+The following table ranks the evaluated ultrasound foundation models by their average score across the four task categories. Each score is the mean over the tasks in that category, measured with macro F1 for classification and positive Dice for segmentation, under the full fine-tuning paradigm. The best score in each category is bold.
+
+Read the scores of a model pretrained on data that overlaps a category's tasks with care. See [the evaluation protocol](docs/evaluation_protocol.md) for the task categories, the metrics, and how the scores are aggregated.
+
+| Model | Pathological (classification) | Non-pathological (classification) | Pathological (segmentation) | Anatomical (segmentation) |
+|-------|-------------------------------|-----------------------------------|-----------------------------|---------------------------|
+| URFM-L | **0.645** | **0.757** | 0.782 | 0.822 |
+| URFM-B | 0.620 | 0.744 | 0.770 | 0.821 |
+| OpenUS | 0.606 | 0.735 | 0.763 | 0.822 |
+| DINOv3 ViT-L | 0.583 | 0.710 | 0.774 | 0.815 |
+| DINOv3 ViT-B | 0.574 | 0.716 | 0.768 | 0.811 |
+| USF-MAE | 0.600 | 0.735 | 0.717 | 0.813 |
+| Deblurring ConvMAE | 0.600 | 0.683 | 0.759 | 0.811 |
+| DINOv3 ConvNeXt-L | 0.552 | 0.670 | **0.794** | 0.822 |
+| DINOv3 ConvNeXt-B | 0.551 | 0.677 | 0.780 | 0.820 |
+| Deblurring MAE | 0.589 | 0.679 | 0.747 | 0.810 |
+| UltraFedFM | 0.617 | 0.684 | 0.715 | 0.807 |
+| USFM | 0.575 | 0.678 | 0.745 | 0.813 |
+| SAMUS | 0.564 | 0.644 | 0.776 | **0.826** |
+| UltraSAM | 0.584 | 0.679 | 0.724 | 0.809 |
+| EchoCare | 0.549 | 0.671 | 0.712 | 0.801 |
+| TinyUSFM | 0.540 | 0.641 | 0.690 | 0.801 |
+
+## Submissions
+
+Add a model to the leaderboard by opening a pull request against `main`. A maintainer reviews every submission before merging it.
+
+Produce the scores with the evaluation layer, following [the evaluation protocol](docs/evaluation_protocol.md):
+
+1. Train the model on every task of the benchmark under the full fine-tuning paradigm, with five seeds per task. A category score covers all of the tasks in that category, so a missing task leaves the category unscored.
+2. Write the test split predictions of each run to a prediction CSV, and lay the CSVs out as one directory per task. See [the evaluation documentation](docs/evaluation.md) for the format.
+3. Score the submission with `python -m ultrabench2.evaluate.protocol predictions=<your directory>`. It writes the per-task and per-category scores with their error bars, and prints the leaderboard row to paste into the table.
+
+Your pull request adds one row to the [leaderboard](#leaderboard) table:
+
+- Report the four category scores to three decimal places.
+- Place the row in the position its average of the four scores earns it.
+- Link the model name to the public repository for the model, so that readers reach the weights and the code that produced the scores.
+- Move the bold in any column your model now leads, so that each column still marks its best score.
+
+Describe how you trained the model in the pull request, and state which benchmark datasets, if any, appear in its pretraining data. A reviewer checks the row against the linked repository and asks for the per-task scores where a number needs verifying.
+
+## Current Datasets & Tasks
+
+The following table contains the list of supported datasets and tasks. Click on the article and data links to visit the original publications.
+
+The **Access** column says how each dataset reaches you. *Processed* datasets are published ready to use. *Raw* datasets may be redistributed unmodified but not preprocessed, so `load_dataset` downloads the original files and preprocesses them on your machine. *Local* datasets may not be redistributed at all, so you download them from the original source and pass the directory as `path`.
+
+| Dataset | Access | Region | Classification Tasks | Segmentation Tasks |
+|---------|--------|--------|----------------------|--------------------|
+| Annotated Ultrasound Liver ([article](https://doi.org/10.1093/bib/bbac569), [data](https://zenodo.org/records/7272660)) | Processed | Liver | Liver mass classification | Liver segmentation, Liver mass segmentation |
+| BUS-BRA ([article](https://doi.org/10.1002/mp.16812), [data](https://zenodo.org/records/8231412)) | Processed | Breast | Histology classification, Pathology classification | Breast lesion segmentation |
+| CAMUS ([article](https://ieeexplore.ieee.org/document/8649738/), [data](https://www.creatis.insa-lyon.fr/Challenge/camus/index.html)) | Processed | Heart | Image quality classification | Cardiac region segmentation |
+| COVID-BLUES ([article](https://doi.org/10.1109/TUFFC.2025.3535879), [data](https://github.com/NinaWie/COVID-BLUES)) | Raw | Lungs | COVID-19 classification | |
+| Fetal Planes ([article](https://www.nature.com/articles/s41598-020-67076-5), [data](https://zenodo.org/records/3904280)) | Processed | Fetus | Plane classification, Brain plane classification | |
+| Gallbladder Cancer Ultrasound ([article](https://ieeexplore.ieee.org/document/9879895), [data](https://gbc-iitd.github.io/data/gbcu)) | Local | Gallbladder | Gallbladder tumour classification | |
+| MASLD ([article](https://link.springer.com/article/10.1007/s11548-018-1843-2), [data](https://zenodo.org/records/1009146)) | Processed | Liver | Steatosis classification | |
+| MMOTU ([article](http://arxiv.org/abs/2207.06799), [data](https://github.com/cv516Buaa/MMOTU_DS2Net)) | Raw | Ovaries | Ovarian tumour classification | Ovarian tumour segmentation |
+| Open Kidney Ultrasound ([article](https://link.springer.com/chapter/10.1007/978-3-031-44521-7_15), [data](https://rsingla.ca/kidneyUS/)) | Local | Kidney | | Kidney capsule segmentation, Kidney region segmentation |
+| PSFHS ([article](https://www.nature.com/articles/s41597-024-03266-4), [data](https://zenodo.org/records/10969427)) | Processed | Fetus | | Fetal head and pubic symphysis segmentation |
+| STMUS ([data](https://data.mendeley.com/datasets/3jykz7wz8d)) | Processed | Muscle | | Muscle segmentation |
+| TN3K ([article](https://doi.org/10.1016/j.compbiomed.2022.106389), [data](https://github.com/haifangong/TRFE-Net-for-thyroid-nodule-segmentation)) | Processed | Thyroid | Thyroid nodule classification | Thyroid nodule segmentation |

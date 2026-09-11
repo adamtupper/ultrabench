@@ -3,7 +3,7 @@
 import pytest
 import torch
 
-from ultrabench.models.backbone import Backbone, BackboneOutput
+from ultrabench2.models.backbone import Backbone, BackboneOutput
 
 
 class TestBackboneOutput:

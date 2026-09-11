@@ -4,7 +4,7 @@ from unittest.mock import patch
 
 import torch
 
-from ultrabench.models.samus.samus_backbone import SAMUSBackbone
+from ultrabench2.models.samus.samus_backbone import SAMUSBackbone
 
 _BATCH = 2
 _IMG_SIZE = 256

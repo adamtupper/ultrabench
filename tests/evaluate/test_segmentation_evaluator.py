@@ -9,9 +9,9 @@ import pytest
 import torch
 from torchmetrics.segmentation import DiceScore
 
-from ultrabench.core.rle import mask_to_rle
-from ultrabench.evaluate.segmentation import SegmentationEvaluator
-from ultrabench.evaluate.tasks import get_task
+from ultrabench2.core.rle import mask_to_rle
+from ultrabench2.evaluate.segmentation import SegmentationEvaluator
+from ultrabench2.evaluate.tasks import get_task
 
 from .utils import _write_csv
 

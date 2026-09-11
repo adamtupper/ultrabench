@@ -6,8 +6,8 @@ from unittest.mock import patch
 import pytest
 import torch
 
-from ultrabench.models.openus import openus_backbone, openus_vmamba
-from ultrabench.models.openus.openus_backbone import OpenUSBackbone
+from ultrabench2.models.openus import openus_backbone, openus_vmamba
+from ultrabench2.models.openus.openus_backbone import OpenUSBackbone
 
 _BATCH = 2
 _IMG_SIZE = 224

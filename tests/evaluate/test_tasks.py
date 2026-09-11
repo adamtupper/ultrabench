@@ -2,7 +2,7 @@
 
 import pytest
 
-from ultrabench.evaluate.tasks import (
+from ultrabench2.evaluate.tasks import (
     CATEGORIES,
     TASKS,
     get_task,

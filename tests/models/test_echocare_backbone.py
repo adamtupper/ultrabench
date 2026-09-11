@@ -4,7 +4,7 @@ from unittest.mock import patch
 
 import torch
 
-from ultrabench.models.echocare.echocare_backbone import EchoCareBackbone
+from ultrabench2.models.echocare.echocare_backbone import EchoCareBackbone
 
 _BATCH = 2
 _IMG_SIZE = 256

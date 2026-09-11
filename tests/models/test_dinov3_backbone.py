@@ -12,7 +12,7 @@ import pytest
 import torch
 import torch.nn as nn
 
-from ultrabench.models.dinov3.dinov3_backbone import (
+from ultrabench2.models.dinov3.dinov3_backbone import (
     DINOv3ConvNeXtBackbone,
     DINOv3ViTBackbone,
 )

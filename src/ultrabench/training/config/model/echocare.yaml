@@ -1,3 +1,0 @@
-_target_: ultrabench.models.echocare.echocare_backbone.EchoCareBackbone
-checkpoint_path: ${system.checkpoint_dir}/echocare/echocare_encoder.pth
-output_intermediate_features: true

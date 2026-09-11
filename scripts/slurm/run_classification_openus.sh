@@ -58,7 +58,7 @@ ACCUM_GRAD=2
 ub_run_one() {
     local run_dir="$1" seed="$2" method="$3" task="$4"
 
-    python ultrabench2/src/ultrabench/training/main_launch.py \
+    python ultrabench2/src/ultrabench2/training/main_launch.py \
         system.output_dir=${OUTPUT_DIR} \
         system.checkpoint_dir=${CHECKPOINT_DIR} \
         hydra.run.dir="${run_dir}" \

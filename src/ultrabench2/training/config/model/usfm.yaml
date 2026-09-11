@@ -1,0 +1,3 @@
+_target_: ultrabench2.models.usfm.usfm_backbone.USFMBackbone
+checkpoint_path: ${system.checkpoint_dir}/usfm/USFM_latest.pth
+output_intermediate_features: true

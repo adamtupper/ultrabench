@@ -3,7 +3,7 @@
 import pytest
 import torch
 
-from ultrabench.training.losses import DiceCELoss
+from ultrabench2.training.losses import DiceCELoss
 
 
 @pytest.fixture

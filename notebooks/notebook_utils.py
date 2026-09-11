@@ -15,7 +15,7 @@ import pandas as pd
 from tbparse import SummaryReader
 from tqdm.auto import tqdm
 
-from ultrabench.evaluate.tasks import split_mode
+from ultrabench2.evaluate.tasks import split_mode
 
 logger = logging.getLogger(__name__)
 

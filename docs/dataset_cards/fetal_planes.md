@@ -75,24 +75,23 @@ The Fetal Planes dataset supports two tasks:
 
 ## Usage
 
-The easiest way to use this dataset is with [Hugging Face Datasets library](https://huggingface.co/docs/datasets/index):
+Load this dataset with `ultrabench2.load_dataset`, which returns a Hugging Face [`DatasetDict`](https://huggingface.co/docs/datasets/index):
 
 ```python
-from datasets import load_dataset
+import ultrabench2
 
-# Fetal plane classification
-train_data = datasets.load_dataset(
-    "UltraBench/FetalPlanes", name="fetal", revision="0.2", split="train"
+train_data = ultrabench2.load_dataset(
+    name="FetalPlanes",
+    subset="fetal_brain",
+    split="train",
+    revision="0.4",
 )
-test_data = datasets.load_dataset(
-    "UltraBench/FetalPlanes", name="fetal", revision="0.2", split="test.256"
-)
-
-# Fetal brain plane classification
-train_data = datasets.load_dataset(
-    "UltraBench/FetalPlanes", name="fetal_brain", revision="0.2", split="train"
-)
-test_data = datasets.load_dataset(
-    "UltraBench/FetalPlanes", name="fetal_brain", revision="0.2", split="test.256"
+test_data = ultrabench2.load_dataset(
+    name="FetalPlanes",
+    subset="fetal_brain",
+    split="test.256",
+    revision="0.4",
 )
 ```
+
+This dataset has more than one subset, so `subset` is required. Pass `subset="fetal"` for the other one.

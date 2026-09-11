@@ -4,6 +4,8 @@ set -e
 
 # Set GPU visibility for local runs.
 export HF_HOME=/raid/aradhachandran/thyroid/code/UltraBench2o/hf_data
+# Where GBCU and Open Kidney are cached after being preprocessed.
+export ULTRABENCH_CACHE=/raid/aradhachandran/thyroid/code/UltraBench2o/ultrabench_cache
 export CUDA_VISIBLE_DEVICES=3
 
 # Model configuration.

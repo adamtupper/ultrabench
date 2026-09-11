@@ -1,4 +1,4 @@
-"""Unit tests for ultrabench.process.stmus."""
+"""Unit tests for ultrabench2.process.stmus."""
 
 from pathlib import Path
 
@@ -10,8 +10,8 @@ from sklearn.model_selection import GroupShuffleSplit
 
 from datasets import load_from_disk
 
-from ultrabench.core.rle import rle_to_mask
-from ultrabench.process.stmus import (
+from ultrabench2.core.rle import rle_to_mask
+from ultrabench2.process.stmus import (
     CHARACTERISTICS_FILENAME,
     MUSCLE_NAMES,
     OUTPUT_NAME,
@@ -20,7 +20,7 @@ from ultrabench.process.stmus import (
     load_characteristics,
     process_stmus,
 )
-from ultrabench.process.utils import cap_train_split_by_patient
+from ultrabench2.process.utils import cap_train_split_by_patient
 
 ECHOGENICITIES = ["healthy", "pathological"]
 

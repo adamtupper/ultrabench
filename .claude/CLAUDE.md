@@ -32,6 +32,6 @@ UltraBench 2 a standardized evaluation framework for assessing how well ultrasou
     * `docs/`: The end user documentation. Written using Markdown.
     * `examples/`: Contains examples of how to use the datasets with different machine learning frameworks.
     *  `notebooks/`: Jupyter notebooks
-    * `src/`: The source code for the ultrabench package.
+    * `src/`: The source code for the ultrabench2 package.
     * `tests/`: Contains all unit and integration tests.
     * `pyproject.toml`: Package configuration, including project dependencies.

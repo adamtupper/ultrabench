@@ -1,0 +1,3 @@
+_target_: ultrabench2.models.usfmae.usfmae_backbone.USFMAEBackbone
+checkpoint_path: ${system.checkpoint_dir}/usfmae/USF-MAE_full_pretrain_43dataset_100epochs.pt
+output_intermediate_features: true

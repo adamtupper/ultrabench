@@ -5,7 +5,7 @@ from unittest.mock import patch
 import pytest
 import torch
 
-from ultrabench.models.urfm.urfm_backbone import URFMBackbone
+from ultrabench2.models.urfm.urfm_backbone import URFMBackbone
 
 _BATCH = 2
 _IMG_SIZE = 224

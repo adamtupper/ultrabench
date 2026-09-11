@@ -45,11 +45,19 @@ The PSFHS dataset supports one task:
 
 ## Usage
 
-The easiest way to use this dataset is with [Hugging Face Datasets library](https://huggingface.co/docs/datasets/index):
+Load this dataset with `ultrabench2.load_dataset`, which returns a Hugging Face [`DatasetDict`](https://huggingface.co/docs/datasets/index):
 
 ```python
-from datasets import load_dataset
+import ultrabench2
 
-train_data = datasets.load_dataset("UltraBench/PSFHS", revision="0.2", split="train")
-test_data = datasets.load_dataset("UltraBench/PSFHS", revision="0.2", split="test.256")
+train_data = ultrabench2.load_dataset(
+    name="PSFHS",
+    split="train",
+    revision="0.4",
+)
+test_data = ultrabench2.load_dataset(
+    name="PSFHS",
+    split="test.256",
+    revision="0.4",
+)
 ```

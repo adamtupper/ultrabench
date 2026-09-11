@@ -11,25 +11,32 @@ module load arrow/21.0.0 python/3.12
 virtualenv --no-download ~/venvs/hf
 source ~/venvs/hf/bin/activate
 pip install --no-index huggingface_hub datasets
+pip install --no-index -e .
 
 hf auth login --token $HF_TOKEN
 
 cd $project/ultrabench2
 
-python scripts/slurm/download_dataset.py --name UltraBench/AUL --revision 0.1 --cache_dir $project/data/hf/datasets
-python scripts/slurm/download_dataset.py --name UltraBench/BUS-BRA --revision 0.2 --cache_dir $project/data/hf/datasets
-python scripts/slurm/download_dataset.py --name UltraBench/CAMUS --config classification --revision 0.3 --cache_dir $project/data/hf/datasets
-python scripts/slurm/download_dataset.py --name UltraBench/CAMUS --config segmentation --revision 0.3 --cache_dir $project/data/hf/datasets
-python scripts/slurm/download_dataset.py --name UltraBench/COVID-BLUES --revision 0.3 --cache_dir $project/data/hf/datasets
-python scripts/slurm/download_dataset.py --name UltraBench/FetalPlanes --config fetal --revision 0.2 --cache_dir $project/data/hf/datasets
-python scripts/slurm/download_dataset.py --name UltraBench/FetalPlanes --config fetal_brain --revision 0.2 --cache_dir $project/data/hf/datasets
-python scripts/slurm/download_dataset.py --name UltraBench/GBCU --revision 0.2 --cache_dir $project/data/hf/datasets
-python scripts/slurm/download_dataset.py --name UltraBench/MASLD --revision 0.3 --cache_dir $project/data/hf/datasets
-python scripts/slurm/download_dataset.py --name UltraBench/MMOTU-2D --revision 0.1 --cache_dir $project/data/hf/datasets
-python scripts/slurm/download_dataset.py --name UltraBench/OpenKidney --revision 0.1 --cache_dir $project/data/hf/datasets
-python scripts/slurm/download_dataset.py --name UltraBench/PSFHS --revision 0.2 --cache_dir $project/data/hf/datasets
-python scripts/slurm/download_dataset.py --name UltraBench/STMUS --revision 0.3 --cache_dir $project/data/hf/datasets
-python scripts/slurm/download_dataset.py --name UltraBench/TN3K --revision 0.2 --cache_dir $project/data/hf/datasets
+# Datasets published ready to use.
+for spec in "AUL" "BUS-BRA" "CAMUS:classification" "CAMUS:segmentation" \
+            "FetalPlanes:fetal" "FetalPlanes:fetal_brain" "MASLD" "PSFHS" \
+            "STMUS" "TN3K"; do
+  name=${spec%%:*}
+  config=${spec#*:}
+  args="--name UltraBench/$name --revision 0.4 --cache_dir $project/data/hf/datasets"
+  [ "$config" = "$name" ] || args="$args --config $config"
+  python scripts/slurm/download_dataset.py $args
+done
+
+# Datasets preprocessed on this machine. The compute nodes run with
+# HF_HUB_OFFLINE=1, so the cache has to be warmed here, and the two local
+# datasets need their raw data staged under $project/data/raw.
+export ULTRABENCH_CACHE=$project/data/ultrabench_cache
+
+python -c "import ultrabench2; ultrabench2.load_dataset(name='MMOTU', revision='0.4')"
+python -c "import ultrabench2; ultrabench2.load_dataset(name='COVID-BLUES', revision='0.4')"
+python -c "import ultrabench2; ultrabench2.load_dataset(name='GBCU', path='$project/data/raw/GBCU-Shared')"
+python -c "import ultrabench2; ultrabench2.load_dataset(name='OpenKidney', path='$project/data/raw/kidneyUS')"
 
 deactivate
 rm -r ~/venvs/hf

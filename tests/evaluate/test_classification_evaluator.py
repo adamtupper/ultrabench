@@ -5,7 +5,7 @@ import logging
 import pandas as pd
 import pytest
 
-from ultrabench.evaluate.classification import ClassificationEvaluator
+from ultrabench2.evaluate.classification import ClassificationEvaluator
 
 from .utils import _write_csv
 

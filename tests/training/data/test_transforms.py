@@ -1,10 +1,10 @@
-"""Unit tests for ultrabench.training.data.transforms."""
+"""Unit tests for ultrabench2.training.data.transforms."""
 
 import cv2
 import numpy as np
 import pytest
 
-from ultrabench.training.data.transforms import (
+from ultrabench2.training.data.transforms import (
     AdaptiveLongestMaxSize,
     get_train_test_transforms,
 )

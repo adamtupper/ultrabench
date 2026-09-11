@@ -18,8 +18,8 @@ from unittest.mock import MagicMock, patch
 import pytest
 import torch
 
-from ultrabench.models.openus import openus_vmamba
-from ultrabench.models.openus.openus_vmamba import (
+from ultrabench2.models.openus import openus_vmamba
+from ultrabench2.models.openus.openus_vmamba import (
     _selective_scan_torch,
     cross_merge_fn,
     cross_scan_fn,

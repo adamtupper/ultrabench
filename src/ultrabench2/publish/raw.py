@@ -1,0 +1,110 @@
+"""Publish a dataset's original files to the Hugging Face Hub.
+
+Some datasets may be redistributed unmodified but not in a preprocessed
+form. Publishing their original files lets `ultrabench2.load_dataset`
+preprocess them on the user's machine without the user having to track
+down the raw data themselves.
+"""
+
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Annotated
+
+import typer
+from huggingface_hub import HfApi
+
+from ultrabench2.process.utils import DATASET_REVISION, verify_revision_unpublished
+
+
+@dataclass(frozen=True)
+class RawRepo:
+    """Where a dataset's original files come from and go to.
+
+    Args:
+        repo_id: The Hugging Face Hub repository to publish to.
+        marker: A file that must be present, relative to the raw data
+            directory, identifying it as the right dataset.
+        allow_patterns: The files to upload. Everything else in the
+            directory, such as the source code the datasets ship
+            alongside their images, is left out.
+    """
+
+    repo_id: str
+    marker: str
+    allow_patterns: list[str]
+
+
+RAW_DATASETS: dict[str, RawRepo] = {
+    "covid-blues": RawRepo(
+        repo_id="UltraBench/COVID-BLUES-raw",
+        marker="covid_blues/clinical_variables.csv",
+        allow_patterns=[
+            "covid_blues/clinical_variables.csv",
+            "covid_blues/lus_videos/*.mp4",
+        ],
+    ),
+    "mmotu": RawRepo(
+        repo_id="UltraBench/MMOTU-raw",
+        marker="OTU_2d/train.txt",
+        allow_patterns=["OTU_2d/**"],
+    ),
+}
+"""The datasets whose original files may be republished."""
+
+
+def publish_raw(
+    dataset: Annotated[str, typer.Argument(help="The dataset to publish")],
+    raw_dir: Annotated[str, typer.Argument(help="The path to the raw data")],
+    private: Annotated[
+        bool, typer.Option(help="Whether to create a private repository")
+    ] = True,
+) -> None:
+    """Publish a dataset's original files to the Hugging Face Hub.
+
+    Nothing is modified: the layout on the Hub is the layout
+    `ultrabench2 process` expects, so the loaders can pass a downloaded
+    snapshot straight to the processing code.
+
+    Args:
+        dataset: The dataset to publish.
+        raw_dir: The directory holding the raw data.
+        private: Whether to create the repository as private.
+
+    Raises:
+        ValueError: If the dataset does not republish its raw data, or
+            if the current revision is already tagged.
+        FileNotFoundError: If the raw data directory does not hold the
+            expected layout.
+    """
+    if dataset not in RAW_DATASETS:
+        raise ValueError(
+            f"{dataset!r} does not republish its raw data. "
+            f"Valid datasets: {', '.join(sorted(RAW_DATASETS))}."
+        )
+
+    repo = RAW_DATASETS[dataset]
+    raw_path = Path(raw_dir).expanduser()
+    if not (raw_path / repo.marker).is_file():
+        raise FileNotFoundError(
+            f"{raw_path} does not look like the raw {dataset} data: "
+            f"expected to find {repo.marker}."
+        )
+
+    verify_revision_unpublished(repo.repo_id)
+
+    api = HfApi()
+    api.create_repo(repo.repo_id, repo_type="dataset", private=private, exist_ok=True)
+    api.upload_folder(
+        folder_path=str(raw_path),
+        repo_id=repo.repo_id,
+        repo_type="dataset",
+        allow_patterns=repo.allow_patterns,
+        commit_message=f"Upload the raw data for revision {DATASET_REVISION}.",
+    )
+
+    typer.echo(
+        f"Published the raw {dataset} data to {repo.repo_id}. Tag the "
+        f"revision so that published results stay reproducible:\n"
+        f"  hf repos tag create {repo.repo_id} {DATASET_REVISION} "
+        f"--type dataset -m 'Upload the raw data.'"
+    )

@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from ultrabench.core.rle import mask_to_rle, rle_to_mask
+from ultrabench2.core.rle import mask_to_rle, rle_to_mask
 
 
 def test_round_trip_random_mask():

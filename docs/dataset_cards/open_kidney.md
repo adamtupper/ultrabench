@@ -42,11 +42,21 @@ The Open Kidney dataset supports two tasks:
 
 ## Usage
 
-The easiest way to use this dataset is with [Hugging Face Datasets library](https://huggingface.co/docs/datasets/index):
+Load this dataset with `ultrabench2.load_dataset`, which returns a Hugging Face [`DatasetDict`](https://huggingface.co/docs/datasets/index):
 
 ```python
-from datasets import load_dataset
+import ultrabench2
 
-train_data = datasets.load_dataset("UltraBench/OpenKidney", split="train")
-test_data = datasets.load_dataset("UltraBench/OpenKidney", split="test")
+train_data = ultrabench2.load_dataset(
+    name="OpenKidney",
+    path="path/to/raw/data",
+    split="train",
+)
+test_data = ultrabench2.load_dataset(
+    name="OpenKidney",
+    path="path/to/raw/data",
+    split="test.256",
+)
 ```
+
+OpenKidney cannot be republished, so download it from [its original source](https://rsingla.ca/kidneyUS/) first and pass the directory as `path`. The first call preprocesses it and caches the result in `$ULTRABENCH_CACHE`, or `~/.ultrabench` if that is not set, so later calls are immediate.

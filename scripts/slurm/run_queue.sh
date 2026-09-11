@@ -40,7 +40,7 @@ SHOT_PCT="${SHOT_PCT:-1.0}"
 UB_LEDGER_HEADER="combo_id,status,attempts,fields,job_id,array_task_id,node,run_dir,started_at,heartbeat_at,ended_at,duration_s,exit_code"
 
 # Hydra run directory for one attempt. Mirrors the hydra.run.dir template in
-# src/ultrabench/training/config/default.yaml, but with a timestamp we generate
+# src/ultrabench2/training/config/default.yaml, but with a timestamp we generate
 # ourselves so the directory is known before the run starts and can be recorded
 # in the ledger. Scripts whose combos have different fields override this.
 #

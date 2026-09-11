@@ -66,7 +66,7 @@ Segmentation is evaluated per image. Image quality assessment is evaluated per *
 Generate one prediction per sequence by averaging the predicted probabilities over every frame in the sequence, then taking the argmax. The ground-truth CSV carries a `sequence_id` column (`{patient}_{view}`, for example `313_2CH`) that identifies which frames belong together, so the predictions CSV stays per image:
 
 ```bash
-python -m ultrabench.evaluate task=classification aggregate_by=sequence_id \
+python -m ultrabench2.evaluate task=classification aggregate_by=sequence_id \
   ground_truth=classification-test-ground-truth-classification.csv \
   predictions=predictions.csv
 ```
@@ -75,24 +75,23 @@ See [the evaluation documentation](../evaluation.md) for the CSV format.
 
 ## Usage
 
-The easiest way to use this dataset is with [Hugging Face Datasets library](https://huggingface.co/docs/datasets/index). You must name a subset, since the dataset has no default configuration:
+Load this dataset with `ultrabench2.load_dataset`, which returns a Hugging Face [`DatasetDict`](https://huggingface.co/docs/datasets/index):
 
 ```python
-from datasets import load_dataset
+import ultrabench2
 
-# Cardiac structure segmentation
-train_data = datasets.load_dataset(
-    "UltraBench/CAMUS", name="segmentation", revision="0.3", split="train"
+train_data = ultrabench2.load_dataset(
+    name="CAMUS",
+    subset="classification",
+    split="train",
+    revision="0.4",
 )
-test_data = datasets.load_dataset(
-    "UltraBench/CAMUS", name="segmentation", revision="0.3", split="test.256"
-)
-
-# Image quality assessment
-train_data = datasets.load_dataset(
-    "UltraBench/CAMUS", name="classification", revision="0.3", split="train"
-)
-test_data = datasets.load_dataset(
-    "UltraBench/CAMUS", name="classification", revision="0.3", split="test.256"
+test_data = ultrabench2.load_dataset(
+    name="CAMUS",
+    subset="classification",
+    split="test.256",
+    revision="0.4",
 )
 ```
+
+This dataset has more than one subset, so `subset` is required. Pass `subset="segmentation"` for the other one.

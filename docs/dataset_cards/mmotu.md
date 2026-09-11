@@ -36,11 +36,21 @@ The MMOTU-2D dataset supports two tasks:
 
 ## Usage
 
-The easiest way to use this dataset is with [Hugging Face Datasets library](https://huggingface.co/docs/datasets/index):
+Load this dataset with `ultrabench2.load_dataset`, which returns a Hugging Face [`DatasetDict`](https://huggingface.co/docs/datasets/index):
 
 ```python
-from datasets import load_dataset
+import ultrabench2
 
-train_data = datasets.load_dataset("UltraBench/MMOTU-2D", split="train")
-test_data = datasets.load_dataset("UltraBench/MMOTU-2D", split="test.256")
+train_data = ultrabench2.load_dataset(
+    name="MMOTU",
+    split="train",
+    revision="0.4",
+)
+test_data = ultrabench2.load_dataset(
+    name="MMOTU",
+    split="test.256",
+    revision="0.4",
+)
 ```
+
+The first call downloads the original files and preprocesses them on your machine, which takes a few minutes. The result is cached in `$ULTRABENCH_CACHE`, or `~/.ultrabench` if that is not set, so later calls are immediate.
