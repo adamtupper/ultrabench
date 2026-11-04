@@ -90,7 +90,7 @@ def gbcu_raw(tmp_path, monkeypatch):
         [name for name, _ in test],
     )
     monkeypatch.setattr(
-        "ultrabench2.datasets.utils.MANIFEST_DIR", tmp_path / "manifests"
+        "ultrabench.datasets.utils.MANIFEST_DIR", tmp_path / "manifests"
     )
 
     return raw
@@ -148,7 +148,7 @@ def open_kidney_raw(tmp_path, monkeypatch):
 
     write_manifests(tmp_path / "manifests", "OpenKidney", names[:3], names[3:])
     monkeypatch.setattr(
-        "ultrabench2.datasets.utils.MANIFEST_DIR", tmp_path / "manifests"
+        "ultrabench.datasets.utils.MANIFEST_DIR", tmp_path / "manifests"
     )
 
     return raw
@@ -192,7 +192,7 @@ def mmotu_raw(tmp_path, monkeypatch):
 
     write_manifests(tmp_path / "manifests", "MMOTU", splits["train"], splits["val"])
     monkeypatch.setattr(
-        "ultrabench2.datasets.utils.MANIFEST_DIR", tmp_path / "manifests"
+        "ultrabench.datasets.utils.MANIFEST_DIR", tmp_path / "manifests"
     )
 
     return raw
@@ -242,7 +242,7 @@ def covid_blues_raw(tmp_path, monkeypatch):
         return frames
 
     monkeypatch.setattr(
-        "ultrabench2.process.covid_blues.extract_frames", fake_extract_frames
+        "ultrabench.process.covid_blues.extract_frames", fake_extract_frames
     )
     write_manifests(
         tmp_path / "manifests",
@@ -251,7 +251,7 @@ def covid_blues_raw(tmp_path, monkeypatch):
         ["patient_3_L1", "patient_3_R1"],
     )
     monkeypatch.setattr(
-        "ultrabench2.datasets.utils.MANIFEST_DIR", tmp_path / "manifests"
+        "ultrabench.datasets.utils.MANIFEST_DIR", tmp_path / "manifests"
     )
 
     return raw

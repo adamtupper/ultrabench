@@ -4,7 +4,7 @@ from unittest.mock import patch
 
 import torch
 
-from ultrabench2.models.ultrasam.ultrasam_backbone import UltraSAMBackbone
+from ultrabench.models.ultrasam.ultrasam_backbone import UltraSAMBackbone
 
 _BATCH = 2
 _IMG_SIZE = 256

@@ -1,6 +1,6 @@
 # Multi-Modality Ovarian Tumor 2D Ultrasound (MMOTU-2D) Dataset
 
-The Multi-Modality Ovarian Tumor 2D Ultrasound (MMOTU-2D) dataset consists of 1469 ultrasound images each accompanied by semantic segmentation masks that identify the tumor in the image. In addition, each image is labeled according to the presence of each type of tumour (*chocolate cyst*, *serous cystadenoma*, *teratoma*, *theca cell tumour*, *simple cyst*, *normal ovary*, *mucinous cystadenoma*, and *high grade serous cystadenocarcinoma*). This version of the dataset was created for UltraBench 2 to support the evaluation of ultrasound models for ovarian tumor classification and segmentation.
+The Multi-Modality Ovarian Tumor 2D Ultrasound (MMOTU-2D) dataset consists of 1469 ultrasound images each accompanied by semantic segmentation masks that identify the tumor in the image. In addition, each image is labeled according to the presence of each type of tumour (*chocolate cyst*, *serous cystadenoma*, *teratoma*, *theca cell tumour*, *simple cyst*, *normal ovary*, *mucinous cystadenoma*, and *high grade serous cystadenocarcinoma*). This version of the dataset was created for UltraBench to support the evaluation of ultrasound models for ovarian tumor classification and segmentation.
 
 > [!IMPORTANT]
 > When using this dataset, please ensure that you cite the original work:
@@ -36,17 +36,17 @@ The MMOTU-2D dataset supports two tasks:
 
 ## Usage
 
-Load this dataset with `ultrabench2.load_dataset`, which returns a Hugging Face [`DatasetDict`](https://huggingface.co/docs/datasets/index):
+Load this dataset with `ultrabench.load_dataset`, which returns a Hugging Face [`DatasetDict`](https://huggingface.co/docs/datasets/index):
 
 ```python
-import ultrabench2
+import ultrabench
 
-train_data = ultrabench2.load_dataset(
+train_data = ultrabench.load_dataset(
     name="MMOTU",
     split="train",
     revision="0.4",
 )
-test_data = ultrabench2.load_dataset(
+test_data = ultrabench.load_dataset(
     name="MMOTU",
     split="test.256",
     revision="0.4",

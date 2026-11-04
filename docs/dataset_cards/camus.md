@@ -1,6 +1,6 @@
 # CAMUS Dataset
 
-The Cardiac Acquisitions for Multi-structure Ultrasound Segmentation (CAMUS) dataset consists consists of apical four-chamber and two-chamber view cardiac ultrasound sequences from 500 patients for a total of 19,232 images. Each image is accompanied by segmentation masks for the left ventricle (LV) endocardium, left ventricle (LV) myocardium, and the left atrium (LA). Each image is also labeled according to the quality of the scan (*poor*, *medium*, and *good*). This version of the dataset was created for UltraBench 2 to support the evaluation of ultrasound models for cardiac structure segmentation and image quality assessment.
+The Cardiac Acquisitions for Multi-structure Ultrasound Segmentation (CAMUS) dataset consists consists of apical four-chamber and two-chamber view cardiac ultrasound sequences from 500 patients for a total of 19,232 images. Each image is accompanied by segmentation masks for the left ventricle (LV) endocardium, left ventricle (LV) myocardium, and the left atrium (LA). Each image is also labeled according to the quality of the scan (*poor*, *medium*, and *good*). This version of the dataset was created for UltraBench to support the evaluation of ultrasound models for cardiac structure segmentation and image quality assessment.
 
 > [!IMPORTANT]
 > When using this dataset, please ensure that you cite the original work:
@@ -66,7 +66,7 @@ Segmentation is evaluated per image. Image quality assessment is evaluated per *
 Generate one prediction per sequence by averaging the predicted probabilities over every frame in the sequence, then taking the argmax. The ground-truth CSV carries a `sequence_id` column (`{patient}_{view}`, for example `313_2CH`) that identifies which frames belong together, so the predictions CSV stays per image:
 
 ```bash
-python -m ultrabench2.evaluate task=classification aggregate_by=sequence_id \
+python -m ultrabench.evaluate task=classification aggregate_by=sequence_id \
   ground_truth=classification-test-ground-truth-classification.csv \
   predictions=predictions.csv
 ```
@@ -75,18 +75,18 @@ See [the evaluation documentation](../evaluation.md) for the CSV format.
 
 ## Usage
 
-Load this dataset with `ultrabench2.load_dataset`, which returns a Hugging Face [`DatasetDict`](https://huggingface.co/docs/datasets/index):
+Load this dataset with `ultrabench.load_dataset`, which returns a Hugging Face [`DatasetDict`](https://huggingface.co/docs/datasets/index):
 
 ```python
-import ultrabench2
+import ultrabench
 
-train_data = ultrabench2.load_dataset(
+train_data = ultrabench.load_dataset(
     name="CAMUS",
     subset="classification",
     split="train",
     revision="0.4",
 )
-test_data = ultrabench2.load_dataset(
+test_data = ultrabench.load_dataset(
     name="CAMUS",
     subset="classification",
     split="test.256",

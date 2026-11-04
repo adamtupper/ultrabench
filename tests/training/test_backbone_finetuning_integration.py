@@ -15,7 +15,7 @@ import torch.nn as nn
 from lightning.pytorch.utilities.types import OptimizerLRScheduler
 from torch.utils.data import DataLoader, TensorDataset
 
-from ultrabench2.training.callbacks import BackboneFinetuningSteps
+from ultrabench.training.callbacks import BackboneFinetuningSteps
 
 MAX_STEPS = 16
 UNFREEZE_STEP = 8

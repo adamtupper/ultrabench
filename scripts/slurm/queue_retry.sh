@@ -35,7 +35,7 @@ done
 
 QUEUE_DIR="$OUTPUT_DIR/_queue/$EXPERIMENT"
 LEDGER="$QUEUE_DIR/ledger.csv"
-SCRIPT="${UB_SCRIPT:-$project/ultrabench2/scripts/slurm/run_${EXPERIMENT}.sh}"
+SCRIPT="${UB_SCRIPT:-$project/ultrabench/scripts/slurm/run_${EXPERIMENT}.sh}"
 
 if [[ ! -f "$LEDGER" ]]; then
     echo "no queue at $LEDGER" >&2

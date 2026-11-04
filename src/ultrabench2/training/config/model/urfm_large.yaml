@@ -1,4 +1,0 @@
-_target_: ultrabench2.models.urfm.urfm_backbone.URFMBackbone
-model_variant: urfm_mae_vit_large_patch16
-checkpoint_path: ${system.checkpoint_dir}/urfm/mae_vit_large_patch16_dec768d8b_all_biomedclip_1199.pth
-output_intermediate_features: true

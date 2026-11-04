@@ -1,8 +1,8 @@
-"""Unit tests for ultrabench2.datasets.mmotu."""
+"""Unit tests for ultrabench.datasets.mmotu."""
 
 import pytest
 
-from ultrabench2.datasets.mmotu import NAME, load_mmotu
+from ultrabench.datasets.mmotu import NAME, load_mmotu
 
 GROUND_TRUTH_FILES = (
     "ground_truth_classification.csv",
@@ -114,10 +114,10 @@ class TestParityWithTheCli:
     """Tests that the CLI and the loader share one implementation."""
 
     def test_produces_the_same_dataset(self, snapshot, mmotu_raw, tmp_path):
-        """`ultrabench2 process mmotu` and the loader agree."""
+        """`ultrabench process mmotu` and the loader agree."""
         from datasets import load_from_disk
 
-        from ultrabench2.process.mmotu import OUTPUT_NAME, process_mmotu
+        from ultrabench.process.mmotu import OUTPUT_NAME, process_mmotu
 
         output = tmp_path / "out"
         output.mkdir()
@@ -133,7 +133,7 @@ class TestParityWithTheCli:
 
     def test_writes_identical_ground_truth(self, snapshot, mmotu_raw, tmp_path):
         """Both paths write byte-identical ground-truth CSVs."""
-        from ultrabench2.process.mmotu import OUTPUT_NAME, process_mmotu
+        from ultrabench.process.mmotu import OUTPUT_NAME, process_mmotu
 
         output = tmp_path / "out"
         output.mkdir()

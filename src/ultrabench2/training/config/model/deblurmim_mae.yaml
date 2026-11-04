@@ -1,4 +1,0 @@
-_target_: ultrabench2.models.deblurmim.deblurmim_backbone.DeblurMIMBackbone
-model_variant: deblurmim_mae_base_patch16
-checkpoint_path: ${system.checkpoint_dir}/deblurmim/de_mae_base_us280k.pth
-output_intermediate_features: true

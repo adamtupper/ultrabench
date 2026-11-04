@@ -1,4 +1,4 @@
-"""Unit tests for ultrabench2.datasets.load_dataset."""
+"""Unit tests for ultrabench.datasets.load_dataset."""
 
 from importlib import import_module
 from types import SimpleNamespace
@@ -6,14 +6,14 @@ from types import SimpleNamespace
 import pytest
 from datasets import Dataset, DatasetDict
 
-import ultrabench2
-from ultrabench2.datasets import load_dataset
-from ultrabench2.datasets.registry import _REGISTRY, DatasetType
+import ultrabench
+from ultrabench.datasets import load_dataset
+from ultrabench.datasets.registry import _REGISTRY, DatasetType
 
-# `ultrabench2.datasets.load_dataset` is the function, which shadows the
+# `ultrabench.datasets.load_dataset` is the function, which shadows the
 # module of the same name, so the module is fetched rather than imported
 # and everything below is patched by object reference.
-MODULE = import_module("ultrabench2.datasets.load_dataset")
+MODULE = import_module("ultrabench.datasets.load_dataset")
 
 
 @pytest.fixture
@@ -72,8 +72,8 @@ class TestPublicApi:
     """Tests for how load_dataset is exposed."""
 
     def test_is_re_exported_from_the_package_root(self):
-        """The documented `ultrabench2.load_dataset` entry point works."""
-        assert ultrabench2.load_dataset is load_dataset
+        """The documented `ultrabench.load_dataset` entry point works."""
+        assert ultrabench.load_dataset is load_dataset
 
 
 class TestName:

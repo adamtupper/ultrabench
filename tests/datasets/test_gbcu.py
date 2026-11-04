@@ -1,10 +1,10 @@
-"""Unit tests for ultrabench2.datasets.gbcu."""
+"""Unit tests for ultrabench.datasets.gbcu."""
 
 import csv
 
 import pytest
 
-from ultrabench2.datasets.gbcu import load_gbcu
+from ultrabench.datasets.gbcu import load_gbcu
 
 
 class TestLoadGbcu:
@@ -81,7 +81,7 @@ class TestLoadGbcu:
         def fail(*args, **kwargs):
             raise AssertionError("the dataset was reprocessed")
 
-        monkeypatch.setattr("ultrabench2.process.gbcu.build_gbcu_dataset", fail)
+        monkeypatch.setattr("ultrabench.process.gbcu.build_gbcu_dataset", fail)
         second = load_gbcu(gbcu_raw, cache_dir=cache)
 
         assert second["train"]["filename"] == first["train"]["filename"]
@@ -130,10 +130,10 @@ class TestParityWithTheCli:
     """Tests that the CLI and the loader share one implementation."""
 
     def test_produces_the_same_dataset(self, gbcu_raw, tmp_path):
-        """`ultrabench2 process gbcu` and load_gbcu agree exactly."""
+        """`ultrabench process gbcu` and load_gbcu agree exactly."""
         from datasets import load_from_disk
 
-        from ultrabench2.process.gbcu import OUTPUT_NAME, process_gbcu
+        from ultrabench.process.gbcu import OUTPUT_NAME, process_gbcu
 
         output = tmp_path / "out"
         output.mkdir()
@@ -149,7 +149,7 @@ class TestParityWithTheCli:
 
     def test_writes_identical_ground_truth(self, gbcu_raw, tmp_path):
         """Both paths write byte-identical ground-truth CSVs."""
-        from ultrabench2.process.gbcu import OUTPUT_NAME, process_gbcu
+        from ultrabench.process.gbcu import OUTPUT_NAME, process_gbcu
 
         output = tmp_path / "out"
         output.mkdir()

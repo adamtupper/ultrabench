@@ -6,14 +6,14 @@ from typing import get_args
 import pytest
 import yaml
 
-from ultrabench2.datasets.registry import (
+from ultrabench.datasets.registry import (
     DEFAULT_SPLITS,
     _REGISTRY,
     DatasetConfig,
     DatasetName,
     DatasetType,
 )
-from ultrabench2.evaluate.tasks import TASK_CONFIG_DIR
+from ultrabench.evaluate.tasks import TASK_CONFIG_DIR
 
 EXPECTED_HUB_IDS = {
     "AUL": "UltraBench/AUL",
@@ -86,7 +86,7 @@ class TestRegistry:
         if config.loader is None:
             pytest.skip("processed datasets have no loader")
 
-        from ultrabench2.datasets.load_dataset import _resolve_loader
+        from ultrabench.datasets.load_dataset import _resolve_loader
 
         assert callable(_resolve_loader(config))
 

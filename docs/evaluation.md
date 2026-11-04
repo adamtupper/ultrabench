@@ -5,7 +5,7 @@ The evaluation layer is framework independent. It reads two CSV files — the gr
 ## Running an evaluation
 
 ```bash
-python -m ultrabench2.evaluate task=<classification|segmentation> \
+python -m ultrabench.evaluate task=<classification|segmentation> \
   ground_truth=<path to ground truth CSV> \
   predictions=<path to predictions CSV>
 ```
@@ -67,7 +67,7 @@ Segmentation:
 | `class_id` | The foreground class index. |
 | `encoded_pixels` | The run-length encoded binary mask for that class. |
 
-Run-length encoding is Kaggle style: 1-indexed, column-major, and space separated pairs of start position and run length. An all-zero mask encodes to an empty string. Use `ultrabench2.core.rle.mask_to_rle` and `rle_to_mask` to convert.
+Run-length encoding is Kaggle style: 1-indexed, column-major, and space separated pairs of start position and run length. An all-zero mask encodes to an empty string. Use `ultrabench.core.rle.mask_to_rle` and `rle_to_mask` to convert.
 
 ## Sequence-level tasks
 
@@ -82,14 +82,14 @@ Some datasets label a whole sequence rather than an individual image. CAMUS grad
 Pool the predictions by averaging the predicted probabilities over every image in the sequence, then take the argmax. Pass `aggregate_by=sequence_id` to do this:
 
 ```bash
-python -m ultrabench2.evaluate task=classification aggregate_by=sequence_id \
+python -m ultrabench.evaluate task=classification aggregate_by=sequence_id \
   ground_truth=test-ground-truth-classification.csv \
   predictions=predictions.csv
 ```
 
 Your predictions CSV stays per image. The evaluator reads the grouping from the ground truth's `sequence_id` column, so you do not need to know how the sequences are laid out. You do need the `prob_{k}` columns, since probabilities are averaged rather than votes counted.
 
-The training layer reports the same metric inline. Set `sequence_by` in the task configuration (`src/ultrabench2/training/config/task/*.yaml`) to the dataset columns that identify a sequence, and `test_metrics.csv` gains `seq_`-prefixed metrics next to the per-image ones.
+The training layer reports the same metric inline. Set `sequence_by` in the task configuration (`src/ultrabench/training/config/task/*.yaml`) to the dataset columns that identify a sequence, and `test_metrics.csv` gains `seq_`-prefixed metrics next to the per-image ones.
 
 ## Scoring a whole submission
 
@@ -110,7 +110,7 @@ runs/
 The CSVs are the ones described above, and their names are not interpreted. Score them with:
 
 ```bash
-python -m ultrabench2.evaluate.protocol predictions=runs
+python -m ultrabench.evaluate.protocol predictions=runs
 ```
 
 Two CSVs are written to the Hydra run directory, and both are printed:

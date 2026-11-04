@@ -1,10 +1,10 @@
-"""Unit tests for ultrabench2.datasets.covid_blues."""
+"""Unit tests for ultrabench.datasets.covid_blues."""
 
 import csv
 
 import pytest
 
-from ultrabench2.datasets.covid_blues import NAME, load_covid_blues
+from ultrabench.datasets.covid_blues import NAME, load_covid_blues
 
 
 @pytest.fixture
@@ -92,7 +92,7 @@ class TestLoadCovidBlues:
 
     def test_never_decodes_an_unlisted_video(self, snapshot, tmp_path, monkeypatch):
         """A video in neither manifest costs nothing to skip."""
-        from ultrabench2.process import covid_blues
+        from ultrabench.process import covid_blues
 
         decoded = []
         original = covid_blues.extract_frames
@@ -121,10 +121,10 @@ class TestParityWithTheCli:
     """Tests that the CLI and the loader share one implementation."""
 
     def test_produces_the_same_dataset(self, snapshot, covid_blues_raw, tmp_path):
-        """`ultrabench2 process covid-blues` and the loader agree."""
+        """`ultrabench process covid-blues` and the loader agree."""
         from datasets import load_from_disk
 
-        from ultrabench2.process.covid_blues import OUTPUT_NAME, process_covid_blues
+        from ultrabench.process.covid_blues import OUTPUT_NAME, process_covid_blues
 
         output = tmp_path / "out"
         output.mkdir()
@@ -143,7 +143,7 @@ class TestParityWithTheCli:
 
     def test_writes_identical_ground_truth(self, snapshot, covid_blues_raw, tmp_path):
         """Both paths write byte-identical ground-truth CSVs."""
-        from ultrabench2.process.covid_blues import OUTPUT_NAME, process_covid_blues
+        from ultrabench.process.covid_blues import OUTPUT_NAME, process_covid_blues
 
         output = tmp_path / "out"
         output.mkdir()

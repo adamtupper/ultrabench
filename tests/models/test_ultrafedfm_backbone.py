@@ -5,7 +5,7 @@ from unittest.mock import patch
 import pytest
 import torch
 
-from ultrabench2.models.ultrafedfm.ultrafedfm_backbone import UltraFedFMBackbone
+from ultrabench.models.ultrafedfm.ultrafedfm_backbone import UltraFedFMBackbone
 
 _BATCH = 2
 _IMG_SIZE = 224

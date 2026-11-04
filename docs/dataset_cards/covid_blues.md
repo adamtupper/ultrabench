@@ -3,7 +3,7 @@
 > [!CAUTION]
 > This dataset must not be made public as it is licensed under a CC-BY-NC-ND-4.0 license.
 
-COVID-BLUES ([GitHub](https://github.com/NinaWie/COVID-BLUES), [Hugging Face](https://huggingface.co/datasets/jannisborn/COVID-BLUES)) is a dataset of lung ultrasound 362 videos from 63 suspected COVID-19 patients (30 negative and 33 positive cases). There are a total of 31,746 frames across the videos. This version of the dataset was created for UltraBench 2 to support the evaluation of ultrasound models for COVID-19 classification.
+COVID-BLUES ([GitHub](https://github.com/NinaWie/COVID-BLUES), [Hugging Face](https://huggingface.co/datasets/jannisborn/COVID-BLUES)) is a dataset of lung ultrasound 362 videos from 63 suspected COVID-19 patients (30 negative and 33 positive cases). There are a total of 31,746 frames across the videos. This version of the dataset was created for UltraBench to support the evaluation of ultrasound models for COVID-19 classification.
 
 > [!IMPORTANT]
 > When using this dataset, please ensure that you cite the original article:
@@ -24,7 +24,7 @@ The dataset is split by patient into `train` and `test` splits:
 The dataset is versioned with Git tags on the Hugging Face Hub. Pin a revision to keep an experiment reproducible:
 
 - `0.3`: The ground-truth CSV gains a `sequence_id` column so that COVID-19 classification is evaluated per patient. The images and splits are unchanged.
-- `0.1`: The initial UltraBench 2 splits.
+- `0.1`: The initial UltraBench v2 splits.
 
 ## Features
 
@@ -54,7 +54,7 @@ The `covid19` label is a PCR test result for the whole patient, not a property o
 Generate one prediction per patient by averaging the predicted probabilities over every frame from that patient, then taking the argmax. The ground-truth CSV carries a `sequence_id` column (the patient ID) that identifies which frames belong together, so the predictions CSV stays per image:
 
 ```bash
-python -m ultrabench2.evaluate task=classification aggregate_by=sequence_id \
+python -m ultrabench.evaluate task=classification aggregate_by=sequence_id \
   ground_truth=test-ground-truth-classification.csv \
   predictions=predictions.csv
 ```
@@ -65,17 +65,17 @@ See [the evaluation documentation](../evaluation.md) for the CSV format.
 
 ## Usage
 
-Load this dataset with `ultrabench2.load_dataset`, which returns a Hugging Face [`DatasetDict`](https://huggingface.co/docs/datasets/index):
+Load this dataset with `ultrabench.load_dataset`, which returns a Hugging Face [`DatasetDict`](https://huggingface.co/docs/datasets/index):
 
 ```python
-import ultrabench2
+import ultrabench
 
-train_data = ultrabench2.load_dataset(
+train_data = ultrabench.load_dataset(
     name="COVID-BLUES",
     split="train",
     revision="0.4",
 )
-test_data = ultrabench2.load_dataset(
+test_data = ultrabench.load_dataset(
     name="COVID-BLUES",
     split="test.256",
     revision="0.4",

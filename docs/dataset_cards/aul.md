@@ -1,6 +1,6 @@
 # Annotated Ultrasound Liver (AUL) Dataset
 
-The Annotated Ultrasound Liver (AUL) dataset consists of 735 liver ultrasound images with accompanying liver and mass segmentation masks and image labels (*normal*, *benign*, *malignant*). This version of the dataset was created for UltraBench 2 to support the evaluation of ultrasound models for liver and mass segmentation, and liver mass classification.
+The Annotated Ultrasound Liver (AUL) dataset consists of 735 liver ultrasound images with accompanying liver and mass segmentation masks and image labels (*normal*, *benign*, *malignant*). This version of the dataset was created for UltraBench to support the evaluation of ultrasound models for liver and mass segmentation, and liver mass classification.
 
 > [!IMPORTANT]
 > When using this dataset, please ensure that you cite the original work:
@@ -40,17 +40,17 @@ Note that  image `malignant_375` is missing a liver segmentation mask, so there 
 
 ## Usage
 
-Load this dataset with `ultrabench2.load_dataset`, which returns a Hugging Face [`DatasetDict`](https://huggingface.co/docs/datasets/index):
+Load this dataset with `ultrabench.load_dataset`, which returns a Hugging Face [`DatasetDict`](https://huggingface.co/docs/datasets/index):
 
 ```python
-import ultrabench2
+import ultrabench
 
-train_data = ultrabench2.load_dataset(
+train_data = ultrabench.load_dataset(
     name="AUL",
     split="train",
     revision="0.4",
 )
-test_data = ultrabench2.load_dataset(
+test_data = ultrabench.load_dataset(
     name="AUL",
     split="test.256",
     revision="0.4",

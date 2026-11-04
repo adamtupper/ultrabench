@@ -1,5 +1,0 @@
-_target_: ultrabench2.models.dinov3.dinov3_backbone.DINOv3ConvNeXtBackbone
-model_variant: dinov3_convnext_large
-repo_dir: ${system.checkpoint_dir}/dinov3-repo
-checkpoint_path: ${system.checkpoint_dir}/dinov3/dinov3_convnext_large_pretrain_lvd1689m-61fa432d.pth
-output_intermediate_features: true

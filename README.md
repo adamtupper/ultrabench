@@ -1,10 +1,10 @@
-# UltraBench 2
+# UltraBench
 
-UltraBench 2 is a standardized benchmark of 21 convex ultrasound image classification and semantic segmentation tasks drawn from 12 publicly available datasets covering 10 anatomical regions. This repository contains the datasets, the downstream training framework, and the evaluation layer used to train and score machine learning models on them.
+UltraBench is a standardized benchmark of 21 convex ultrasound image classification and semantic segmentation tasks drawn from 12 publicly available datasets covering 10 anatomical regions. This repository contains the datasets, the downstream training framework, and the evaluation layer used to train and score machine learning models on them.
 
 ## Installation
 
-Install UltraBench 2 from source:
+Install UltraBench from source:
 
 ```bash
 uv sync --group dev --group training  # Install optional dependencies, if required
@@ -18,20 +18,20 @@ pre-commit install
 Load any dataset in the collection with one function:
 
 ```python
-import ultrabench2
+import ultrabench
 
-train_data = ultrabench2.load_dataset(name="AUL", split="train", revision="0.4")
+train_data = ultrabench.load_dataset(name="AUL", split="train", revision="0.4")
 ```
 
 Most datasets are published preprocessed and download ready to use. A few cannot be republished in that form, so `load_dataset` preprocesses them on your machine the first time and caches the result. Two of those cannot be republished at all, so you download the raw data yourself and pass its directory:
 
 ```python
-train_data = ultrabench2.load_dataset(name="GBCU", path="path/to/raw/data")
+train_data = ultrabench.load_dataset(name="GBCU", path="path/to/raw/data")
 ```
 
 See [the dataset documentation](docs/dataset_format.md) for the three kinds of dataset, where the cache lives, and how to pin a revision.
 
-UltraBench is also packaged as a commandline application, for preprocessing raw datasets and publishing them. After installing, run `ultrabench2 --help` to get started.
+UltraBench is also packaged as a commandline application, for preprocessing raw datasets and publishing them. After installing, run `ultrabench --help` to get started.
 
 ## Leaderboard
 
@@ -66,7 +66,7 @@ Produce the scores with the evaluation layer, following [the evaluation protocol
 
 1. Train the model on every task of the benchmark under the full fine-tuning paradigm, with five seeds per task. A category score covers all of the tasks in that category, so a missing task leaves the category unscored.
 2. Write the test split predictions of each run to a prediction CSV, and lay the CSVs out as one directory per task. See [the evaluation documentation](docs/evaluation.md) for the format.
-3. Score the submission with `python -m ultrabench2.evaluate.protocol predictions=<your directory>`. It writes the per-task and per-category scores with their error bars, and prints the leaderboard row to paste into the table.
+3. Score the submission with `python -m ultrabench.evaluate.protocol predictions=<your directory>`. It writes the per-task and per-category scores with their error bars, and prints the leaderboard row to paste into the table.
 
 Your pull request adds one row to the [leaderboard](#leaderboard) table:
 

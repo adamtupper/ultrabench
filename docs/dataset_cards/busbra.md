@@ -1,6 +1,6 @@
 # BUS-BRA Dataset
 
-The BUS-BRA dataset ([Zenodo](https://zenodo.org/records/8231412)) consists 1,875 breast ultrasound images from 1,064 patients. Each image is accompanied by biopsy-proven tumour labels (722 benign and 342 malignant cases), BI-RADS assessment categories (2 to 5) and segmentation masks of tumorous and non-tumorous (background) regions. This version of the dataset was created for UltraBench 2 to support the evaluation of ultrasound models for beast cancer screening tasks.
+The BUS-BRA dataset ([Zenodo](https://zenodo.org/records/8231412)) consists 1,875 breast ultrasound images from 1,064 patients. Each image is accompanied by biopsy-proven tumour labels (722 benign and 342 malignant cases), BI-RADS assessment categories (2 to 5) and segmentation masks of tumorous and non-tumorous (background) regions. This version of the dataset was created for UltraBench to support the evaluation of ultrasound models for beast cancer screening tasks.
 
 > [!IMPORTANT]
 > When using this dataset, please ensure that you cite the original work:
@@ -52,17 +52,17 @@ The BUS-BRA dataset supports three tasks:
 
 ## Usage
 
-Load this dataset with `ultrabench2.load_dataset`, which returns a Hugging Face [`DatasetDict`](https://huggingface.co/docs/datasets/index):
+Load this dataset with `ultrabench.load_dataset`, which returns a Hugging Face [`DatasetDict`](https://huggingface.co/docs/datasets/index):
 
 ```python
-import ultrabench2
+import ultrabench
 
-train_data = ultrabench2.load_dataset(
+train_data = ultrabench.load_dataset(
     name="BUS-BRA",
     split="train",
     revision="0.4",
 )
-test_data = ultrabench2.load_dataset(
+test_data = ultrabench.load_dataset(
     name="BUS-BRA",
     split="test.256",
     revision="0.4",

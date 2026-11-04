@@ -18,12 +18,12 @@ unzip kidneyUS_images_14_june_2022.zip -d /path/to/kidneyUS/images
 4. Now you can run the UltraBench processing script:
 
 ```shell
-ultrabench2 process open-kidney /path/to/kidneyUS .
+ultrabench process open-kidney /path/to/kidneyUS .
 ```
 Or load it directly, letting UltraBench preprocess and cache it for you:
 
 ```python
-import ultrabench2
+import ultrabench
 
-data = ultrabench2.load_dataset(name="OpenKidney", path="/path/to/kidneyUS")
+data = ultrabench.load_dataset(name="OpenKidney", path="/path/to/kidneyUS")
 ```

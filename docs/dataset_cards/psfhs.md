@@ -1,6 +1,6 @@
 # Pubic Symphysis and Fetal Head Segmentation (PSFHS) Dataset
 
-The PSFHS dataset is a dataset for fetal head and pubic symphysis segmentation with 1,358 images from 1,124 patients. Each image is accompanied by pixel-level segmentation masks for the fetal head and pubic symphysis, supporting a three-class image segmentation task (_background_, _pubic symphysis_, and _fetal head_). This version of the dataset was created for UltraBench 2 to support the evaluation of ultrasound models for pubic symphysis and fetal head segmentation.
+The PSFHS dataset is a dataset for fetal head and pubic symphysis segmentation with 1,358 images from 1,124 patients. Each image is accompanied by pixel-level segmentation masks for the fetal head and pubic symphysis, supporting a three-class image segmentation task (_background_, _pubic symphysis_, and _fetal head_). This version of the dataset was created for UltraBench to support the evaluation of ultrasound models for pubic symphysis and fetal head segmentation.
 
 > [!IMPORTANT]
 > When using this dataset, please ensure that you cite the original works:
@@ -45,17 +45,17 @@ The PSFHS dataset supports one task:
 
 ## Usage
 
-Load this dataset with `ultrabench2.load_dataset`, which returns a Hugging Face [`DatasetDict`](https://huggingface.co/docs/datasets/index):
+Load this dataset with `ultrabench.load_dataset`, which returns a Hugging Face [`DatasetDict`](https://huggingface.co/docs/datasets/index):
 
 ```python
-import ultrabench2
+import ultrabench
 
-train_data = ultrabench2.load_dataset(
+train_data = ultrabench.load_dataset(
     name="PSFHS",
     split="train",
     revision="0.4",
 )
-test_data = ultrabench2.load_dataset(
+test_data = ultrabench.load_dataset(
     name="PSFHS",
     split="test.256",
     revision="0.4",

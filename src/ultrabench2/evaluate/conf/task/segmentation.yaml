@@ -1,6 +1,0 @@
-_target_: ultrabench2.evaluate.segmentation.SegmentationEvaluator
-ground_truth_path: ${ground_truth}
-predictions_path: ${predictions}
-output_dir: ${hydra:runtime.output_dir}
-image_height: ???
-image_width: ???

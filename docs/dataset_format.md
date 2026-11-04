@@ -4,12 +4,12 @@ UltraBench provides a standardized preprocessing pipeline that converts raw ultr
 
 ## Loading Datasets
 
-`ultrabench2.load_dataset` loads any dataset in the collection through one interface:
+`ultrabench.load_dataset` loads any dataset in the collection through one interface:
 
 ```python
-import ultrabench2
+import ultrabench
 
-dataset = ultrabench2.load_dataset(
+dataset = ultrabench.load_dataset(
     name="AUL",          # the dataset to load
     path=None,           # the raw data directory, for a local dataset
     subset=None,         # the subset, for a dataset that has more than one
@@ -31,16 +31,16 @@ Datasets reach you in one of three ways, and the interface is the same for all o
 
 ```python
 # A processed dataset
-data = ultrabench2.load_dataset(name="AUL", revision="0.4")
+data = ultrabench.load_dataset(name="AUL", revision="0.4")
 
 # A dataset with more than one subset
-data = ultrabench2.load_dataset(name="CAMUS", subset="classification")
+data = ultrabench.load_dataset(name="CAMUS", subset="classification")
 
 # A local dataset
-data = ultrabench2.load_dataset(name="GBCU", path="path/to/raw/data")
+data = ultrabench.load_dataset(name="GBCU", path="path/to/raw/data")
 
 # A single split
-train_data = ultrabench2.load_dataset(name="AUL", split="train")
+train_data = ultrabench.load_dataset(name="AUL", split="train")
 ```
 
 Every dataset publishes the same three splits: `train`, `test`, and `test.256`. Passing an unknown name, subset, or split raises a `ValueError` listing the valid values, and a local dataset with no `path` raises a `ValueError` naming where to get the data.
@@ -61,7 +61,7 @@ Read a cache entry with `datasets.load_from_disk`, never `datasets.load_dataset`
 
 ### Split Manifests
 
-The splits of the raw and local datasets are committed to `src/ultrabench2/datasets/manifests/`, one CSV per split. Preprocessing partitions the raw examples by these files rather than re-running a seeded splitter, so the splits cannot shift with a library upgrade or a change to the raw data, and results stay comparable with the published revision.
+The splits of the raw and local datasets are committed to `src/ultrabench/datasets/manifests/`, one CSV per split. Preprocessing partitions the raw examples by these files rather than re-running a seeded splitter, so the splits cannot shift with a library upgrade or a change to the raw data, and results stay comparable with the published revision.
 
 An example listed in neither manifest is dropped, which is how the training splits are capped and how duplicate images are removed. An entry with no matching raw example raises a `ValueError`, which is what catches raw data that has changed. COVID-BLUES is listed one video per row rather than one frame, because every frame of a video belongs to the same split.
 
@@ -73,29 +73,29 @@ uv run python scripts/generate_split_manifests.py path/to/processed/datasets
 
 ## Downloading Datasets
 
-Some datasets can be downloaded automatically using the `ultrabench2 download` command:
+Some datasets can be downloaded automatically using the `ultrabench download` command:
 
 ```bash
-ultrabench2 download <dataset> <output_dir>
+ultrabench download <dataset> <output_dir>
 ```
 
 Downloadable datasets:
 
 | Dataset | Command |
 |---------|---------|
-| AUL | `ultrabench2 download aul <output_dir>` |
-| CAMUS | `ultrabench2 download camus <output_dir>` |
-| MASLD | `ultrabench2 download masld <output_dir>` |
-| PSFHS | `ultrabench2 download psfhs <output_dir>` |
+| AUL | `ultrabench download aul <output_dir>` |
+| CAMUS | `ultrabench download camus <output_dir>` |
+| MASLD | `ultrabench download masld <output_dir>` |
+| PSFHS | `ultrabench download psfhs <output_dir>` |
 
 For datasets not listed above, refer to their respective sources and download them manually before running the preprocessing step.
 
 ## Preprocessing Datasets
 
-Once the raw data is available, preprocess it into the standardized format using the `ultrabench2 process` command:
+Once the raw data is available, preprocess it into the standardized format using the `ultrabench process` command:
 
 ```bash
-ultrabench2 process <dataset> <raw_dir> <output_dir> [--size 256] [--publish]
+ultrabench process <dataset> <raw_dir> <output_dir> [--size 256] [--publish]
 ```
 
 - `<raw_dir>`: Path to the downloaded raw dataset directory.
@@ -107,30 +107,30 @@ All 12 datasets are supported:
 
 | Dataset | Command |
 |---------|---------|
-| AUL | `ultrabench2 process aul <raw_dir> <output_dir>` |
-| BUS-BRA | `ultrabench2 process busbra <raw_dir> <output_dir>` |
-| CAMUS | `ultrabench2 process camus <raw_dir> <output_dir>` |
-| COVID-BLUES | `ultrabench2 process covid-blues <raw_dir> <output_dir>` |
-| Fetal Planes | `ultrabench2 process fetal-planes <raw_dir> <output_dir>` |
-| GBCU | `ultrabench2 process gbcu <raw_dir> <output_dir>` |
-| MASLD | `ultrabench2 process masld <raw_file> <output_dir>` |
-| MMOTU | `ultrabench2 process mmotu <raw_dir> <output_dir>` |
-| Open Kidney | `ultrabench2 process open-kidney <raw_dir> <output_dir>` |
-| PSFHS | `ultrabench2 process psfhs <raw_dir> <output_dir>` |
-| STMUS | `ultrabench2 process stmus <raw_dir> <output_dir>` |
-| TN3K | `ultrabench2 process tn3k <raw_dir> <output_dir>` |
+| AUL | `ultrabench process aul <raw_dir> <output_dir>` |
+| BUS-BRA | `ultrabench process busbra <raw_dir> <output_dir>` |
+| CAMUS | `ultrabench process camus <raw_dir> <output_dir>` |
+| COVID-BLUES | `ultrabench process covid-blues <raw_dir> <output_dir>` |
+| Fetal Planes | `ultrabench process fetal-planes <raw_dir> <output_dir>` |
+| GBCU | `ultrabench process gbcu <raw_dir> <output_dir>` |
+| MASLD | `ultrabench process masld <raw_file> <output_dir>` |
+| MMOTU | `ultrabench process mmotu <raw_dir> <output_dir>` |
+| Open Kidney | `ultrabench process open-kidney <raw_dir> <output_dir>` |
+| PSFHS | `ultrabench process psfhs <raw_dir> <output_dir>` |
+| STMUS | `ultrabench process stmus <raw_dir> <output_dir>` |
+| TN3K | `ultrabench process tn3k <raw_dir> <output_dir>` |
 
-Most users do not need this command. `ultrabench2.load_dataset` preprocesses the raw and local datasets for you and caches the result; use `ultrabench2 process` when you are publishing a dataset or want the output on disk.
+Most users do not need this command. `ultrabench.load_dataset` preprocesses the raw and local datasets for you and caches the result; use `ultrabench process` when you are publishing a dataset or want the output on disk.
 
 ## Publishing Raw Data
 
-COVID-BLUES and MMOTU may be redistributed unmodified but not in a preprocessed form, so their original files are published instead and `ultrabench2.load_dataset` preprocesses them locally. Publish them with:
+COVID-BLUES and MMOTU may be redistributed unmodified but not in a preprocessed form, so their original files are published instead and `ultrabench.load_dataset` preprocesses them locally. Publish them with:
 
 ```bash
-ultrabench2 publish-raw <dataset> <raw_dir>
+ultrabench publish-raw <dataset> <raw_dir>
 ```
 
-Only the files the processing code reads are uploaded, and the layout on the Hub is the layout `ultrabench2 process` expects. Tag the revision afterwards, as the command prints.
+Only the files the processing code reads are uploaded, and the layout on the Hub is the layout `ultrabench process` expects. Tag the revision afterwards, as the command prints.
 
 ## Training Split Size
 
@@ -151,21 +151,21 @@ Where examples are discarded from a labelled dataset, they are taken from the la
 Published datasets are versioned with Git tags on the Hugging Face Hub. Pin a revision so that an experiment stays reproducible when a dataset changes:
 
 ```python
-import ultrabench2
+import ultrabench
 
-train_data = ultrabench2.load_dataset(name="TN3K", revision="0.4", split="train")
+train_data = ultrabench.load_dataset(name="TN3K", revision="0.4", split="train")
 ```
 
 `revision` pins the published dataset for a processed dataset, and the published raw files for a raw dataset. A local dataset has no revision, so passing one raises a `UserWarning` and the argument is ignored; what fixes its splits instead is the manifest committed alongside the code.
 
 | Revision | Description |
 |----------|-------------|
-| `0.1` | The initial UltraBench 2 splits. |
+| `0.1` | The initial UltraBench v2 splits. |
 | `0.2` | The `train` splits are capped at 1,000 examples. CAMUS is also split into `classification` and `segmentation` subsets. |
 | `0.3` | The ground-truth CSVs of the sequence-level classification tasks (CAMUS image quality, COVID-BLUES, MASLD) gain a `sequence_id` column. The images are unchanged. |
 | `0.4` | Each test split gets its own ground-truth CSVs, with the segmentation masks encoded at the resolution of that split. Earlier revisions publish full-resolution masks under the `test.256` name. The images are unchanged. From this revision every dataset in the collection shares one revision number. |
 
-Set `revision` in a task configuration (`src/ultrabench2/training/config/task/*.yaml`) to pin the revision a training run uses, and pass `--revision` to `scripts/slurm/download_dataset.py` to pre-cache the matching revision.
+Set `revision` in a task configuration (`src/ultrabench/training/config/task/*.yaml`) to pin the revision a training run uses, and pass `--revision` to `scripts/slurm/download_dataset.py` to pre-cache the matching revision.
 
 The processing code refuses to publish a revision that is already tagged, so re-running `--publish` cannot overwrite a released revision. Create the tag once the datasets are pushed:
 
@@ -175,7 +175,7 @@ hf repos tag create UltraBench/TN3K 0.2 --type dataset -m "Cap training splits a
 
 ## Output Directory Structure
 
-`ultrabench2 process` writes a Hugging Face `DatasetDict` with `save_to_disk`, under `<output_dir>/UltraBench/<Dataset>/`:
+`ultrabench process` writes a Hugging Face `DatasetDict` with `save_to_disk`, under `<output_dir>/UltraBench/<Dataset>/`:
 
 ```
 UltraBench/AUL/
@@ -208,7 +208,7 @@ Datasets carry PIL images, so a transform is applied with `with_transform`:
 ```python
 import albumentations as A
 import numpy as np
-import ultrabench2
+import ultrabench
 from albumentations.pytorch import ToTensorV2
 
 transform = A.Compose(
@@ -227,8 +227,8 @@ def apply(batch):
     }
 
 
-train_data = ultrabench2.load_dataset(name="AUL", split="train")
+train_data = ultrabench.load_dataset(name="AUL", split="train")
 train_data = train_data.with_transform(apply)
 ```
 
-The training layer does this for every task in [`src/ultrabench2/training/data/utils.py`](../src/ultrabench2/training/data/utils.py), including the train/validation split and the sequence pooling some tasks need.
+The training layer does this for every task in [`src/ultrabench/training/data/utils.py`](../src/ultrabench/training/data/utils.py), including the train/validation split and the sequence pooling some tasks need.

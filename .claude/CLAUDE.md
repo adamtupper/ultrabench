@@ -1,5 +1,5 @@
-# Project: UltraBench 2 - A Standardized Benchmark for Evaluating Ultrasound Foundation Models
-UltraBench 2 a standardized evaluation framework for assessing how well ultrasound foundation models (pretrained vision encoders, like ViT or CNN backbones) generalize to downstream segmentation and classification tasks. It provides:
+# Project: UltraBench - A Standardized Benchmark for Evaluating Ultrasound Foundation Models
+UltraBench a standardized evaluation framework for assessing how well ultrasound foundation models (pretrained vision encoders, like ViT or CNN backbones) generalize to downstream segmentation and classification tasks. It provides:
 
 1. **A dataset layer.** Standardized versions (e.g., pre-processing, splitting, interface, etc.) of common classification and segmentation datasets.
 2. **A training layer.** PyTorch framework for downstream training using common techniques (e.g., linear probing, lightweight segmentation decoder, full fine-tuning, etc.).
@@ -32,6 +32,6 @@ UltraBench 2 a standardized evaluation framework for assessing how well ultrasou
     * `docs/`: The end user documentation. Written using Markdown.
     * `examples/`: Contains examples of how to use the datasets with different machine learning frameworks.
     *  `notebooks/`: Jupyter notebooks
-    * `src/`: The source code for the ultrabench2 package.
+    * `src/`: The source code for the ultrabench package.
     * `tests/`: Contains all unit and integration tests.
     * `pyproject.toml`: Package configuration, including project dependencies.

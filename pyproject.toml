@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "ultrabench2"
+name = "ultrabench"
 dynamic = ["version"]
 authors = [
   { name="Adam Tupper", email="adam.tupper.1@ulaval.ca" },
@@ -77,18 +77,18 @@ training = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/adamtupper/ultrabench2"
-Documentation = "https://github.com/adamtupper/ultrabench2/wiki"
-Issues = "https://github.com/adamtupper/ultrabench2/issues"
+Homepage = "https://github.com/adamtupper/ultrabench"
+Documentation = "https://github.com/adamtupper/ultrabench/wiki"
+Issues = "https://github.com/adamtupper/ultrabench/issues"
 
 [project.scripts]
-ultrabench2 = "ultrabench2.cli:app"
+ultrabench = "ultrabench.cli:app"
 
 [project.entry-points."pipx.run"]
-ultrabench2 = "ultrabench2.cli:app"
+ultrabench = "ultrabench.cli:app"
 
 [tool.hatch.version]
-path = "src/ultrabench2/__about__.py"
+path = "src/ultrabench/__about__.py"
 
 [tool.uv]
 add-bounds = "major"
@@ -111,7 +111,7 @@ select = ["E", "W"]
 line-length = 88
 
 [tool.ruff.lint.isort]
-known-first-party = ["ultrabench2"]
+known-first-party = ["ultrabench"]
 
 [tool.ruff.lint.pycodestyle]
 max-doc-length = 79

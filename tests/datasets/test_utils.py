@@ -1,10 +1,10 @@
-"""Unit tests for ultrabench2.datasets.utils."""
+"""Unit tests for ultrabench.datasets.utils."""
 
 from pathlib import Path
 
 import pytest
 
-from ultrabench2.datasets.utils import (
+from ultrabench.datasets.utils import (
     CACHE_ENV_VAR,
     dataset_cache_key,
     dataset_cache_path,
@@ -48,7 +48,7 @@ class TestResolveCacheDir:
     def test_falls_back_to_the_home_directory(self, no_cache_env, monkeypatch):
         """A hidden directory in the home directory is the last resort."""
         monkeypatch.setattr(
-            "ultrabench2.datasets.utils.DEFAULT_CACHE_DIR", Path("/home/x/.ultrabench")
+            "ultrabench.datasets.utils.DEFAULT_CACHE_DIR", Path("/home/x/.ultrabench")
         )
 
         assert resolve_cache_dir() == Path("/home/x/.ultrabench")

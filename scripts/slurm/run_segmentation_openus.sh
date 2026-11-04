@@ -57,7 +57,7 @@ ACCUM_GRAD=2
 ub_run_one() {
     local run_dir="$1" seed="$2" method="$3" task="$4"
 
-    python ultrabench2/src/ultrabench2/training/main_launch.py \
+    python ultrabench/src/ultrabench/training/main_launch.py \
         system.output_dir=${OUTPUT_DIR} \
         system.checkpoint_dir=${CHECKPOINT_DIR} \
         hydra.run.dir="${run_dir}" \
@@ -74,8 +74,8 @@ ub_run_one() {
         optimization.accum_grad=${ACCUM_GRAD}
 }
 
-source $project/ultrabench2/scripts/slurm/run_queue.sh
+source $project/ultrabench/scripts/slurm/run_queue.sh
 ub_queue_init
 
-source $project/ultrabench2/scripts/slurm/setup_node.sh
+source $project/ultrabench/scripts/slurm/setup_node.sh
 ub_queue_run

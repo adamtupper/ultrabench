@@ -1,6 +1,6 @@
 # TN3K Dataset
 
-TN3K ([GitHub](https://github.com/haifangong/TRFE-Net-for-thyroid-nodule-segmentation), [Hugging Face](https://huggingface.co/datasets/haifan-gong/TN3K)) is a dataset for thyroid nodule classification and segmentation. It consists of 3,493 thyroid ultrasound images from 2,421 patients that are divided into 2,879 training and 614 test images. Each image is accompanied by a binary segmentation mask indicating tumorous and non-tumorous regions, and a binary label indicating the pathology (benign or malignant). This version of the dataset was created for UltraBench 2 to support the evaluation of ultrasound models for thyroid nodule classification and segmentation.
+TN3K ([GitHub](https://github.com/haifangong/TRFE-Net-for-thyroid-nodule-segmentation), [Hugging Face](https://huggingface.co/datasets/haifan-gong/TN3K)) is a dataset for thyroid nodule classification and segmentation. It consists of 3,493 thyroid ultrasound images from 2,421 patients that are divided into 2,879 training and 614 test images. Each image is accompanied by a binary segmentation mask indicating tumorous and non-tumorous regions, and a binary label indicating the pathology (benign or malignant). This version of the dataset was created for UltraBench to support the evaluation of ultrasound models for thyroid nodule classification and segmentation.
 
 > [!IMPORTANT]
 > When using this dataset, please ensure that you cite the original work:
@@ -48,17 +48,17 @@ The TN3K dataset supports three tasks:
 
 ## Usage
 
-Load this dataset with `ultrabench2.load_dataset`, which returns a Hugging Face [`DatasetDict`](https://huggingface.co/docs/datasets/index):
+Load this dataset with `ultrabench.load_dataset`, which returns a Hugging Face [`DatasetDict`](https://huggingface.co/docs/datasets/index):
 
 ```python
-import ultrabench2
+import ultrabench
 
-train_data = ultrabench2.load_dataset(
+train_data = ultrabench.load_dataset(
     name="TN3K",
     split="train",
     revision="0.4",
 )
-test_data = ultrabench2.load_dataset(
+test_data = ultrabench.load_dataset(
     name="TN3K",
     split="test.256",
     revision="0.4",

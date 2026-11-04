@@ -3,7 +3,7 @@
 > [!CAUTION]
 > This dataset must not be made public as it is licensed under a Research Usage Agreement. See [here](https://rsingla.ca/kidneyUS/) for more details.
 
-The Open Kidney Ultrasound dataset consists of 514 B-mode kidney ultrasound images, each from a distinct patient. Each image has two segmentation masks for two separate semantic segmentation tasks: kidney capsule and fine-grain kidney regions segmentation. The regions segmentation task is very difficult due to the limited amount of data. This version of the dataset was created for UltraBench 2 to support the evaluation of ultrasound models for kidney segmentation.
+The Open Kidney Ultrasound dataset consists of 514 B-mode kidney ultrasound images, each from a distinct patient. Each image has two segmentation masks for two separate semantic segmentation tasks: kidney capsule and fine-grain kidney regions segmentation. The regions segmentation task is very difficult due to the limited amount of data. This version of the dataset was created for UltraBench to support the evaluation of ultrasound models for kidney segmentation.
 
 > [!IMPORTANT]
 > When using this dataset, please ensure that you cite the original source:
@@ -42,17 +42,17 @@ The Open Kidney dataset supports two tasks:
 
 ## Usage
 
-Load this dataset with `ultrabench2.load_dataset`, which returns a Hugging Face [`DatasetDict`](https://huggingface.co/docs/datasets/index):
+Load this dataset with `ultrabench.load_dataset`, which returns a Hugging Face [`DatasetDict`](https://huggingface.co/docs/datasets/index):
 
 ```python
-import ultrabench2
+import ultrabench
 
-train_data = ultrabench2.load_dataset(
+train_data = ultrabench.load_dataset(
     name="OpenKidney",
     path="path/to/raw/data",
     split="train",
 )
-test_data = ultrabench2.load_dataset(
+test_data = ultrabench.load_dataset(
     name="OpenKidney",
     path="path/to/raw/data",
     split="test.256",

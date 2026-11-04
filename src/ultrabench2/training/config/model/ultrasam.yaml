@@ -1,3 +1,0 @@
-_target_: ultrabench2.models.ultrasam.ultrasam_backbone.UltraSAMBackbone
-checkpoint_path: ${system.checkpoint_dir}/ultrasam/UltraSam.pt
-output_intermediate_features: true

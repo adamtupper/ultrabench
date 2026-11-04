@@ -3,7 +3,7 @@
 > [!CAUTION]
 > This dataset must not be made public as it is licensed under a Research Usage Agreement. See [here](https://gbc-iitd.github.io/data/gbcu) for more details.
 
-The GBCU dataset contains a total of 1,255 annotated abdominal ultrasound images (consisting of 432 normal, 558 benign, and 265 malignant images) collected from 218 patients (71 normal, 100 benign, and 47 malignant). This version of the dataset was created for UltraBench 2 to support the evaluation of ultrasound models for gallbladder tumour classification.
+The GBCU dataset contains a total of 1,255 annotated abdominal ultrasound images (consisting of 432 normal, 558 benign, and 265 malignant images) collected from 218 patients (71 normal, 100 benign, and 47 malignant). This version of the dataset was created for UltraBench to support the evaluation of ultrasound models for gallbladder tumour classification.
 
 > [!IMPORTANT]
 > When using this dataset, please ensure that you cite the original source:
@@ -46,17 +46,17 @@ The GBCU dataset supports one task:
 
 ## Usage
 
-Load this dataset with `ultrabench2.load_dataset`, which returns a Hugging Face [`DatasetDict`](https://huggingface.co/docs/datasets/index):
+Load this dataset with `ultrabench.load_dataset`, which returns a Hugging Face [`DatasetDict`](https://huggingface.co/docs/datasets/index):
 
 ```python
-import ultrabench2
+import ultrabench
 
-train_data = ultrabench2.load_dataset(
+train_data = ultrabench.load_dataset(
     name="GBCU",
     path="path/to/raw/data",
     split="train",
 )
-test_data = ultrabench2.load_dataset(
+test_data = ultrabench.load_dataset(
     name="GBCU",
     path="path/to/raw/data",
     split="test.256",

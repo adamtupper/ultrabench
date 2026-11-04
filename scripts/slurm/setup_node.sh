@@ -24,7 +24,7 @@ export TQDM_DISABLE=1
 export NO_ALBUMENTATIONS_UPDATE=1
 
 # Copy code to compute node
-rsync -a $project/ultrabench2 $SLURM_TMPDIR --exclude-from=$project/ultrabench2/.gitignore
+rsync -a $project/ultrabench $SLURM_TMPDIR --exclude-from=$project/ultrabench/.gitignore
 
 # Copy the warm dataset cache and the raw data the local datasets need
 rsync -a $project/data/ultrabench_cache/ $SLURM_TMPDIR/ultrabench_cache/
@@ -35,7 +35,7 @@ virtualenv --no-download $SLURM_TMPDIR/env
 source $SLURM_TMPDIR/env/bin/activate
 
 # Install package and dependencies
-cd $SLURM_TMPDIR/ultrabench2
+cd $SLURM_TMPDIR/ultrabench
 pip install --no-index --upgrade pip
 pip install --no-index --find-links=$project/wheels -e . --group training
 

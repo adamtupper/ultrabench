@@ -4,8 +4,8 @@ import albumentations as A
 import pytest
 from datasets import Dataset
 
-from ultrabench2.training.data import utils
-from ultrabench2.training.data.utils import TEST_SPLIT, get_splits, resolve_task_path
+from ultrabench.training.data import utils
+from ultrabench.training.data.utils import TEST_SPLIT, get_splits, resolve_task_path
 
 
 @pytest.fixture

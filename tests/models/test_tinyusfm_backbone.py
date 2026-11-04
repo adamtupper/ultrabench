@@ -6,8 +6,8 @@ from unittest.mock import patch
 import pytest
 import torch
 
-from ultrabench2.models.tinyusfm.tinyusfm_backbone import TinyUSFMBackbone
-from ultrabench2.models.tinyusfm.tinyusfm_vit import TinyUSFMEncoder
+from ultrabench.models.tinyusfm.tinyusfm_backbone import TinyUSFMBackbone
+from ultrabench.models.tinyusfm.tinyusfm_vit import TinyUSFMEncoder
 
 _BATCH = 2
 _IMG_SIZE = 224

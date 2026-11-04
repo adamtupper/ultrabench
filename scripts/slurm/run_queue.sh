@@ -40,7 +40,7 @@ SHOT_PCT="${SHOT_PCT:-1.0}"
 UB_LEDGER_HEADER="combo_id,status,attempts,fields,job_id,array_task_id,node,run_dir,started_at,heartbeat_at,ended_at,duration_s,exit_code"
 
 # Hydra run directory for one attempt. Mirrors the hydra.run.dir template in
-# src/ultrabench2/training/config/default.yaml, but with a timestamp we generate
+# src/ultrabench/training/config/default.yaml, but with a timestamp we generate
 # ourselves so the directory is known before the run starts and can be recorded
 # in the ledger. Scripts whose combos have different fields override this.
 #
@@ -396,7 +396,7 @@ ub_queue_init() {
     UB_LEDGER="$UB_QUEUE_DIR/ledger.csv"
     # Not $0: Slurm runs a spooled copy of the batch script, and resubmitting
     # that would also pin the chain to a stale snapshot of the code.
-    UB_SCRIPT="${UB_SCRIPT:-$project/ultrabench2/scripts/slurm/run_${EXPERIMENT}.sh}"
+    UB_SCRIPT="${UB_SCRIPT:-$project/ultrabench/scripts/slurm/run_${EXPERIMENT}.sh}"
     UB_SUBMIT_DIR="${UB_SUBMIT_DIR:-${SLURM_SUBMIT_DIR:-$PWD}}"
     export UB_SCRIPT UB_SUBMIT_DIR
 

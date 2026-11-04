@@ -1,6 +1,6 @@
 # Fetal Planes Dataset
 
-Fetal Planes is a dataset of 12,400 routinely acquired maternal-fetal screening ultrasound images from 1,792 patients. The images are divided into 6 classes: four of the most widely used fetal anatomical planes (Abdomen, Brain, Femur and Thorax), the mother’s cervix (widely used for prematurity screening) and a general category to include any other less common image planes. The fetal brain images are further categorized into the 3 most common fetal brain planes (Trans-thalamic, Trans-cerebellum, Trans-ventricular and Other to judge fine grain categorization performance. This version of the dataset was created for UltraBench 2 to support the evaluation of ultrasound models for maternal-fetal screening tasks.
+Fetal Planes is a dataset of 12,400 routinely acquired maternal-fetal screening ultrasound images from 1,792 patients. The images are divided into 6 classes: four of the most widely used fetal anatomical planes (Abdomen, Brain, Femur and Thorax), the mother’s cervix (widely used for prematurity screening) and a general category to include any other less common image planes. The fetal brain images are further categorized into the 3 most common fetal brain planes (Trans-thalamic, Trans-cerebellum, Trans-ventricular and Other to judge fine grain categorization performance. This version of the dataset was created for UltraBench to support the evaluation of ultrasound models for maternal-fetal screening tasks.
 
 > [!IMPORTANT]
 > When using this dataset, please ensure that you cite the original source:
@@ -75,18 +75,18 @@ The Fetal Planes dataset supports two tasks:
 
 ## Usage
 
-Load this dataset with `ultrabench2.load_dataset`, which returns a Hugging Face [`DatasetDict`](https://huggingface.co/docs/datasets/index):
+Load this dataset with `ultrabench.load_dataset`, which returns a Hugging Face [`DatasetDict`](https://huggingface.co/docs/datasets/index):
 
 ```python
-import ultrabench2
+import ultrabench
 
-train_data = ultrabench2.load_dataset(
+train_data = ultrabench.load_dataset(
     name="FetalPlanes",
     subset="fetal_brain",
     split="train",
     revision="0.4",
 )
-test_data = ultrabench2.load_dataset(
+test_data = ultrabench.load_dataset(
     name="FetalPlanes",
     subset="fetal_brain",
     split="test.256",

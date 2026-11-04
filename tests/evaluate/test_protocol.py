@@ -7,9 +7,9 @@ import pandas as pd
 import pytest
 from sklearn.metrics import f1_score
 
-from ultrabench2.core.rle import mask_to_rle
-from ultrabench2.evaluate import protocol
-from ultrabench2.evaluate.tasks import CATEGORIES, get_task
+from ultrabench.core.rle import mask_to_rle
+from ultrabench.evaluate import protocol
+from ultrabench.evaluate.tasks import CATEGORIES, get_task
 
 IMAGE_SIZE = 256
 """The size of the test images every benchmark task is scored at."""

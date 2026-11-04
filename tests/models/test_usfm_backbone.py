@@ -4,7 +4,7 @@ from unittest.mock import patch
 
 import torch
 
-from ultrabench2.models.usfm.usfm_backbone import USFMBackbone
+from ultrabench.models.usfm.usfm_backbone import USFMBackbone
 
 _BATCH = 2
 _IMG_SIZE = 224

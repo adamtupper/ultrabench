@@ -34,7 +34,7 @@ PATIENCE=null
 
 
 # Run Hydra multi-run sweep
-python src/ultrabench2/training/main_launch.py \
+python src/ultrabench/training/main_launch.py \
   model=${MODEL} \
   head=${HEAD} \
   task=${TASK} \

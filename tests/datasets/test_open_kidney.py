@@ -1,11 +1,11 @@
-"""Unit tests for ultrabench2.datasets.open_kidney."""
+"""Unit tests for ultrabench.datasets.open_kidney."""
 
 import csv
 
 import numpy as np
 import pytest
 
-from ultrabench2.datasets.open_kidney import load_open_kidney
+from ultrabench.datasets.open_kidney import load_open_kidney
 
 GROUND_TRUTH_FILES = (
     "ground_truth_segmentation_capsule.csv",
@@ -95,7 +95,7 @@ class TestLoadOpenKidney:
             raise AssertionError("the dataset was reprocessed")
 
         monkeypatch.setattr(
-            "ultrabench2.process.open_kidney.build_open_kidney_dataset", fail
+            "ultrabench.process.open_kidney.build_open_kidney_dataset", fail
         )
         second = load_open_kidney(open_kidney_raw, cache_dir=cache)
 
@@ -111,10 +111,10 @@ class TestParityWithTheCli:
     """Tests that the CLI and the loader share one implementation."""
 
     def test_produces_the_same_dataset(self, open_kidney_raw, tmp_path):
-        """`ultrabench2 process open-kidney` and the loader agree."""
+        """`ultrabench process open-kidney` and the loader agree."""
         from datasets import load_from_disk
 
-        from ultrabench2.process.open_kidney import OUTPUT_NAME, process_open_kidney
+        from ultrabench.process.open_kidney import OUTPUT_NAME, process_open_kidney
 
         output = tmp_path / "out"
         output.mkdir()
@@ -129,7 +129,7 @@ class TestParityWithTheCli:
 
     def test_writes_identical_ground_truth(self, open_kidney_raw, tmp_path):
         """Both paths write byte-identical ground-truth CSVs."""
-        from ultrabench2.process.open_kidney import OUTPUT_NAME, process_open_kidney
+        from ultrabench.process.open_kidney import OUTPUT_NAME, process_open_kidney
 
         output = tmp_path / "out"
         output.mkdir()

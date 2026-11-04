@@ -22,7 +22,7 @@ from pathlib import Path
 from datasets import load_from_disk
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-MANIFEST_DIR = REPO_ROOT / "src" / "ultrabench2" / "datasets" / "manifests"
+MANIFEST_DIR = REPO_ROOT / "src" / "ultrabench" / "datasets" / "manifests"
 SPLITS = ("train", "test")
 
 DATASETS = {

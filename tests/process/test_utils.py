@@ -1,4 +1,4 @@
-"""Unit tests for ultrabench2.process.utils."""
+"""Unit tests for ultrabench.process.utils."""
 
 import httpx
 import numpy as np
@@ -6,9 +6,9 @@ import pandas as pd
 import pytest
 from huggingface_hub.errors import RepositoryNotFoundError
 
-from ultrabench2.core.rle import mask_to_rle, rle_to_mask
-from ultrabench2.evaluate.segmentation import SegmentationEvaluator
-from ultrabench2.process.utils import (
+from ultrabench.core.rle import mask_to_rle, rle_to_mask
+from ultrabench.evaluate.segmentation import SegmentationEvaluator
+from ultrabench.process.utils import (
     cap_train_split_by_patient,
     generate_classification_ground_truth_from_records,
     generate_segmentation_ground_truth_from_records,
@@ -354,7 +354,7 @@ class TestVerifyRevisionUnpublished:
             return refs
 
         monkeypatch.setattr(
-            "ultrabench2.process.utils.HfApi.list_repo_refs", list_repo_refs
+            "ultrabench.process.utils.HfApi.list_repo_refs", list_repo_refs
         )
 
     def test_raises_when_revision_exists(self, monkeypatch):

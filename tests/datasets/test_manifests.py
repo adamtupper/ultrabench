@@ -4,7 +4,7 @@ import csv
 
 import pytest
 
-from ultrabench2.datasets.utils import (
+from ultrabench.datasets.utils import (
     MANIFEST_DIR,
     load_split_manifest,
     partition_by_manifest,
@@ -109,7 +109,7 @@ class TestPartitionByManifest:
         directory.mkdir()
         (directory / "train.csv").write_text("filename\na\nb\n")
         (directory / "test.csv").write_text("filename\nc\n")
-        monkeypatch.setattr("ultrabench2.datasets.utils.MANIFEST_DIR", tmp_path)
+        monkeypatch.setattr("ultrabench.datasets.utils.MANIFEST_DIR", tmp_path)
 
         return "Fake"
 

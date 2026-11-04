@@ -3,7 +3,7 @@
 import numpy as np
 import pytest
 
-from ultrabench2.core.aggregation import (
+from ultrabench.core.aggregation import (
     aggregate_sequence_probabilities,
     format_sequence_id,
     join_sequence_values,

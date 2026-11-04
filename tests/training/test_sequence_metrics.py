@@ -8,8 +8,8 @@ import pandas as pd
 import pytest
 import torch
 
-from ultrabench2.evaluate.classification import ClassificationEvaluator
-from ultrabench2.training.lightning import UltraBenchModule
+from ultrabench.evaluate.classification import ClassificationEvaluator
+from ultrabench.training.lightning import UltraBenchModule
 
 
 def make_module(

@@ -1,10 +1,10 @@
-"""Unit tests for ultrabench2.publish.raw."""
+"""Unit tests for ultrabench.publish.raw."""
 
 import httpx
 import pytest
 from huggingface_hub.errors import RepositoryNotFoundError
 
-from ultrabench2.publish.raw import RAW_DATASETS, publish_raw
+from ultrabench.publish.raw import RAW_DATASETS, publish_raw
 
 
 @pytest.fixture
@@ -31,10 +31,10 @@ def hub(monkeypatch):
         )
         raise RepositoryNotFoundError(repo_id, response=response)
 
-    monkeypatch.setattr("ultrabench2.publish.raw.HfApi.create_repo", create_repo)
-    monkeypatch.setattr("ultrabench2.publish.raw.HfApi.upload_folder", upload_folder)
+    monkeypatch.setattr("ultrabench.publish.raw.HfApi.create_repo", create_repo)
+    monkeypatch.setattr("ultrabench.publish.raw.HfApi.upload_folder", upload_folder)
     monkeypatch.setattr(
-        "ultrabench2.process.utils.HfApi.list_repo_refs", list_repo_refs
+        "ultrabench.process.utils.HfApi.list_repo_refs", list_repo_refs
     )
 
     return calls
@@ -112,7 +112,7 @@ class TestPublishRaw:
             return refs
 
         monkeypatch.setattr(
-            "ultrabench2.process.utils.HfApi.list_repo_refs", list_repo_refs
+            "ultrabench.process.utils.HfApi.list_repo_refs", list_repo_refs
         )
 
         with pytest.raises(ValueError, match="already been published"):
@@ -126,7 +126,7 @@ class TestRawDatasets:
 
     def test_matches_the_registry(self):
         """Every raw dataset in the registry can be published."""
-        from ultrabench2.datasets.registry import _REGISTRY, DatasetType
+        from ultrabench.datasets.registry import _REGISTRY, DatasetType
 
         registered = {
             config.hub_id
