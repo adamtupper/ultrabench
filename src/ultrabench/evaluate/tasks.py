@@ -1,10 +1,10 @@
 """The registry of benchmark tasks and the categories they belong to.
 
 The mechanical properties of a task (its type, number of classes, and the
-dataset it comes from) are read from the training layer's task configs so
-that the two cannot drift apart. Everything the configs cannot know --
-which metric a task is scored on, and which category it belongs to -- is
-declared here. See `docs/evaluation_protocol.md` for how the per-task
+dataset and columns it comes from) are read from the task configs in
+`task_configs/`, one YAML file per task. Everything the configs cannot
+know -- which metric a task is scored on, and which category it belongs
+to -- is declared here. See `docs/evaluation_protocol.md` for how the per-task
 scores are reduced to a score per category.
 """
 
@@ -16,11 +16,11 @@ from typing import Literal
 
 import yaml
 
-TASK_CONFIG_DIR = Path(__file__).resolve().parents[1] / "training" / "config" / "task"
-"""Directory holding the training layer's task configs."""
+TASK_CONFIG_DIR = Path(__file__).resolve().parent / "task_configs"
+"""Directory holding the task configs."""
 
 DEFAULT_IMAGE_SIZE = 256
-"""Size of the test images, from `data.image_size` in the training config."""
+"""Size of the test images, matching the published `test.256` splits."""
 
 PRIMARY_METRICS = {
     "classification": "f1_macro",
@@ -45,7 +45,7 @@ class TaskSpec:
     """The properties of a benchmark task needed to score it.
 
     Args:
-        name: The task name, matching its training config file.
+        name: The task name, matching its config file.
         task_type: Whether the task is classification or segmentation.
         num_classes: The number of classes, including the background for
             segmentation tasks.
@@ -59,6 +59,13 @@ class TaskSpec:
         sequence_by: The columns that jointly identify the sequence an
             image belongs to, or None for tasks scored per image.
         image_size: The height and width of the test images in pixels.
+        input_key: The dataset column holding the input image.
+        stratify_by: The column to stratify a train/validation split
+            by, or None.
+        group_by: The column to group a train/validation split by, so
+            that no group (e.g., patient) spans both sides, or None.
+        filter_by: A column that must be non-null for an example to be
+            used for training, or None.
     """
 
     name: str
@@ -71,6 +78,10 @@ class TaskSpec:
     sequence_by: tuple[str, ...] | None
     image_size: int = DEFAULT_IMAGE_SIZE
     dataset_name: str | None = None
+    input_key: str = "image"
+    stratify_by: str | None = None
+    group_by: str | None = None
+    filter_by: str | None = None
 
     @property
     def primary_metric(self) -> str:
@@ -115,7 +126,7 @@ class Category:
 
 
 def load_task_specs(config_dir: Path = TASK_CONFIG_DIR) -> dict[str, TaskSpec]:
-    """Load the task registry from the training layer's task configs.
+    """Load the task registry from the task configs.
 
     Args:
         config_dir: The directory holding the task config files.
@@ -144,13 +155,17 @@ def load_task_specs(config_dir: Path = TASK_CONFIG_DIR) -> dict[str, TaskSpec]:
             revision=config.get("revision"),
             target_key=config["target"],
             sequence_by=tuple(sequence_by) if sequence_by else None,
+            input_key=config.get("input", "image"),
+            stratify_by=config.get("stratify_by"),
+            group_by=config.get("group_by"),
+            filter_by=config.get("filter_by"),
         )
 
     return specs
 
 
 TASKS: dict[str, TaskSpec] = load_task_specs()
-"""Every task with a training config, including the excluded ones."""
+"""Every task with a config, including the excluded ones."""
 
 
 def get_task(name: str) -> TaskSpec:

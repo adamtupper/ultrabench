@@ -1,13 +1,25 @@
 # UltraBench
 
-UltraBench is a standardized benchmark of 21 convex ultrasound image classification and semantic segmentation tasks drawn from 12 publicly available datasets covering 10 anatomical regions. This repository contains the datasets, the downstream training framework, and the evaluation layer used to train and score machine learning models on them.
+UltraBench is a standardized benchmark of 21 convex ultrasound image classification and semantic segmentation tasks drawn from 12 publicly available datasets covering 10 anatomical regions. This repository contains the datasets, the backbones and task heads of the evaluated models, and the evaluation layer used to score machine learning models on them, plus example training scripts.
 
 ## Installation
 
-Install UltraBench from source:
+Install the datasets and the evaluation layer:
 
 ```bash
-uv sync --group dev --group training  # Install optional dependencies, if required
+pip install ultrabench
+```
+
+Add the `models` extra to also install the backbones and task heads in `ultrabench.models`, which need PyTorch:
+
+```bash
+pip install "ultrabench[models]"
+```
+
+To develop UltraBench, install it from source. `uv sync` installs the `dev` and `examples` dependency groups:
+
+```bash
+uv sync
 source .venv/bin/activate
 nbstripout --install
 pre-commit install
@@ -31,7 +43,7 @@ train_data = ultrabench.load_dataset(name="GBCU", path="path/to/raw/data")
 
 See [the dataset documentation](docs/dataset_format.md) for the three kinds of dataset, where the cache lives, and how to pin a revision.
 
-UltraBench is also packaged as a commandline application, for preprocessing raw datasets and publishing them. After installing, run `ultrabench --help` to get started.
+Train with any framework you like, and write your test predictions to a CSV for the evaluation layer. The [`examples/`](examples/) directory holds two short PyTorch scripts, one for classification and one for segmentation, that train a head on a frozen backbone and score the result.
 
 ## Leaderboard
 

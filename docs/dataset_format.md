@@ -110,7 +110,7 @@ train_data = ultrabench.load_dataset(name="TN3K", revision="0.4", split="train")
 | `0.3` | The ground-truth CSVs of the sequence-level classification tasks (CAMUS image quality, COVID-BLUES, MASLD) gain a `sequence_id` column. The images are unchanged. |
 | `0.4` | Each test split gets its own ground-truth CSVs, with the segmentation masks encoded at the resolution of that split. Earlier revisions publish full-resolution masks under the `test.256` name. The images are unchanged. From this revision every dataset in the collection shares one revision number. |
 
-Set `revision` in a task configuration (`src/ultrabench/training/config/task/*.yaml`) to pin the revision a training run uses, and pass `--revision` to `scripts/slurm/download_dataset.py` to pre-cache the matching revision.
+Each task configuration in `src/ultrabench/evaluate/task_configs/` pins the revision its task is scored against. Pass the same `revision` to `load_dataset` when you train, so your predictions and the ground truth come from the same revision.
 
 The maintainer scripts refuse to publish a revision that is already tagged, so re-running `--publish` cannot overwrite a released revision. Create the tag once the datasets are pushed:
 
@@ -176,4 +176,4 @@ train_data = ultrabench.load_dataset(name="AUL", split="train")
 train_data = train_data.with_transform(apply)
 ```
 
-The training layer does this for every task in [`src/ultrabench/training/data/utils.py`](../src/ultrabench/training/data/utils.py), including the train/validation split and the sequence pooling some tasks need.
+The example training scripts do this for every task in [`examples/common.py`](../examples/common.py), including the train/validation split and the resize that matches the `test.256` split.

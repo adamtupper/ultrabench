@@ -103,7 +103,7 @@ class TestRegistry:
 
 
 class TestTaskConfigsMatchRegistry:
-    """Tests that the training and dataset registries cannot drift."""
+    """Tests that the task configs and dataset registry cannot drift."""
 
     @pytest.fixture(scope="class")
     def configs(self):

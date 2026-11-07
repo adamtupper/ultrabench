@@ -1,5 +1,0 @@
-name: "upsampler_probe"
-# For any single-feature encoder: patch_tokens (ViTs) or spatial_map (SAMUS, UltraSAM).
-decoder_type: upsampler
-upsampler_use_residual: true
-type: "segmentation"

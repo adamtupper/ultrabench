@@ -1,6 +1,0 @@
-name: "setr_mla_probe"
-# For isotropic ViT encoders (URFM, USFM, USF-MAE).
-# block_indices: null uses auto-selection (evenly-spaced last 4 blocks).
-decoder_type: setr_mla
-block_indices: null
-type: "segmentation"

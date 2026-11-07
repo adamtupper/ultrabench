@@ -89,7 +89,7 @@ python -m ultrabench.evaluate task=classification aggregate_by=sequence_id \
 
 Your predictions CSV stays per image. The evaluator reads the grouping from the ground truth's `sequence_id` column, so you do not need to know how the sequences are laid out. You do need the `prob_{k}` columns, since probabilities are averaged rather than votes counted.
 
-The training layer reports the same metric inline. Set `sequence_by` in the task configuration (`src/ultrabench/training/config/task/*.yaml`) to the dataset columns that identify a sequence, and `test_metrics.csv` gains `seq_`-prefixed metrics next to the per-image ones.
+The task configurations in `src/ultrabench/evaluate/task_configs/` name the columns that identify a sequence under `sequence_by`. The example training scripts in [`examples/`](../examples/) read it and pass `aggregate_by=sequence_id` for you.
 
 ## Scoring a whole submission
 
@@ -155,7 +155,7 @@ The ground truth of every task it scores, and, for the datasets resampled over p
 
 ### The positive Dice convention
 
-The positive Dice score excludes the background class, and follows two further conventions. Both match `torchmetrics.segmentation.DiceScore(include_background=False)`, which the training layer uses for the `positive_dice` column of `test_metrics.csv`, so the evaluator reproduces that column exactly.
+The positive Dice score excludes the background class, and follows two further conventions. Both match `torchmetrics.segmentation.DiceScore(include_background=False)`, and the test suite checks that the evaluator reproduces it exactly.
 
 - A class that is empty in both the ground truth and the prediction is undefined, and drops out of the score. Scoring it 1.0 instead rewards a model for predicting nothing on an image the class is absent from, which inflates the score on tasks where many images hold no instance of a class. An image whose every foreground class is undefined drops out of the score entirely.
 - The score averages the defined foreground classes of an image first, and the images second. Averaging per class first gives a different number, since the undefined pairs leave the per-class groups unequal in size.

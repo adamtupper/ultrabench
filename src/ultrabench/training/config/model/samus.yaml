@@ -1,3 +1,0 @@
-_target_: ultrabench.models.samus.samus_backbone.SAMUSBackbone
-checkpoint_path: ${system.checkpoint_dir}/samus/SAMUS.pth
-output_intermediate_features: false

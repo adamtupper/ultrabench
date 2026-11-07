@@ -1,5 +1,0 @@
-name: "segformer_probe"
-# For hierarchical multi-scale encoders (e.g. EchoCare).
-# scale_dims is read from backbone.scale_dims automatically; no extra config needed here.
-decoder_type: segformer
-type: "segmentation"

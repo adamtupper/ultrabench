@@ -56,7 +56,7 @@ NOTEBOOK_CATEGORIES = {
 
 
 def test_registry_covers_every_task_config():
-    """Check that every training task config is registered."""
+    """Check that every task config is registered."""
     assert len(TASKS) == 21
     assert all(spec.name == name for name, spec in TASKS.items())
 
@@ -151,3 +151,13 @@ def test_resolve_tasks():
 
     with pytest.raises(KeyError, match="Unknown task 'nope'"):
         resolve_tasks(["nope"])
+
+
+def test_split_columns_are_read_from_the_config():
+    """Check that the columns a training script needs are registered."""
+    spec = get_task("busbra_pathology_classification")
+    assert spec.input_key == "image"
+    assert spec.target_key == "pathology"
+    assert spec.group_by == "patient"
+    assert spec.stratify_by is None
+    assert spec.filter_by is None
