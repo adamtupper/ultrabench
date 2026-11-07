@@ -43,7 +43,10 @@ def load_mmotu(
     """
     from huggingface_hub import snapshot_download
 
-    from ultrabench.process.mmotu import build_mmotu_dataset, write_ground_truth
+    from ultrabench.datasets.builders.mmotu import (
+        build_mmotu_dataset,
+        write_ground_truth,
+    )
 
     key = dataset_cache_key(name=NAME, revision=revision)
     cache_path = dataset_cache_path(NAME, key, cache_dir)

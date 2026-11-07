@@ -71,66 +71,11 @@ Regenerate the manifests only when a new revision intentionally re-splits a data
 uv run python scripts/generate_split_manifests.py path/to/processed/datasets
 ```
 
-## Downloading Datasets
+## Downloading and Preprocessing
 
-Some datasets can be downloaded automatically using the `ultrabench download` command:
+`ultrabench.load_dataset` is the only interface users need. It downloads the processed datasets from the Hugging Face Hub, and downloads (or reads from `path`) and preprocesses the raw and local datasets on first use, caching the result.
 
-```bash
-ultrabench download <dataset> <output_dir>
-```
-
-Downloadable datasets:
-
-| Dataset | Command |
-|---------|---------|
-| AUL | `ultrabench download aul <output_dir>` |
-| CAMUS | `ultrabench download camus <output_dir>` |
-| MASLD | `ultrabench download masld <output_dir>` |
-| PSFHS | `ultrabench download psfhs <output_dir>` |
-
-For datasets not listed above, refer to their respective sources and download them manually before running the preprocessing step.
-
-## Preprocessing Datasets
-
-Once the raw data is available, preprocess it into the standardized format using the `ultrabench process` command:
-
-```bash
-ultrabench process <dataset> <raw_dir> <output_dir> [--size 256] [--publish]
-```
-
-- `<raw_dir>`: Path to the downloaded raw dataset directory.
-- `<output_dir>`: Path where the preprocessed dataset will be saved.
-- `--size`: Target height and width (in pixels) for test images (default: `256`).
-- `--publish`: Push the processed dataset to the Hugging Face Hub.
-
-All 12 datasets are supported:
-
-| Dataset | Command |
-|---------|---------|
-| AUL | `ultrabench process aul <raw_dir> <output_dir>` |
-| BUS-BRA | `ultrabench process busbra <raw_dir> <output_dir>` |
-| CAMUS | `ultrabench process camus <raw_dir> <output_dir>` |
-| COVID-BLUES | `ultrabench process covid-blues <raw_dir> <output_dir>` |
-| Fetal Planes | `ultrabench process fetal-planes <raw_dir> <output_dir>` |
-| GBCU | `ultrabench process gbcu <raw_dir> <output_dir>` |
-| MASLD | `ultrabench process masld <raw_file> <output_dir>` |
-| MMOTU | `ultrabench process mmotu <raw_dir> <output_dir>` |
-| Open Kidney | `ultrabench process open-kidney <raw_dir> <output_dir>` |
-| PSFHS | `ultrabench process psfhs <raw_dir> <output_dir>` |
-| STMUS | `ultrabench process stmus <raw_dir> <output_dir>` |
-| TN3K | `ultrabench process tn3k <raw_dir> <output_dir>` |
-
-Most users do not need this command. `ultrabench.load_dataset` preprocesses the raw and local datasets for you and caches the result; use `ultrabench process` when you are publishing a dataset or want the output on disk.
-
-## Publishing Raw Data
-
-COVID-BLUES and MMOTU may be redistributed unmodified but not in a preprocessed form, so their original files are published instead and `ultrabench.load_dataset` preprocesses them locally. Publish them with:
-
-```bash
-ultrabench publish-raw <dataset> <raw_dir>
-```
-
-Only the files the processing code reads are uploaded, and the layout on the Hub is the layout `ultrabench process` expects. Tag the revision afterwards, as the command prints.
+Downloading the raw data, processing it and publishing it to the Hub are maintainer tasks. The scripts for them, and how to use them, are in [`scripts/README.md`](../scripts/README.md).
 
 ## Training Split Size
 
@@ -167,7 +112,7 @@ train_data = ultrabench.load_dataset(name="TN3K", revision="0.4", split="train")
 
 Set `revision` in a task configuration (`src/ultrabench/training/config/task/*.yaml`) to pin the revision a training run uses, and pass `--revision` to `scripts/slurm/download_dataset.py` to pre-cache the matching revision.
 
-The processing code refuses to publish a revision that is already tagged, so re-running `--publish` cannot overwrite a released revision. Create the tag once the datasets are pushed:
+The maintainer scripts refuse to publish a revision that is already tagged, so re-running `--publish` cannot overwrite a released revision. Create the tag once the datasets are pushed:
 
 ```bash
 hf repos tag create UltraBench/TN3K 0.2 --type dataset -m "Cap training splits at 1,000 samples."
@@ -175,7 +120,7 @@ hf repos tag create UltraBench/TN3K 0.2 --type dataset -m "Cap training splits a
 
 ## Output Directory Structure
 
-`ultrabench process` writes a Hugging Face `DatasetDict` with `save_to_disk`, under `<output_dir>/UltraBench/<Dataset>/`:
+A processed dataset is a Hugging Face `DatasetDict` written with `save_to_disk`. The `load_dataset` cache entries and the output of `scripts/process_dataset.py` (under `<output_dir>/UltraBench/<Dataset>/`) share this layout:
 
 ```
 UltraBench/AUL/

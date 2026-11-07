@@ -50,7 +50,7 @@ class TestLoadCovidBlues:
         return data, next(cache.glob(f"{NAME}/*"))
 
     def test_returns_the_published_splits(self, dataset):
-        """The loader builds the same three splits as the CLI."""
+        """The loader builds the train, test and test.256 splits."""
         data, _ = dataset
 
         assert set(data) == {"train", "test", "test.256"}
@@ -92,7 +92,7 @@ class TestLoadCovidBlues:
 
     def test_never_decodes_an_unlisted_video(self, snapshot, tmp_path, monkeypatch):
         """A video in neither manifest costs nothing to skip."""
-        from ultrabench.process import covid_blues
+        from ultrabench.datasets.builders import covid_blues
 
         decoded = []
         original = covid_blues.extract_frames
@@ -115,46 +115,3 @@ class TestLoadCovidBlues:
         load_covid_blues("UltraBench/COVID-BLUES-raw", cache_dir=cache)
 
         assert len(snapshot) == 1
-
-
-class TestParityWithTheCli:
-    """Tests that the CLI and the loader share one implementation."""
-
-    def test_produces_the_same_dataset(self, snapshot, covid_blues_raw, tmp_path):
-        """`ultrabench process covid-blues` and the loader agree."""
-        from datasets import load_from_disk
-
-        from ultrabench.process.covid_blues import OUTPUT_NAME, process_covid_blues
-
-        output = tmp_path / "out"
-        output.mkdir()
-        process_covid_blues(str(covid_blues_raw), str(output))
-        processed = load_from_disk(str(output / OUTPUT_NAME))
-
-        loaded = load_covid_blues(
-            "UltraBench/COVID-BLUES-raw", cache_dir=tmp_path / "cache"
-        )
-
-        assert set(processed) == set(loaded)
-        for split in processed:
-            assert sorted(processed[split]["filename"]) == sorted(
-                loaded[split]["filename"]
-            )
-
-    def test_writes_identical_ground_truth(self, snapshot, covid_blues_raw, tmp_path):
-        """Both paths write byte-identical ground-truth CSVs."""
-        from ultrabench.process.covid_blues import OUTPUT_NAME, process_covid_blues
-
-        output = tmp_path / "out"
-        output.mkdir()
-        process_covid_blues(str(covid_blues_raw), str(output))
-
-        cache = tmp_path / "cache"
-        load_covid_blues("UltraBench/COVID-BLUES-raw", cache_dir=cache)
-        entry = next(cache.glob(f"{NAME}/*"))
-
-        name = "ground_truth_classification.csv"
-        for split in ("test", "test.256"):
-            assert (output / OUTPUT_NAME / split / name).read_bytes() == (
-                entry / split / name
-            ).read_bytes()

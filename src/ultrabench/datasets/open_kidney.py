@@ -42,7 +42,7 @@ def load_open_kidney(
         ValueError: If no path was given.
         FileNotFoundError: If the path is not an existing directory.
     """
-    from ultrabench.process.open_kidney import (
+    from ultrabench.datasets.builders.open_kidney import (
         build_open_kidney_dataset,
         write_ground_truth,
     )

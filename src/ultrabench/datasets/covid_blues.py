@@ -43,7 +43,7 @@ def load_covid_blues(
     """
     from huggingface_hub import snapshot_download
 
-    from ultrabench.process.covid_blues import (
+    from ultrabench.datasets.builders.covid_blues import (
         build_covid_blues_dataset,
         write_ground_truth,
     )

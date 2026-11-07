@@ -20,23 +20,16 @@ license-files = ["LICEN[CS]E*"]
 
 dependencies = [
     "datasets >= 4.0.0",
-    "h5py >=3.11.0",
     "huggingface-hub >=0.30",
     "hydra-core >=1.3",
     "imageio[ffmpeg] >=0.5.1",
     "kernels>=0.16.0,<0.17.0",
-    "nibabel >=5.2.1",
     "numpy >=1.26.4",
-    "opencv-python-headless >=4.10.0.84",
-    "openpyxl >=3.1.5",
     "pandas >=2.2.1",
     "pyyaml >=6.0.0",
     "scikit-image >=0.24.0,<0.28",
     "scikit-learn >=1.5.0",
-    "simpleitk >=2.3.1",
-    "transformers>=5.14.1,<6.0.0",
-    "typer >=0.15.1",
-    "requests >=2.32.0",
+    "tqdm >=4.66.0",
 ]
 
 [dependency-groups]
@@ -52,6 +45,14 @@ dev = [
     "ty>=0.0.39,<0.0.40",
     "zenodo-get >=3.0.0",
     "adjusttext>=1.4.0,<2.0.0",
+    # Needed only by the maintainer scripts in scripts/.
+    "nibabel >=5.2.1",
+    "openpyxl >=3.1.5",
+    "requests >=2.32.0",
+    "simpleitk >=2.3.1",
+    # Not imported by the package, scripts or tests. Candidates for removal.
+    "h5py >=3.11.0",
+    "transformers>=5.14.1,<6.0.0",
 ]
 training = [
     "albumentations==2.0.0",
@@ -74,18 +75,13 @@ training = [
     "usaugment==1.0.1",
     "termcolor>=3.3.0,<4.0.0",
     "monai>=1.5.0,<2.0.0",
+    "opencv-python-headless >=4.10.0.84",
 ]
 
 [project.urls]
 Homepage = "https://github.com/adamtupper/ultrabench"
 Documentation = "https://github.com/adamtupper/ultrabench/wiki"
 Issues = "https://github.com/adamtupper/ultrabench/issues"
-
-[project.scripts]
-ultrabench = "ultrabench.cli:app"
-
-[project.entry-points."pipx.run"]
-ultrabench = "ultrabench.cli:app"
 
 [tool.hatch.version]
 path = "src/ultrabench/__about__.py"

@@ -15,12 +15,7 @@ git clone https://github.com/rsingla92/kidneyUS.git
 unzip kidneyUS_images_14_june_2022.zip -d /path/to/kidneyUS/images
 ```
 
-4. Now you can run the UltraBench processing script:
-
-```shell
-ultrabench process open-kidney /path/to/kidneyUS .
-```
-Or load it directly, letting UltraBench preprocess and cache it for you:
+4. Now load it, letting UltraBench preprocess and cache it for you on first use:
 
 ```python
 import ultrabench

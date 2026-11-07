@@ -54,7 +54,7 @@ class TestLoadMmotu:
         return data, next(cache.glob(f"{NAME}/*"))
 
     def test_returns_the_published_splits(self, dataset):
-        """The loader builds the same three splits as the CLI."""
+        """The loader builds the train, test and test.256 splits."""
         data, _ = dataset
 
         assert set(data) == {"train", "test", "test.256"}
@@ -108,43 +108,3 @@ class TestLoadMmotu:
         load_mmotu("UltraBench/MMOTU-raw", cache_dir=cache, revision="0.5")
 
         assert len(list((cache / NAME).iterdir())) == 2
-
-
-class TestParityWithTheCli:
-    """Tests that the CLI and the loader share one implementation."""
-
-    def test_produces_the_same_dataset(self, snapshot, mmotu_raw, tmp_path):
-        """`ultrabench process mmotu` and the loader agree."""
-        from datasets import load_from_disk
-
-        from ultrabench.process.mmotu import OUTPUT_NAME, process_mmotu
-
-        output = tmp_path / "out"
-        output.mkdir()
-        process_mmotu(str(mmotu_raw), str(output))
-        processed = load_from_disk(str(output / OUTPUT_NAME))
-
-        loaded = load_mmotu("UltraBench/MMOTU-raw", cache_dir=tmp_path / "cache")
-
-        assert set(processed) == set(loaded)
-        for split in processed:
-            assert processed[split]["filename"] == loaded[split]["filename"]
-            assert processed[split]["tumor_type"] == loaded[split]["tumor_type"]
-
-    def test_writes_identical_ground_truth(self, snapshot, mmotu_raw, tmp_path):
-        """Both paths write byte-identical ground-truth CSVs."""
-        from ultrabench.process.mmotu import OUTPUT_NAME, process_mmotu
-
-        output = tmp_path / "out"
-        output.mkdir()
-        process_mmotu(str(mmotu_raw), str(output))
-
-        cache = tmp_path / "cache"
-        load_mmotu("UltraBench/MMOTU-raw", cache_dir=cache)
-        entry = next(cache.glob(f"{NAME}/*"))
-
-        for split in ("test", "test.256"):
-            for name in GROUND_TRUTH_FILES:
-                assert (output / OUTPUT_NAME / split / name).read_bytes() == (
-                    entry / split / name
-                ).read_bytes()

@@ -242,7 +242,7 @@ def covid_blues_raw(tmp_path, monkeypatch):
         return frames
 
     monkeypatch.setattr(
-        "ultrabench.process.covid_blues.extract_frames", fake_extract_frames
+        "ultrabench.datasets.builders.covid_blues.extract_frames", fake_extract_frames
     )
     write_manifests(
         tmp_path / "manifests",

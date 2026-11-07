@@ -14,7 +14,9 @@ import pytest
 from datasets import Dataset, Features, Image, Value
 from PIL import Image as PILImage
 
-from ultrabench.process.utils import generate_classification_ground_truth_from_records
+from ultrabench.datasets.builders.utils import (
+    generate_classification_ground_truth_from_records,
+)
 from ultrabench.training.data.utils import add_sequence_id
 
 CAMUS_RECORDS = [

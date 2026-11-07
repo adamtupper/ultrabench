@@ -40,7 +40,7 @@ def load_gbcu(path: str | Path, cache_dir: str | Path | None = None) -> DatasetD
         ValueError: If no path was given.
         FileNotFoundError: If the path is not an existing directory.
     """
-    from ultrabench.process.gbcu import build_gbcu_dataset, write_ground_truth
+    from ultrabench.datasets.builders.gbcu import build_gbcu_dataset, write_ground_truth
 
     raw_path = validate_raw_path(NAME, path)
     key = dataset_cache_key(name=NAME, path=raw_path)

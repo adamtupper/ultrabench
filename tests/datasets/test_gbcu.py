@@ -26,7 +26,7 @@ class TestLoadGbcu:
         return load_gbcu(gbcu_raw, cache_dir=cache), cache
 
     def test_returns_the_published_splits(self, dataset):
-        """The loader builds the same three splits as the CLI."""
+        """The loader builds the train, test and test.256 splits."""
         data, _ = dataset
 
         assert set(data) == {"train", "test", "test.256"}
@@ -81,7 +81,9 @@ class TestLoadGbcu:
         def fail(*args, **kwargs):
             raise AssertionError("the dataset was reprocessed")
 
-        monkeypatch.setattr("ultrabench.process.gbcu.build_gbcu_dataset", fail)
+        monkeypatch.setattr(
+            "ultrabench.datasets.builders.gbcu.build_gbcu_dataset", fail
+        )
         second = load_gbcu(gbcu_raw, cache_dir=cache)
 
         assert second["train"]["filename"] == first["train"]["filename"]
@@ -124,43 +126,3 @@ class TestLoadGbcu:
 
         with pytest.raises(ValueError, match=r"missing 3 example\(s\)"):
             load_gbcu(gbcu_raw, cache_dir=tmp_path / "cache")
-
-
-class TestParityWithTheCli:
-    """Tests that the CLI and the loader share one implementation."""
-
-    def test_produces_the_same_dataset(self, gbcu_raw, tmp_path):
-        """`ultrabench process gbcu` and load_gbcu agree exactly."""
-        from datasets import load_from_disk
-
-        from ultrabench.process.gbcu import OUTPUT_NAME, process_gbcu
-
-        output = tmp_path / "out"
-        output.mkdir()
-        process_gbcu(str(gbcu_raw), str(output))
-        processed = load_from_disk(str(output / OUTPUT_NAME))
-
-        loaded = load_gbcu(gbcu_raw, cache_dir=tmp_path / "cache")
-
-        assert set(processed) == set(loaded)
-        for split in processed:
-            assert processed[split]["filename"] == loaded[split]["filename"]
-            assert processed[split]["label"] == loaded[split]["label"]
-
-    def test_writes_identical_ground_truth(self, gbcu_raw, tmp_path):
-        """Both paths write byte-identical ground-truth CSVs."""
-        from ultrabench.process.gbcu import OUTPUT_NAME, process_gbcu
-
-        output = tmp_path / "out"
-        output.mkdir()
-        process_gbcu(str(gbcu_raw), str(output))
-
-        cache = tmp_path / "cache"
-        load_gbcu(gbcu_raw, cache_dir=cache)
-        entry = next(cache.glob("GBCU/*"))
-
-        for split in ("test", "test.256"):
-            name = "ground_truth_classification.csv"
-            assert (output / OUTPUT_NAME / split / name).read_bytes() == (
-                entry / split / name
-            ).read_bytes()

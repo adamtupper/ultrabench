@@ -34,7 +34,7 @@ class TestLoadOpenKidney:
         return data, next(cache.glob("OpenKidney/*"))
 
     def test_returns_the_published_splits(self, dataset):
-        """The loader builds the same three splits as the CLI."""
+        """The loader builds the train, test and test.256 splits."""
         data, _ = dataset
 
         assert set(data) == {"train", "test", "test.256"}
@@ -95,7 +95,7 @@ class TestLoadOpenKidney:
             raise AssertionError("the dataset was reprocessed")
 
         monkeypatch.setattr(
-            "ultrabench.process.open_kidney.build_open_kidney_dataset", fail
+            "ultrabench.datasets.builders.open_kidney.build_open_kidney_dataset", fail
         )
         second = load_open_kidney(open_kidney_raw, cache_dir=cache)
 
@@ -105,42 +105,3 @@ class TestLoadOpenKidney:
         """A path that does not exist is reported."""
         with pytest.raises(FileNotFoundError, match="No raw data for OpenKidney"):
             load_open_kidney(tmp_path / "missing", cache_dir=tmp_path / "cache")
-
-
-class TestParityWithTheCli:
-    """Tests that the CLI and the loader share one implementation."""
-
-    def test_produces_the_same_dataset(self, open_kidney_raw, tmp_path):
-        """`ultrabench process open-kidney` and the loader agree."""
-        from datasets import load_from_disk
-
-        from ultrabench.process.open_kidney import OUTPUT_NAME, process_open_kidney
-
-        output = tmp_path / "out"
-        output.mkdir()
-        process_open_kidney(str(open_kidney_raw), str(output))
-        processed = load_from_disk(str(output / OUTPUT_NAME))
-
-        loaded = load_open_kidney(open_kidney_raw, cache_dir=tmp_path / "cache")
-
-        assert set(processed) == set(loaded)
-        for split in processed:
-            assert processed[split]["filename"] == loaded[split]["filename"]
-
-    def test_writes_identical_ground_truth(self, open_kidney_raw, tmp_path):
-        """Both paths write byte-identical ground-truth CSVs."""
-        from ultrabench.process.open_kidney import OUTPUT_NAME, process_open_kidney
-
-        output = tmp_path / "out"
-        output.mkdir()
-        process_open_kidney(str(open_kidney_raw), str(output))
-
-        cache = tmp_path / "cache"
-        load_open_kidney(open_kidney_raw, cache_dir=cache)
-        entry = next(cache.glob("OpenKidney/*"))
-
-        for split in ("test", "test.256"):
-            for name in GROUND_TRUTH_FILES:
-                assert (output / OUTPUT_NAME / split / name).read_bytes() == (
-                    entry / split / name
-                ).read_bytes()
