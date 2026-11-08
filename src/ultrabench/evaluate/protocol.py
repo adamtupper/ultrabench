@@ -999,24 +999,28 @@ def _category_scores(
 def leaderboard_row(category_scores: pd.DataFrame) -> str | None:
     """Build the leaderboard row of a submission covering every category.
 
-    The README's leaderboard reports the four category scores to three
-    decimal places, in a fixed column order, so the row is printed ready
-    to paste into the table.
+    The leaderboard is built from `docs/_data/leaderboard.csv`, which holds
+    the mean and standard error of each category score to four decimal
+    places, in a fixed column order. The row is printed with the scores
+    filled in and placeholders for the model's name, repository URL,
+    release date and parameter count.
 
     Args:
         category_scores: The per-category table.
 
     Returns:
-        The Markdown table row, or None if the submission leaves a
-        category unscored.
+        The CSV row, or None if the submission leaves a category unscored.
     """
-    scores = category_scores.set_index("category")["mean"]
+    scores = category_scores.set_index("category")
     if not set(CATEGORIES).issubset(scores.index):
         return None
 
-    cells = " | ".join(f"{scores[category]:.3f}" for category in CATEGORIES)
+    cells = ",".join(
+        f"{scores.loc[category, 'mean']:.4f},{scores.loc[category, 'se']:.4f}"
+        for category in CATEGORIES
+    )
 
-    return f"| <model> | {cells} |"
+    return f"<model>,<url>,<release_date>,<params>,{cells}"
 
 
 def _format(table: pd.DataFrame) -> str:
@@ -1061,7 +1065,7 @@ def main(cfg: DictConfig) -> None:
 
     row = leaderboard_row(category_scores)
     if row is not None:
-        print(f"\nLeaderboard row:\n{row}")
+        print(f"\nLeaderboard row (add it to docs/_data/leaderboard.csv):\n{row}")
 
     print(f"\nWritten to {output_dir}")
 

@@ -1,8 +1,14 @@
+---
+title: BUS-BRA
+parent: Datasets
+nav_order: 2
+---
+
 # BUS-BRA Dataset
 
 The BUS-BRA dataset ([Zenodo](https://zenodo.org/records/8231412)) consists 1,875 breast ultrasound images from 1,064 patients. Each image is accompanied by biopsy-proven tumour labels (722 benign and 342 malignant cases), BI-RADS assessment categories (2 to 5) and segmentation masks of tumorous and non-tumorous (background) regions. This version of the dataset was created for UltraBench to support the evaluation of ultrasound models for beast cancer screening tasks.
 
-> [!IMPORTANT]
+{: .important }
 > When using this dataset, please ensure that you cite the original work:
 >
 > Gómez-Flores W, Gregorio-Calas MJ, Coelho de Albuquerque Pereira W. BUS-BRA: A breast ultrasound dataset for assessing computer-aided diagnosis systems. Med Phys. 2024;51:3110–3123. https://doi.org/10.1002/mp.16812

@@ -1,11 +1,17 @@
+---
+title: COVID-BLUES
+parent: Datasets
+nav_order: 4
+---
+
 # COVID-BLUES Dataset
 
-> [!CAUTION]
+{: .warning }
 > This dataset must not be made public as it is licensed under a CC-BY-NC-ND-4.0 license.
 
 COVID-BLUES ([GitHub](https://github.com/NinaWie/COVID-BLUES), [Hugging Face](https://huggingface.co/datasets/jannisborn/COVID-BLUES)) is a dataset of lung ultrasound 362 videos from 63 suspected COVID-19 patients (30 negative and 33 positive cases). There are a total of 31,746 frames across the videos. This version of the dataset was created for UltraBench to support the evaluation of ultrasound models for COVID-19 classification.
 
-> [!IMPORTANT]
+{: .important }
 > When using this dataset, please ensure that you cite the original article:
 >
 > Wiedemann, N., Boer, D. de K., Richter, M., van de Weijer, S., Buhre, C., Eggert, F. A. M., Aarnoudse, S., Grevendonk, L., Röber, S., Remie, C. M. E., Buhre, W., Henry, R., & Born, J. (2025). COVID-BLUeS - a Prospective Study on the Value of AI in Lung Ultrasound Analysis. IEEE Journal of Biomedical and Health Informatics, 29(9), 6301–6310. https://doi.org/10.1109/JBHI.2025.3543686

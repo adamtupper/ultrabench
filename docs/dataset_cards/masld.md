@@ -1,8 +1,14 @@
+---
+title: MASLD
+parent: Datasets
+nav_order: 7
+---
+
 # MASLD Dataset
 
 The MALSD dataset consists of 550 liver ultrasound images from 55 patients from the *Dataset of B-mode fatty liver ultrasound images*. 38 of the 55 patients are diagnosed with Metabolic dysfunction-associated steatotic liver disease (MASLD), formerly known as nonalcoholic fatty liver disease (NAFLD). MASLD is defined as >5 % of hepatocytes having fatty infiltration. This version of the dataset was created for UltraBench to support the evaluation of ultrasound models for MALSD classification.
 
-> [!IMPORTANT]
+{: .important }
 > When using this dataset, please ensure that you cite the original work:
 >
 > M. Byra, G. Styczynski, C. Szmigielski, P. Kalinowski. Ł. Michałowski. R. Paluszkiewicz. B. Ziarkiewicz-Wróblewska, K. Zieniewicz. P. Sobieraj, A. Nowicki. Transfer learning with deep convolutional neural network for liver steatosis assessment in ultrasound images. International Journal of Computer Assisted Radiology and Surgery, 2018. DOI: 10.1007/s11548-018-1843-2

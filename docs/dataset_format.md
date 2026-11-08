@@ -1,3 +1,9 @@
+---
+title: Datasets
+nav_order: 2
+has_children: true
+---
+
 # Dataset Format
 
 UltraBench provides a standardized preprocessing pipeline that converts raw ultrasound datasets into a consistent directory structure.
@@ -75,7 +81,7 @@ uv run python scripts/generate_split_manifests.py path/to/processed/datasets
 
 `ultrabench.load_dataset` is the only interface users need. It downloads the processed datasets from the Hugging Face Hub, and downloads (or reads from `path`) and preprocesses the raw and local datasets on first use, caching the result.
 
-Downloading the raw data, processing it and publishing it to the Hub are maintainer tasks. The scripts for them, and how to use them, are in [`scripts/README.md`](../scripts/README.md).
+Downloading the raw data, processing it and publishing it to the Hub are maintainer tasks. The scripts for them, and how to use them, are in [`scripts/README.md`](https://github.com/adamtupper/ultrabench/blob/main/scripts/README.md).
 
 ## Training Split Size
 

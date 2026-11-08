@@ -1,8 +1,14 @@
+---
+title: AUL
+parent: Datasets
+nav_order: 1
+---
+
 # Annotated Ultrasound Liver (AUL) Dataset
 
 The Annotated Ultrasound Liver (AUL) dataset consists of 735 liver ultrasound images with accompanying liver and mass segmentation masks and image labels (*normal*, *benign*, *malignant*). This version of the dataset was created for UltraBench to support the evaluation of ultrasound models for liver and mass segmentation, and liver mass classification.
 
-> [!IMPORTANT]
+{: .important }
 > When using this dataset, please ensure that you cite the original work:
 >
 > Yiming Xu, Bowen Zheng, Xiaohong Liu, Tao Wu, Jinxiu Ju, Shijie Wang, Yufan Lian, Hongjun Zhang, Tong Liang, Ye Sang, Rui Jiang, Guangyu Wang, Jie Ren, Ting Chen, Improving artificial intelligence pipeline for liver malignancy diagnosis using ultrasound images and video frames, Briefings in Bioinformatics, Volume 24, Issue 1, January 2023, bbac569, https://doi.org/10.1093/bib/bbac569

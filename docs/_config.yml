@@ -1,0 +1,59 @@
+title: UltraBench
+description: >-
+  A standardized benchmark of 21 convex ultrasound classification and
+  segmentation tasks for evaluating ultrasound foundation models.
+theme: just-the-docs
+
+# Set these when publishing to GitHub Pages, e.g. url:
+# "https://adamtupper.github.io" and baseurl: "/ultrabench". Leave baseurl
+# empty to serve the site locally at http://localhost:4000.
+url: ""
+baseurl: ""
+
+color_scheme: light
+search_enabled: true
+heading_anchors: true
+
+aux_links:
+  GitHub: https://github.com/adamtupper/ultrabench
+aux_links_new_tab: true
+
+back_to_top: true
+back_to_top_text: Back to top
+
+callouts:
+  important:
+    title: Important
+    color: blue
+  warning:
+    title: Warning
+    color: red
+  note:
+    title: Note
+    color: purple
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - vendor/
+  - .bundle/
+
+plugins:
+  - jekyll-relative-links
+
+relative_links:
+  enabled: true
+  collections: false
+
+# The theme's stylesheets trigger Dart Sass deprecation warnings upstream.
+sass:
+  quiet_deps: true
+  silence_deprecations:
+    - import
+
+# Give every page the theme's layout unless it sets its own.
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default

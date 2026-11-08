@@ -1,0 +1,130 @@
+// Text for screen readers only.
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// The leaderboard: a sortable table following the WAI-ARIA APG pattern.
+table.leaderboard {
+  // Positioned so that it contains its visually hidden text, which is
+  // absolutely positioned and would otherwise widen the page past the
+  // theme's scrolling table wrapper.
+  caption {
+    position: relative;
+    caption-side: top;
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    font-size: 0.875em;
+    color: $grey-dk-000;
+  }
+
+  th,
+  td {
+    padding: 0.4rem 0.5rem;
+    vertical-align: middle;
+  }
+
+  .num {
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  thead th {
+    padding: 0;
+
+    button {
+      display: block;
+      width: 100%;
+      padding: 0.5rem;
+      font: inherit;
+      font-weight: 500;
+      color: inherit;
+      text-align: inherit;
+      white-space: nowrap;
+      cursor: pointer;
+      background: transparent;
+      border: 0;
+      outline: none;
+
+      span[aria-hidden] {
+        margin-left: 0.3em;
+        color: $grey-dk-000;
+      }
+
+      &:hover,
+      &:focus {
+        background-color: $grey-lt-100;
+
+        span[aria-hidden] {
+          color: $link-color;
+        }
+      }
+
+      &:focus-visible {
+        outline: 2px solid $link-color;
+        outline-offset: -2px;
+      }
+    }
+
+    .kind {
+      font-size: 0.8em;
+      font-weight: 400;
+      color: $grey-dk-000;
+    }
+  }
+
+  thead th[aria-sort] button span[aria-hidden] {
+    color: $link-color;
+  }
+
+  tbody th {
+    font-weight: 500;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  // The standard error sits under the score, in a smaller font.
+  .se {
+    display: block;
+    font-size: 0.75em;
+    line-height: 1.2;
+    color: $grey-dk-000;
+    white-space: nowrap;
+  }
+}
+
+// The release date chart.
+.chart-container {
+  position: relative;
+  width: 100%;
+  height: 320px;
+
+  @include mq(md) {
+    height: 400px;
+  }
+}
+
+.chart-caption {
+  margin-top: 0.5rem;
+  font-size: 0.875em;
+  color: $grey-dk-000;
+}
+
+// The GitHub mark in the header, in place of the theme's text link.
+.aux-nav .aux-nav-icon {
+  display: flex;
+  align-items: center;
+  color: $grey-dk-200;
+
+  &:hover,
+  &:focus-visible {
+    color: $link-color;
+  }
+}

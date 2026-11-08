@@ -1,8 +1,14 @@
+---
+title: Fetal Planes
+parent: Datasets
+nav_order: 5
+---
+
 # Fetal Planes Dataset
 
 Fetal Planes is a dataset of 12,400 routinely acquired maternal-fetal screening ultrasound images from 1,792 patients. The images are divided into 6 classes: four of the most widely used fetal anatomical planes (Abdomen, Brain, Femur and Thorax), the mother’s cervix (widely used for prematurity screening) and a general category to include any other less common image planes. The fetal brain images are further categorized into the 3 most common fetal brain planes (Trans-thalamic, Trans-cerebellum, Trans-ventricular and Other to judge fine grain categorization performance. This version of the dataset was created for UltraBench to support the evaluation of ultrasound models for maternal-fetal screening tasks.
 
-> [!IMPORTANT]
+{: .important }
 > When using this dataset, please ensure that you cite the original source:
 >
 > Burgos-Artizzu, X.P., Coronado-Gutiérrez, D., Valenzuela-Alcaraz, B. et al. Evaluation of deep convolutional neural networks for automatic classification of common maternal fetal ultrasound planes. Sci Rep 10, 10200 (2020). https://doi.org/10.1038/s41598-020-67076-5

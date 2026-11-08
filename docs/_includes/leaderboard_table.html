@@ -1,0 +1,96 @@
+{%- comment -%}
+  Render the leaderboard from _data/leaderboard.csv as a sortable table,
+  following the WAI-ARIA APG sortable table pattern. Rows are ordered by the
+  average of the four category scores, so the table reads correctly without
+  JavaScript, and the best score in each category is computed and bolded.
+  assets/js/sortable-table.js re-sorts the rows when a column header is
+  clicked.
+{%- endcomment -%}
+{%- assign rows = site.data.leaderboard -%}
+{%- assign categories = "pathology_classification,anatomy_classification,pathology_segmentation,anatomy_segmentation" | split: "," -%}
+{%- assign category_labels = "Pathological|Non-pathological|Pathological|Anatomical" | split: "|" -%}
+{%- assign category_kinds = "classification|classification|segmentation|segmentation" | split: "|" -%}
+
+{%- comment -%} The best score in each category, in category order. {%- endcomment -%}
+{%- assign best_scores = "" | split: "" -%}
+{%- for category in categories -%}
+  {%- assign best = 0.0 -%}
+  {%- for row in rows -%}
+    {%- assign score = row[category] | plus: 0.0 -%}
+    {%- if score > best -%}{%- assign best = score -%}{%- endif -%}
+  {%- endfor -%}
+  {%- assign best_scores = best_scores | push: best -%}
+{%- endfor -%}
+
+{%- comment -%}
+  Sort keys of the form "<average to 4 dp>|<row index>". The averages are all
+  of the form 0.xxxx, so sorting the keys as strings sorts them numerically.
+{%- endcomment -%}
+{%- assign keys = "" | split: "" -%}
+{%- for row in rows -%}
+  {%- assign total = 0.0 -%}
+  {%- for category in categories -%}
+    {%- assign total = total | plus: row[category] -%}
+  {%- endfor -%}
+  {%- assign average = total | divided_by: 4.0 | round: 4 | append: "" | split: "." -%}
+  {%- assign decimals = average[1] | append: "0000" | slice: 0, 4 -%}
+  {%- assign key = average[0] | append: "." | append: decimals | append: "|" | append: forloop.index0 -%}
+  {%- assign keys = keys | push: key -%}
+{%- endfor -%}
+{%- assign keys = keys | sort | reverse -%}
+
+<table class="sortable leaderboard">
+  <caption>
+    Category scores under full fine-tuning: the mean over five runs, ± the
+    standard error.
+    <span class="visually-hidden">Column headers with buttons are sortable.</span>
+  </caption>
+  <thead>
+    <tr>
+      <th scope="col" data-type="text">
+        <button type="button">Model<span aria-hidden="true">♢</span></button>
+      </th>
+      <th scope="col" class="num">
+        <button type="button">Params<span aria-hidden="true">♢</span></button>
+      </th>
+      {%- for label in category_labels %}
+      <th scope="col" class="num">
+        <button type="button">{{ label }}<br><span class="kind">{{ category_kinds[forloop.index0] }}</span><span aria-hidden="true">♢</span></button>
+      </th>
+      {%- endfor %}
+      <th scope="col" class="num" aria-sort="descending">
+        <button type="button">Average<span aria-hidden="true">▼</span></button>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    {%- for key in keys -%}
+    {%- assign key_parts = key | split: "|" -%}
+    {%- assign index = key_parts[1] | plus: 0 -%}
+    {%- assign row = rows[index] -%}
+    {%- assign params = row.params | plus: 0 -%}
+    <tr>
+      <th scope="row" data-value="{{ row.model | escape }}">
+        {%- if row.url and row.url != "" -%}
+        <a href="{{ row.url }}">{{ row.model }}</a>
+        {%- else -%}
+        {{ row.model }}
+        {%- endif -%}
+      </th>
+      <td class="num" data-value="{{ params }}">{{ params | divided_by: 1000000.0 | round: 1 }}M</td>
+      {%- for category in categories -%}
+      {%- assign score = row[category] | plus: 0.0 -%}
+      {%- assign se_column = category | append: "_se" %}
+      <td class="num" data-value="{{ row[category] }}">
+        {%- if score == best_scores[forloop.index0] -%}
+        <strong>{{ row[category] }}</strong>
+        {%- else -%}
+        {{ row[category] }}
+        {%- endif %} <span class="se">± {{ row[se_column] }}</span>
+      </td>
+      {%- endfor %}
+      <td class="num" data-value="{{ key_parts[0] }}">{{ key_parts[0] }}</td>
+    </tr>
+    {%- endfor %}
+  </tbody>
+</table>

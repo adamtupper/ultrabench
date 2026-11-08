@@ -34,7 +34,7 @@ uv run python scripts/download_dataset.py <dataset> [<download_dir>]
 | `psfhs` | Zenodo |
 | `stmus` | Mendeley Data |
 
-The others (GBCU, MMOTU, Open Kidney, TN3K) must be requested from their authors and downloaded by hand. See the dataset pages in `docs/datasets/`.
+The others (GBCU, MMOTU, Open Kidney, TN3K) must be requested from their authors and downloaded by hand. See the dataset cards in `docs/dataset_cards/`.
 
 ## Processing
 

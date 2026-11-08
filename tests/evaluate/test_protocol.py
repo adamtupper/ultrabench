@@ -272,16 +272,23 @@ def test_incomplete_category_is_skipped():
 
 def test_leaderboard_row_needs_every_category():
     """The row is offered only for a submission covering the benchmark."""
-    partial = pd.DataFrame({"category": ["anatomy_classification"], "mean": [0.5]})
+    partial = pd.DataFrame(
+        {"category": ["anatomy_classification"], "mean": [0.5], "se": [0.01]}
+    )
 
     assert protocol.leaderboard_row(partial) is None
 
     complete = pd.DataFrame(
-        {"category": list(CATEGORIES), "mean": [0.5, 0.25, 0.125, 0.0629]}
+        {
+            "category": list(CATEGORIES),
+            "mean": [0.5, 0.25, 0.125, 0.06289],
+            "se": [0.01, 0.02, 0.003, 0.00051],
+        }
     )
 
     assert protocol.leaderboard_row(complete) == (
-        "| <model> | 0.500 | 0.250 | 0.125 | 0.063 |"
+        "<model>,<url>,<release_date>,<params>,"
+        "0.5000,0.0100,0.2500,0.0200,0.1250,0.0030,0.0629,0.0005"
     )
 
 

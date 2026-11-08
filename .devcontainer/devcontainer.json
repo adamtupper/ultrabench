@@ -2,7 +2,8 @@
     "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
     "features": {
         "ghcr.io/stuartleeks/dev-container-features/shell-history:0": {},
-        "ghcr.io/hwaien/devcontainer-features/match-host-time-zone": {}
+        "ghcr.io/hwaien/devcontainer-features/match-host-time-zone": {},
+        "ghcr.io/devcontainers/features/ruby:2.0.0": {}
     },
     "hostRequirements": {
         "gpu": "optional"

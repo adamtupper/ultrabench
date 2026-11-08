@@ -1,8 +1,14 @@
+---
+title: PSFHS
+parent: Datasets
+nav_order: 10
+---
+
 # Pubic Symphysis and Fetal Head Segmentation (PSFHS) Dataset
 
 The PSFHS dataset is a dataset for fetal head and pubic symphysis segmentation with 1,358 images from 1,124 patients. Each image is accompanied by pixel-level segmentation masks for the fetal head and pubic symphysis, supporting a three-class image segmentation task (_background_, _pubic symphysis_, and _fetal head_). This version of the dataset was created for UltraBench to support the evaluation of ultrasound models for pubic symphysis and fetal head segmentation.
 
-> [!IMPORTANT]
+{: .important }
 > When using this dataset, please ensure that you cite the original works:
 >
 > Chen, G., Bai, J., Ou, Z. et al. PSFHS: Intrapartum ultrasound image dataset for AI-based segmentation of pubic symphysis and fetal head. Sci Data 11, 436 (2024). https://doi-org.acces.bibl.ulaval.ca/10.1038/s41597-024-03266-4

@@ -185,3 +185,10 @@ outputs/
 # Agentic coding
 .claude/settings.local.json
 .serena/
+
+# Jekyll documentation site
+docs/_site/
+docs/.jekyll-cache/
+docs/.jekyll-metadata
+docs/.bundle/
+docs/vendor/

@@ -1,11 +1,17 @@
+---
+title: Open Kidney
+parent: Datasets
+nav_order: 9
+---
+
 # Open Kidney Dataset
 
-> [!CAUTION]
+{: .warning }
 > This dataset must not be made public as it is licensed under a Research Usage Agreement. See [here](https://rsingla.ca/kidneyUS/) for more details.
 
 The Open Kidney Ultrasound dataset consists of 514 B-mode kidney ultrasound images, each from a distinct patient. Each image has two segmentation masks for two separate semantic segmentation tasks: kidney capsule and fine-grain kidney regions segmentation. The regions segmentation task is very difficult due to the limited amount of data. This version of the dataset was created for UltraBench to support the evaluation of ultrasound models for kidney segmentation.
 
-> [!IMPORTANT]
+{: .important }
 > When using this dataset, please ensure that you cite the original source:
 >
 > Singla, R. et al. (2023). The Open Kidney Ultrasound Data Set. In: Simplifying Medical Ultrasound. ASMUS 2023. Lecture Notes in Computer Science, vol 14337. Springer, Cham. https://doi.org/10.1007/978-3-031-44521-7_15
@@ -39,6 +45,23 @@ The Open Kidney dataset supports two tasks:
 
 - Binary kidney capsule segmentation
 - Multi-class kidney regions segmentation
+
+## Preparation
+
+1. Request access to the dataset by completing the form on the [Open Kidney Dataset website](https://rsingla.ca/kidneyUS/).
+2. Clone [the GitHub repository](https://github.com/rsingla92/kidneyUS/tree/main) containing the annotations:
+
+   ```shell
+   git clone https://github.com/rsingla92/kidneyUS.git
+   ```
+
+3. Once you have access, download the ZIP file containing the images (`kidneyUS_images_14_june_2022.zip`) and unzip the images into an `images` folder in your cloned repository:
+
+   ```shell
+   unzip kidneyUS_images_14_june_2022.zip -d /path/to/kidneyUS/images
+   ```
+
+4. Pass the cloned repository as `path` when you load the dataset, as shown below.
 
 ## Usage
 

@@ -1,8 +1,14 @@
+---
+title: MMOTU
+parent: Datasets
+nav_order: 8
+---
+
 # Multi-Modality Ovarian Tumor 2D Ultrasound (MMOTU-2D) Dataset
 
 The Multi-Modality Ovarian Tumor 2D Ultrasound (MMOTU-2D) dataset consists of 1469 ultrasound images each accompanied by semantic segmentation masks that identify the tumor in the image. In addition, each image is labeled according to the presence of each type of tumour (*chocolate cyst*, *serous cystadenoma*, *teratoma*, *theca cell tumour*, *simple cyst*, *normal ovary*, *mucinous cystadenoma*, and *high grade serous cystadenocarcinoma*). This version of the dataset was created for UltraBench to support the evaluation of ultrasound models for ovarian tumor classification and segmentation.
 
-> [!IMPORTANT]
+{: .important }
 > When using this dataset, please ensure that you cite the original work:
 >
 > Lyu, S., Zhao, Q., Bai, W., Cai, L., Cheng, G., Cui, G., Yang, M., Chen, L., & Zhou, H. (2026). Unsupervised cross-domain semantic segmentation on multi-modality ovarian tumor ultrasound data. Pattern Recognition, 171, 112311. https://doi.org/10.1016/j.patcog.2025.112311

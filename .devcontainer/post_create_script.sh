@@ -17,3 +17,6 @@ uv sync --all-groups
 source .venv/bin/activate
 nbstripout --install
 pre-commit install
+
+# Install dependencies for docs
+cd docs && bundle install

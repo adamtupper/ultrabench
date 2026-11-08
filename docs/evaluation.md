@@ -1,3 +1,9 @@
+---
+title: Evaluation
+nav_order: 3
+has_children: true
+---
+
 # Evaluation
 
 The evaluation layer is framework independent. It reads two CSV files — the ground truth published with each dataset and the predictions produced by your model — and writes the performance metrics. Nothing about how you trained the model matters, so you can benchmark a model written in any framework.
@@ -120,7 +126,7 @@ Two CSVs are written to the Hydra run directory, and both are printed:
 | `task_scores.csv` | One row per task: its metric, the cohort it is resampled over, the mean over the runs, and the error bar. |
 | `category_scores.csv` | One row per category the submission covers completely. |
 
-A submission covering all four categories also prints its leaderboard row, ready to paste into the table in the README.
+A submission covering all four categories also prints its leaderboard row, ready to add to `docs/_data/leaderboard.csv`. See [Submissions](submissions.md) for how to fill in the rest of the row.
 
 ### Configuration
 

@@ -1,8 +1,14 @@
+---
+title: CAMUS
+parent: Datasets
+nav_order: 3
+---
+
 # CAMUS Dataset
 
 The Cardiac Acquisitions for Multi-structure Ultrasound Segmentation (CAMUS) dataset consists consists of apical four-chamber and two-chamber view cardiac ultrasound sequences from 500 patients for a total of 19,232 images. Each image is accompanied by segmentation masks for the left ventricle (LV) endocardium, left ventricle (LV) myocardium, and the left atrium (LA). Each image is also labeled according to the quality of the scan (*poor*, *medium*, and *good*). This version of the dataset was created for UltraBench to support the evaluation of ultrasound models for cardiac structure segmentation and image quality assessment.
 
-> [!IMPORTANT]
+{: .important }
 > When using this dataset, please ensure that you cite the original work:
 >
 > S. Leclerc et al., "Deep Learning for Segmentation Using an Open Large-Scale Dataset in 2D Echocardiography," in IEEE Transactions on Medical Imaging, vol. 38, no. 9, pp. 2198-2210, Sept. 2019, doi: 10.1109/TMI.2019.2900516

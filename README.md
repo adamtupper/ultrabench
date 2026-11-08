@@ -47,47 +47,21 @@ Train with any framework you like, and write your test predictions to a CSV for 
 
 ## Leaderboard
 
-The following table ranks the evaluated ultrasound foundation models by their average score across the four task categories. Each score is the mean over the tasks in that category, measured with macro F1 for classification and positive Dice for segmentation, under the full fine-tuning paradigm. The best score in each category is bold.
+The [leaderboard](docs/index.md) ranks the evaluated ultrasound foundation models by the average of their four category scores, with a standard error for each score. It is built from [`docs/_data/leaderboard.csv`](docs/_data/leaderboard.csv). See [the evaluation protocol](docs/evaluation_protocol.md) for the task categories, the metrics, and how the scores are aggregated.
 
-Read the scores of a model pretrained on data that overlaps a category's tasks with care. See [the evaluation protocol](docs/evaluation_protocol.md) for the task categories, the metrics, and how the scores are aggregated.
+To add a model to the leaderboard, open a pull request that adds its row to the CSV. See [Submissions](docs/submissions.md) for how to produce the scores and fill in the row.
 
-| Model | Pathological (classification) | Non-pathological (classification) | Pathological (segmentation) | Anatomical (segmentation) |
-|-------|-------------------------------|-----------------------------------|-----------------------------|---------------------------|
-| URFM-L | **0.645** | **0.757** | 0.782 | 0.822 |
-| URFM-B | 0.620 | 0.744 | 0.770 | 0.821 |
-| OpenUS | 0.606 | 0.735 | 0.763 | 0.822 |
-| DINOv3 ViT-L | 0.583 | 0.710 | 0.774 | 0.815 |
-| DINOv3 ViT-B | 0.574 | 0.716 | 0.768 | 0.811 |
-| USF-MAE | 0.600 | 0.735 | 0.717 | 0.813 |
-| Deblurring ConvMAE | 0.600 | 0.683 | 0.759 | 0.811 |
-| DINOv3 ConvNeXt-L | 0.552 | 0.670 | **0.794** | 0.822 |
-| DINOv3 ConvNeXt-B | 0.551 | 0.677 | 0.780 | 0.820 |
-| Deblurring MAE | 0.589 | 0.679 | 0.747 | 0.810 |
-| UltraFedFM | 0.617 | 0.684 | 0.715 | 0.807 |
-| USFM | 0.575 | 0.678 | 0.745 | 0.813 |
-| SAMUS | 0.564 | 0.644 | 0.776 | **0.826** |
-| UltraSAM | 0.584 | 0.679 | 0.724 | 0.809 |
-| EchoCare | 0.549 | 0.671 | 0.712 | 0.801 |
-| TinyUSFM | 0.540 | 0.641 | 0.690 | 0.801 |
+## Documentation
 
-## Submissions
+The documentation in [`docs/`](docs/) is a Jekyll site. Install Ruby and Bundler, then serve the site locally from `docs/`:
 
-Add a model to the leaderboard by opening a pull request against `main`. A maintainer reviews every submission before merging it.
+```bash
+cd docs
+bundle install
+bundle exec jekyll serve --livereload
+```
 
-Produce the scores with the evaluation layer, following [the evaluation protocol](docs/evaluation_protocol.md):
-
-1. Train the model on every task of the benchmark under the full fine-tuning paradigm, with five seeds per task. A category score covers all of the tasks in that category, so a missing task leaves the category unscored.
-2. Write the test split predictions of each run to a prediction CSV, and lay the CSVs out as one directory per task. See [the evaluation documentation](docs/evaluation.md) for the format.
-3. Score the submission with `python -m ultrabench.evaluate.protocol predictions=<your directory>`. It writes the per-task and per-category scores with their error bars, and prints the leaderboard row to paste into the table.
-
-Your pull request adds one row to the [leaderboard](#leaderboard) table:
-
-- Report the four category scores to three decimal places.
-- Place the row in the position its average of the four scores earns it.
-- Link the model name to the public repository for the model, so that readers reach the weights and the code that produced the scores.
-- Move the bold in any column your model now leads, so that each column still marks its best score.
-
-Describe how you trained the model in the pull request, and state which benchmark datasets, if any, appear in its pretraining data. A reviewer checks the row against the linked repository and asks for the per-task scores where a number needs verifying.
+Open <http://localhost:4000> to view it.
 
 ## Current Datasets & Tasks
 

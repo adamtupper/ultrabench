@@ -1,8 +1,14 @@
+---
+title: TN3K
+parent: Datasets
+nav_order: 12
+---
+
 # TN3K Dataset
 
 TN3K ([GitHub](https://github.com/haifangong/TRFE-Net-for-thyroid-nodule-segmentation), [Hugging Face](https://huggingface.co/datasets/haifan-gong/TN3K)) is a dataset for thyroid nodule classification and segmentation. It consists of 3,493 thyroid ultrasound images from 2,421 patients that are divided into 2,879 training and 614 test images. Each image is accompanied by a binary segmentation mask indicating tumorous and non-tumorous regions, and a binary label indicating the pathology (benign or malignant). This version of the dataset was created for UltraBench to support the evaluation of ultrasound models for thyroid nodule classification and segmentation.
 
-> [!IMPORTANT]
+{: .important }
 > When using this dataset, please ensure that you cite the original work:
 >
 > Gong, H., Chen, J., Chen, G., Li, H., Li, G., & Chen, F. (2023). Thyroid region prior guided attention for ultrasound segmentation of thyroid nodules. Computers in Biology and Medicine, 155, 106389. https://doi.org/10.1016/j.compbiomed.2022.106389

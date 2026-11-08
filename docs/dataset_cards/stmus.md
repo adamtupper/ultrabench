@@ -1,10 +1,16 @@
+---
+title: STMUS
+parent: Datasets
+nav_order: 11
+---
+
 # Segmentation of Transverse Musculoskeletal Ultrasound Images (STMUS) Dataset
 
 STMUS ([Mendeley Data](https://data.mendeley.com/datasets/3jykz7wz8d/1)) is a dataset for transverse musculoskeletal ultrasound segmentation. It consists of 8,169 images of three different muscles (the tibialis anterior, gastrocnemius medialis, and biceps brachii) from 1,223 patients. Each image is accompanied by an echogenicity level label, patient characteristics, and a binary muscle segmentation mask. This version of the dataset was created for UltraBench to support the evaluation of ultrasound models for muscle segmentation.
 
 The subject numbers in the original filenames are local to each muscle and echogenicity directory, so patients are identified here by joining the per-muscle characteristics spreadsheets. Two subjects whose characteristics are identical are treated as a single patient, so that their images are never split across the two splits. The original paper reports 3,917 images from 1,283 subjects. Those figures describe the authors' own train, validation, and test subset, and count each muscle scanned for a patient as a separate subject. This version includes every released image.
 
-> [!IMPORTANT]
+{: .important }
 > When using this dataset, please ensure that you cite the original works:
 >
 > Marzola, F., van Alfen, N., Doorduin, J., & Meiburger, K. M. (2021). Deep learning segmentation of transverse musculoskeletal ultrasound images for neuromuscular disease assessment. Computers in Biology and Medicine, 135, 104623. https://doi.org/10.1016/j.compbiomed.2021.104623
