@@ -7,7 +7,7 @@ nav_order: 6
 # Gallbladder Cancer Ultrasound (GBCU) Dataset
 
 {: .warning }
-> This dataset must not be made public as it is licensed under a Research Usage Agreement. See [here](https://gbc-iitd.github.io/data/gbcu) for more details.
+> To use this dataset you must sign a Research Usage Agreement and obtain the raw data from the original authors. See [here](https://gbc-iitd.github.io/data/gbcu) for more details.
 
 The GBCU dataset contains a total of 1,255 annotated abdominal ultrasound images (consisting of 432 normal, 558 benign, and 265 malignant images) collected from 218 patients (71 normal, 100 benign, and 47 malignant). This version of the dataset was created for UltraBench to support the evaluation of ultrasound models for gallbladder tumour classification.
 

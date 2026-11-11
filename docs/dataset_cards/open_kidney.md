@@ -7,7 +7,7 @@ nav_order: 9
 # Open Kidney Dataset
 
 {: .warning }
-> This dataset must not be made public as it is licensed under a Research Usage Agreement. See [here](https://rsingla.ca/kidneyUS/) for more details.
+> To use this dataset you must sign a Research Usage Agreement and obtain the raw data from the original authors. See [here](https://rsingla.ca/kidneyUS/) for more details.
 
 The Open Kidney Ultrasound dataset consists of 514 B-mode kidney ultrasound images, each from a distinct patient. Each image has two segmentation masks for two separate semantic segmentation tasks: kidney capsule and fine-grain kidney regions segmentation. The regions segmentation task is very difficult due to the limited amount of data. This version of the dataset was created for UltraBench to support the evaluation of ultrasound models for kidney segmentation.
 
