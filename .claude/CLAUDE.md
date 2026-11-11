@@ -21,7 +21,7 @@ UltraBench a standardized evaluation framework for assessing how well ultrasound
 
 ## Style Guidelines
 - Python: `.claude/rules/python.md`
-- Markdown: `.claude/markdown.md`
+- Markdown: `.claude/rules/markdown.md`
 
 ## Architecture
 

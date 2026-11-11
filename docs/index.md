@@ -16,7 +16,8 @@ UltraBench is a standardized benchmark of 21 convex ultrasound image classificat
 pip install ultrabench
 ```
 
-[Load a dataset]({% link dataset_format.md %}){: .btn .btn-primary .mr-2 }
+[Get started]({% link getting_started.md %}){: .btn .btn-primary .mr-2 }
+[Load a dataset]({% link dataset_format.md %}){: .btn .mr-2 }
 [Submit a model]({% link submissions.md %}){: .btn }
 
 ## Leaderboard
