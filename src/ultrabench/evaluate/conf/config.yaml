@@ -1,0 +1,10 @@
+defaults:
+  - task: segmentation
+
+ground_truth: ???
+predictions: ???
+
+# Ground-truth column to pool predictions over before computing metrics.
+# Set to sequence_id for tasks with sequence-level labels (CAMUS image
+# quality, COVID-BLUES, MASLD). Ignored by the segmentation task.
+aggregate_by: null

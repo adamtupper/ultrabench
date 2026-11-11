@@ -1,0 +1,9 @@
+{% if page.math %}
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+{% endif %}
+{% if page.leaderboard %}
+<script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+<script defer src="{{ '/assets/js/sortable-table.js' | relative_url }}"></script>
+<script defer src="{{ '/assets/js/release-chart.js' | relative_url }}"></script>
+{% endif %}

@@ -1,85 +1,46 @@
 # UltraBench
 
-[![arXiv](https://img.shields.io/badge/arXiv-2501.13193-b31b1b.svg)](http://arxiv.org/abs/2501.13193)
-[![OpenReview](https://img.shields.io/badge/OpenReview-Reviews-blue.svg)](https://openreview.net/forum?id=iGcxlTLIL5)
+[![arXiv](https://img.shields.io/badge/arXiv-2609.28610-b31b1b.svg)](https://arxiv.org/abs/2609.28610)
+[![Leaderboard](https://img.shields.io/badge/%F0%9F%8F%86-Leaderboard-blue.svg)](https://adamtupper.github.io/ultrabench/)
 
-UltraBench is a standardized benchmark of 14 different convex ultrasound image classification and semantic segmentation tasks (7 classification and 7 segmentation tasks) drawn from the 10 different publicly available datasets covering 11 regions of the body. This repository contains the processing scripts to transform raw datasets from their original sources into a standardized format for training and evaluating machine learning models.
-
-This benchmark was published alongside the article [Revisiting Data Augmentation for Ultrasound Images](https://openreview.net/forum?id=iGcxlTLIL5). If you use this benchmark in your research please cite this article and the articles for each of the included datasets. Instructions for how to do so are provided at the end.
+UltraBench is a standardized benchmark of 21 convex ultrasound image classification and semantic segmentation tasks drawn from 12 publicly available datasets covering 10 anatomical regions. See below for how to get started, or checkout the [Leaderboard 🏆](https://adamtupper.github.io/ultrabench/#leaderboard) to see how different ultrasound foundation models stack up!
 
 <p align="center">
-  <img src="figures/cover_figure.svg" alt="Datasets and tasks included in UltraBench"/>
+  <img src="figures/overview.png" alt="Datasets and tasks included in UltraBench", width="900"/>
 </p>
 
-## Motivation
+## Getting Started
 
-A common limitation of studies on ultrasound image analysis using machine learning is a lack of evaluations across multiple domains. However, this is made difficult by a lack of ultrasound image analysis tasks in existing medical image analysis benchmarks, such as [MedMNIST](https://www.nature.com/articles/s41597-022-01721-8), [MedSegBench](https://www.nature.com/articles/s41597-024-04159-2) and the [Medical Segmentation Decathlon](https://www.nature.com/articles/s41467-022-30695-9). To address this issue, we created UltraBench. Our aim is to make it easier for researchers by standardizing the preprocessing of many publicly available ultrasound datasets and providing tools (e.g., dataset implementations for common deep learning frameworks) that (a) reduce the effort required to use them and (b) make it easier for researchers to compare results between papers.
-
-## Installation
-
-Install UltraBench using:
+Install UltraBench and load any dataset in the collection with one function:
 
 ```bash
 pip install ultrabench
 ```
 
-## Getting Started
+```python
+import ultrabench
 
-UltraBench is packaged as a commandline application. After installing, run
-`ultrabench --help` to get started.
-
-For more information, checkout the [Documentation](https://github.com/adamtupper/ultrabench/wiki) on the wiki!
-
-## Current Datasets & Tasks
-
-The following table contains the list of supported datasets and tasks. Click on the links to checkout the appropriate sections of the documentation or on the article/repository links to visit the original publications. We do not have the rights to republish the datasets, but links to the original articles and datasets are included here and in the [Documentation](https://github.com/adamtupper/ultrabench/wiki).
-
-<!-- TODO: Add links to documentation -->
-
-| Dataset                                                   | Region       | Classification Tasks             | Segmentation Tasks                          |
-|-----------------------------------------------------------|--------------|----------------------------------|---------------------------------------------|
-| Annotated Ultrasound Liver ([article](https://doi.org/10.1093/bib/bbac569), [data](https://zenodo.org/records/7272660))                      | Liver        | Liver mass classification        | Liver segmentation, Liver mass segmentation |
-| Butterfly ([data](https://github.com/ButterflyNetwork/MITGrandHack2018))                                    | Multi-region | Region classification            |                                             |
-| CAMUS ([article](https://ieeexplore.ieee.org/document/8649738/), [data](https://www.creatis.insa-lyon.fr/Challenge/camus/index.html))                                           | Heart        | Image quality classification     | Cardiac region segmentation                 |
-| Dataset of B-mode fatty liver ultrasound images ([article](https://link.springer.com/article/10.1007/s11548-018-1843-2), [data](https://zenodo.org/records/1009146)) | Liver        | NFLD classification              |                                             |
-| Gallbladder Cancer Ultrasound (GBCU) ([article](https://ieeexplore.ieee.org/document/9879895), [data](https://gbc-iitd.github.io/data/gbcu))            | Gallbladder  | Gallbladder tumor classification |                                             |
-| Multi-Modality Ovarian Tumor Ultrasound (MMOTU) ([article](http://arxiv.org/abs/2207.06799), [data](https://github.com/cv516Buaa/MMOTU_DS2Net)) | Ovaries      | Ovarian tumor classifcation      | Ovarian tumor segmentation                  |
-| Open Kidney Ultrasound ([article](https://link.springer.com/chapter/10.1007/978-3-031-44521-7_15), [data](https://rsingla.ca/kidneyUS/))                          | Kidney       |                                  | Kidney capsule segmentation                 |
-| Point-of-care Ultrasound (POCUS) ([article](http://dx.doi.org/10.3390/app11020672), [data](https://github.com/jannisborn/covid19_ultrasound/))                | Lung         | COVID-19 classification          |                                             |
-| PSFHS ([article](https://www.nature.com/articles/s41597-024-03266-4), [data](https://zenodo.org/records/10969427))                                           | Fetus        |                                  | Fetal head and pubic symphysis segmentation |
-| Stanford Thyroid ([data](https://stanfordaimi.azurewebsites.net/datasets/a72f2b02-7b53-4c5d-963c-d7253220bfd5))                             | Thyroid      |                                  | Thyroid nodule segmentation                 |
-
-## Contributing
-
-We would love for this benchmark to grow and flourish into a resource that anyone with an interest in machine learning for ultrasound analysis can pick up and use quickly and easily. Any help addressing bugs, contributing new datasets or tasks, or any other improvements are welcome and appreciated! I only ask that you respect the community guidelines laid out in the `CODE_OF_CONDUCT.md`. For more information on how to contribute, checkout out the [Documentation](https://github.com/adamtupper/ultrabench/wiki).
-
-UltraBench is built using [uv](https://docs.astral.sh/uv/). For the best experience, you can use the development container configuration (see [DEVCONTAINER.md](/.devcontainer/DEVCONTAINER.md)) to setup an isolated development environment with uv and all the necessary dependencies already installed. Otherwise, you can [install uv](https://docs.astral.sh/uv/getting-started/installation/) and then following the commands below. To ensure that your code meets the style guidelines etc., this also installs and initializes the optional development dependencies.
-
-```bash
-uv sync
-uv sync --group examples  # Install the dependencies for the examples, if required
-source .venv/bin/activate
-nbstripout --install
-pre-commit install
+train_data = ultrabench.load_dataset(name="AUL", split="train")
 ```
+
+Read the [documentation](https://adamtupper.github.io/ultrabench/getting_started) to learn how to train and evaluate a model, and how to add it to the leaderboard.
 
 ## Questions
 
-If you have any questions, please open an issue or contact us via email.
+If you have any questions, please open an issue or contact us via [email](mailto:adam.tupper.1@ulaval.ca).
 
 ## How to Cite UltraBench
 
-If you use UltraBench in your research, please cite our article [Revisiting Data Augmentation for Ultrasound Images](https://openreview.net/forum?id=iGcxlTLIL5) and the articles for each of the datasets. This ensures that the work of the authors of the original datasets is properly acknowledged, helps more people find the benchmark and encourages us to continue maintaining and improving it!
+If you use UltraBench in your research, please cite our article [UltraBench 2: Towards Robust Evaluation of Vision Foundation Models on Ultrasound](https://arxiv.org/abs/2609.28610v1) and the articles for each of the datasets. This ensures that the work of the authors of the original datasets is properly acknowledged, helps more people find the benchmark and encourages us to continue maintaining and improving it!
 
-```
-@article{
-  tupper2025,
-  title={Revisiting Data Augmentation for Ultrasound Images},
-  author={Adam Tupper and Christian Gagn{\'e}},
-  journal={Transactions on Machine Learning Research},
-  issn={2835-8856},
-  year={2025},
-  url={https://openreview.net/forum?id=iGcxlTLIL5},
-  note={}
+```bibtex
+@misc{radhachandran2026ultrabench2,
+  title={UltraBench 2: Towards Robust Evaluation of Vision Foundation Models on Ultrasound},
+  author={Ashwath Radhachandran and Adam Tupper and Christian Gagn{\'e} and William Speier},
+  year={2026},
+  eprint={2609.28610},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV},
+  url={https://arxiv.org/abs/2609.28610}
 }
 ```

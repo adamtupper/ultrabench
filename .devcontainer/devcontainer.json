@@ -1,12 +1,9 @@
 {
     "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
     "features": {
-        "ghcr.io/devcontainers/features/nvidia-cuda:2.0.0": {
-            "cudaVersion": "12.6",
-            "cudnnVersion": "9.10.0.56"
-        },
         "ghcr.io/stuartleeks/dev-container-features/shell-history:0": {},
-        "ghcr.io/hwaien/devcontainer-features/match-host-time-zone": {}
+        "ghcr.io/hwaien/devcontainer-features/match-host-time-zone": {},
+        "ghcr.io/devcontainers/features/ruby:2.0.0": {}
     },
     "hostRequirements": {
         "gpu": "optional"
@@ -16,7 +13,10 @@
     ],
     "postCreateCommand": "bash .devcontainer/post_create_script.sh",
     "containerEnv": {
-        "TERM": "xterm-256color"
+        "TERM": "xterm-256color",
+        "NO_ALBUMENTATIONS_UPDATE": "1",
+        "UV_ENV_FILE": ".env",
+        "ANTHROPIC_API_KEY": "${localEnv:ANTHROPIC_API_KEY}"
     },
     "customizations": {
         "vscode": {

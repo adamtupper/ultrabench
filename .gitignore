@@ -98,7 +98,7 @@ ipython_config.py
 #   Similar to Pipfile.lock, it is generally recommended to include uv.lock in version control.
 #   This is especially recommended for binary packages to ensure reproducibility, and is more
 #   commonly ignored for libraries.
-uv.lock
+# uv.lock
 
 # poetry
 #   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.
@@ -178,3 +178,17 @@ cython_debug/
 
 # Ruff
 .ruff_cache/
+
+# Artifacts
+outputs/
+
+# Agentic coding
+.claude/settings.local.json
+.serena/
+
+# Jekyll documentation site
+docs/_site/
+docs/.jekyll-cache/
+docs/.jekyll-metadata
+docs/.bundle/
+docs/vendor/
