@@ -7,6 +7,7 @@ name = "ultrabench"
 dynamic = ["version"]
 authors = [
   { name="Adam Tupper", email="adam.tupper.1@ulaval.ca" },
+  { name="Ashwath Radhachandran", email="ashwathradha123@g.ucla.edu" },
 ]
 description = "A standardized benchmark of ultrasound image analysis tasks."
 readme = "README.md"
